@@ -1,0 +1,9 @@
+version: '3.4'
+
+services:
+  data-hub-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runtime
+    image: elifesciences/data-hub-api:${IMAGE_TAG}
