@@ -12,4 +12,4 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v3
       - name: Build Image and Test
-        uses: make ci-build-and-test
+        run: make ci-build-and-test
