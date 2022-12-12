@@ -7,6 +7,8 @@ WORKDIR /app/api
 COPY requirements.build.txt ./
 RUN pip install --disable-pip-version-check -r requirements.build.txt
 
+COPY requirements.txt ./
+RUN pip install --disable-pip-version-check -r requirements.txt
 
 COPY requirements.dev.txt ./
 RUN pip install --disable-pip-version-check -r requirements.dev.txt

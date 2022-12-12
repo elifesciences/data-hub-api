@@ -30,6 +30,7 @@ venv-activate:
 dev-install:
 	$(PIP) install --disable-pip-version-check \
 		-r requirements.build.txt \
+		-r requirements.txt \
 		-r requirements.dev.txt
 
 
@@ -56,6 +57,10 @@ dev-watch:
 	$(PYTHON) -m pytest_watch -- -p no:cacheprovider $(ARGS) $(PYTEST_WATCH_MODULES)
 
 dev-test: dev-lint dev-unittest
+
+
+dev-start:
+	$(PYTHON) -m uvicorn data_hub_api.main:create_app --reload
 
 
 build:
