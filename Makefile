@@ -60,7 +60,7 @@ dev-test: dev-lint dev-unittest
 
 
 dev-start:
-	$(PYTHON) -m uvicorn data_hub_api.main:create_app --reload
+	$(PYTHON) -m uvicorn data_hub_api.main:create_app --reload --host 127.0.0.1 --port 8000
 
 
 build:
@@ -86,6 +86,19 @@ watch:
 	$(DOCKER_PYTHON) -m pytest_watch -- -p no:cacheprovider $(ARGS) $(PYTEST_WATCH_MODULES)
 
 test: lint unittest
+
+
+start:
+	$(DOCKER_COMPOSE) up -d
+
+
+stop:
+	$(DOCKER_COMPOSE) down
+
+
+logs:
+	$(DOCKER_COMPOSE) logs -f
+
 
 ci-build-and-test:
 	$(MAKE) DOCKER_COMPOSE="$(DOCKER_COMPOSE_CI)" \

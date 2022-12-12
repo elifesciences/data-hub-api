@@ -1,0 +1,6 @@
+version: '3.4'
+
+services:
+  data-hub-api:
+    ports:
+      - "${DATA_HUB_API_PORT}:8000"

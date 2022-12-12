@@ -16,3 +16,5 @@ RUN pip install --disable-pip-version-check -r requirements.dev.txt
 COPY .pylintrc .flake8 mypy.ini ./
 COPY data_hub_api ./data_hub_api
 COPY tests ./tests
+
+CMD [ "python3", "-m", "uvicorn", "data_hub_api.main:create_app", "--host", "0.0.0.0", "--port", "8000"]
