@@ -60,7 +60,7 @@ dev-test: dev-lint dev-unittest
 
 
 dev-start:
-	$(PYTHON) -m uvicorn data_hub_api.main:create_app --reload --host 127.0.0.1 --port 8000
+	$(PYTHON) -m uvicorn data_hub_api.main:create_app --reload --factory --host 127.0.0.1 --port 8000
 
 
 build:
