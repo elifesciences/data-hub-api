@@ -32,17 +32,20 @@ dev-venv: venv-create dev-install
 
 
 dev-flake8:
-	$(PYTHON) -m flake8 dummy_api
+	$(PYTHON) -m flake8 api
 
 dev-pylint:
-	$(PYTHON) -m pylint dummy_api
+	$(PYTHON) -m pylint api
 
 dev-mypy:
-	$(PYTHON) -m mypy dummy_api
+	$(PYTHON) -m mypy api
 
 
 dev-lint: dev-flake8 dev-pylint dev-mypy
 
+
+build:
+	$(DOCKER_COMPOSE) build data-hub-api
 
 ci-build-and-test:
 	$(DOCKER_COMPOSE_CI) build
