@@ -9,10 +9,14 @@ on:
       - develop
 
 jobs:
-  tests:
+  build-and-test:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code
         uses: actions/checkout@v3
-      - name: Build Image and Test
-        run: make ci-build-and-test
+      - name: Build Image
+        run: make build
+      - name: Linting
+        run: make lint
+      - name: Unit Test
+        run: make unittest
