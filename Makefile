@@ -6,6 +6,9 @@ VENV = venv
 PIP = $(VENV)/bin/pip
 PYTHON = $(VENV)/bin/python
 
+DOCKER_RUN = $(DOCKER_COMPOSE) run --rm data-hub-api
+DOCKER_PYTHON = $(DOCKER_RUN) python
+
 ARGS =
 PYTEST_WATCH_MODULES = tests/unit_tests
 
@@ -58,8 +61,30 @@ dev-test: dev-lint dev-unittest
 build:
 	$(DOCKER_COMPOSE) build data-hub-api
 
+flake8:
+	$(DOCKER_PYTHON) -m flake8 data_hub_api tests
+
+pylint:
+	$(DOCKER_PYTHON) -m pylint data_hub_api tests
+
+mypy:
+	$(DOCKER_PYTHON) -m mypy data_hub_api tests
+
+
+lint: flake8 pylint mypy
+
+
+unittest:
+	$(DOCKER_PYTHON) -m pytest -p no:cacheprovider $(ARGS) tests/unit_tests
+
+watch:
+	$(DOCKER_PYTHON) -m pytest_watch -- -p no:cacheprovider $(ARGS) $(PYTEST_WATCH_MODULES)
+
+test: lint unittest
+
 ci-build-and-test:
-	$(DOCKER_COMPOSE_CI) build
+	$(MAKE) DOCKER_COMPOSE="$(DOCKER_COMPOSE_CI)" \
+		build test
 
 ci-clean:
 	$(DOCKER_COMPOSE_CI) down -v

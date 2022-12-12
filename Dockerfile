@@ -13,3 +13,4 @@ RUN pip install --disable-pip-version-check -r requirements.dev.txt
 
 COPY .pylintrc .flake8 mypy.ini ./
 COPY data_hub_api ./data_hub_api
+COPY tests ./tests
