@@ -32,13 +32,13 @@ dev-venv: venv-create dev-install
 
 
 dev-flake8:
-	$(PYTHON) -m flake8 api
+	$(PYTHON) -m flake8 data_hub_api
 
 dev-pylint:
-	$(PYTHON) -m pylint api
+	$(PYTHON) -m pylint data_hub_api
 
 dev-mypy:
-	$(PYTHON) -m mypy api
+	$(PYTHON) -m mypy data_hub_api
 
 
 dev-lint: dev-flake8 dev-pylint dev-mypy
