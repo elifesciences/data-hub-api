@@ -30,6 +30,7 @@ venv-activate:
 dev-install:
 	$(PIP) install --disable-pip-version-check \
 		-r requirements.build.txt \
+		-r requirements.txt \
 		-r requirements.dev.txt
 
 
@@ -58,6 +59,10 @@ dev-watch:
 dev-test: dev-lint dev-unittest
 
 
+dev-start:
+	$(PYTHON) -m uvicorn data_hub_api.main:create_app --reload --factory --host 127.0.0.1 --port 8000
+
+
 build:
 	$(DOCKER_COMPOSE) build data-hub-api
 
@@ -81,6 +86,19 @@ watch:
 	$(DOCKER_PYTHON) -m pytest_watch -- -p no:cacheprovider $(ARGS) $(PYTEST_WATCH_MODULES)
 
 test: lint unittest
+
+
+start:
+	$(DOCKER_COMPOSE) up -d
+
+
+stop:
+	$(DOCKER_COMPOSE) down
+
+
+logs:
+	$(DOCKER_COMPOSE) logs -f
+
 
 ci-build-and-test:
 	$(MAKE) DOCKER_COMPOSE="$(DOCKER_COMPOSE_CI)" \
