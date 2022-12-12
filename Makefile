@@ -6,6 +6,8 @@ VENV = venv
 PIP = $(VENV)/bin/pip
 PYTHON = $(VENV)/bin/python
 
+ARGS =
+PYTEST_WATCH_MODULES = tests/unit_tests
 
 venv-clean:
 	@if [ -d "$(VENV)" ]; then \
@@ -32,16 +34,25 @@ dev-venv: venv-create dev-install
 
 
 dev-flake8:
-	$(PYTHON) -m flake8 data_hub_api
+	$(PYTHON) -m flake8 data_hub_api tests
 
 dev-pylint:
-	$(PYTHON) -m pylint data_hub_api
+	$(PYTHON) -m pylint data_hub_api tests
 
 dev-mypy:
-	$(PYTHON) -m mypy data_hub_api
+	$(PYTHON) -m mypy data_hub_api tests
 
 
 dev-lint: dev-flake8 dev-pylint dev-mypy
+
+
+dev-unittest:
+	$(PYTHON) -m pytest -p no:cacheprovider $(ARGS) tests/unit_tests
+
+dev-watch:
+	$(PYTHON) -m pytest_watch -- -p no:cacheprovider $(ARGS) $(PYTEST_WATCH_MODULES)
+
+dev-test: dev-lint dev-unittest
 
 
 build:
