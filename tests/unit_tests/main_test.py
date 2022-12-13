@@ -1,3 +1,4 @@
+import json
 from pathlib import Path
 from fastapi.testclient import TestClient
 
@@ -15,4 +16,6 @@ class TestGetScietyDocmapsIndex:
     def test_should_return_json_with_articles_list(self):
         client = TestClient(create_app())
         response = client.get("/sciety/docmaps/v1/index")
-        assert response.json() == {'articles': [Path('data/docmaps/minimal_docmaps_example.json').read_text()]}
+        docmaps_path = Path('data/docmaps/minimal_docmaps_example.json')
+        data = json.loads(docmaps_path.read_bytes())
+        assert response.json() == {'articles': [data]}
