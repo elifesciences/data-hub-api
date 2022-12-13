@@ -16,6 +16,8 @@ class TestGetScietyDocmapsIndex:
     def test_should_return_json_with_articles_list(self):
         client = TestClient(create_app())
         response = client.get("/sciety/docmaps/v1/index")
-        docmaps_path = Path('data/docmaps/minimal_docmaps_example.json')
-        data = json.loads(docmaps_path.read_bytes())
-        assert response.json() == {'articles': [data]}
+        docmaps_1 = Path('data/docmaps/minimal_docmaps_example.json')
+        docmaps_2 = Path('data/docmaps/minimal_docmaps_example_2.json')
+        assert response.json() == {
+            'articles': [json.loads(docmaps_1.read_bytes()), json.loads(docmaps_2.read_bytes())]
+        }

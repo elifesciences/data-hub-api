@@ -15,8 +15,10 @@ def create_app():
 
     @app.get("/sciety/docmaps/v1/index")
     def get_sciety_docmaps_index():
-        docmaps_path = Path('data/docmaps/minimal_docmaps_example.json')
-        data = json.loads(docmaps_path.read_bytes())
-        return {'articles': [data]}
+        docmaps_path = Path('./data/docmaps/')
+        article_docmaps_list = []
+        for docmaps_file_path in docmaps_path.iterdir():
+            article_docmaps_list.append(json.loads(docmaps_file_path.read_bytes()))
+        return {'articles': article_docmaps_list}
 
     return app
