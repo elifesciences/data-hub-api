@@ -10,6 +10,6 @@ def create_app():
 
     @app.get("/sciety/docmaps/v1/index")
     def get_sciety_docmaps_index():
-        return {'articles':[]}
+        return {'articles': []}
 
     return app
