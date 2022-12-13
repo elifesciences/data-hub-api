@@ -1,4 +1,8 @@
+from pathlib import Path
+import logging
 from fastapi import FastAPI
+
+LOGGER = logging.getLogger(__name__)
 
 
 def create_app():
@@ -10,6 +14,6 @@ def create_app():
 
     @app.get("/sciety/docmaps/v1/index")
     def get_sciety_docmaps_index():
-        return {'articles': []}
+        return {'articles': [Path('data/docmaps/minimal_docmaps_example.json').read_text()]}
 
     return app
