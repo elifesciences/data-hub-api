@@ -1,0 +1,33 @@
+{
+  "@context": "https://w3id.org/docmaps/context.jsonld",
+  "id": "https://sciety.org/docmaps/v1/articles/10.1101/2022.06.24.497502/elife.docmap.json",
+  "type": "docmap",
+  "created": "2022-09-06T09:10:16.834Z",
+  "updated": "2022-09-06T09:10:20.344Z",
+  "publisher": {
+    "id": "https://elifesciences.org/",
+    "name": "eLife",
+    "logo": "https://sciety.org/static/groups/elife--b560187e-f2fb-4ff9-a861-a204f3fc0fb0.png",
+    "homepage": "https://elifesciences.org/",
+    "account": {
+      "id": "https://sciety.org/groups/elife",
+      "service": "https://sciety.org"
+    }
+  },
+  "first-step": "_:b0",
+  "steps": {
+    "_:b0": {
+      "assertions": [
+      ],
+      "inputs": [
+        {
+          "doi": "10.1101/509380",
+          "url": "https://www.biorxiv.org/content/10.1101/509380v1",
+          "_version": "1"
+        }
+      ],
+      "actions": [
+      ]
+    }
+  }
+}
