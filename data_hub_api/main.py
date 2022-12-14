@@ -1,13 +1,16 @@
-import json
-from pathlib import Path
 import logging
+
 from fastapi import FastAPI
+
+from data_hub_api.sciety.docmaps.provider import ScietyDocmapsProvider
+
 
 LOGGER = logging.getLogger(__name__)
 
 
 def create_app():
     app = FastAPI()
+    sciety_docmaps_provider = ScietyDocmapsProvider()
 
     @app.get("/")
     def get_root():
@@ -15,10 +18,6 @@ def create_app():
 
     @app.get("/sciety/docmaps/v1/index")
     def get_sciety_docmaps_index():
-        docmaps_path = Path('./data/docmaps/')
-        article_docmaps_list = []
-        for docmaps_file_path in docmaps_path.iterdir():
-            article_docmaps_list.append(json.loads(docmaps_file_path.read_bytes()))
-        return {'articles': article_docmaps_list}
+        return sciety_docmaps_provider.get_docmaps_index()
 
     return app
