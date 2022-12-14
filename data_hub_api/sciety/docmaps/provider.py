@@ -8,8 +8,26 @@ from data_hub_api.utils.bigquery import (
 from data_hub_api.sciety.docmaps.sql import get_sql_path
 
 
+DOCMAPS_JSONLD_SCHEMA_URL = 'https://w3id.org/docmaps/context.jsonld'
+
+
 def get_docmaps_item_for_query_result_item(query_result_item: dict) -> dict:
-    return query_result_item
+    return {
+        '@context': DOCMAPS_JSONLD_SCHEMA_URL,
+        'type': 'docmap',
+        'first-step': '_:b0',
+        'steps': {
+            '_:b0': {
+                'assertions': [],
+                'inputs': [{
+                    'doi': query_result_item['preprint_doi'],
+                    'url': query_result_item['preprint_url'],
+                }],
+                'actions': []
+            }
+        }
+
+    }
 
 
 class ScietyDocmapsProvider:
