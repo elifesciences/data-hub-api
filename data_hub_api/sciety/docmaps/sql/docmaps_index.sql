@@ -62,7 +62,22 @@ SELECT
   Version.QC_Complete_Timestamp AS qc_complete_timestamp,
   preprint_doi_and_url.preprint_doi,
   preprint_doi_and_url.preprint_version,
-  preprint_doi_and_url.preprint_url
+  preprint_doi_and_url.preprint_url,
+  PARSE_JSON(ARRAY_TO_STRING(
+    [
+      '{',
+      '  "id": "https://elifesciences.org/",',
+      '  "name": "eLife",',
+      '  "logo": "https://sciety.org/static/groups/elife--b560187e-f2fb-4ff9-a861-a204f3fc0fb0.png",',
+      '  "homepage": "https://elifesciences.org/",',
+      '  "account": {',
+      '    "id": "https://sciety.org/groups/elife",',
+      '    "service": "https://sciety.org"',
+      '  }',
+      '}'
+    ],
+    '\n'
+  )) AS provider_json
 FROM `elife-data-pipeline.prod.mv_Editorial_Manuscript_Version` AS Version
 JOIN t_preprint_doi_and_url_by_manuscript_id AS preprint_doi_and_url
   ON preprint_doi_and_url.manuscript_id = Version.Manuscript_ID

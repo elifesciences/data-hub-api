@@ -1,3 +1,4 @@
+import json
 from datetime import datetime
 from unittest.mock import patch, MagicMock
 from typing import Iterable
@@ -21,7 +22,8 @@ DOCMAPS_QUERY_RESULT_ITEM_1 = {
     'qc_complete_timestamp': datetime.fromisoformat('2022-01-01T01:02:03+00:00'),
     'preprint_doi': DOI_1,
     'preprint_version': None,
-    'preprint_url': f'https://doi.org/{DOI_1}'
+    'preprint_url': f'https://doi.org/{DOI_1}',
+    'provider_json': '{"id": "provider_1"}'
 }
 
 
@@ -46,6 +48,12 @@ class TestGetDocmapsItemForQueryResultItem:
             DOCMAPS_QUERY_RESULT_ITEM_1['qc_complete_timestamp'].isoformat()
         )
         assert docmaps_item['updated'] == docmaps_item['created']
+
+    def test_should_parse_and_include_provider_json(self):
+        docmaps_item = get_docmaps_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
+        assert docmaps_item['provider'] == json.loads(
+            DOCMAPS_QUERY_RESULT_ITEM_1['provider_json']
+        )
 
     def test_should_populate_first_step_input_doi_and_url(self):
         docmaps_item = get_docmaps_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)

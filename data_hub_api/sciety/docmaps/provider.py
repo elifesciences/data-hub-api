@@ -1,3 +1,5 @@
+import logging
+import json
 from pathlib import Path
 from typing import Iterable
 
@@ -8,16 +10,21 @@ from data_hub_api.utils.bigquery import (
 from data_hub_api.sciety.docmaps.sql import get_sql_path
 
 
+LOGGER = logging.getLogger(__name__)
+
 DOCMAPS_JSONLD_SCHEMA_URL = 'https://w3id.org/docmaps/context.jsonld'
 
 
 def get_docmaps_item_for_query_result_item(query_result_item: dict) -> dict:
     qc_complete_timestamp_str = query_result_item['qc_complete_timestamp'].isoformat()
+    provider_json = query_result_item['provider_json']
+    LOGGER.debug('provider_json: %r', provider_json)
     return {
         '@context': DOCMAPS_JSONLD_SCHEMA_URL,
         'type': 'docmap',
         'created': qc_complete_timestamp_str,
         'updated': qc_complete_timestamp_str,
+        'provider': json.loads(provider_json),
         'first-step': '_:b0',
         'steps': {
             '_:b0': {
