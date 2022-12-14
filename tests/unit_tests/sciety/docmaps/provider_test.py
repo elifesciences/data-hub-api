@@ -9,7 +9,9 @@ from data_hub_api.sciety.docmaps import provider as provider_module
 from data_hub_api.sciety.docmaps.provider import (
     get_docmaps_item_for_query_result_item,
     ScietyDocmapsProvider,
-    DOCMAPS_JSONLD_SCHEMA_URL
+    DOCMAPS_JSONLD_SCHEMA_URL,
+    DOCMAP_ID_PREFIX,
+    DOCMAP_ID_SUFFIX
 )
 
 
@@ -23,6 +25,7 @@ DOCMAPS_QUERY_RESULT_ITEM_1 = {
     'preprint_doi': DOI_1,
     'preprint_version': None,
     'preprint_url': f'https://doi.org/{DOI_1}',
+    'docmap_id': 'docmap_id_1',
     'provider_json': '{"id": "provider_1"}'
 }
 
@@ -41,6 +44,12 @@ class TestGetDocmapsItemForQueryResultItem:
     def test_should_populate_type(self):
         docmaps_item = get_docmaps_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
         assert docmaps_item['type'] == 'docmap'
+
+    def test_should_add_prefix_and_suffix_to_id(self):
+        docmaps_item = get_docmaps_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
+        assert docmaps_item['id'] == (
+            DOCMAP_ID_PREFIX + DOCMAPS_QUERY_RESULT_ITEM_1['docmap_id'] + DOCMAP_ID_SUFFIX
+        )
 
     def test_should_populate_create_and_updated_timestamp_with_qc_complete_timestamp(self):
         docmaps_item = get_docmaps_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)

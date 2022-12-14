@@ -63,6 +63,7 @@ SELECT
   preprint_doi_and_url.preprint_doi,
   preprint_doi_and_url.preprint_version,
   preprint_doi_and_url.preprint_url,
+  CONCAT('elife/', preprint_doi_and_url.preprint_doi) AS docmap_id,
   PARSE_JSON(ARRAY_TO_STRING(
     [
       '{',

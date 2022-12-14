@@ -14,6 +14,9 @@ LOGGER = logging.getLogger(__name__)
 
 DOCMAPS_JSONLD_SCHEMA_URL = 'https://w3id.org/docmaps/context.jsonld'
 
+DOCMAP_ID_PREFIX = 'https://sciety.org/docmaps/v1/articles/'
+DOCMAP_ID_SUFFIX = '/docmap.json'
+
 
 def get_docmaps_item_for_query_result_item(query_result_item: dict) -> dict:
     qc_complete_timestamp_str = query_result_item['qc_complete_timestamp'].isoformat()
@@ -22,6 +25,7 @@ def get_docmaps_item_for_query_result_item(query_result_item: dict) -> dict:
     return {
         '@context': DOCMAPS_JSONLD_SCHEMA_URL,
         'type': 'docmap',
+        'id': DOCMAP_ID_PREFIX + query_result_item['docmap_id'] + DOCMAP_ID_SUFFIX,
         'created': qc_complete_timestamp_str,
         'updated': qc_complete_timestamp_str,
         'provider': json.loads(provider_json),
