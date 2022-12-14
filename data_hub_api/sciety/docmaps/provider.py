@@ -18,7 +18,7 @@ DOCMAP_ID_PREFIX = 'https://sciety.org/docmaps/v1/articles/'
 DOCMAP_ID_SUFFIX = '/docmap.json'
 
 
-def get_docmaps_item_for_query_result_item(query_result_item: dict) -> dict:
+def get_docmap_item_for_query_result_item(query_result_item: dict) -> dict:
     qc_complete_timestamp_str = query_result_item['qc_complete_timestamp'].isoformat()
     provider_json = query_result_item['provider_json']
     LOGGER.debug('provider_json: %r', provider_json)
@@ -60,7 +60,7 @@ class ScietyDocmapsProvider:
             self.docmaps_index_query
         )
         for bq_result in bq_result_iterable:
-            yield get_docmaps_item_for_query_result_item(bq_result)
+            yield get_docmap_item_for_query_result_item(bq_result)
 
     def get_docmaps_index(self) -> dict:
         article_docmaps_list = list(self.iter_docmaps())
