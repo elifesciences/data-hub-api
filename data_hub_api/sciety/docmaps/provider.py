@@ -37,7 +37,7 @@ class ScietyDocmapsProvider:
     ) -> None:
         self.gcp_project_name = gcp_project_name
         self.docmaps_index_query = (
-          Path(get_sql_path('docmaps_index.sql')).read_text(encoding='utf-8')
+            Path(get_sql_path('docmaps_index.sql')).read_text(encoding='utf-8')
         )
 
     def iter_docmaps(self) -> Iterable[dict]:
