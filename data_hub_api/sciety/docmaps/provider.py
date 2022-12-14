@@ -1,13 +1,34 @@
-import json
 from pathlib import Path
 from typing import Iterable
 
 
+from data_hub_api.utils.bigquery import (
+    iter_dict_from_bq_query
+)
+from data_hub_api.sciety.docmaps.sql import get_sql_path
+
+
+def get_docmaps_item_for_query_result_item(query_result_item: dict) -> dict:
+    return query_result_item
+
+
 class ScietyDocmapsProvider:
+    def __init__(
+        self,
+        gcp_project_name: str = 'elife-data-pipeline'
+    ) -> None:
+        self.gcp_project_name = gcp_project_name
+        self.docmaps_index_query = (
+          Path(get_sql_path('docmaps_index.sql')).read_text(encoding='utf-8')
+        )
+
     def iter_docmaps(self) -> Iterable[dict]:
-        docmaps_path = Path('./data/docmaps/')
-        for docmaps_file_path in docmaps_path.iterdir():
-            yield json.loads(docmaps_file_path.read_bytes())
+        bq_result_iterable = iter_dict_from_bq_query(
+            self.gcp_project_name,
+            self.docmaps_index_query
+        )
+        for bq_result in bq_result_iterable:
+            yield get_docmaps_item_for_query_result_item(bq_result)
 
     def get_docmaps_index(self) -> dict:
         article_docmaps_list = list(self.iter_docmaps())
