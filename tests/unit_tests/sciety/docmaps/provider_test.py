@@ -1,3 +1,4 @@
+from datetime import datetime
 from unittest.mock import patch, MagicMock
 from typing import Iterable
 
@@ -17,7 +18,7 @@ DOI_2 = '10.1101.test/doi2'
 
 DOCMAPS_QUERY_RESULT_ITEM_1 = {
     'manuscript_id': 'manuscript_id_1',
-    'qc_complete_timestamp': '2022-01-01 01:02:03Z',
+    'qc_complete_timestamp': datetime.fromisoformat('2022-01-01T01:02:03+00:00'),
     'preprint_doi': DOI_1,
     'preprint_version': None,
     'preprint_url': f'https://doi.org/{DOI_1}'
@@ -38,6 +39,13 @@ class TestGetDocmapsItemForQueryResultItem:
     def test_should_populate_type(self):
         docmaps_item = get_docmaps_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
         assert docmaps_item['type'] == 'docmap'
+
+    def test_should_populate_create_and_updated_timestamp_with_qc_complete_timestamp(self):
+        docmaps_item = get_docmaps_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
+        assert docmaps_item['created'] == (
+            DOCMAPS_QUERY_RESULT_ITEM_1['qc_complete_timestamp'].isoformat()
+        )
+        assert docmaps_item['updated'] == docmaps_item['created']
 
     def test_should_populate_first_step_input_doi_and_url(self):
         docmaps_item = get_docmaps_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)

@@ -12,9 +12,12 @@ DOCMAPS_JSONLD_SCHEMA_URL = 'https://w3id.org/docmaps/context.jsonld'
 
 
 def get_docmaps_item_for_query_result_item(query_result_item: dict) -> dict:
+    qc_complete_timestamp_str = query_result_item['qc_complete_timestamp'].isoformat()
     return {
         '@context': DOCMAPS_JSONLD_SCHEMA_URL,
         'type': 'docmap',
+        'created': qc_complete_timestamp_str,
+        'updated': qc_complete_timestamp_str,
         'first-step': '_:b0',
         'steps': {
             '_:b0': {
