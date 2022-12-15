@@ -20,3 +20,9 @@ jobs:
         run: make lint
       - name: Unit Test
         run: make unittest
+      - name: Login to GHCR
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
