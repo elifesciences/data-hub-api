@@ -26,3 +26,8 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Push the Image
+        run: |
+          DATA_HUB_API_IMAGE_REPO=ghcr.io/elifesciences/data-hub-api_unstable \
+          DATA_HUB_API_IMAGE_TAG=latest \
+          make docker-push
