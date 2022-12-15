@@ -99,8 +99,11 @@ stop:
 logs:
 	$(DOCKER_COMPOSE) logs -f
 
-docker-push:
-	$(DOCKER_COMPOSE) push data-hub-api
+docker-tag-and-push:
+	docker compose \
+		tag ${DATA_HUB_API_IMAGE_REPO}:${DATA_HUB_API_IMAGE_TAG} \
+		data-hub-api \
+		--push
 
 
 ci-build-and-test:

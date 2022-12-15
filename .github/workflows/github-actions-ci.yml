@@ -30,4 +30,4 @@ jobs:
         run: |
           DATA_HUB_API_IMAGE_REPO=ghcr.io/elifesciences/data-hub-api_unstable \
           DATA_HUB_API_IMAGE_TAG=latest \
-          make build docker-push
+          make docker-tag-and-push
