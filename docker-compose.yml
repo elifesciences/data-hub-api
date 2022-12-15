@@ -5,4 +5,4 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: elifesciences/data-hub-api:${IMAGE_TAG}
+    image: ${DATA_HUB_API_IMAGE_REPO}:${DATA_HUB_API_IMAGE_TAG}

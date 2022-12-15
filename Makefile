@@ -99,6 +99,9 @@ stop:
 logs:
 	$(DOCKER_COMPOSE) logs -f
 
+docker-push:
+	$(DOCKER_COMPOSE) push data-hub-api
+
 
 ci-build-and-test:
 	$(MAKE) DOCKER_COMPOSE="$(DOCKER_COMPOSE_CI)" \
