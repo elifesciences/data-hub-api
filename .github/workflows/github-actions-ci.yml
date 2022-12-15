@@ -21,7 +21,12 @@ jobs:
       - name: Unit Test
         run: make unittest
 
-      # Docker Build and Push
+  docker-build-and-push:
+    needs: [build-and-test]
+
+    runs-on: ubuntu-latest
+
+    steps:
       - name: Set tags
         id: set_tags
         run: |
