@@ -82,7 +82,7 @@ class TestGetDocmapsItemForQueryResultItem:
 
 
 class TestScietyDocmapsProvider:
-    def test_should_create_index_with_non_empty_articles(
+    def test_should_create_index_with_non_empty_docmaps(
         self,
         iter_dict_from_bq_query_mock: MagicMock
     ):
@@ -90,6 +90,6 @@ class TestScietyDocmapsProvider:
             DOCMAPS_QUERY_RESULT_ITEM_1
         ])
         docmaps_index = ScietyDocmapsProvider().get_docmaps_index()
-        assert docmaps_index['articles'] == [
+        assert docmaps_index['docmaps'] == [
             get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
         ]

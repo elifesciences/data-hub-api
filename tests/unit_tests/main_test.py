@@ -30,11 +30,11 @@ def test_read_main():
 
 
 class TestGetScietyDocmapsIndex:
-    def test_should_return_json_with_articles_list(
+    def test_should_return_json_with_docmaps_list(
         self,
         sciety_docmaps_provider_mock: MagicMock
     ):
-        docmaps_index = [{'articles': [{'id': 'article_1'}, {'id': 'article_1'}]}]
+        docmaps_index = [{'docmaps': [{'id': 'docmap_1'}, {'id': 'docmap_2'}]}]
         sciety_docmaps_provider_mock.get_docmaps_index.return_value = docmaps_index
         client = TestClient(create_app())
         response = client.get("/enhanced-preprints/docmaps/v1/index")

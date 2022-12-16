@@ -64,4 +64,4 @@ class ScietyDocmapsProvider:
 
     def get_docmaps_index(self) -> dict:
         article_docmaps_list = list(self.iter_docmaps())
-        return {'articles': article_docmaps_list}
+        return {'docmaps': article_docmaps_list}
