@@ -4,3 +4,5 @@ services:
   data-hub-api:
     ports:
       - "${DATA_HUB_API_PORT}:8000"
+    volumes:
+      - ~/.config/gcloud:/root/.config/gcloud
