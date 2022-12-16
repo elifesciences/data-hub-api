@@ -54,15 +54,32 @@ t_preprint_doi_and_url_by_manuscript_id AS (
       ON Version.Long_Manuscript_Identifier = t_preprint_doi_and_url_by_long_manuscript_identifier.long_manuscript_identifier
   )
   WHERE rn = 1
+),
+
+t_europepmc_response_by_normalized_title AS (
+  SELECT
+    * EXCEPT(rn)
+  FROM (
+    SELECT
+      REGEXP_REPLACE(LOWER(response.title_without_markup), r'[^a-z]', '') AS normalized_title,
+      response.*,
+      ROW_NUMBER() OVER(
+        PARTITION BY REGEXP_REPLACE(LOWER(response.title_without_markup), r'[^a-z]', '')
+        ORDER BY response.firstIndexDate ASC
+      ) AS rn
+    FROM `elife-data-pipeline.prod.v_latest_europepmc_preprint_servers_response` AS response
+    WHERE response.doi LIKE '10.1101/%'
+  )
+  WHERE rn = 1
 )
 
 SELECT
   Version.Manuscript_ID AS manuscript_id,
   Version.Long_Manuscript_Identifier AS long_manuscript_identifier,
   Version.QC_Complete_Timestamp AS qc_complete_timestamp,
-  preprint_doi_and_url.preprint_doi,
+  COALESCE(preprint_doi_and_url.preprint_doi, europepmc_response.doi) AS preprint_doi,
   preprint_doi_and_url.preprint_version,
-  preprint_doi_and_url.preprint_url,
+  COALESCE(preprint_doi_and_url.preprint_url, CONCAT('https://doi.org/', europepmc_response.doi)) AS preprint_url,
   CONCAT('elife/', preprint_doi_and_url.preprint_doi) AS docmap_id,
   PARSE_JSON(ARRAY_TO_STRING(
     [
@@ -78,11 +95,15 @@ SELECT
       '}'
     ],
     '\n'
-  )) AS provider_json
+  )) AS provider_json,
+  Version.Manuscript_Title AS manuscript_title
 FROM `elife-data-pipeline.prod.mv_Editorial_Manuscript_Version` AS Version
-JOIN t_preprint_doi_and_url_by_manuscript_id AS preprint_doi_and_url
+LEFT JOIN t_preprint_doi_and_url_by_manuscript_id AS preprint_doi_and_url
   ON preprint_doi_and_url.manuscript_id = Version.Manuscript_ID
+LEFT JOIN t_europepmc_response_by_normalized_title AS europepmc_response
+  ON europepmc_response.normalized_title = REGEXP_REPLACE(LOWER(Version.Manuscript_Title), r'[^a-z]', '')
 WHERE
   Version.Long_Manuscript_Identifier LIKE '%-RP-%'
   AND Version.Overall_Stage = 'Full Submission'
   AND Version.Position_In_Overall_Stage = 1
+  AND COALESCE(preprint_doi_and_url.preprint_doi, europepmc_response.doi) IS NOT NULL
