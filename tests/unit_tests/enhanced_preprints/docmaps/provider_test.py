@@ -8,7 +8,7 @@ import pytest
 from data_hub_api.enhanced_preprints.docmaps import provider as provider_module
 from data_hub_api.enhanced_preprints.docmaps.provider import (
     get_docmap_item_for_query_result_item,
-    ScietyDocmapsProvider,
+    EnhancedPreprintsDocmapsProvider,
     DOCMAPS_JSONLD_SCHEMA_URL,
     DOCMAP_ID_PREFIX,
     DOCMAP_ID_SUFFIX
@@ -81,7 +81,7 @@ class TestGetDocmapsItemForQueryResultItem:
         assert not first_step['actions']
 
 
-class TestScietyDocmapsProvider:
+class TestEnhancedPreprintsDocmapsProvider:
     def test_should_create_index_with_non_empty_docmaps(
         self,
         iter_dict_from_bq_query_mock: MagicMock
@@ -89,7 +89,7 @@ class TestScietyDocmapsProvider:
         iter_dict_from_bq_query_mock.return_value = iter([
             DOCMAPS_QUERY_RESULT_ITEM_1
         ])
-        docmaps_index = ScietyDocmapsProvider().get_docmaps_index()
+        docmaps_index = EnhancedPreprintsDocmapsProvider().get_docmaps_index()
         assert docmaps_index['docmaps'] == [
             get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
         ]
