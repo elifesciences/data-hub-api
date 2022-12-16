@@ -90,6 +90,6 @@ class TestScietyDocmapsProvider:
             DOCMAPS_QUERY_RESULT_ITEM_1
         ])
         docmaps_index = ScietyDocmapsProvider().get_docmaps_index()
-        assert docmaps_index['articles'] == [
+        assert docmaps_index['docmaps'] == [
             get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
         ]
