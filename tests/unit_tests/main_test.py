@@ -37,5 +37,5 @@ class TestGetScietyDocmapsIndex:
         docmaps_index = [{'articles': [{'id': 'article_1'}, {'id': 'article_1'}]}]
         sciety_docmaps_provider_mock.get_docmaps_index.return_value = docmaps_index
         client = TestClient(create_app())
-        response = client.get("/sciety/docmaps/v1/index")
+        response = client.get("/enhanced-preprints/docmaps/v1/index")
         assert response.json() == docmaps_index

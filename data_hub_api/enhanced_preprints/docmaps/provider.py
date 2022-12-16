@@ -7,14 +7,14 @@ from typing import Iterable
 from data_hub_api.utils.bigquery import (
     iter_dict_from_bq_query
 )
-from data_hub_api.sciety.docmaps.sql import get_sql_path
+from data_hub_api.enhanced_preprints.docmaps.sql import get_sql_path
 
 
 LOGGER = logging.getLogger(__name__)
 
 DOCMAPS_JSONLD_SCHEMA_URL = 'https://w3id.org/docmaps/context.jsonld'
 
-DOCMAP_ID_PREFIX = 'https://sciety.org/docmaps/v1/articles/'
+DOCMAP_ID_PREFIX = 'https://data-hub-api.elifesciences.org/enhanced-preprints/docmaps/v1/articles/'
 DOCMAP_ID_SUFFIX = '/docmap.json'
 
 

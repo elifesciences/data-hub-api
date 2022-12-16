@@ -5,8 +5,8 @@ from typing import Iterable
 
 import pytest
 
-from data_hub_api.sciety.docmaps import provider as provider_module
-from data_hub_api.sciety.docmaps.provider import (
+from data_hub_api.enhanced_preprints.docmaps import provider as provider_module
+from data_hub_api.enhanced_preprints.docmaps.provider import (
     get_docmap_item_for_query_result_item,
     ScietyDocmapsProvider,
     DOCMAPS_JSONLD_SCHEMA_URL,
