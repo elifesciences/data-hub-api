@@ -14,7 +14,7 @@ LOGGER = logging.getLogger(__name__)
 
 DOCMAPS_JSONLD_SCHEMA_URL = 'https://w3id.org/docmaps/context.jsonld'
 
-DOCMAP_ID_PREFIX = 'https://sciety.org/docmaps/v1/articles/'
+DOCMAP_ID_PREFIX = 'https://data-hub-api.elifesciences.org/enhanced-preprints/docmaps/v1/articles/'
 DOCMAP_ID_SUFFIX = '/docmap.json'
 
 
