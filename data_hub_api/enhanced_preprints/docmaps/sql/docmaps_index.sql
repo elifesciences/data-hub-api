@@ -71,7 +71,7 @@ SELECT
   COALESCE(preprint_doi_and_url.preprint_doi, europepmc_response.doi) AS preprint_doi,
   preprint_doi_and_url.preprint_version,
   COALESCE(preprint_doi_and_url.preprint_url, CONCAT('https://doi.org/', europepmc_response.doi)) AS preprint_url,
-  CONCAT('elife/', preprint_doi_and_url.preprint_doi) AS docmap_id,
+  CONCAT('elife/', COALESCE(preprint_doi_and_url.preprint_doi, europepmc_response.doi)) AS docmap_id,
   PARSE_JSON(ARRAY_TO_STRING(
     [
       '{',
