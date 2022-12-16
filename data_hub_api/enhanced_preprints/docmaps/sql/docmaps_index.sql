@@ -40,20 +40,11 @@ t_preprint_doi_and_url_by_long_manuscript_identifier AS (
 
 t_preprint_doi_and_url_by_manuscript_id AS (
   SELECT
-    * EXCEPT(rn)
-  FROM (
-    SELECT
-      t_preprint_doi_and_url_by_long_manuscript_identifier.*,
-      Version.Manuscript_ID AS manuscript_id,
-      ROW_NUMBER() OVER(
-        PARTITION BY Version.Manuscript_ID
-        ORDER BY t_preprint_doi_and_url_by_long_manuscript_identifier.imported_timestamp DESC
-      ) AS rn
-    FROM t_preprint_doi_and_url_by_long_manuscript_identifier
-    JOIN `elife-data-pipeline.prod.mv_Editorial_Manuscript_Version` AS Version
-      ON Version.Long_Manuscript_Identifier = t_preprint_doi_and_url_by_long_manuscript_identifier.long_manuscript_identifier
-  )
-  WHERE rn = 1
+    Version.Manuscript_ID AS manuscript_id,
+    preprint_doi_url.*
+  FROM t_preprint_doi_and_url_by_long_manuscript_identifier AS preprint_doi_url
+  JOIN `elife-data-pipeline.prod.mv_Editorial_Last_Manuscript_Version` AS Version
+    ON Version.Long_Manuscript_Identifier = preprint_doi_url.long_manuscript_identifier
 ),
 
 t_europepmc_response_by_normalized_title AS (
