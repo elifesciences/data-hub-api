@@ -26,7 +26,7 @@ DOCMAPS_QUERY_RESULT_ITEM_1 = {
     'preprint_version': None,
     'preprint_url': f'https://doi.org/{DOI_1}',
     'docmap_id': 'docmap_id_1',
-    'provider_json': '{"id": "provider_1"}'
+    'publisher_json': '{"id": "publisher_1"}'
 }
 
 
@@ -58,10 +58,10 @@ class TestGetDocmapsItemForQueryResultItem:
         )
         assert docmaps_item['updated'] == docmaps_item['created']
 
-    def test_should_parse_and_include_provider_json(self):
+    def test_should_parse_and_include_publisher_json(self):
         docmaps_item = get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
-        assert docmaps_item['provider'] == json.loads(
-            DOCMAPS_QUERY_RESULT_ITEM_1['provider_json']
+        assert docmaps_item['publisher'] == json.loads(
+            DOCMAPS_QUERY_RESULT_ITEM_1['publisher_json']
         )
 
     def test_should_populate_first_step_input_doi_and_url(self):
