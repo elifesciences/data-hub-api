@@ -44,7 +44,7 @@ def get_docmap_item_for_query_result_item(query_result_item: dict) -> dict:
     }
 
 
-class ScietyDocmapsProvider:
+class EnhancedPreprintsDocmapsProvider:
     def __init__(
         self,
         gcp_project_name: str = 'elife-data-pipeline'
