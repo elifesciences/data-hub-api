@@ -55,6 +55,7 @@ class EnhancedPreprintsDocmapsProvider:
         self.docmaps_index_query = (
             Path(get_sql_path('docmaps_index.sql')).read_text(encoding='utf-8')
         )
+        assert not (only_include_reviewed_preprint_type and only_include_evaluated_preprints)
         if only_include_reviewed_preprint_type:
             self.docmaps_index_query += '\nWHERE is_reviewed_preprint_type'
         if only_include_evaluated_preprints:

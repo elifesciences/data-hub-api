@@ -111,3 +111,12 @@ class TestEnhancedPreprintsDocmapsProvider:
             only_include_evaluated_preprints=True
         )
         assert provider.docmaps_index_query.rstrip().endswith('WHERE has_evaluations')
+
+    def test_should_allow_both_reviewed_prerint_type_and_evaluated_preprints_filter(
+        self
+    ):
+        with pytest.raises(AssertionError):
+            EnhancedPreprintsDocmapsProvider(
+                only_include_reviewed_preprint_type=True,
+                only_include_evaluated_preprints=True
+            )
