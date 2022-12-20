@@ -8,6 +8,7 @@ from data_hub_api.utils.bigquery import (
     iter_dict_from_bq_query
 )
 from data_hub_api.docmaps.sql import get_sql_path
+from data_hub_api.utils.json import remove_key_with_none_value_only
 
 
 LOGGER = logging.getLogger(__name__)
@@ -45,16 +46,21 @@ def get_docmap_actions_value_from_query_result(query_result_item: dict) -> list:
 def generate_docmap_steps(number_of_steps: int, query_result_item: dict) -> dict:
     step_number = 0
     while step_number < number_of_steps:
-        if number_of_steps == 1:
-            steps_dict = {
-                    '_:b'+str(step_number): {
-                        'assertions': [],
-                        'inputs': get_docmap_inputs_value_from_query_result(query_result_item),
-                        'actions': get_docmap_actions_value_from_query_result(query_result_item)
-                    }
-                }
+        next_step = step_number + 1 if step_number + 1 < number_of_steps else None
+        previous_step = step_number - 1 if step_number > 0 else None
+        step_dict = {
+            'assertions': [],
+            'inputs': get_docmap_inputs_value_from_query_result(query_result_item),
+            'actions': get_docmap_actions_value_from_query_result(query_result_item),
+            'next-step': '_:b'+str(next_step) if next_step else None,
+            'previous-step': '_:b'+str(previous_step) if previous_step else None
+        }
+
+        steps_dict = {
+            '_:b'+str(step_number): step_dict
+        }
         step_number += 1
-    return steps_dict
+    return remove_key_with_none_value_only(steps_dict)
 
 
 def get_docmap_item_for_query_result_item(query_result_item: dict) -> dict:
