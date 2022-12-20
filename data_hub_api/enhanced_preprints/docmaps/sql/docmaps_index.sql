@@ -62,39 +62,64 @@ t_europepmc_response_by_normalized_title AS (
     WHERE response.doi LIKE '10.1101/%'
   )
   WHERE rn = 1
+),
+
+t_hypothesis_annotation_with_doi AS (
+  SELECT
+    *,
+    REGEXP_EXTRACT(annotation.uri, r'(10\.\d{3,}[^v]*)v?') AS source_doi
+  FROM `elife-data-pipeline.de_proto.v_hypothesis_annotation` AS annotation
+  WHERE annotation.group = 'q5X6RWJ6'
+),
+
+t_result AS (
+  SELECT
+    Version.Manuscript_ID AS manuscript_id,
+    Version.Long_Manuscript_Identifier AS long_manuscript_identifier,
+    Version.QC_Complete_Timestamp AS qc_complete_timestamp,
+    COALESCE(preprint_doi_and_url.preprint_doi, europepmc_response.doi) AS preprint_doi,
+    preprint_doi_and_url.preprint_version,
+    COALESCE(preprint_doi_and_url.preprint_url, CONCAT('https://doi.org/', europepmc_response.doi)) AS preprint_url,
+    CONCAT('elife/', COALESCE(preprint_doi_and_url.preprint_doi, europepmc_response.doi)) AS docmap_id,
+    PARSE_JSON(ARRAY_TO_STRING(
+      [
+        '{',
+        '  "id": "https://elifesciences.org/",',
+        '  "name": "eLife",',
+        '  "logo": "https://sciety.org/static/groups/elife--b560187e-f2fb-4ff9-a861-a204f3fc0fb0.png",',
+        '  "homepage": "https://elifesciences.org/",',
+        '  "account": {',
+        '    "id": "https://sciety.org/groups/elife",',
+        '    "service": "https://sciety.org"',
+        '  }',
+        '}'
+      ],
+      '\n'
+    )) AS publisher_json,
+    Version.Manuscript_Title AS manuscript_title,
+
+    (Version.Long_Manuscript_Identifier LIKE '%-RP-%') AS is_reviewed_preprint,
+
+    ARRAY(
+      SELECT AS STRUCT
+        annotation.id AS hypothesis_id,
+        annotation.created AS annotation_created_timestamp
+      FROM t_hypothesis_annotation_with_doi AS annotation
+      WHERE annotation.source_doi = COALESCE(preprint_doi_and_url.preprint_doi, europepmc_response.doi)
+    ) AS evaluations
+  FROM `elife-data-pipeline.prod.mv_Editorial_Manuscript_Version` AS Version
+  LEFT JOIN t_preprint_doi_and_url_by_manuscript_id AS preprint_doi_and_url
+    ON preprint_doi_and_url.manuscript_id = Version.Manuscript_ID
+  LEFT JOIN t_europepmc_response_by_normalized_title AS europepmc_response
+    ON europepmc_response.normalized_title = REGEXP_REPLACE(LOWER(Version.Manuscript_Title), r'[^a-z]', '')
+  WHERE
+    Version.Overall_Stage = 'Full Submission'
+    AND Version.Position_In_Overall_Stage = 1
+    AND COALESCE(preprint_doi_and_url.preprint_doi, europepmc_response.doi) IS NOT NULL
 )
 
 SELECT
-  Version.Manuscript_ID AS manuscript_id,
-  Version.Long_Manuscript_Identifier AS long_manuscript_identifier,
-  Version.QC_Complete_Timestamp AS qc_complete_timestamp,
-  COALESCE(preprint_doi_and_url.preprint_doi, europepmc_response.doi) AS preprint_doi,
-  preprint_doi_and_url.preprint_version,
-  COALESCE(preprint_doi_and_url.preprint_url, CONCAT('https://doi.org/', europepmc_response.doi)) AS preprint_url,
-  CONCAT('elife/', COALESCE(preprint_doi_and_url.preprint_doi, europepmc_response.doi)) AS docmap_id,
-  PARSE_JSON(ARRAY_TO_STRING(
-    [
-      '{',
-      '  "id": "https://elifesciences.org/",',
-      '  "name": "eLife",',
-      '  "logo": "https://sciety.org/static/groups/elife--b560187e-f2fb-4ff9-a861-a204f3fc0fb0.png",',
-      '  "homepage": "https://elifesciences.org/",',
-      '  "account": {',
-      '    "id": "https://sciety.org/groups/elife",',
-      '    "service": "https://sciety.org"',
-      '  }',
-      '}'
-    ],
-    '\n'
-  )) AS publisher_json,
-  Version.Manuscript_Title AS manuscript_title
-FROM `elife-data-pipeline.prod.mv_Editorial_Manuscript_Version` AS Version
-LEFT JOIN t_preprint_doi_and_url_by_manuscript_id AS preprint_doi_and_url
-  ON preprint_doi_and_url.manuscript_id = Version.Manuscript_ID
-LEFT JOIN t_europepmc_response_by_normalized_title AS europepmc_response
-  ON europepmc_response.normalized_title = REGEXP_REPLACE(LOWER(Version.Manuscript_Title), r'[^a-z]', '')
-WHERE
-  Version.Long_Manuscript_Identifier LIKE '%-RP-%'
-  AND Version.Overall_Stage = 'Full Submission'
-  AND Version.Position_In_Overall_Stage = 1
-  AND COALESCE(preprint_doi_and_url.preprint_doi, europepmc_response.doi) IS NOT NULL
+  *,
+  (ARRAY_LENGTH(evaluations) > 0) AS has_evaluations
+FROM t_result
+WHERE is_reviewed_preprint
