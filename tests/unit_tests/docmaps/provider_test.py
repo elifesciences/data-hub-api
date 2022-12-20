@@ -90,7 +90,7 @@ class TestGetDocmapsItemForQueryResultItem:
         first_step = docmaps_item['steps'][first_step_key]
         assert not first_step['assertions']
 
-    def test_should_populate_actions_with_elife_doi(self):
+    def test_should_populate_actions_with_elife_doi_and_url(self):
         docmaps_item = get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
         first_step_key = docmaps_item['first-step']
         first_step = docmaps_item['steps'][first_step_key]
@@ -100,7 +100,7 @@ class TestGetDocmapsItemForQueryResultItem:
                     'type': '',
                     'doi': 'elife_doi_1',
                     'published': '',
-                    'url': '',
+                    'url': 'https://doi.org/elife_doi_1',
                     'content': []
                 }
             ]

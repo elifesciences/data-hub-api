@@ -26,13 +26,16 @@ def get_docmap_inputs_value_from_query_result(query_result_item: dict) -> list:
 
 
 def get_docmap_actions_value_from_query_result(query_result_item: dict) -> list:
+    query_result_evaluations = query_result_item['evaluations']
+    doi = query_result_item['elife_doi']
+    url = 'https://doi.org/'+doi
     return [{
         'outputs': [
             {
                 'type': '',
-                'doi': query_result_item['elife_doi'],
+                'doi': doi,
                 'published': '',
-                'url': '',
+                'url': url,
                 'content': []
             }
         ]
