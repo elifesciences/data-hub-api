@@ -106,7 +106,9 @@ t_result AS (
         annotation.created AS annotation_created_timestamp
       FROM t_hypothesis_annotation_with_doi AS annotation
       WHERE annotation.source_doi = COALESCE(preprint_doi_and_url.preprint_doi, europepmc_response.doi)
-    ) AS evaluations
+    ) AS evaluations,
+
+    Version.DOI AS elife_doi
   FROM `elife-data-pipeline.prod.mv_Editorial_Manuscript_Version` AS Version
   LEFT JOIN t_preprint_doi_and_url_by_manuscript_id AS preprint_doi_and_url
     ON preprint_doi_and_url.manuscript_id = Version.Manuscript_ID
