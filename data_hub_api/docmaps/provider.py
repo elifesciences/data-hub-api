@@ -18,6 +18,13 @@ DOCMAP_ID_PREFIX = 'https://data-hub-api.elifesciences.org/enhanced-preprints/do
 DOCMAP_ID_SUFFIX = '/docmap.json'
 
 
+def get_docmap_inputs_value_from_query_result(query_result_item: dict) -> list:
+    return [{
+            'doi': query_result_item['preprint_doi'],
+            'url': query_result_item['preprint_url'],
+        }]
+
+
 def get_docmap_item_for_query_result_item(query_result_item: dict) -> dict:
     qc_complete_timestamp_str = query_result_item['qc_complete_timestamp'].isoformat()
     publisher_json = query_result_item['publisher_json']
@@ -33,14 +40,10 @@ def get_docmap_item_for_query_result_item(query_result_item: dict) -> dict:
         'steps': {
             '_:b0': {
                 'assertions': [],
-                'inputs': [{
-                    'doi': query_result_item['preprint_doi'],
-                    'url': query_result_item['preprint_url'],
-                }],
+                'inputs': get_docmap_inputs_value_from_query_result(query_result_item),
                 'actions': []
             }
         }
-
     }
 
 
