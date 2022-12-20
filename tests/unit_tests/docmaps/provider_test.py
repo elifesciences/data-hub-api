@@ -95,9 +95,9 @@ class TestGetDocmapsItemForQueryResultItem:
         first_step_key = docmaps_item['first-step']
         first_step = docmaps_item['steps'][first_step_key]
         assert first_step['actions'] == [{
-            'outputs':[
+            'outputs': [
                 {
-                    'type':'',
+                    'type': '',
                     'doi': 'elife_doi_1',
                     'published': '',
                     'url': '',

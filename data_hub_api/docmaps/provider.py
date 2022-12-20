@@ -20,16 +20,16 @@ DOCMAP_ID_SUFFIX = '/docmap.json'
 
 def get_docmap_inputs_value_from_query_result(query_result_item: dict) -> list:
     return [{
-            'doi': query_result_item['preprint_doi'],
-            'url': query_result_item['preprint_url'],
-        }]
+        'doi': query_result_item['preprint_doi'],
+        'url': query_result_item['preprint_url'],
+    }]
 
 
 def get_docmap_actions_value_from_query_result(query_result_item: dict) -> list:
     return [{
-        'outputs':[
+        'outputs': [
             {
-                'type':'',
+                'type': '',
                 'doi': query_result_item['elife_doi'],
                 'published': '',
                 'url': '',
