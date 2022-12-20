@@ -122,4 +122,3 @@ SELECT
   *,
   (ARRAY_LENGTH(evaluations) > 0) AS has_evaluations
 FROM t_result
-WHERE is_reviewed_preprint

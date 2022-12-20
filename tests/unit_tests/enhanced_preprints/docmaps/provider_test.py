@@ -93,3 +93,11 @@ class TestEnhancedPreprintsDocmapsProvider:
         assert docmaps_index['docmaps'] == [
             get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
         ]
+
+    def test_should_add_is_reviewed_preprint_where_clause_to_query(
+        self
+    ):
+        provider = EnhancedPreprintsDocmapsProvider(
+            only_include_reviewed_preprints=True
+        )
+        assert provider.docmaps_index_query.rstrip().endswith('WHERE is_reviewed_preprint')
