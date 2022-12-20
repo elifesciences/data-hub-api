@@ -11,7 +11,8 @@ from data_hub_api.docmaps.provider import (
     DocmapsProvider,
     DOCMAPS_JSONLD_SCHEMA_URL,
     DOCMAP_ID_PREFIX,
-    DOCMAP_ID_SUFFIX
+    DOCMAP_ID_SUFFIX,
+    generate_docmap_steps
 )
 
 
@@ -45,6 +46,42 @@ DOCMAPS_QUERY_RESULT_ITEM_1 = {
 def _iter_dict_from_bq_query_mock() -> Iterable[MagicMock]:
     with patch.object(provider_module, 'iter_dict_from_bq_query') as mock:
         yield mock
+
+
+class TestGenerateDocmapSteps:
+    def test_should_return_first_step_key_if_number_of_steps_is_one(self):
+        steps = generate_docmap_steps(1, DOCMAPS_QUERY_RESULT_ITEM_1)
+        step_key_list = list(steps.keys())
+        assert step_key_list == ['_:b0']
+
+    def test_should_return_all_step_keys_if_number_of_steps_is_more_than_one(self):
+        steps = generate_docmap_steps(3, DOCMAPS_QUERY_RESULT_ITEM_1)
+        step_key_list = list(steps.keys())
+        assert step_key_list == ['_:b0', '_:b1', '_:b2']
+
+    def test_should_not_have_next_or_previous_step_keys_while_number_of_steps_is_one(self):
+        steps = generate_docmap_steps(1, DOCMAPS_QUERY_RESULT_ITEM_1)
+        with pytest.raises(KeyError):
+            assert steps['_:b0']['previous-step']
+        with pytest.raises(KeyError):
+            assert steps['_:b0']['next-step']
+
+    def test_should_only_have_next_step_for_first_step_while_number_of_steps_more_than_one(self):
+        steps = generate_docmap_steps(2, DOCMAPS_QUERY_RESULT_ITEM_1)
+        assert steps['_:b0']['next-step'] == '_:b1'
+        with pytest.raises(KeyError):
+            assert steps['_:b0']['previous-step']
+
+    def test_should_have_both_next_and_previous_steps_keys_for_a_middle_step(self):
+        steps = generate_docmap_steps(3, DOCMAPS_QUERY_RESULT_ITEM_1)
+        assert steps['_:b1']['next-step'] == '_:b2'
+        assert steps['_:b1']['previous-step'] == '_:b0'
+
+    def test_should_only_have_previous_step_for_latest_step(self):
+        steps = generate_docmap_steps(3, DOCMAPS_QUERY_RESULT_ITEM_1)
+        assert steps['_:b2']['previous-step'] == '_:b1'
+        with pytest.raises(KeyError):
+            assert steps['_:b2']['next-step']
 
 
 class TestGetDocmapsItemForQueryResultItem:
