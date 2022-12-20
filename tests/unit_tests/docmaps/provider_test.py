@@ -26,7 +26,18 @@ DOCMAPS_QUERY_RESULT_ITEM_1 = {
     'preprint_version': None,
     'preprint_url': f'https://doi.org/{DOI_1}',
     'docmap_id': 'docmap_id_1',
-    'publisher_json': '{"id": "publisher_1"}'
+    'publisher_json': '{"id": "publisher_1"}',
+    'evaluations': [
+        {
+            'hypothesis_id': 'hypothesis_id_1',
+            'annotation_created_timestamp': 'annotation_created_timestamp_1'
+        },
+        {
+            'hypothesis_id': 'hypothesis_id_2',
+            'annotation_created_timestamp': 'annotation_created_timestamp_2'
+        }
+    ],
+    'elife_doi': 'elife_doi_1'
 }
 
 
@@ -73,12 +84,27 @@ class TestGetDocmapsItemForQueryResultItem:
         assert first_step_input[0]['doi'] == DOCMAPS_QUERY_RESULT_ITEM_1['preprint_doi']
         assert first_step_input[0]['url'] == DOCMAPS_QUERY_RESULT_ITEM_1['preprint_url']
 
-    def test_should_populate_empty_first_step_assertions_and_actions(self):
+    def test_should_populate_empty_first_step_assertions(self):
         docmaps_item = get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
         first_step_key = docmaps_item['first-step']
         first_step = docmaps_item['steps'][first_step_key]
         assert not first_step['assertions']
-        assert not first_step['actions']
+
+    def test_should_populate_actions_with_elife_doi(self):
+        docmaps_item = get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
+        first_step_key = docmaps_item['first-step']
+        first_step = docmaps_item['steps'][first_step_key]
+        assert first_step['actions'] == [{
+            'outputs':[
+                {
+                    'type':'',
+                    'doi': 'elife_doi_1',
+                    'published': '',
+                    'url': '',
+                    'content': []
+                }
+            ]
+        }]
 
 
 class TestEnhancedPreprintsDocmapsProvider:

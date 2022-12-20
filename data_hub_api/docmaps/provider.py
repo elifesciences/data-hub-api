@@ -25,6 +25,20 @@ def get_docmap_inputs_value_from_query_result(query_result_item: dict) -> list:
         }]
 
 
+def get_docmap_actions_value_from_query_result(query_result_item: dict) -> list:
+    return [{
+        'outputs':[
+            {
+                'type':'',
+                'doi': query_result_item['elife_doi'],
+                'published': '',
+                'url': '',
+                'content': []
+            }
+        ]
+    }]
+
+
 def get_docmap_item_for_query_result_item(query_result_item: dict) -> dict:
     qc_complete_timestamp_str = query_result_item['qc_complete_timestamp'].isoformat()
     publisher_json = query_result_item['publisher_json']
@@ -41,7 +55,7 @@ def get_docmap_item_for_query_result_item(query_result_item: dict) -> dict:
             '_:b0': {
                 'assertions': [],
                 'inputs': get_docmap_inputs_value_from_query_result(query_result_item),
-                'actions': []
+                'actions': get_docmap_actions_value_from_query_result(query_result_item)
             }
         }
     }
