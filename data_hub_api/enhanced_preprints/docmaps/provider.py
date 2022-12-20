@@ -48,7 +48,8 @@ class EnhancedPreprintsDocmapsProvider:
     def __init__(
         self,
         gcp_project_name: str = 'elife-data-pipeline',
-        only_include_reviewed_preprints: bool = True
+        only_include_reviewed_preprints: bool = True,
+        only_include_evaluated_preprints: bool = False
     ) -> None:
         self.gcp_project_name = gcp_project_name
         self.docmaps_index_query = (
@@ -56,6 +57,8 @@ class EnhancedPreprintsDocmapsProvider:
         )
         if only_include_reviewed_preprints:
             self.docmaps_index_query += '\nWHERE is_reviewed_preprint'
+        if only_include_evaluated_preprints:
+            self.docmaps_index_query += '\nWHERE has_evaluations'
 
     def iter_docmaps(self) -> Iterable[dict]:
         bq_result_iterable = iter_dict_from_bq_query(

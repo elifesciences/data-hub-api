@@ -116,9 +116,15 @@ t_result AS (
     Version.Overall_Stage = 'Full Submission'
     AND Version.Position_In_Overall_Stage = 1
     AND COALESCE(preprint_doi_and_url.preprint_doi, europepmc_response.doi) IS NOT NULL
+),
+
+t_with_has_evaluations AS (
+  SELECT
+    *,
+    (ARRAY_LENGTH(evaluations) > 0) AS has_evaluations
+  FROM t_result
 )
 
 SELECT
-  *,
-  (ARRAY_LENGTH(evaluations) > 0) AS has_evaluations
-FROM t_result
+  *
+FROM t_with_has_evaluations
