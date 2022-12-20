@@ -99,7 +99,7 @@ class TestGetDocmapsItemForQueryResultItem:
                 {
                     'type': '',
                     'doi': 'elife_doi_1',
-                    'published': '',
+                    'published': 'annotation_created_timestamp_1',
                     'url': 'https://doi.org/elife_doi_1',
                     'content': []
                 }

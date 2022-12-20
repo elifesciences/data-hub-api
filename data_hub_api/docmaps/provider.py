@@ -34,12 +34,27 @@ def get_docmap_actions_value_from_query_result(query_result_item: dict) -> list:
             {
                 'type': '',
                 'doi': doi,
-                'published': '',
+                'published': query_result_evaluations[0]['annotation_created_timestamp'],
                 'url': url,
                 'content': []
             }
         ]
     }]
+
+
+def generate_docmap_steps(number_of_steps: int, query_result_item: dict) -> dict:
+    step_number = 0
+    while step_number < number_of_steps:
+        if number_of_steps == 1:
+            steps_dict = {
+                    '_:b'+str(step_number): {
+                        'assertions': [],
+                        'inputs': get_docmap_inputs_value_from_query_result(query_result_item),
+                        'actions': get_docmap_actions_value_from_query_result(query_result_item)
+                    }
+                }
+        step_number += 1
+    return steps_dict
 
 
 def get_docmap_item_for_query_result_item(query_result_item: dict) -> dict:
@@ -54,13 +69,7 @@ def get_docmap_item_for_query_result_item(query_result_item: dict) -> dict:
         'updated': qc_complete_timestamp_str,
         'publisher': json.loads(publisher_json),
         'first-step': '_:b0',
-        'steps': {
-            '_:b0': {
-                'assertions': [],
-                'inputs': get_docmap_inputs_value_from_query_result(query_result_item),
-                'actions': get_docmap_actions_value_from_query_result(query_result_item)
-            }
-        }
+        'steps': generate_docmap_steps(1, query_result_item)
     }
 
 
