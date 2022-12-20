@@ -94,20 +94,20 @@ class TestEnhancedPreprintsDocmapsProvider:
             get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
         ]
 
-    def test_should_add_is_reviewed_preprint_where_clause_to_query(
+    def test_should_add_is_reviewed_preprint_type_where_clause_to_query(
         self
     ):
         provider = EnhancedPreprintsDocmapsProvider(
-            only_include_reviewed_preprints=True,
+            only_include_reviewed_preprint_type=True,
             only_include_evaluated_preprints=False
         )
-        assert provider.docmaps_index_query.rstrip().endswith('WHERE is_reviewed_preprint')
+        assert provider.docmaps_index_query.rstrip().endswith('WHERE is_reviewed_preprint_type')
 
     def test_should_add_has_evaluatons_where_clause_to_query(
         self
     ):
         provider = EnhancedPreprintsDocmapsProvider(
-            only_include_reviewed_preprints=False,
+            only_include_reviewed_preprint_type=False,
             only_include_evaluated_preprints=True
         )
         assert provider.docmaps_index_query.rstrip().endswith('WHERE has_evaluations')

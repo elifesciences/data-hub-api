@@ -98,7 +98,7 @@ t_result AS (
     )) AS publisher_json,
     Version.Manuscript_Title AS manuscript_title,
 
-    (Version.Long_Manuscript_Identifier LIKE '%-RP-%') AS is_reviewed_preprint,
+    (Version.Long_Manuscript_Identifier LIKE '%-RP-%') AS is_reviewed_preprint_type,
 
     ARRAY(
       SELECT AS STRUCT
