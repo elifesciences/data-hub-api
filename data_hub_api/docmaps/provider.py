@@ -7,7 +7,7 @@ from typing import Iterable
 from data_hub_api.utils.bigquery import (
     iter_dict_from_bq_query
 )
-from data_hub_api.enhanced_preprints.docmaps.sql import get_sql_path
+from data_hub_api.docmaps.sql import get_sql_path
 
 
 LOGGER = logging.getLogger(__name__)

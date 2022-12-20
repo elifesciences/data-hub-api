@@ -2,7 +2,7 @@ import logging
 
 from fastapi import FastAPI
 
-from data_hub_api.enhanced_preprints.docmaps.provider import DocmapsProvider
+from data_hub_api.docmaps.provider import DocmapsProvider
 
 
 LOGGER = logging.getLogger(__name__)
