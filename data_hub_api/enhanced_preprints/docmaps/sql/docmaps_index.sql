@@ -86,7 +86,7 @@ SELECT
       '}'
     ],
     '\n'
-  )) AS provider_json,
+  )) AS publisher_json,
   Version.Manuscript_Title AS manuscript_title
 FROM `elife-data-pipeline.prod.mv_Editorial_Manuscript_Version` AS Version
 LEFT JOIN t_preprint_doi_and_url_by_manuscript_id AS preprint_doi_and_url

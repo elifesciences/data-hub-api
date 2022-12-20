@@ -20,15 +20,15 @@ DOCMAP_ID_SUFFIX = '/docmap.json'
 
 def get_docmap_item_for_query_result_item(query_result_item: dict) -> dict:
     qc_complete_timestamp_str = query_result_item['qc_complete_timestamp'].isoformat()
-    provider_json = query_result_item['provider_json']
-    LOGGER.debug('provider_json: %r', provider_json)
+    publisher_json = query_result_item['publisher_json']
+    LOGGER.debug('publisher_json: %r', publisher_json)
     return {
         '@context': DOCMAPS_JSONLD_SCHEMA_URL,
         'type': 'docmap',
         'id': DOCMAP_ID_PREFIX + query_result_item['docmap_id'] + DOCMAP_ID_SUFFIX,
         'created': qc_complete_timestamp_str,
         'updated': qc_complete_timestamp_str,
-        'provider': json.loads(provider_json),
+        'publisher': json.loads(publisher_json),
         'first-step': '_:b0',
         'steps': {
             '_:b0': {
