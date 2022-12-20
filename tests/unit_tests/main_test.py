@@ -38,8 +38,6 @@ def _public_reviews_docmaps_provider_mock(
     return docmaps_provider_mock_list[1]
 
 
-
-
 def test_read_main():
     client = TestClient(create_app())
     response = client.get("/")
