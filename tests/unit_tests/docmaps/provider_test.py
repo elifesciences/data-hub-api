@@ -5,10 +5,10 @@ from typing import Iterable
 
 import pytest
 
-from data_hub_api.enhanced_preprints.docmaps import provider as provider_module
-from data_hub_api.enhanced_preprints.docmaps.provider import (
+from data_hub_api.docmaps import provider as provider_module
+from data_hub_api.docmaps.provider import (
     get_docmap_item_for_query_result_item,
-    EnhancedPreprintsDocmapsProvider,
+    DocmapsProvider,
     DOCMAPS_JSONLD_SCHEMA_URL,
     DOCMAP_ID_PREFIX,
     DOCMAP_ID_SUFFIX
@@ -89,7 +89,34 @@ class TestEnhancedPreprintsDocmapsProvider:
         iter_dict_from_bq_query_mock.return_value = iter([
             DOCMAPS_QUERY_RESULT_ITEM_1
         ])
-        docmaps_index = EnhancedPreprintsDocmapsProvider().get_docmaps_index()
+        docmaps_index = DocmapsProvider().get_docmaps_index()
         assert docmaps_index['docmaps'] == [
             get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
         ]
+
+    def test_should_add_is_reviewed_preprint_type_where_clause_to_query(
+        self
+    ):
+        provider = DocmapsProvider(
+            only_include_reviewed_preprint_type=True,
+            only_include_evaluated_preprints=False
+        )
+        assert provider.docmaps_index_query.rstrip().endswith('WHERE is_reviewed_preprint_type')
+
+    def test_should_add_has_evaluatons_where_clause_to_query(
+        self
+    ):
+        provider = DocmapsProvider(
+            only_include_reviewed_preprint_type=False,
+            only_include_evaluated_preprints=True
+        )
+        assert provider.docmaps_index_query.rstrip().endswith('WHERE has_evaluations')
+
+    def test_should_allow_both_reviewed_prerint_type_and_evaluated_preprints_filter(
+        self
+    ):
+        with pytest.raises(AssertionError):
+            DocmapsProvider(
+                only_include_reviewed_preprint_type=True,
+                only_include_evaluated_preprints=True
+            )

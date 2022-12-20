@@ -7,7 +7,7 @@ from typing import Iterable
 from data_hub_api.utils.bigquery import (
     iter_dict_from_bq_query
 )
-from data_hub_api.enhanced_preprints.docmaps.sql import get_sql_path
+from data_hub_api.docmaps.sql import get_sql_path
 
 
 LOGGER = logging.getLogger(__name__)
@@ -44,15 +44,22 @@ def get_docmap_item_for_query_result_item(query_result_item: dict) -> dict:
     }
 
 
-class EnhancedPreprintsDocmapsProvider:
+class DocmapsProvider:
     def __init__(
         self,
-        gcp_project_name: str = 'elife-data-pipeline'
+        gcp_project_name: str = 'elife-data-pipeline',
+        only_include_reviewed_preprint_type: bool = True,
+        only_include_evaluated_preprints: bool = False
     ) -> None:
         self.gcp_project_name = gcp_project_name
         self.docmaps_index_query = (
             Path(get_sql_path('docmaps_index.sql')).read_text(encoding='utf-8')
         )
+        assert not (only_include_reviewed_preprint_type and only_include_evaluated_preprints)
+        if only_include_reviewed_preprint_type:
+            self.docmaps_index_query += '\nWHERE is_reviewed_preprint_type'
+        if only_include_evaluated_preprints:
+            self.docmaps_index_query += '\nWHERE has_evaluations'
 
     def iter_docmaps(self) -> Iterable[dict]:
         bq_result_iterable = iter_dict_from_bq_query(
