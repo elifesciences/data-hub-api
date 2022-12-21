@@ -68,7 +68,7 @@ t_hypothesis_annotation_with_doi AS (
   SELECT
     *,
     REGEXP_EXTRACT(annotation.uri, r'(10\.\d{3,}[^v]*)v?') AS source_doi,
-    REGEXP_EXTRACT(annotation.uri, r'10\.\d{3,}.*v([1-9])') source_version
+    REGEXP_EXTRACT(annotation.uri, r'10\.\d{3,}.*v([1-9])') AS source_version
   FROM `elife-data-pipeline.de_proto.v_hypothesis_annotation` AS annotation
   WHERE annotation.group = 'q5X6RWJ6'
 ),
