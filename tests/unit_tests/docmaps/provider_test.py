@@ -140,6 +140,7 @@ class TestGetDocmapsItemForQueryResultItem:
         docmaps_item = get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
         second_step_input = docmaps_item['steps']['_:b1']['inputs']
         assert len(second_step_input) == 1
+        assert second_step_input[0]['type'] == 'preprint'
         assert second_step_input[0]['doi'] == DOCMAPS_QUERY_RESULT_ITEM_1['preprint_doi']
         assert second_step_input[0]['url'] == DOCMAPS_QUERY_RESULT_ITEM_1['preprint_url']
 

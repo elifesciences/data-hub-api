@@ -26,6 +26,7 @@ def get_docmap_inputs_value_from_query_result(
     if step_number == 0:
         return []
     return [{
+        'type': 'preprint',
         'doi': query_result_item['preprint_doi'],
         'url': query_result_item['preprint_url'],
     }]
