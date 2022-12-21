@@ -31,6 +31,7 @@ def get_docmap_actions_value_from_query_result(query_result_item: dict) -> list:
     doi = query_result_item['elife_doi']
     url = 'https://doi.org/'+doi
     return [{
+        'participants': [],
         'outputs': [
             {
                 'type': '',
