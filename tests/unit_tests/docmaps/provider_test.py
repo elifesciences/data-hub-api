@@ -144,7 +144,12 @@ class TestGetDocmapsItemForQueryResultItem:
                     'doi': 'elife_doi_1',
                     'published': 'annotation_created_timestamp_1',
                     'url': 'https://doi.org/elife_doi_1',
-                    'content': []
+                    'content': [
+                        {
+                            'type': 'web-page',
+                            'url': 'https://hypothes.is/a/elife_doi_1'
+                        }
+                    ]
                 }
             ]
         }]

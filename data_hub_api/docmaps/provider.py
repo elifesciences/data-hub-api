@@ -27,18 +27,24 @@ def get_docmap_inputs_value_from_query_result(query_result_item: dict) -> list:
 
 
 def get_docmap_actions_value_from_query_result(query_result_item: dict) -> list:
-    query_result_evaluations = query_result_item['evaluations']
+    evaluations = query_result_item['evaluations']
     doi = query_result_item['elife_doi']
     url = 'https://doi.org/'+doi
+    # condition should be added for diffrent type of stages (for now it is generic)
     return [{
         'participants': [],
         'outputs': [
             {
                 'type': '',
                 'doi': doi,
-                'published': query_result_evaluations[0]['annotation_created_timestamp'],
+                'published': evaluations[0]['annotation_created_timestamp'] if evaluations else '',
                 'url': url,
-                'content': []
+                'content': [
+                    {
+                        'type': 'web-page',
+                        'url': 'https://hypothes.is/a/'+doi
+                    }
+                ]
             }
         ]
     }]
