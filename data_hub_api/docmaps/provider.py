@@ -26,31 +26,41 @@ def get_docmap_inputs_value_from_query_result(query_result_item: dict) -> list:
     }]
 
 
-def iter_single_actions_value_from_query_result_for_evaluations(query_result_item: dict) -> Iterable[dict]:
+def iter_single_actions_value_from_query_result_for_evaluations(
+    query_result_item: dict
+) -> Iterable[dict]:
     evaluations = query_result_item['evaluations']
-    doi = query_result_item['elife_doi']
-    url = f'https://doi.org/{doi}'
+    preprint_doi = query_result_item["preprint_doi"]
+    elife_doi = query_result_item['elife_doi']
+    url = f'https://doi.org/{elife_doi}'
     for evaluation in evaluations:
+        hypothesis_id = evaluation["hypothesis_id"]
         yield {
             'participants': [],
             'outputs': [
                 {
                     'type': '',
-                    'doi': doi,
+                    'doi': elife_doi,
                     'published': evaluation['annotation_created_timestamp'] if evaluations else '',
                     'url': url,
                     'content': [
                         {
                             'type': 'web-page',
-                            'url': f'https://hypothes.is/a/{evaluation["hypothesis_id"]}'
+                            'url': f'https://hypothes.is/a/{hypothesis_id}'
                         },
                         {
                             'type': 'web-page',
-                            'url': f'https://sciety.org/articles/activity/{query_result_item["preprint_doi"]}#hypothesis:{evaluation["hypothesis_id"]}'
+                            'url': (
+                                'https://sciety.org/articles/activity/'
+                                f'{preprint_doi}#hypothesis:{hypothesis_id}'
+                            )
                         },
                         {
                             'type': 'web-page',
-                            'url': f'https://sciety.org/evaluations/hypothesis:{evaluation["hypothesis_id"]}/content'
+                            'url': (
+                                'https://sciety.org/evaluations/hypothesis:'
+                                f'{hypothesis_id}/content'
+                            )
                         }
                     ]
                 }
@@ -74,7 +84,9 @@ def generate_docmap_steps(number_of_steps: int, query_result_item: dict) -> dict
             'assertions': [],
             'inputs': get_docmap_inputs_value_from_query_result(query_result_item),
             'actions': get_docmap_actions_value_from_query_result(query_result_item),
-            'next-step': '_:b' + str(step_number + 1) if step_number + 1 < number_of_steps else None,
+            'next-step': (
+                '_:b' + str(step_number + 1) if step_number + 1 < number_of_steps else None
+            ),
             'previous-step': '_:b' + str(step_number - 1) if step_number > 0 else None
         }
 

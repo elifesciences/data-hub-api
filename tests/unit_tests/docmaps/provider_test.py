@@ -166,11 +166,17 @@ class TestGetDocmapsItemForQueryResultItem:
                             },
                             {
                                 'type': 'web-page',
-                                'url': f'https://sciety.org/articles/activity/{DOI_1}#hypothesis:hypothesis_id_1'
+                                'url': (
+                                    'https://sciety.org/articles/activity/'
+                                    f'{DOI_1}#hypothesis:hypothesis_id_1'
+                                )
                             },
                             {
                                 'type': 'web-page',
-                                'url': 'https://sciety.org/evaluations/hypothesis:hypothesis_id_1/content'
+                                'url': (
+                                    'https://sciety.org/evaluations/hypothesis:'
+                                    'hypothesis_id_1/content'
+                                )
                             }
                         ]
                     }
@@ -191,11 +197,17 @@ class TestGetDocmapsItemForQueryResultItem:
                             },
                             {
                                 'type': 'web-page',
-                                'url': f'https://sciety.org/articles/activity/{DOI_1}#hypothesis:hypothesis_id_2'
+                                'url': (
+                                    'https://sciety.org/articles/activity/'
+                                    f'{DOI_1}#hypothesis:hypothesis_id_2'
+                                )
                             },
                             {
                                 'type': 'web-page',
-                                'url': 'https://sciety.org/evaluations/hypothesis:hypothesis_id_2/content'
+                                'url': (
+                                    'https://sciety.org/evaluations/hypothesis:'
+                                    'hypothesis_id_2/content'
+                                )
                             }
                         ]
                     }
