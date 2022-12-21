@@ -28,6 +28,18 @@ DOCMAPS_QUERY_RESULT_ITEM_1 = {
     'preprint_url': f'https://doi.org/{DOI_1}',
     'docmap_id': 'docmap_id_1',
     'publisher_json': '{"id": "publisher_1"}',
+    'evaluations': [],
+    'elife_doi': 'elife_doi_1'
+}
+
+DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS = {
+    'manuscript_id': 'manuscript_id_1',
+    'qc_complete_timestamp': datetime.fromisoformat('2022-01-01T01:02:03+00:00'),
+    'preprint_doi': DOI_1,
+    'preprint_version': None,
+    'preprint_url': f'https://doi.org/{DOI_1}',
+    'docmap_id': 'docmap_id_1',
+    'publisher_json': '{"id": "publisher_1"}',
     'evaluations': [
         {
             'hypothesis_id': 'hypothesis_id_1',
@@ -49,10 +61,10 @@ def _iter_dict_from_bq_query_mock() -> Iterable[MagicMock]:
 
 
 class TestGenerateDocmapSteps:
-    def test_should_return_required_fields_for_a_step(self):
+    def test_should_return_minimum_required_fields_for_a_step(self):
         steps = generate_docmap_steps(1, DOCMAPS_QUERY_RESULT_ITEM_1)
         assert steps['_:b0']['inputs']
-        assert steps['_:b0']['actions']
+        assert steps['_:b0']['actions'] == []
         assert steps['_:b0']['assertions'] == []
 
     def test_should_return_first_step_key_if_number_of_steps_is_one(self):
@@ -132,21 +144,76 @@ class TestGetDocmapsItemForQueryResultItem:
         first_step = docmaps_item['steps'][first_step_key]
         assert not first_step['assertions']
 
-    def test_should_populate_actions_with_elife_doi_and_url(self):
-        docmaps_item = get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
+    def test_should_populate_actions_if_has_evaluations(self):
+        docmaps_item = get_docmap_item_for_query_result_item(
+            DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS
+        )
         first_step_key = docmaps_item['first-step']
         first_step = docmaps_item['steps'][first_step_key]
-        assert first_step['actions'] == [{
-            'outputs': [
-                {
-                    'type': '',
-                    'doi': 'elife_doi_1',
-                    'published': 'annotation_created_timestamp_1',
-                    'url': 'https://doi.org/elife_doi_1',
-                    'content': []
-                }
-            ]
-        }]
+        assert first_step['actions'] == [
+            {
+                'participants': [],
+                'outputs': [
+                    {
+                        'type': '',
+                        'doi': 'elife_doi_1',
+                        'published': 'annotation_created_timestamp_1',
+                        'url': 'https://doi.org/elife_doi_1',
+                        'content': [
+                            {
+                                'type': 'web-page',
+                                'url': 'https://hypothes.is/a/hypothesis_id_1'
+                            },
+                            {
+                                'type': 'web-page',
+                                'url': (
+                                    'https://sciety.org/articles/activity/'
+                                    f'{DOI_1}#hypothesis:hypothesis_id_1'
+                                )
+                            },
+                            {
+                                'type': 'web-page',
+                                'url': (
+                                    'https://sciety.org/evaluations/hypothesis:'
+                                    'hypothesis_id_1/content'
+                                )
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                'participants': [],
+                'outputs': [
+                    {
+                        'type': '',
+                        'doi': 'elife_doi_1',
+                        'published': 'annotation_created_timestamp_2',
+                        'url': 'https://doi.org/elife_doi_1',
+                        'content': [
+                            {
+                                'type': 'web-page',
+                                'url': 'https://hypothes.is/a/hypothesis_id_2'
+                            },
+                            {
+                                'type': 'web-page',
+                                'url': (
+                                    'https://sciety.org/articles/activity/'
+                                    f'{DOI_1}#hypothesis:hypothesis_id_2'
+                                )
+                            },
+                            {
+                                'type': 'web-page',
+                                'url': (
+                                    'https://sciety.org/evaluations/hypothesis:'
+                                    'hypothesis_id_2/content'
+                                )
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
 
 
 class TestEnhancedPreprintsDocmapsProvider:

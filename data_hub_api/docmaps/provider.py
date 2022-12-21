@@ -26,21 +26,53 @@ def get_docmap_inputs_value_from_query_result(query_result_item: dict) -> list:
     }]
 
 
+def iter_single_actions_value_from_query_result_for_evaluations(
+    query_result_item: dict
+) -> Iterable[dict]:
+    evaluations = query_result_item['evaluations']
+    preprint_doi = query_result_item["preprint_doi"]
+    elife_doi = query_result_item['elife_doi']
+    url = f'https://doi.org/{elife_doi}'
+    for evaluation in evaluations:
+        hypothesis_id = evaluation["hypothesis_id"]
+        yield {
+            'participants': [],
+            'outputs': [
+                {
+                    'type': '',
+                    'doi': elife_doi,
+                    'published': evaluation['annotation_created_timestamp'] if evaluations else '',
+                    'url': url,
+                    'content': [
+                        {
+                            'type': 'web-page',
+                            'url': f'https://hypothes.is/a/{hypothesis_id}'
+                        },
+                        {
+                            'type': 'web-page',
+                            'url': (
+                                'https://sciety.org/articles/activity/'
+                                f'{preprint_doi}#hypothesis:{hypothesis_id}'
+                            )
+                        },
+                        {
+                            'type': 'web-page',
+                            'url': (
+                                'https://sciety.org/evaluations/hypothesis:'
+                                f'{hypothesis_id}/content'
+                            )
+                        }
+                    ]
+                }
+            ]
+        }
+
+
 def get_docmap_actions_value_from_query_result(query_result_item: dict) -> list:
-    query_result_evaluations = query_result_item['evaluations']
-    doi = query_result_item['elife_doi']
-    url = 'https://doi.org/'+doi
-    return [{
-        'outputs': [
-            {
-                'type': '',
-                'doi': doi,
-                'published': query_result_evaluations[0]['annotation_created_timestamp'],
-                'url': url,
-                'content': []
-            }
-        ]
-    }]
+    evaluations = query_result_item['evaluations']
+    if evaluations:
+        return list(iter_single_actions_value_from_query_result_for_evaluations(query_result_item))
+    return []
 
 
 def generate_docmap_steps(number_of_steps: int, query_result_item: dict) -> dict:
@@ -52,8 +84,10 @@ def generate_docmap_steps(number_of_steps: int, query_result_item: dict) -> dict
             'assertions': [],
             'inputs': get_docmap_inputs_value_from_query_result(query_result_item),
             'actions': get_docmap_actions_value_from_query_result(query_result_item),
-            'next-step': '_:b'+str(step_number + 1) if step_number + 1 < number_of_steps else None,
-            'previous-step': '_:b'+str(step_number - 1) if step_number > 0 else None
+            'next-step': (
+                '_:b' + str(step_number + 1) if step_number + 1 < number_of_steps else None
+            ),
+            'previous-step': '_:b' + str(step_number - 1) if step_number > 0 else None
         }
 
         steps_dict['_:b'+str(step_number)] = step_dict
