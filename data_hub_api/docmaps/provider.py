@@ -62,8 +62,7 @@ def get_docmap_actions_value_from_query_result(query_result_item: dict) -> list:
     evaluations = query_result_item['evaluations']
     if evaluations:
         return list(iter_single_actions_value_from_query_result_for_evaluations(query_result_item))
-    else:
-        return []
+    return []
 
 
 def generate_docmap_steps(number_of_steps: int, query_result_item: dict) -> dict:
