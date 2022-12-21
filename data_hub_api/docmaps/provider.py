@@ -26,6 +26,16 @@ def get_docmap_inputs_value_from_query_result(query_result_item: dict) -> list:
     }]
 
 
+def get_docmap_assertions_value_from_query_result(query_result_item: dict) -> list:
+    return [{
+            'item': {
+                'type': 'preprint',
+                'doi': query_result_item['preprint_doi']
+            },
+            'status': ''
+        }]
+
+
 def iter_single_actions_value_from_query_result_for_evaluations(
     query_result_item: dict
 ) -> Iterable[dict]:
@@ -81,7 +91,7 @@ def generate_docmap_steps(number_of_steps: int, query_result_item: dict) -> dict
     while step_number < number_of_steps:
         LOGGER.debug('step_number: %r', step_number)
         step_dict = {
-            'assertions': [],
+            'assertions': get_docmap_assertions_value_from_query_result(query_result_item),
             'inputs': get_docmap_inputs_value_from_query_result(query_result_item),
             'actions': get_docmap_actions_value_from_query_result(query_result_item),
             'next-step': (

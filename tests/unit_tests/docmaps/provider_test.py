@@ -65,7 +65,7 @@ class TestGenerateDocmapSteps:
         steps = generate_docmap_steps(1, DOCMAPS_QUERY_RESULT_ITEM_1)
         assert steps['_:b0']['inputs']
         assert steps['_:b0']['actions'] == []
-        assert steps['_:b0']['assertions'] == []
+        assert steps['_:b0']['assertions']
 
     def test_should_return_first_step_key_if_number_of_steps_is_one(self):
         steps = generate_docmap_steps(1, DOCMAPS_QUERY_RESULT_ITEM_1)
@@ -138,11 +138,17 @@ class TestGetDocmapsItemForQueryResultItem:
         assert first_step_input[0]['doi'] == DOCMAPS_QUERY_RESULT_ITEM_1['preprint_doi']
         assert first_step_input[0]['url'] == DOCMAPS_QUERY_RESULT_ITEM_1['preprint_url']
 
-    def test_should_populate_empty_first_step_assertions(self):
+    def test_should_populate_first_step_assertions_with(self):
         docmaps_item = get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
         first_step_key = docmaps_item['first-step']
         first_step = docmaps_item['steps'][first_step_key]
-        assert not first_step['assertions']
+        assert first_step['assertions'] == [{
+            'item': {
+                'type': 'preprint',
+                'doi': DOI_1
+            },
+            'status': ''
+        }]
 
     def test_should_populate_actions_if_has_evaluations(self):
         docmaps_item = get_docmap_item_for_query_result_item(
