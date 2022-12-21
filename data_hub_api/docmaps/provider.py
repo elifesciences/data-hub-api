@@ -141,7 +141,9 @@ def generate_docmap_steps(number_of_steps: int, query_result_item: dict) -> dict
 def get_docmap_item_for_query_result_item(query_result_item: dict) -> dict:
     qc_complete_timestamp_str = query_result_item['qc_complete_timestamp'].isoformat()
     publisher_json = query_result_item['publisher_json']
+    number_of_steps = 2  # we need to know which stage we are in
     LOGGER.debug('publisher_json: %r', publisher_json)
+    LOGGER.debug('number_of_steps: %r', number_of_steps)
     return {
         '@context': DOCMAPS_JSONLD_SCHEMA_URL,
         'type': 'docmap',
@@ -150,7 +152,7 @@ def get_docmap_item_for_query_result_item(query_result_item: dict) -> dict:
         'updated': qc_complete_timestamp_str,
         'publisher': json.loads(publisher_json),
         'first-step': '_:b0',
-        'steps': generate_docmap_steps(2, query_result_item)
+        'steps': generate_docmap_steps(number_of_steps, query_result_item)
     }
 
 
