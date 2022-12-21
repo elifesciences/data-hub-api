@@ -29,7 +29,7 @@ def get_docmap_inputs_value_from_query_result(query_result_item: dict) -> list:
 def iter_single_actions_value_from_query_result_for_evaluations(query_result_item: dict) -> dict:
     evaluations = query_result_item['evaluations']
     doi = query_result_item['elife_doi']
-    url = 'https://doi.org/'+doi
+    url = f'https://doi.org/{doi}'
     for evaluation in evaluations:
         yield {
             'participants': [],
