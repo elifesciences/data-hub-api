@@ -117,6 +117,7 @@ def generate_docmap_steps(number_of_steps: int, query_result_item: dict) -> dict
     while step_number < number_of_steps:
         LOGGER.debug('step_number: %r', step_number)
         step_dict = {
+            'actions': get_docmap_actions_value_from_query_result(query_result_item),
             'assertions': get_docmap_assertions_value_from_query_result(
                 step_number,
                 query_result_item
@@ -125,7 +126,6 @@ def generate_docmap_steps(number_of_steps: int, query_result_item: dict) -> dict
                 step_number,
                 query_result_item
             ),
-            'actions': get_docmap_actions_value_from_query_result(query_result_item),
             'next-step': (
                 '_:b' + str(step_number + 1) if step_number + 1 < number_of_steps else None
             ),
