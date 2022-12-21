@@ -28,12 +28,12 @@ def get_docmap_inputs_value_from_query_result(query_result_item: dict) -> list:
 
 def get_docmap_assertions_value_from_query_result(query_result_item: dict) -> list:
     return [{
-        'item': {
-            'type': 'preprint',
-            'doi': query_result_item['preprint_doi']
-        },
-        'status': ''
-    }]
+            'item': {
+                'type': 'preprint',
+                'doi': query_result_item['preprint_doi']
+            },
+            'status': 'manuscript-published'
+        }]
 
 
 def iter_single_actions_value_from_query_result_for_evaluations(

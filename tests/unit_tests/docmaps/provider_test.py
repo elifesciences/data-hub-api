@@ -138,7 +138,7 @@ class TestGetDocmapsItemForQueryResultItem:
         assert first_step_input[0]['doi'] == DOCMAPS_QUERY_RESULT_ITEM_1['preprint_doi']
         assert first_step_input[0]['url'] == DOCMAPS_QUERY_RESULT_ITEM_1['preprint_url']
 
-    def test_should_populate_first_step_assertions_with(self):
+    def test_should_populate_first_step_assertions_with_status_manuscript_published(self):
         docmaps_item = get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
         first_step_key = docmaps_item['first-step']
         first_step = docmaps_item['steps'][first_step_key]
@@ -147,7 +147,7 @@ class TestGetDocmapsItemForQueryResultItem:
                 'type': 'preprint',
                 'doi': DOI_1
             },
-            'status': ''
+            'status': 'manuscript-published'
         }]
 
     def test_should_populate_actions_if_has_evaluations(self):
