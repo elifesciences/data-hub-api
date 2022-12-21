@@ -42,7 +42,15 @@ def get_docmap_actions_value_from_query_result(query_result_item: dict) -> list:
                 'content': [
                     {
                         'type': 'web-page',
-                        'url': 'https://hypothes.is/a/'+evaluations[0]['hypothesis_id']
+                        'url': f'https://hypothes.is/a/{evaluations[0]["hypothesis_id"]}'
+                    },
+                    {
+                        'type': 'web-page',
+                        'url': f'https://sciety.org/articles/activity/{query_result_item["preprint_doi"]}#hypothesis:{evaluations[0]["hypothesis_id"]}'
+                    },
+                    {
+                        'type': 'web-page',
+                        'url': f'https://sciety.org/evaluations/hypothesis:{evaluations[0]["hypothesis_id"]}/content'
                     }
                 ]
             }
@@ -59,8 +67,8 @@ def generate_docmap_steps(number_of_steps: int, query_result_item: dict) -> dict
             'assertions': [],
             'inputs': get_docmap_inputs_value_from_query_result(query_result_item),
             'actions': get_docmap_actions_value_from_query_result(query_result_item),
-            'next-step': '_:b'+str(step_number + 1) if step_number + 1 < number_of_steps else None,
-            'previous-step': '_:b'+str(step_number - 1) if step_number > 0 else None
+            'next-step': '_:b' + str(step_number + 1) if step_number + 1 < number_of_steps else None,
+            'previous-step': '_:b' + str(step_number - 1) if step_number > 0 else None
         }
 
         steps_dict['_:b'+str(step_number)] = step_dict
