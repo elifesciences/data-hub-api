@@ -26,36 +26,44 @@ def get_docmap_inputs_value_from_query_result(query_result_item: dict) -> list:
     }]
 
 
-def get_docmap_actions_value_from_query_result(query_result_item: dict) -> list:
+def iter_single_actions_value_from_query_result_for_evaluations(query_result_item: dict) -> dict:
     evaluations = query_result_item['evaluations']
     doi = query_result_item['elife_doi']
     url = 'https://doi.org/'+doi
-    # condition should be added for diffrent type of stages (for now it is generic)
-    return [{
-        'participants': [],
-        'outputs': [
-            {
-                'type': '',
-                'doi': doi,
-                'published': evaluations[0]['annotation_created_timestamp'] if evaluations else '',
-                'url': url,
-                'content': [
-                    {
-                        'type': 'web-page',
-                        'url': f'https://hypothes.is/a/{evaluations[0]["hypothesis_id"]}'
-                    },
-                    {
-                        'type': 'web-page',
-                        'url': f'https://sciety.org/articles/activity/{query_result_item["preprint_doi"]}#hypothesis:{evaluations[0]["hypothesis_id"]}'
-                    },
-                    {
-                        'type': 'web-page',
-                        'url': f'https://sciety.org/evaluations/hypothesis:{evaluations[0]["hypothesis_id"]}/content'
-                    }
-                ]
-            }
-        ]
-    }]
+    for evaluation in evaluations:
+        yield {
+            'participants': [],
+            'outputs': [
+                {
+                    'type': '',
+                    'doi': doi,
+                    'published': evaluation['annotation_created_timestamp'] if evaluations else '',
+                    'url': url,
+                    'content': [
+                        {
+                            'type': 'web-page',
+                            'url': f'https://hypothes.is/a/{evaluation["hypothesis_id"]}'
+                        },
+                        {
+                            'type': 'web-page',
+                            'url': f'https://sciety.org/articles/activity/{query_result_item["preprint_doi"]}#hypothesis:{evaluation["hypothesis_id"]}'
+                        },
+                        {
+                            'type': 'web-page',
+                            'url': f'https://sciety.org/evaluations/hypothesis:{evaluation["hypothesis_id"]}/content'
+                        }
+                    ]
+                }
+            ]
+        }
+
+
+def get_docmap_actions_value_from_query_result(query_result_item: dict) -> list:
+    evaluations = query_result_item['evaluations']
+    if evaluations:
+        return list(iter_single_actions_value_from_query_result_for_evaluations(query_result_item))
+    else:
+        return []
 
 
 def generate_docmap_steps(number_of_steps: int, query_result_item: dict) -> dict:
