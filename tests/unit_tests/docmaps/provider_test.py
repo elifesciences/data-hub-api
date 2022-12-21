@@ -63,9 +63,9 @@ def _iter_dict_from_bq_query_mock() -> Iterable[MagicMock]:
 class TestGenerateDocmapSteps:
     def test_should_return_minimum_required_fields_for_a_step(self):
         steps = generate_docmap_steps(1, DOCMAPS_QUERY_RESULT_ITEM_1)
-        assert steps['_:b0']['inputs']
+        assert steps['_:b0']['inputs'] == []
         assert steps['_:b0']['actions'] == []
-        assert steps['_:b0']['assertions'] == []
+        assert steps['_:b0']['assertions']
 
     def test_should_return_first_step_key_if_number_of_steps_is_one(self):
         steps = generate_docmap_steps(1, DOCMAPS_QUERY_RESULT_ITEM_1)
@@ -129,20 +129,52 @@ class TestGetDocmapsItemForQueryResultItem:
             DOCMAPS_QUERY_RESULT_ITEM_1['publisher_json']
         )
 
-    def test_should_populate_first_step_input_doi_and_url(self):
+    def test_should_return_empty_list_for_inputs_in_first_step(self):
         docmaps_item = get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
         first_step_key = docmaps_item['first-step']
         first_step = docmaps_item['steps'][first_step_key]
         first_step_input = first_step['inputs']
-        assert len(first_step_input) == 1
-        assert first_step_input[0]['doi'] == DOCMAPS_QUERY_RESULT_ITEM_1['preprint_doi']
-        assert first_step_input[0]['url'] == DOCMAPS_QUERY_RESULT_ITEM_1['preprint_url']
+        assert first_step_input == []
 
-    def test_should_populate_empty_first_step_assertions(self):
+    def test_should_populate_second_step_input_doi_and_url(self):
+        docmaps_item = get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
+        second_step_input = docmaps_item['steps']['_:b1']['inputs']
+        assert len(second_step_input) == 1
+        assert second_step_input[0]['type'] == 'preprint'
+        assert second_step_input[0]['doi'] == DOCMAPS_QUERY_RESULT_ITEM_1['preprint_doi']
+        assert second_step_input[0]['url'] == DOCMAPS_QUERY_RESULT_ITEM_1['preprint_url']
+
+    def test_should_populate_first_step_assertions_with_status_manuscript_published(self):
         docmaps_item = get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
         first_step_key = docmaps_item['first-step']
         first_step = docmaps_item['steps'][first_step_key]
-        assert not first_step['assertions']
+        assert first_step['assertions'] == [{
+            'item': {
+                'type': 'preprint',
+                'doi': DOI_1
+            },
+            'status': 'manuscript-published'
+        }]
+
+    def test_should_populate_second_step_assertions_with_status_under_review_and_draft(self):
+        docmaps_item = get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
+        second_step_assertions = docmaps_item['steps']['_:b1']['assertions']
+        assert second_step_assertions == [
+            {
+                'item': {
+                    'type': 'preprint',
+                    'doi': DOI_1
+                },
+                'status': 'under-review'
+            },
+            {
+                'item': {
+                    'type': 'preprint',
+                    'doi': 'elife_doi_1'
+                },
+                'status': 'draft'
+            }
+        ]
 
     def test_should_populate_actions_if_has_evaluations(self):
         docmaps_item = get_docmap_item_for_query_result_item(

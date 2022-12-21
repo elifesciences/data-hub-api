@@ -19,11 +19,49 @@ DOCMAP_ID_PREFIX = 'https://data-hub-api.elifesciences.org/enhanced-preprints/do
 DOCMAP_ID_SUFFIX = '/docmap.json'
 
 
-def get_docmap_inputs_value_from_query_result(query_result_item: dict) -> list:
+def get_docmap_inputs_value_from_query_result(
+    step_number: int,
+    query_result_item: dict
+) -> list:
+    if step_number == 0:
+        return []
     return [{
+        'type': 'preprint',
         'doi': query_result_item['preprint_doi'],
         'url': query_result_item['preprint_url'],
     }]
+
+
+def get_docmap_assertions_value_from_query_result(
+    step_number: int,
+    query_result_item: dict
+) -> list:
+    preprint_doi = query_result_item['preprint_doi']
+    elife_doi = query_result_item['elife_doi']
+    if step_number == 0:
+        return [{
+            'item': {
+                'type': 'preprint',
+                'doi': preprint_doi
+            },
+            'status': 'manuscript-published'
+        }]
+    return [
+        {
+            'item': {
+                'type': 'preprint',
+                'doi': preprint_doi
+            },
+            'status': 'under-review'
+        },
+        {
+            'item': {
+                'type': 'preprint',
+                'doi': elife_doi
+            },
+            'status': 'draft'
+        }
+    ]
 
 
 def iter_single_actions_value_from_query_result_for_evaluations(
@@ -81,9 +119,15 @@ def generate_docmap_steps(number_of_steps: int, query_result_item: dict) -> dict
     while step_number < number_of_steps:
         LOGGER.debug('step_number: %r', step_number)
         step_dict = {
-            'assertions': [],
-            'inputs': get_docmap_inputs_value_from_query_result(query_result_item),
             'actions': get_docmap_actions_value_from_query_result(query_result_item),
+            'assertions': get_docmap_assertions_value_from_query_result(
+                step_number,
+                query_result_item
+            ),
+            'inputs': get_docmap_inputs_value_from_query_result(
+                step_number,
+                query_result_item
+            ),
             'next-step': (
                 '_:b' + str(step_number + 1) if step_number + 1 < number_of_steps else None
             ),
@@ -99,7 +143,9 @@ def generate_docmap_steps(number_of_steps: int, query_result_item: dict) -> dict
 def get_docmap_item_for_query_result_item(query_result_item: dict) -> dict:
     qc_complete_timestamp_str = query_result_item['qc_complete_timestamp'].isoformat()
     publisher_json = query_result_item['publisher_json']
+    number_of_steps = 2  # we need to know which stage we are in
     LOGGER.debug('publisher_json: %r', publisher_json)
+    LOGGER.debug('number_of_steps: %r', number_of_steps)
     return {
         '@context': DOCMAPS_JSONLD_SCHEMA_URL,
         'type': 'docmap',
@@ -108,7 +154,7 @@ def get_docmap_item_for_query_result_item(query_result_item: dict) -> dict:
         'updated': qc_complete_timestamp_str,
         'publisher': json.loads(publisher_json),
         'first-step': '_:b0',
-        'steps': generate_docmap_steps(1, query_result_item)
+        'steps': generate_docmap_steps(number_of_steps, query_result_item)
     }
 
 
