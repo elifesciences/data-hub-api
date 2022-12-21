@@ -8,6 +8,7 @@ from data_hub_api.utils.bigquery import (
     iter_dict_from_bq_query
 )
 from data_hub_api.docmaps.sql import get_sql_path
+from data_hub_api.utils.json import remove_key_with_none_value_only
 
 
 LOGGER = logging.getLogger(__name__)
@@ -16,6 +17,49 @@ DOCMAPS_JSONLD_SCHEMA_URL = 'https://w3id.org/docmaps/context.jsonld'
 
 DOCMAP_ID_PREFIX = 'https://data-hub-api.elifesciences.org/enhanced-preprints/docmaps/v1/articles/'
 DOCMAP_ID_SUFFIX = '/docmap.json'
+
+
+def get_docmap_inputs_value_from_query_result(query_result_item: dict) -> list:
+    return [{
+        'doi': query_result_item['preprint_doi'],
+        'url': query_result_item['preprint_url'],
+    }]
+
+
+def get_docmap_actions_value_from_query_result(query_result_item: dict) -> list:
+    query_result_evaluations = query_result_item['evaluations']
+    doi = query_result_item['elife_doi']
+    url = 'https://doi.org/'+doi
+    return [{
+        'outputs': [
+            {
+                'type': '',
+                'doi': doi,
+                'published': query_result_evaluations[0]['annotation_created_timestamp'],
+                'url': url,
+                'content': []
+            }
+        ]
+    }]
+
+
+def generate_docmap_steps(number_of_steps: int, query_result_item: dict) -> dict:
+    step_number = 0
+    steps_dict = {}
+    while step_number < number_of_steps:
+        LOGGER.debug('step_number: %r', step_number)
+        step_dict = {
+            'assertions': [],
+            'inputs': get_docmap_inputs_value_from_query_result(query_result_item),
+            'actions': get_docmap_actions_value_from_query_result(query_result_item),
+            'next-step': '_:b'+str(step_number + 1) if step_number + 1 < number_of_steps else None,
+            'previous-step': '_:b'+str(step_number - 1) if step_number > 0 else None
+        }
+
+        steps_dict['_:b'+str(step_number)] = step_dict
+
+        step_number += 1
+    return remove_key_with_none_value_only(steps_dict)
 
 
 def get_docmap_item_for_query_result_item(query_result_item: dict) -> dict:
@@ -30,17 +74,7 @@ def get_docmap_item_for_query_result_item(query_result_item: dict) -> dict:
         'updated': qc_complete_timestamp_str,
         'publisher': json.loads(publisher_json),
         'first-step': '_:b0',
-        'steps': {
-            '_:b0': {
-                'assertions': [],
-                'inputs': [{
-                    'doi': query_result_item['preprint_doi'],
-                    'url': query_result_item['preprint_url'],
-                }],
-                'actions': []
-            }
-        }
-
+        'steps': generate_docmap_steps(1, query_result_item)
     }
 
 

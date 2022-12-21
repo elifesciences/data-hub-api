@@ -67,7 +67,8 @@ t_europepmc_response_by_normalized_title AS (
 t_hypothesis_annotation_with_doi AS (
   SELECT
     *,
-    REGEXP_EXTRACT(annotation.uri, r'(10\.\d{3,}[^v]*)v?') AS source_doi
+    REGEXP_EXTRACT(annotation.uri, r'(10\.\d{3,}[^v]*)v?') AS source_doi,
+    REGEXP_EXTRACT(annotation.uri, r'10\.\d{3,}.*v([1-9])') AS source_version
   FROM `elife-data-pipeline.de_proto.v_hypothesis_annotation` AS annotation
   WHERE annotation.group = 'q5X6RWJ6'
 ),
@@ -103,10 +104,17 @@ t_result AS (
     ARRAY(
       SELECT AS STRUCT
         annotation.id AS hypothesis_id,
-        annotation.created AS annotation_created_timestamp
+        annotation.created AS annotation_created_timestamp,
+        annotation.uri,
+        annotation.tags,
+        annotation.normalized_tags,
+        annotation.source_doi,
+        annotation.source_version
       FROM t_hypothesis_annotation_with_doi AS annotation
       WHERE annotation.source_doi = COALESCE(preprint_doi_and_url.preprint_doi, europepmc_response.doi)
-    ) AS evaluations
+    ) AS evaluations,
+
+    Version.DOI AS elife_doi
   FROM `elife-data-pipeline.prod.mv_Editorial_Manuscript_Version` AS Version
   LEFT JOIN t_preprint_doi_and_url_by_manuscript_id AS preprint_doi_and_url
     ON preprint_doi_and_url.manuscript_id = Version.Manuscript_ID

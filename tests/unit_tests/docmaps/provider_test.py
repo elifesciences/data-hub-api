@@ -11,7 +11,8 @@ from data_hub_api.docmaps.provider import (
     DocmapsProvider,
     DOCMAPS_JSONLD_SCHEMA_URL,
     DOCMAP_ID_PREFIX,
-    DOCMAP_ID_SUFFIX
+    DOCMAP_ID_SUFFIX,
+    generate_docmap_steps
 )
 
 
@@ -26,7 +27,18 @@ DOCMAPS_QUERY_RESULT_ITEM_1 = {
     'preprint_version': None,
     'preprint_url': f'https://doi.org/{DOI_1}',
     'docmap_id': 'docmap_id_1',
-    'publisher_json': '{"id": "publisher_1"}'
+    'publisher_json': '{"id": "publisher_1"}',
+    'evaluations': [
+        {
+            'hypothesis_id': 'hypothesis_id_1',
+            'annotation_created_timestamp': 'annotation_created_timestamp_1'
+        },
+        {
+            'hypothesis_id': 'hypothesis_id_2',
+            'annotation_created_timestamp': 'annotation_created_timestamp_2'
+        }
+    ],
+    'elife_doi': 'elife_doi_1'
 }
 
 
@@ -34,6 +46,47 @@ DOCMAPS_QUERY_RESULT_ITEM_1 = {
 def _iter_dict_from_bq_query_mock() -> Iterable[MagicMock]:
     with patch.object(provider_module, 'iter_dict_from_bq_query') as mock:
         yield mock
+
+
+class TestGenerateDocmapSteps:
+    def test_should_return_required_fields_for_a_step(self):
+        steps = generate_docmap_steps(1, DOCMAPS_QUERY_RESULT_ITEM_1)
+        assert steps['_:b0']['inputs']
+        assert steps['_:b0']['actions']
+        assert steps['_:b0']['assertions'] == []
+
+    def test_should_return_first_step_key_if_number_of_steps_is_one(self):
+        steps = generate_docmap_steps(1, DOCMAPS_QUERY_RESULT_ITEM_1)
+        assert steps['_:b0']
+
+    def test_should_return_all_step_keys_if_number_of_steps_is_more_than_one(self):
+        steps = generate_docmap_steps(3, DOCMAPS_QUERY_RESULT_ITEM_1)
+        step_key_list = list(steps.keys())
+        assert step_key_list == ['_:b0', '_:b1', '_:b2']
+
+    def test_should_not_have_next_or_previous_step_keys_while_number_of_steps_is_one(self):
+        steps = generate_docmap_steps(1, DOCMAPS_QUERY_RESULT_ITEM_1)
+        with pytest.raises(KeyError):
+            assert steps['_:b0']['previous-step']
+        with pytest.raises(KeyError):
+            assert steps['_:b0']['next-step']
+
+    def test_should_only_have_next_step_for_first_step_while_number_of_steps_more_than_one(self):
+        steps = generate_docmap_steps(2, DOCMAPS_QUERY_RESULT_ITEM_1)
+        assert steps['_:b0']['next-step'] == '_:b1'
+        with pytest.raises(KeyError):
+            assert steps['_:b0']['previous-step']
+
+    def test_should_have_both_next_and_previous_steps_keys_for_a_middle_step(self):
+        steps = generate_docmap_steps(3, DOCMAPS_QUERY_RESULT_ITEM_1)
+        assert steps['_:b1']['next-step'] == '_:b2'
+        assert steps['_:b1']['previous-step'] == '_:b0'
+
+    def test_should_only_have_previous_step_for_latest_step(self):
+        steps = generate_docmap_steps(3, DOCMAPS_QUERY_RESULT_ITEM_1)
+        assert steps['_:b2']['previous-step'] == '_:b1'
+        with pytest.raises(KeyError):
+            assert steps['_:b2']['next-step']
 
 
 class TestGetDocmapsItemForQueryResultItem:
@@ -73,12 +126,27 @@ class TestGetDocmapsItemForQueryResultItem:
         assert first_step_input[0]['doi'] == DOCMAPS_QUERY_RESULT_ITEM_1['preprint_doi']
         assert first_step_input[0]['url'] == DOCMAPS_QUERY_RESULT_ITEM_1['preprint_url']
 
-    def test_should_populate_empty_first_step_assertions_and_actions(self):
+    def test_should_populate_empty_first_step_assertions(self):
         docmaps_item = get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
         first_step_key = docmaps_item['first-step']
         first_step = docmaps_item['steps'][first_step_key]
         assert not first_step['assertions']
-        assert not first_step['actions']
+
+    def test_should_populate_actions_with_elife_doi_and_url(self):
+        docmaps_item = get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
+        first_step_key = docmaps_item['first-step']
+        first_step = docmaps_item['steps'][first_step_key]
+        assert first_step['actions'] == [{
+            'outputs': [
+                {
+                    'type': '',
+                    'doi': 'elife_doi_1',
+                    'published': 'annotation_created_timestamp_1',
+                    'url': 'https://doi.org/elife_doi_1',
+                    'content': []
+                }
+            ]
+        }]
 
 
 class TestEnhancedPreprintsDocmapsProvider:
