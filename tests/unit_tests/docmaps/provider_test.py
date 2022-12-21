@@ -49,10 +49,15 @@ def _iter_dict_from_bq_query_mock() -> Iterable[MagicMock]:
 
 
 class TestGenerateDocmapSteps:
+    def test_should_return_required_fields_for_a_step(self):
+        steps = generate_docmap_steps(1, DOCMAPS_QUERY_RESULT_ITEM_1)
+        assert steps['_:b0']['inputs']
+        assert steps['_:b0']['actions']
+        assert steps['_:b0']['assertions'] == []
+
     def test_should_return_first_step_key_if_number_of_steps_is_one(self):
         steps = generate_docmap_steps(1, DOCMAPS_QUERY_RESULT_ITEM_1)
-        step_key_list = list(steps.keys())
-        assert step_key_list == ['_:b0']
+        assert steps['_:b0']
 
     def test_should_return_all_step_keys_if_number_of_steps_is_more_than_one(self):
         steps = generate_docmap_steps(3, DOCMAPS_QUERY_RESULT_ITEM_1)
