@@ -48,14 +48,12 @@ def generate_docmap_steps(number_of_steps: int, query_result_item: dict) -> dict
     steps_dict = {}
     while step_number < number_of_steps:
         LOGGER.debug('step_number: %r', step_number)
-        next_step = step_number + 1 if step_number + 1 < number_of_steps else None
-        prev_step = step_number - 1 if step_number > 0 else None
         step_dict = {
             'assertions': [],
             'inputs': get_docmap_inputs_value_from_query_result(query_result_item),
             'actions': get_docmap_actions_value_from_query_result(query_result_item),
-            'next-step': '_:b'+str(next_step) if next_step else None,
-            'previous-step': '_:b'+str(prev_step) if prev_step == 0 or prev_step else None
+            'next-step': '_:b'+str(step_number + 1) if step_number + 1 < number_of_steps else None,
+            'previous-step': '_:b'+str(step_number - 1) if step_number > 0 else None
         }
 
         steps_dict['_:b'+str(step_number)] = step_dict
