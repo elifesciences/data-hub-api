@@ -147,7 +147,7 @@ class TestGetDocmapsItemForQueryResultItem:
                     'content': [
                         {
                             'type': 'web-page',
-                            'url': 'https://hypothes.is/a/elife_doi_1'
+                            'url': 'https://hypothes.is/a/hypothesis_id_1'
                         }
                     ]
                 }

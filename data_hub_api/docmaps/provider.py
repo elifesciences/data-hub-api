@@ -42,7 +42,7 @@ def get_docmap_actions_value_from_query_result(query_result_item: dict) -> list:
                 'content': [
                     {
                         'type': 'web-page',
-                        'url': 'https://hypothes.is/a/'+doi
+                        'url': 'https://hypothes.is/a/'+evaluations[0]['hypothesis_id']
                     }
                 ]
             }
