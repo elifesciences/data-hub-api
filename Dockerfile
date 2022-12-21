@@ -1,9 +1,6 @@
-FROM python:3.8-alpine3.17 AS base
+FROM python:3.8 AS base
 
 USER root
-
-RUN apk update
-RUN apk add gcc g++ make python3-dev
 
 WORKDIR /app/api
 
