@@ -169,7 +169,7 @@ class TestGetDocmapsItemForQueryResultItem:
             {
                 'item': {
                     'type': 'preprint',
-                    'doi': DOI_1
+                    'doi': 'elife_doi_1'
                 },
                 'status': 'draft'
             }

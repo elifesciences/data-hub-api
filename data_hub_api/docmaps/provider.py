@@ -36,6 +36,7 @@ def get_docmap_assertions_value_from_query_result(
     query_result_item: dict
 ) -> list:
     preprint_doi = query_result_item['preprint_doi']
+    elife_doi = query_result_item['elife_doi']
     if step_number == 0:
         return [{
             'item': {
@@ -55,7 +56,7 @@ def get_docmap_assertions_value_from_query_result(
         {
             'item': {
                 'type': 'preprint',
-                'doi': preprint_doi
+                'doi': elife_doi
             },
             'status': 'draft'
         }
