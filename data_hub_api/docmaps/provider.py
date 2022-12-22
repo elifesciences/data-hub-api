@@ -3,7 +3,6 @@ import json
 from pathlib import Path
 from typing import Iterable
 
-
 from data_hub_api.utils.bigquery import (
     iter_dict_from_bq_query
 )
@@ -17,6 +16,12 @@ DOCMAPS_JSONLD_SCHEMA_URL = 'https://w3id.org/docmaps/context.jsonld'
 
 DOCMAP_ID_PREFIX = 'https://data-hub-api.elifesciences.org/enhanced-preprints/docmaps/v1/articles/'
 DOCMAP_ID_SUFFIX = '/docmap.json'
+
+DOI_ROOT_URL = 'https://doi.org/'
+ELIFE_REVIEW_PREPRINTS_URL = 'https://elifesciences.org/review-preprints/'
+HYPOTHESIS_URL = 'https://hypothes.is/a/'
+SCIETY_ARTICLES_ACTIVITY_URL = 'https://sciety.org/articles/activity/'
+SCIETY_ARTICLES_EVALUATIONS_URL = 'https://sciety.org/evaluations/hypothesis:'
 
 
 def get_docmap_inputs_value_from_query_result(
@@ -64,86 +69,125 @@ def get_docmap_assertions_value_from_query_result(
     ]
 
 
-def iter_single_actions_value_from_query_result_for_evaluations(
+def get_single_actions_value_for_first_preprint_published_step(
+    preprint_doi: str,
+    preprint_published: str
+) -> dict:
+    return {
+        'participants': [],
+        'outputs': [{
+            'type': 'preprint',
+            'doi': preprint_doi,
+            'url': f'{DOI_ROOT_URL}{preprint_doi}',
+            'published': preprint_published,
+            'versionIdentifier': ''
+        }]
+    }
+
+
+def get_single_actions_value_for_preprint_under_review_step(
+    manuscript_id: str,
+    elife_doi: str,
+    elife_doi_url: str,
+    preprint_published: str
+) -> dict:
+    return {
+        'participants': [],
+        'outputs': [{
+            'identifier': manuscript_id,
+            'versionIdentifier': '',
+            'type': 'preprint',
+            'doi': elife_doi,
+            'url': elife_doi_url,
+            'published': preprint_published,
+            'content': [{
+                'type': 'web-page',
+                'url': f'{ELIFE_REVIEW_PREPRINTS_URL}{manuscript_id}'
+            }]
+        }]
+    }
+
+
+def get_single_actions_value_for_preprint_peer_reviewed_step(
+    preprint_doi: str,
+    hypothesis_id: str,
+    elife_doi: str,
+    elife_doi_url: str,
+    annotation_created_timestamp: str
+) -> dict:
+    return {
+        'participants': [],
+        'outputs': [
+            {
+                'type': '',
+                'doi': elife_doi,
+                'published': annotation_created_timestamp,
+                'url': elife_doi_url,
+                'content': [
+                    {
+                        'type': 'web-page',
+                        'url': f'{HYPOTHESIS_URL}{hypothesis_id}'
+                    },
+                    {
+                        'type': 'web-page',
+                        'url': (
+                            f'{SCIETY_ARTICLES_ACTIVITY_URL}'
+                            f'{preprint_doi}#hypothesis:{hypothesis_id}'
+                        )
+                    },
+                    {
+                        'type': 'web-page',
+                        'url': (
+                            f'{SCIETY_ARTICLES_EVALUATIONS_URL}'
+                            f'{hypothesis_id}/content'
+                        )
+                    }
+                ]
+            }
+        ]
+    }
+
+
+def iter_single_actions_value_from_query_result(
     step_number: int,
     query_result_item: dict
 ) -> Iterable[dict]:
     manuscript_id = query_result_item["manuscript_id"]
-    qc_complete_timestamp = query_result_item['qc_complete_timestamp']
+    preprint_published = query_result_item['qc_complete_timestamp']
     preprint_doi = query_result_item["preprint_doi"]
     evaluations = query_result_item['evaluations']
     elife_doi = query_result_item['elife_doi']
-    elife_doi_url = f'https://doi.org/{elife_doi}'
+    elife_doi_url = f'{DOI_ROOT_URL}{elife_doi}'
     if evaluations:
         for evaluation in evaluations:
             hypothesis_id = evaluation["hypothesis_id"]
-            yield {
-                'participants': [],
-                'outputs': [
-                    {
-                        'type': '',
-                        'doi': elife_doi,
-                        'published': (
-                            evaluation['annotation_created_timestamp'] if evaluations else ''
-                        ),
-                        'url': elife_doi_url,
-                        'content': [
-                            {
-                                'type': 'web-page',
-                                'url': f'https://hypothes.is/a/{hypothesis_id}'
-                            },
-                            {
-                                'type': 'web-page',
-                                'url': (
-                                    'https://sciety.org/articles/activity/'
-                                    f'{preprint_doi}#hypothesis:{hypothesis_id}'
-                                )
-                            },
-                            {
-                                'type': 'web-page',
-                                'url': (
-                                    'https://sciety.org/evaluations/hypothesis:'
-                                    f'{hypothesis_id}/content'
-                                )
-                            }
-                        ]
-                    }
-                ]
-            }
+            annotation_created_timestamp = evaluation['annotation_created_timestamp']
+            yield get_single_actions_value_for_preprint_peer_reviewed_step(
+                preprint_doi=preprint_doi,
+                hypothesis_id=hypothesis_id,
+                elife_doi=elife_doi,
+                elife_doi_url=elife_doi_url,
+                annotation_created_timestamp=annotation_created_timestamp
+            )
     elif step_number == 0:
-        yield {
-            'participants': [],
-            'outputs': [{
-                'type': 'preprint',
-                'doi': preprint_doi,
-                'url': f'https://doi.org/{preprint_doi}',
-                'published': qc_complete_timestamp,
-                'versionIdentifier': ''
-            }]
-        }
+        yield get_single_actions_value_for_first_preprint_published_step(
+            preprint_doi=preprint_doi,
+            preprint_published=preprint_published
+        )
     elif step_number == 1:
-        yield {
-            'participants': [],
-            'outputs': [{
-                'identifier': manuscript_id,
-                'versionIdentifier': '',
-                'type': 'preprint',
-                'doi': elife_doi,
-                'url': elife_doi_url,
-                'published': qc_complete_timestamp,
-                'content': [{
-                    'type': 'web-page',
-                    'url': f'https://elifesciences.org/review-preprints/{manuscript_id}'
-                }]
-            }]
-        }
+        yield get_single_actions_value_for_preprint_under_review_step(
+            manuscript_id=manuscript_id,
+            elife_doi=elife_doi,
+            elife_doi_url=elife_doi_url,
+            preprint_published=preprint_published
+        )
 
 
 def get_docmap_actions_value_from_query_result(
     step_number: int,
     query_result_item: dict
 ) -> list:
-    return list(iter_single_actions_value_from_query_result_for_evaluations(
+    return list(iter_single_actions_value_from_query_result(
         step_number,
         query_result_item
     ))
