@@ -64,7 +64,7 @@ class TestGenerateDocmapSteps:
     def test_should_return_minimum_required_fields_for_a_step(self):
         steps = generate_docmap_steps(1, DOCMAPS_QUERY_RESULT_ITEM_1)
         assert steps['_:b0']['inputs'] == []
-        assert steps['_:b0']['actions'] == []
+        assert steps['_:b0']['actions']
         assert steps['_:b0']['assertions']
 
     def test_should_return_first_step_key_if_number_of_steps_is_one(self):
@@ -176,7 +176,21 @@ class TestGetDocmapsItemForQueryResultItem:
             }
         ]
 
-    def test_should_populate_actions_if_has_evaluations(self):
+    def test_should_populate_first_step_actions_outputs_with_status_doi_and_url(self):
+        docmaps_item = get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
+        first_step = docmaps_item['steps']['_:b0']
+        assert first_step['actions'] == [{
+            'participants': [],
+            'outputs': [{
+                'type': 'preprint',
+                'doi': DOI_1,
+                'url': f'https://doi.org/{DOI_1}',
+                'published': '',
+                'versionIdentifier': ''
+            }]
+        }]
+
+    def test_should_populate_actions_for_articles_with_evaluations_in_first_step(self):
         docmaps_item = get_docmap_item_for_query_result_item(
             DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS
         )
