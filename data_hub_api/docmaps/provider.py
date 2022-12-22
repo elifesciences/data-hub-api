@@ -71,7 +71,7 @@ def iter_single_actions_value_from_query_result_for_evaluations(
     preprint_doi = query_result_item["preprint_doi"]
     evaluations = query_result_item['evaluations']
     elife_doi = query_result_item['elife_doi']
-    url = f'https://doi.org/{elife_doi}'
+    elife_doi_url = f'https://doi.org/{elife_doi}'
     if evaluations:
         for evaluation in evaluations:
             hypothesis_id = evaluation["hypothesis_id"]
@@ -84,7 +84,7 @@ def iter_single_actions_value_from_query_result_for_evaluations(
                         'published': (
                             evaluation['annotation_created_timestamp'] if evaluations else ''
                         ),
-                        'url': url,
+                        'url': elife_doi_url,
                         'content': [
                             {
                                 'type': 'web-page',
@@ -117,6 +117,22 @@ def iter_single_actions_value_from_query_result_for_evaluations(
                 'url': f'https://doi.org/{preprint_doi}',
                 'published': '',
                 'versionIdentifier': ''
+            }]
+        }
+    elif step_number == 1:
+        yield {
+            'participants': [],
+            'outputs': [{
+                'identifier': '',
+                'versionIdentifier': '',
+                'type': 'preprint',
+                'doi': elife_doi,
+                'url': elife_doi_url,
+                'published': '',
+                'content': [{
+                    'type': 'web-page',
+                    'url': ''
+                }]
             }]
         }
 

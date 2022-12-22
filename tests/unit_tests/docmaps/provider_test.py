@@ -176,7 +176,7 @@ class TestGetDocmapsItemForQueryResultItem:
             }
         ]
 
-    def test_should_populate_first_step_actions_outputs_with_status_doi_and_url(self):
+    def test_should_populate_first_step_actions_outputs_with_doi_and_url(self):
         docmaps_item = get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
         first_step = docmaps_item['steps']['_:b0']
         assert first_step['actions'] == [{
@@ -187,6 +187,25 @@ class TestGetDocmapsItemForQueryResultItem:
                 'url': f'https://doi.org/{DOI_1}',
                 'published': '',
                 'versionIdentifier': ''
+            }]
+        }]
+
+    def test_should_populate_second_step_actions_outputs_with_necessary_details(self):
+        docmaps_item = get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
+        second_step = docmaps_item['steps']['_:b1']
+        assert second_step['actions'] == [{
+            'participants': [],
+            'outputs': [{
+                'identifier': '',
+                'versionIdentifier': '',
+                'type': 'preprint',
+                'doi': 'elife_doi_1',
+                'url': 'https://doi.org/elife_doi_1',
+                'published': '',
+                'content': [{
+                    'type': 'web-page',
+                    'url': ''
+                }]
             }]
         }]
 
