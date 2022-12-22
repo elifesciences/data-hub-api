@@ -25,11 +25,8 @@ SCIETY_ARTICLES_EVALUATIONS_URL = 'https://sciety.org/evaluations/hypothesis:'
 
 
 def get_docmap_inputs_value_from_query_result(
-    step_number: int,
     query_result_item: dict
 ) -> list:
-    if step_number == 0:
-        return []
     return [{
         'type': 'preprint',
         'doi': query_result_item['preprint_doi'],
@@ -158,6 +155,7 @@ def iter_single_actions_value_from_query_result(
     evaluations = query_result_item['evaluations']
     elife_doi = query_result_item['elife_doi']
     elife_doi_url = f'{DOI_ROOT_URL}{elife_doi}'
+    # filtered for evalutions for now as we dont have example yet
     if evaluations:
         for evaluation in evaluations:
             hypothesis_id = evaluation["hypothesis_id"]
@@ -208,7 +206,6 @@ def generate_docmap_steps(number_of_steps: int, query_result_item: dict) -> dict
                 query_result_item
             ),
             'inputs': get_docmap_inputs_value_from_query_result(
-                step_number,
                 query_result_item
             ),
             'next-step': (

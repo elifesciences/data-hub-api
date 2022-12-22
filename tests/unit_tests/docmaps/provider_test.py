@@ -68,7 +68,7 @@ def _iter_dict_from_bq_query_mock() -> Iterable[MagicMock]:
 class TestGenerateDocmapSteps:
     def test_should_return_minimum_required_fields_for_a_step(self):
         steps = generate_docmap_steps(1, DOCMAPS_QUERY_RESULT_ITEM_1)
-        assert steps['_:b0']['inputs'] == []
+        assert steps['_:b0']['inputs']
         assert steps['_:b0']['actions']
         assert steps['_:b0']['assertions']
 
@@ -134,14 +134,7 @@ class TestGetDocmapsItemForQueryResultItem:
             DOCMAPS_QUERY_RESULT_ITEM_1['publisher_json']
         )
 
-    def test_should_return_empty_list_for_inputs_in_first_step(self):
-        docmaps_item = get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
-        first_step_key = docmaps_item['first-step']
-        first_step = docmaps_item['steps'][first_step_key]
-        first_step_input = first_step['inputs']
-        assert first_step_input == []
-
-    def test_should_populate_second_step_input_doi_and_url(self):
+    def test_should_populate_first_second_steps_input_doi_and_url(self):
         docmaps_item = get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
         second_step_input = docmaps_item['steps']['_:b1']['inputs']
         assert len(second_step_input) == 1
