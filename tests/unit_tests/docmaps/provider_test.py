@@ -7,6 +7,11 @@ import pytest
 
 from data_hub_api.docmaps import provider as provider_module
 from data_hub_api.docmaps.provider import (
+    DOI_ROOT_URL,
+    ELIFE_REVIEW_PREPRINTS_URL,
+    HYPOTHESIS_URL,
+    SCIETY_ARTICLES_ACTIVITY_URL,
+    SCIETY_ARTICLES_EVALUATIONS_URL,
     get_docmap_item_for_query_result_item,
     DocmapsProvider,
     DOCMAPS_JSONLD_SCHEMA_URL,
@@ -25,7 +30,7 @@ DOCMAPS_QUERY_RESULT_ITEM_1 = {
     'qc_complete_timestamp': datetime.fromisoformat('2022-01-01T01:02:03+00:00'),
     'preprint_doi': DOI_1,
     'preprint_version': None,
-    'preprint_url': f'https://doi.org/{DOI_1}',
+    'preprint_url': f'{DOI_ROOT_URL}{DOI_1}',
     'docmap_id': 'docmap_id_1',
     'publisher_json': '{"id": "publisher_1"}',
     'evaluations': [],
@@ -37,7 +42,7 @@ DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS = {
     'qc_complete_timestamp': datetime.fromisoformat('2022-01-01T01:02:03+00:00'),
     'preprint_doi': DOI_1,
     'preprint_version': None,
-    'preprint_url': f'https://doi.org/{DOI_1}',
+    'preprint_url': f'{DOI_ROOT_URL}{DOI_1}',
     'docmap_id': 'docmap_id_1',
     'publisher_json': '{"id": "publisher_1"}',
     'evaluations': [
@@ -184,7 +189,7 @@ class TestGetDocmapsItemForQueryResultItem:
             'outputs': [{
                 'type': 'preprint',
                 'doi': DOI_1,
-                'url': f'https://doi.org/{DOI_1}',
+                'url': f'{DOI_ROOT_URL}{DOI_1}',
                 'published': datetime.fromisoformat('2022-01-01T01:02:03+00:00'),
                 'versionIdentifier': ''
             }]
@@ -200,11 +205,11 @@ class TestGetDocmapsItemForQueryResultItem:
                 'versionIdentifier': '',
                 'type': 'preprint',
                 'doi': 'elife_doi_1',
-                'url': 'https://doi.org/elife_doi_1',
+                'url': f'{DOI_ROOT_URL}elife_doi_1',
                 'published': datetime.fromisoformat('2022-01-01T01:02:03+00:00'),
                 'content': [{
                     'type': 'web-page',
-                    'url': 'https://elifesciences.org/review-preprints/manuscript_id_1'
+                    'url': f'{ELIFE_REVIEW_PREPRINTS_URL}manuscript_id_1'
                 }]
             }]
         }]
@@ -223,23 +228,23 @@ class TestGetDocmapsItemForQueryResultItem:
                         'type': '',
                         'doi': 'elife_doi_1',
                         'published': 'annotation_created_timestamp_1',
-                        'url': 'https://doi.org/elife_doi_1',
+                        'url': f'{DOI_ROOT_URL}elife_doi_1',
                         'content': [
                             {
                                 'type': 'web-page',
-                                'url': 'https://hypothes.is/a/hypothesis_id_1'
+                                'url': f'{HYPOTHESIS_URL}hypothesis_id_1'
                             },
                             {
                                 'type': 'web-page',
                                 'url': (
-                                    'https://sciety.org/articles/activity/'
+                                    f'{SCIETY_ARTICLES_ACTIVITY_URL}'
                                     f'{DOI_1}#hypothesis:hypothesis_id_1'
                                 )
                             },
                             {
                                 'type': 'web-page',
                                 'url': (
-                                    'https://sciety.org/evaluations/hypothesis:'
+                                    f'{SCIETY_ARTICLES_EVALUATIONS_URL}'
                                     'hypothesis_id_1/content'
                                 )
                             }
@@ -254,23 +259,23 @@ class TestGetDocmapsItemForQueryResultItem:
                         'type': '',
                         'doi': 'elife_doi_1',
                         'published': 'annotation_created_timestamp_2',
-                        'url': 'https://doi.org/elife_doi_1',
+                        'url': f'{DOI_ROOT_URL}elife_doi_1',
                         'content': [
                             {
                                 'type': 'web-page',
-                                'url': 'https://hypothes.is/a/hypothesis_id_2'
+                                'url': f'{HYPOTHESIS_URL}hypothesis_id_2'
                             },
                             {
                                 'type': 'web-page',
                                 'url': (
-                                    'https://sciety.org/articles/activity/'
+                                    f'{SCIETY_ARTICLES_ACTIVITY_URL}'
                                     f'{DOI_1}#hypothesis:hypothesis_id_2'
                                 )
                             },
                             {
                                 'type': 'web-page',
                                 'url': (
-                                    'https://sciety.org/evaluations/hypothesis:'
+                                    f'{SCIETY_ARTICLES_EVALUATIONS_URL}'
                                     'hypothesis_id_2/content'
                                 )
                             }
