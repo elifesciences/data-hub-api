@@ -64,7 +64,7 @@ class TestGenerateDocmapSteps:
     def test_should_return_minimum_required_fields_for_a_step(self):
         steps = generate_docmap_steps(1, DOCMAPS_QUERY_RESULT_ITEM_1)
         assert steps['_:b0']['inputs'] == []
-        assert steps['_:b0']['actions'] == []
+        assert steps['_:b0']['actions']
         assert steps['_:b0']['assertions']
 
     def test_should_return_first_step_key_if_number_of_steps_is_one(self):
@@ -176,7 +176,40 @@ class TestGetDocmapsItemForQueryResultItem:
             }
         ]
 
-    def test_should_populate_actions_if_has_evaluations(self):
+    def test_should_populate_first_step_actions_outputs_with_doi_and_url(self):
+        docmaps_item = get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
+        first_step = docmaps_item['steps']['_:b0']
+        assert first_step['actions'] == [{
+            'participants': [],
+            'outputs': [{
+                'type': 'preprint',
+                'doi': DOI_1,
+                'url': f'https://doi.org/{DOI_1}',
+                'published': datetime.fromisoformat('2022-01-01T01:02:03+00:00'),
+                'versionIdentifier': ''
+            }]
+        }]
+
+    def test_should_populate_second_step_actions_outputs_with_necessary_details(self):
+        docmaps_item = get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
+        second_step = docmaps_item['steps']['_:b1']
+        assert second_step['actions'] == [{
+            'participants': [],
+            'outputs': [{
+                'identifier': 'manuscript_id_1',
+                'versionIdentifier': '',
+                'type': 'preprint',
+                'doi': 'elife_doi_1',
+                'url': 'https://doi.org/elife_doi_1',
+                'published': datetime.fromisoformat('2022-01-01T01:02:03+00:00'),
+                'content': [{
+                    'type': 'web-page',
+                    'url': 'https://elifesciences.org/review-preprints/manuscript_id_1'
+                }]
+            }]
+        }]
+
+    def test_should_populate_actions_for_articles_with_evaluations_in_first_step(self):
         docmaps_item = get_docmap_item_for_query_result_item(
             DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS
         )

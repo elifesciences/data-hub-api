@@ -65,52 +65,88 @@ def get_docmap_assertions_value_from_query_result(
 
 
 def iter_single_actions_value_from_query_result_for_evaluations(
+    step_number: int,
     query_result_item: dict
 ) -> Iterable[dict]:
-    evaluations = query_result_item['evaluations']
+    manuscript_id = query_result_item["manuscript_id"]
+    qc_complete_timestamp = query_result_item['qc_complete_timestamp']
     preprint_doi = query_result_item["preprint_doi"]
+    evaluations = query_result_item['evaluations']
     elife_doi = query_result_item['elife_doi']
-    url = f'https://doi.org/{elife_doi}'
-    for evaluation in evaluations:
-        hypothesis_id = evaluation["hypothesis_id"]
+    elife_doi_url = f'https://doi.org/{elife_doi}'
+    if evaluations:
+        for evaluation in evaluations:
+            hypothesis_id = evaluation["hypothesis_id"]
+            yield {
+                'participants': [],
+                'outputs': [
+                    {
+                        'type': '',
+                        'doi': elife_doi,
+                        'published': (
+                            evaluation['annotation_created_timestamp'] if evaluations else ''
+                        ),
+                        'url': elife_doi_url,
+                        'content': [
+                            {
+                                'type': 'web-page',
+                                'url': f'https://hypothes.is/a/{hypothesis_id}'
+                            },
+                            {
+                                'type': 'web-page',
+                                'url': (
+                                    'https://sciety.org/articles/activity/'
+                                    f'{preprint_doi}#hypothesis:{hypothesis_id}'
+                                )
+                            },
+                            {
+                                'type': 'web-page',
+                                'url': (
+                                    'https://sciety.org/evaluations/hypothesis:'
+                                    f'{hypothesis_id}/content'
+                                )
+                            }
+                        ]
+                    }
+                ]
+            }
+    elif step_number == 0:
         yield {
             'participants': [],
-            'outputs': [
-                {
-                    'type': '',
-                    'doi': elife_doi,
-                    'published': evaluation['annotation_created_timestamp'] if evaluations else '',
-                    'url': url,
-                    'content': [
-                        {
-                            'type': 'web-page',
-                            'url': f'https://hypothes.is/a/{hypothesis_id}'
-                        },
-                        {
-                            'type': 'web-page',
-                            'url': (
-                                'https://sciety.org/articles/activity/'
-                                f'{preprint_doi}#hypothesis:{hypothesis_id}'
-                            )
-                        },
-                        {
-                            'type': 'web-page',
-                            'url': (
-                                'https://sciety.org/evaluations/hypothesis:'
-                                f'{hypothesis_id}/content'
-                            )
-                        }
-                    ]
-                }
-            ]
+            'outputs': [{
+                'type': 'preprint',
+                'doi': preprint_doi,
+                'url': f'https://doi.org/{preprint_doi}',
+                'published': qc_complete_timestamp,
+                'versionIdentifier': ''
+            }]
+        }
+    elif step_number == 1:
+        yield {
+            'participants': [],
+            'outputs': [{
+                'identifier': manuscript_id,
+                'versionIdentifier': '',
+                'type': 'preprint',
+                'doi': elife_doi,
+                'url': elife_doi_url,
+                'published': qc_complete_timestamp,
+                'content': [{
+                    'type': 'web-page',
+                    'url': f'https://elifesciences.org/review-preprints/{manuscript_id}'
+                }]
+            }]
         }
 
 
-def get_docmap_actions_value_from_query_result(query_result_item: dict) -> list:
-    evaluations = query_result_item['evaluations']
-    if evaluations:
-        return list(iter_single_actions_value_from_query_result_for_evaluations(query_result_item))
-    return []
+def get_docmap_actions_value_from_query_result(
+    step_number: int,
+    query_result_item: dict
+) -> list:
+    return list(iter_single_actions_value_from_query_result_for_evaluations(
+        step_number,
+        query_result_item
+    ))
 
 
 def generate_docmap_steps(number_of_steps: int, query_result_item: dict) -> dict:
@@ -119,7 +155,10 @@ def generate_docmap_steps(number_of_steps: int, query_result_item: dict) -> dict
     while step_number < number_of_steps:
         LOGGER.debug('step_number: %r', step_number)
         step_dict = {
-            'actions': get_docmap_actions_value_from_query_result(query_result_item),
+            'actions': get_docmap_actions_value_from_query_result(
+                step_number,
+                query_result_item
+            ),
             'assertions': get_docmap_assertions_value_from_query_result(
                 step_number,
                 query_result_item
