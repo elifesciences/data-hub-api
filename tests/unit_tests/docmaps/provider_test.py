@@ -185,7 +185,7 @@ class TestGetDocmapsItemForQueryResultItem:
                 'type': 'preprint',
                 'doi': DOI_1,
                 'url': f'https://doi.org/{DOI_1}',
-                'published': '',
+                'published': datetime.fromisoformat('2022-01-01T01:02:03+00:00'),
                 'versionIdentifier': ''
             }]
         }]
@@ -196,15 +196,15 @@ class TestGetDocmapsItemForQueryResultItem:
         assert second_step['actions'] == [{
             'participants': [],
             'outputs': [{
-                'identifier': '',
+                'identifier': 'manuscript_id_1',
                 'versionIdentifier': '',
                 'type': 'preprint',
                 'doi': 'elife_doi_1',
                 'url': 'https://doi.org/elife_doi_1',
-                'published': '',
+                'published': datetime.fromisoformat('2022-01-01T01:02:03+00:00'),
                 'content': [{
                     'type': 'web-page',
-                    'url': ''
+                    'url': 'https://elifesciences.org/review-preprints/manuscript_id_1'
                 }]
             }]
         }]

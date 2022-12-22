@@ -68,6 +68,8 @@ def iter_single_actions_value_from_query_result_for_evaluations(
     step_number: int,
     query_result_item: dict
 ) -> Iterable[dict]:
+    manuscript_id = query_result_item["manuscript_id"]
+    qc_complete_timestamp = query_result_item['qc_complete_timestamp']
     preprint_doi = query_result_item["preprint_doi"]
     evaluations = query_result_item['evaluations']
     elife_doi = query_result_item['elife_doi']
@@ -115,7 +117,7 @@ def iter_single_actions_value_from_query_result_for_evaluations(
                 'type': 'preprint',
                 'doi': preprint_doi,
                 'url': f'https://doi.org/{preprint_doi}',
-                'published': '',
+                'published': qc_complete_timestamp,
                 'versionIdentifier': ''
             }]
         }
@@ -123,15 +125,15 @@ def iter_single_actions_value_from_query_result_for_evaluations(
         yield {
             'participants': [],
             'outputs': [{
-                'identifier': '',
+                'identifier': manuscript_id,
                 'versionIdentifier': '',
                 'type': 'preprint',
                 'doi': elife_doi,
                 'url': elife_doi_url,
-                'published': '',
+                'published': qc_complete_timestamp,
                 'content': [{
                     'type': 'web-page',
-                    'url': ''
+                    'url': f'https://elifesciences.org/review-preprints/{manuscript_id}'
                 }]
             }]
         }
