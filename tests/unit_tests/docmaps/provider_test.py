@@ -199,7 +199,6 @@ class TestGetDocmapsItemForQueryResultItem:
                 'type': 'preprint',
                 'doi': 'elife_doi_1',
                 'url': f'{DOI_ROOT_URL}elife_doi_1',
-                'published': datetime.fromisoformat('2022-01-01T01:02:03+00:00'),
                 'content': [{
                     'type': 'web-page',
                     'url': f'{ELIFE_REVIEW_PREPRINTS_URL}manuscript_id_1'
