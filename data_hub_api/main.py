@@ -24,8 +24,8 @@ def create_app():
 
     @app.get("/")
     def get_root():
-        with open("data_hub_api/root.html", "r", encoding='utf-8') as f:
-            html_content = f.read()
+        with open("data_hub_api/index.html", "r", encoding='utf-8') as file:
+            html_content = file.read()
         return HTMLResponse(content=html_content, status_code=200)
 
     @app.get("/enhanced-preprints/docmaps/v1/index")
