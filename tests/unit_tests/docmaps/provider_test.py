@@ -161,14 +161,17 @@ class TestGetDocmapsItemForQueryResultItem:
             {
                 'item': {
                     'type': 'preprint',
-                    'doi': DOI_1
+                    'doi': DOI_1,
+                    'versionIdentifier': ''
                 },
-                'status': 'under-review'
+                'status': 'under-review',
+                'happened': datetime.fromisoformat('2022-01-01T01:02:03+00:00')
             },
             {
                 'item': {
                     'type': 'preprint',
-                    'doi': 'elife_doi_1'
+                    'doi': 'elife_doi_1',
+                    'versionIdentifier': ''
                 },
                 'status': 'draft'
             }

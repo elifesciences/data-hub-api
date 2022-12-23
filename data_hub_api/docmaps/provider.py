@@ -52,14 +52,17 @@ def get_docmap_assertions_value_from_query_result(
         {
             'item': {
                 'type': 'preprint',
-                'doi': preprint_doi
+                'doi': preprint_doi,
+                'versionIdentifier': ''
             },
-            'status': 'under-review'
+            'status': 'under-review',
+            'happened': query_result_item['qc_complete_timestamp']
         },
         {
             'item': {
                 'type': 'preprint',
-                'doi': elife_doi
+                'doi': elife_doi,
+                'versionIdentifier': ''
             },
             'status': 'draft'
         }
