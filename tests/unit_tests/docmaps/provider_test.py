@@ -149,7 +149,8 @@ class TestGetDocmapsItemForQueryResultItem:
         assert first_step['assertions'] == [{
             'item': {
                 'type': 'preprint',
-                'doi': DOI_1
+                'doi': DOI_1,
+                'versionIdentifier': ''
             },
             'status': 'manuscript-published'
         }]

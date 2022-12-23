@@ -44,7 +44,8 @@ def get_docmap_assertions_value_from_query_result(
         return [{
             'item': {
                 'type': 'preprint',
-                'doi': preprint_doi
+                'doi': preprint_doi,
+                'versionIdentifier': ''
             },
             'status': 'manuscript-published'
         }]
