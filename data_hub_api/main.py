@@ -1,6 +1,7 @@
 import logging
 
 from fastapi import FastAPI
+from fastapi.responses import HTMLResponse
 
 from data_hub_api.docmaps.provider import DocmapsProvider
 
@@ -23,7 +24,9 @@ def create_app():
 
     @app.get("/")
     def get_root():
-        return {"Hello": "World"}
+        with open("data_hub_api/root.html", "r", encoding='utf-8') as f:
+            html_content = f.read()
+        return HTMLResponse(content=html_content, status_code=200)
 
     @app.get("/enhanced-preprints/docmaps/v1/index")
     def get_enhanced_preprints_docmaps_index():
