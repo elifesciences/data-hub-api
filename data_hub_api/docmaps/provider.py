@@ -44,7 +44,8 @@ def get_docmap_assertions_value_from_query_result(
         return [{
             'item': {
                 'type': 'preprint',
-                'doi': preprint_doi
+                'doi': preprint_doi,
+                'versionIdentifier': ''
             },
             'status': 'manuscript-published'
         }]
@@ -52,14 +53,17 @@ def get_docmap_assertions_value_from_query_result(
         {
             'item': {
                 'type': 'preprint',
-                'doi': preprint_doi
+                'doi': preprint_doi,
+                'versionIdentifier': ''
             },
-            'status': 'under-review'
+            'status': 'under-review',
+            'happened': query_result_item['qc_complete_timestamp']
         },
         {
             'item': {
                 'type': 'preprint',
-                'doi': elife_doi
+                'doi': elife_doi,
+                'versionIdentifier': ''
             },
             'status': 'draft'
         }
@@ -85,8 +89,7 @@ def get_single_actions_value_for_first_preprint_published_step(
 def get_single_actions_value_for_preprint_under_review_step(
     manuscript_id: str,
     elife_doi: str,
-    elife_doi_url: str,
-    preprint_published: str
+    elife_doi_url: str
 ) -> dict:
     return {
         'participants': [],
@@ -96,7 +99,6 @@ def get_single_actions_value_for_preprint_under_review_step(
             'type': 'preprint',
             'doi': elife_doi,
             'url': elife_doi_url,
-            'published': preprint_published,
             'content': [{
                 'type': 'web-page',
                 'url': f'{ELIFE_REVIEW_PREPRINTS_URL}{manuscript_id}'
@@ -150,11 +152,12 @@ def iter_single_actions_value_from_query_result(
     query_result_item: dict
 ) -> Iterable[dict]:
     manuscript_id = query_result_item["manuscript_id"]
-    preprint_published = query_result_item['qc_complete_timestamp']
+    # currently using qc_complete_timestamp for timestamp fields (it needs to be confimed)
+    qc_complete_timestamp_str = query_result_item['qc_complete_timestamp']
     preprint_doi = query_result_item["preprint_doi"]
-    evaluations = query_result_item['evaluations']
     elife_doi = query_result_item['elife_doi']
     elife_doi_url = f'{DOI_ROOT_URL}{elife_doi}'
+    evaluations = query_result_item['evaluations']
     # filtered for evalutions for now as we dont have example yet
     if evaluations:
         for evaluation in evaluations:
@@ -170,14 +173,13 @@ def iter_single_actions_value_from_query_result(
     elif step_number == 0:
         yield get_single_actions_value_for_first_preprint_published_step(
             preprint_doi=preprint_doi,
-            preprint_published=preprint_published
+            preprint_published=qc_complete_timestamp_str
         )
     elif step_number == 1:
         yield get_single_actions_value_for_preprint_under_review_step(
             manuscript_id=manuscript_id,
             elife_doi=elife_doi,
-            elife_doi_url=elife_doi_url,
-            preprint_published=preprint_published
+            elife_doi_url=elife_doi_url
         )
 
 
