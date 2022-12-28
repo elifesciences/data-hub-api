@@ -18,7 +18,7 @@ DOCMAP_ID_PREFIX = 'https://data-hub-api.elifesciences.org/enhanced-preprints/do
 DOCMAP_ID_SUFFIX = '/docmap.json'
 
 DOI_ROOT_URL = 'https://doi.org/'
-ELIFE_REVIEW_PREPRINTS_URL = 'https://elifesciences.org/review-preprints/'
+ELIFE_REVIEWED_PREPRINTS_URL = 'https://elifesciences.org/reviewed-preprints/'
 HYPOTHESIS_URL = 'https://hypothes.is/a/'
 SCIETY_ARTICLES_ACTIVITY_URL = 'https://sciety.org/articles/activity/'
 SCIETY_ARTICLES_EVALUATIONS_URL = 'https://sciety.org/evaluations/hypothesis:'
@@ -148,7 +148,7 @@ def get_single_actions_value_for_preprint_under_review_step(
             'url': elife_doi_url,
             'content': [{
                 'type': 'web-page',
-                'url': f'{ELIFE_REVIEW_PREPRINTS_URL}{manuscript_id}'
+                'url': f'{ELIFE_REVIEWED_PREPRINTS_URL}{manuscript_id}'
             }]
         }]
     }

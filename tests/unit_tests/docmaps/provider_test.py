@@ -8,7 +8,7 @@ import pytest
 from data_hub_api.docmaps import provider as provider_module
 from data_hub_api.docmaps.provider import (
     DOI_ROOT_URL,
-    ELIFE_REVIEW_PREPRINTS_URL,
+    ELIFE_REVIEWED_PREPRINTS_URL,
     HYPOTHESIS_URL,
     SCIETY_ARTICLES_ACTIVITY_URL,
     SCIETY_ARTICLES_EVALUATIONS_URL,
@@ -227,7 +227,7 @@ class TestGetDocmapsItemForQueryResultItem:
                 'url': f'{DOI_ROOT_URL}elife_doi_1',
                 'content': [{
                     'type': 'web-page',
-                    'url': f'{ELIFE_REVIEW_PREPRINTS_URL}manuscript_id_1'
+                    'url': f'{ELIFE_REVIEWED_PREPRINTS_URL}manuscript_id_1'
                 }]
             }]
         }]
