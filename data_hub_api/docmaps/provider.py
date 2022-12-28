@@ -244,15 +244,15 @@ def generate_docmap_steps(number_of_steps: int, query_result_item: dict) -> dict
             ),
             'previous-step': '_:b' + str(step_number - 1) if step_number > 0 else None
         }
-        if step_number == 0:
+        if step_number == 0:  # manuscript-published
             step_dict = get_docmaps_step_for_manuscript_published_status(
                 query_result_item=query_result_item
             )
-        elif step_number == 1:
+        elif step_number == 1:  # under-review
             step_dict = get_docmaps_step_for_under_review_status(
                 query_result_item=query_result_item
             )
-        elif step_number == 2:
+        elif step_number == 2:  # peer-reviewed
             step_dict = get_docmaps_step_for_peer_reviewed_status(
                 query_result_item=query_result_item
             )
@@ -262,6 +262,7 @@ def generate_docmap_steps(number_of_steps: int, query_result_item: dict) -> dict
 
 
 def get_docmap_step(query_result_item: dict) -> int:
+    # currently maximum step we handle is peer-reviewed (which is 3)
     if not query_result_item['evaluations']:
         return 2
     return 3
