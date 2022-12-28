@@ -25,8 +25,11 @@ SCIETY_ARTICLES_EVALUATIONS_URL = 'https://sciety.org/evaluations/hypothesis:'
 
 
 def get_docmap_inputs_value_from_query_result(
+    step_number: int,
     query_result_item: dict
 ) -> list:
+    if step_number == 0:
+        return []
     return [{
         'type': 'preprint',
         'doi': query_result_item['preprint_doi'],
@@ -208,6 +211,7 @@ def generate_docmap_steps(number_of_steps: int, query_result_item: dict) -> dict
                 query_result_item
             ),
             'inputs': get_docmap_inputs_value_from_query_result(
+                step_number,
                 query_result_item
             ),
             'next-step': (
