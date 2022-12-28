@@ -68,12 +68,6 @@ def _iter_dict_from_bq_query_mock() -> Iterable[MagicMock]:
 
 
 class TestGenerateDocmapSteps:
-    def test_should_return_minimum_required_fields_for_a_step(self):
-        steps = generate_docmap_steps(1, DOCMAPS_QUERY_RESULT_ITEM_1)
-        assert steps['_:b0']['inputs'] == []
-        assert steps['_:b0']['actions']
-        assert steps['_:b0']['assertions']
-
     def test_should_return_first_step_key_if_number_of_steps_is_one(self):
         steps = generate_docmap_steps(1, DOCMAPS_QUERY_RESULT_ITEM_1)
         assert steps['_:b0']
@@ -136,38 +130,15 @@ class TestGetDocmapsItemForQueryResultItem:
             DOCMAPS_QUERY_RESULT_ITEM_1['publisher_json']
         )
 
-    def test_should_have_an_empty_list_for_inputs_in_first_step(self):
+    def test_should_return_empty_list_for_inputs_manuscript_published_step(self):
         docmaps_item = get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
-        second_step_input = docmaps_item['steps']['_:b0']['inputs']
-        assert len(second_step_input) == 0
+        manuscript_published_step = docmaps_item['steps']['_:b0']
+        assert manuscript_published_step['inputs'] == []
 
-    def test_should_populate_under_review_step_inputs_doi_and_url(self):
+    def test_should_populate_assertions_manuscript_published_step(self):
         docmaps_item = get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
-        second_step_input = docmaps_item['steps']['_:b1']['inputs']
-        assert len(second_step_input) == 1
-        assert second_step_input[0]['type'] == 'preprint'
-        assert second_step_input[0]['doi'] == DOCMAPS_QUERY_RESULT_ITEM_1['preprint_doi']
-        assert second_step_input[0]['url'] == DOCMAPS_QUERY_RESULT_ITEM_1['preprint_url']
-
-    def test_should_populate_peer_reviewed_step_inputs_doi_and_url(self):
-        docmaps_item = get_docmap_item_for_query_result_item(
-            DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS
-        )
-        third_step_input = docmaps_item['steps']['_:b2']['inputs']
-        assert len(third_step_input) == 1
-        assert third_step_input[0]['type'] == 'preprint'
-        assert third_step_input[0]['doi'] == DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS[
-            'preprint_doi'
-        ]
-        assert third_step_input[0]['url'] == DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS[
-            'preprint_url'
-        ]
-
-    def test_should_populate_first_step_assertions_with_status_manuscript_published(self):
-        docmaps_item = get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
-        first_step_key = docmaps_item['first-step']
-        first_step = docmaps_item['steps'][first_step_key]
-        assert first_step['assertions'] == [{
+        manuscript_published_step = docmaps_item['steps']['_:b0']
+        assert manuscript_published_step['assertions'] == [{
             'item': {
                 'type': 'preprint',
                 'doi': DOI_1,
@@ -176,10 +147,33 @@ class TestGetDocmapsItemForQueryResultItem:
             'status': 'manuscript-published'
         }]
 
-    def test_should_populate_second_step_assertions_with_status_under_review_and_draft(self):
+    def test_should_populate_actions_outputs_with_doi_and_url_manuscript_published_step(self):
         docmaps_item = get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
-        second_step_assertions = docmaps_item['steps']['_:b1']['assertions']
-        assert second_step_assertions == [
+        manuscript_published_step = docmaps_item['steps']['_:b0']
+        assert manuscript_published_step['actions'] == [{
+            'participants': [],
+            'outputs': [{
+                'type': 'preprint',
+                'doi': DOI_1,
+                'url': f'{DOI_ROOT_URL}{DOI_1}',
+                'published': datetime.fromisoformat('2022-01-01T01:02:03+00:00'),
+                'versionIdentifier': ''
+            }]
+        }]
+
+    def test_should_populate_inputs_under_review_step(self):
+        docmaps_item = get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
+        under_review_step = docmaps_item['steps']['_:b1']
+        assert under_review_step['inputs'] == [{
+            'type': 'preprint',
+            'doi': DOI_1,
+            'url': DOCMAPS_QUERY_RESULT_ITEM_1['preprint_url'],
+        }]
+
+    def test_should_populate_assertions_under_review_step(self):
+        docmaps_item = get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
+        under_review_step = docmaps_item['steps']['_:b1']
+        assert under_review_step['assertions'] == [
             {
                 'item': {
                     'type': 'preprint',
@@ -199,38 +193,10 @@ class TestGetDocmapsItemForQueryResultItem:
             }
         ]
 
-    def test_should_populate_assertations_for_peer_reviewed_if_evaluations(self):
-        docmaps_item = get_docmap_item_for_query_result_item(
-            DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS
-        )
-        second_step_assertions = docmaps_item['steps']['_:b2']['assertions']
-        assert second_step_assertions == [{
-            'item': {
-                'type': 'preprint',
-                'doi': DOI_1,
-                'versionIdentifier': ''
-            },
-            'status': 'peer-reviewed'
-        }]
-
-    def test_should_populate_first_step_actions_outputs_with_doi_and_url(self):
+    def test_should_populate_actions_outputs_with_doi_and_url_under_review_step(self):
         docmaps_item = get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
-        first_step = docmaps_item['steps']['_:b0']
-        assert first_step['actions'] == [{
-            'participants': [],
-            'outputs': [{
-                'type': 'preprint',
-                'doi': DOI_1,
-                'url': f'{DOI_ROOT_URL}{DOI_1}',
-                'published': datetime.fromisoformat('2022-01-01T01:02:03+00:00'),
-                'versionIdentifier': ''
-            }]
-        }]
-
-    def test_should_populate_second_step_actions_outputs_with_necessary_details(self):
-        docmaps_item = get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
-        second_step = docmaps_item['steps']['_:b1']
-        assert second_step['actions'] == [{
+        under_review_step = docmaps_item['steps']['_:b1']
+        assert under_review_step['actions'] == [{
             'participants': [],
             'outputs': [{
                 'identifier': 'manuscript_id_1',
@@ -245,13 +211,37 @@ class TestGetDocmapsItemForQueryResultItem:
             }]
         }]
 
-    def test_should_populate_actions_for_articles_with_evaluations_in_first_step(self):
+    def test_should_populate_inputs_peer_reviewed_step(self):
         docmaps_item = get_docmap_item_for_query_result_item(
             DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS
         )
-        first_step_key = docmaps_item['first-step']
-        first_step = docmaps_item['steps'][first_step_key]
-        assert first_step['actions'] == [
+        peer_reviewed_step = docmaps_item['steps']['_:b2']
+        assert peer_reviewed_step['inputs'] == [{
+            'type': 'preprint',
+            'doi': DOI_1,
+            'url': DOCMAPS_QUERY_RESULT_ITEM_1['preprint_url'],
+        }]
+
+    def test_should_populate_assertions_peer_reviewed_step(self):
+        docmaps_item = get_docmap_item_for_query_result_item(
+            DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS
+        )
+        peer_reviewed_step = docmaps_item['steps']['_:b2']
+        assert peer_reviewed_step['assertions'] == [{
+            'item': {
+                'type': 'preprint',
+                'doi': DOI_1,
+                'versionIdentifier': ''
+            },
+            'status': 'peer-reviewed'
+        }]
+
+    def test_should_populate_actions_outputs_with_doi_and_url_peer_reviewed_step(self):
+        docmaps_item = get_docmap_item_for_query_result_item(
+            DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS
+        )
+        peer_reviewed_step = docmaps_item['steps']['_:b2']
+        assert peer_reviewed_step['actions'] == [
             {
                 'participants': [],
                 'outputs': [
