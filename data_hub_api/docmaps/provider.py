@@ -153,18 +153,29 @@ def get_single_actions_value_for_preprint_under_review_step(
     }
 
 
+def get_outputs_type_for_peer_reviewed_step(
+    tags: list
+) -> str:
+    for tag in tags:
+        if 'Summary' in tag:
+            return 'evaluation-summary'
+    return 'review-article'
+
+
+# pylint: disable=too-many-arguments
 def get_single_actions_value_for_preprint_peer_reviewed_step(
     preprint_doi: str,
     hypothesis_id: str,
     elife_doi: str,
     elife_doi_url: str,
-    annotation_created_timestamp: str
+    annotation_created_timestamp: str,
+    tags: list
 ) -> dict:
     return {
         'participants': [],
         'outputs': [
             {
-                'type': '',
+                'type': get_outputs_type_for_peer_reviewed_step(tags),
                 'doi': elife_doi,
                 'published': annotation_created_timestamp,
                 'url': elife_doi_url,
@@ -209,12 +220,14 @@ def iter_single_actions_value_from_query_result(
         for evaluation in evaluations:
             hypothesis_id = evaluation['hypothesis_id']
             annotation_created_timestamp = evaluation['annotation_created_timestamp']
+            tags = evaluation['tags']
             yield get_single_actions_value_for_preprint_peer_reviewed_step(
                 preprint_doi=preprint_doi,
                 hypothesis_id=hypothesis_id,
                 elife_doi=elife_doi,
                 elife_doi_url=elife_doi_url,
-                annotation_created_timestamp=annotation_created_timestamp
+                annotation_created_timestamp=annotation_created_timestamp,
+                tags=tags
             )
     elif step_number == 0:
         yield get_single_actions_value_for_preprint_manuscript_published_step(

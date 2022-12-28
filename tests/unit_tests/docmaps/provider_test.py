@@ -48,11 +48,13 @@ DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS = {
     'evaluations': [
         {
             'hypothesis_id': 'hypothesis_id_1',
-            'annotation_created_timestamp': 'annotation_created_timestamp_1'
+            'annotation_created_timestamp': 'annotation_created_timestamp_1',
+            'tags': ['PeerReview']
         },
         {
             'hypothesis_id': 'hypothesis_id_2',
-            'annotation_created_timestamp': 'annotation_created_timestamp_2'
+            'annotation_created_timestamp': 'annotation_created_timestamp_2',
+            'tags': ['PeerReview', 'evaluationSummary']
         }
     ],
     'elife_doi': 'elife_doi_1'
@@ -243,7 +245,7 @@ class TestGetDocmapsItemForQueryResultItem:
                 'participants': [],
                 'outputs': [
                     {
-                        'type': '',
+                        'type': 'review-article',
                         'doi': 'elife_doi_1',
                         'published': 'annotation_created_timestamp_1',
                         'url': f'{DOI_ROOT_URL}elife_doi_1',
@@ -274,7 +276,7 @@ class TestGetDocmapsItemForQueryResultItem:
                 'participants': [],
                 'outputs': [
                     {
-                        'type': '',
+                        'type': 'evaluation-summary',
                         'doi': 'elife_doi_1',
                         'published': 'annotation_created_timestamp_2',
                         'url': f'{DOI_ROOT_URL}elife_doi_1',
