@@ -28,7 +28,7 @@ def get_docmap_inputs_value_for_preprint_manuscript_published_step() -> list:
     return []
 
 
-def get_docmap_inputs_value_for_preprint_under_review_step(
+def get_docmap_inputs_value_for_preprint_under_review_and_peer_reviewed_steps(
     query_result_item: dict
 ) -> list:
     return [{
@@ -45,55 +45,76 @@ def get_docmap_inputs_value_from_query_result(
     if step_number == 0: # manuscript-published
         return get_docmap_inputs_value_for_preprint_manuscript_published_step()
     else: # under-review, peer-reviewed
-        return get_docmap_inputs_value_for_preprint_under_review_step(
+        return get_docmap_inputs_value_for_preprint_under_review_and_peer_reviewed_steps(
             query_result_item=query_result_item
         )
+
+
+def get_docmap_assertions_value_for_preprint_manuscript_published_step(
+    query_result_item: dict
+) -> list:
+    return [{
+        'item': {
+            'type': 'preprint',
+            'doi': query_result_item['preprint_doi'],
+            'versionIdentifier': ''
+        },
+        'status': 'manuscript-published'
+    }]
+
+
+def get_docmap_assertions_value_for_preprint_under_review_step(
+    query_result_item: dict
+) -> list:
+    return [{
+        'item': {
+            'type': 'preprint',
+            'doi': query_result_item['preprint_doi'],
+            'versionIdentifier': ''
+        },
+        'status': 'under-review',
+        'happened': query_result_item['qc_complete_timestamp']
+    },
+    {
+        'item': {
+            'type': 'preprint',
+            'doi': query_result_item['elife_doi'],
+            'versionIdentifier': ''
+        },
+        'status': 'draft'
+    }]
+
+
+def get_docmap_assertions_value_for_preprint_peer_reviewed_step(
+    query_result_item: dict
+) -> list:
+    return [{
+            'item': {
+                'type': 'preprint',
+                'doi': query_result_item['preprint_doi'],
+                'versionIdentifier': ''
+            },
+            'status': 'peer-reviewed'
+        }]
 
 
 def get_docmap_assertions_value_from_query_result(
     step_number: int,
     query_result_item: dict
 ) -> list:
-    preprint_doi = query_result_item['preprint_doi']
-    elife_doi = query_result_item['elife_doi']
     if step_number == 0:
-        return [{
-            'item': {
-                'type': 'preprint',
-                'doi': preprint_doi,
-                'versionIdentifier': ''
-            },
-            'status': 'manuscript-published'
-        }]
+        return get_docmap_assertions_value_for_preprint_manuscript_published_step(
+            query_result_item=query_result_item
+        )
     elif step_number == 1:
-        return [{
-            'item': {
-                'type': 'preprint',
-                'doi': preprint_doi,
-                'versionIdentifier': ''
-            },
-            'status': 'under-review',
-            'happened': query_result_item['qc_complete_timestamp']
-        },
-        {
-            'item': {
-                'type': 'preprint',
-                'doi': elife_doi,
-                'versionIdentifier': ''
-            },
-            'status': 'draft'
-        }]
+        return get_docmap_assertions_value_for_preprint_under_review_step(
+            query_result_item=query_result_item
+        )
+        
     elif step_number == 2:
-        return [{
-            'item': {
-                'type': 'preprint',
-                'doi': preprint_doi,
-                'versionIdentifier': ''
-            },
-            'status': 'peer-reviewed'
-        }]
-    else:
-        return []
+        return get_docmap_assertions_value_for_preprint_peer_reviewed_step(
+            query_result_item=query_result_item
+        )
 
 
 def get_single_actions_value_for_preprint_manuscript_published_step(
