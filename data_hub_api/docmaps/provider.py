@@ -24,17 +24,30 @@ SCIETY_ARTICLES_ACTIVITY_URL = 'https://sciety.org/articles/activity/'
 SCIETY_ARTICLES_EVALUATIONS_URL = 'https://sciety.org/evaluations/hypothesis:'
 
 
-def get_docmap_inputs_value_from_query_result(
-    step_number: int,
+def get_docmap_inputs_value_for_preprint_manuscript_published_step() -> list:
+    return []
+
+
+def get_docmap_inputs_value_for_preprint_under_review_step(
     query_result_item: dict
 ) -> list:
-    if step_number == 0:
-        return []
     return [{
         'type': 'preprint',
         'doi': query_result_item['preprint_doi'],
         'url': query_result_item['preprint_url'],
     }]
+
+
+def get_docmap_inputs_value_from_query_result(
+    step_number: int,
+    query_result_item: dict
+) -> list:
+    if step_number == 0: # manuscript-published
+        return get_docmap_inputs_value_for_preprint_manuscript_published_step()
+    else: # under-review, peer-reviewed
+        return get_docmap_inputs_value_for_preprint_under_review_step(
+            query_result_item=query_result_item
+        )
 
 
 def get_docmap_assertions_value_from_query_result(
