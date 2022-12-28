@@ -346,7 +346,7 @@ class TestEnhancedPreprintsDocmapsProvider:
             only_include_reviewed_preprint_type=False,
             only_include_evaluated_preprints=True
         )
-        assert provider.docmaps_index_query.rstrip().endswith('WHERE has_evaluations')
+        assert provider.docmaps_index_query.rstrip().endswith('WHERE has_evaluations\nLIMIT 20')
 
     def test_should_allow_both_reviewed_prerint_type_and_evaluated_preprints_filter(
         self
