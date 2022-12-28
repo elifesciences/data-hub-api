@@ -141,18 +141,27 @@ class TestGetDocmapsItemForQueryResultItem:
         second_step_input = docmaps_item['steps']['_:b0']['inputs']
         assert len(second_step_input) == 0
 
-    def test_should_populate_other_steps_inputs_doi_and_url(self):
+    def test_should_populate_under_review_step_inputs_doi_and_url(self):
         docmaps_item = get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
         second_step_input = docmaps_item['steps']['_:b1']['inputs']
         assert len(second_step_input) == 1
         assert second_step_input[0]['type'] == 'preprint'
         assert second_step_input[0]['doi'] == DOCMAPS_QUERY_RESULT_ITEM_1['preprint_doi']
         assert second_step_input[0]['url'] == DOCMAPS_QUERY_RESULT_ITEM_1['preprint_url']
+
+    def test_should_populate_peer_reviewed_step_inputs_doi_and_url(self):
+        docmaps_item = get_docmap_item_for_query_result_item(
+            DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS
+        )
         third_step_input = docmaps_item['steps']['_:b2']['inputs']
         assert len(third_step_input) == 1
         assert third_step_input[0]['type'] == 'preprint'
-        assert third_step_input[0]['doi'] == DOCMAPS_QUERY_RESULT_ITEM_1['preprint_doi']
-        assert third_step_input[0]['url'] == DOCMAPS_QUERY_RESULT_ITEM_1['preprint_url']
+        assert third_step_input[0]['doi'] == DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS[
+            'preprint_doi'
+        ]
+        assert third_step_input[0]['url'] == DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS[
+            'preprint_url'
+        ]
 
     def test_should_populate_first_step_assertions_with_status_manuscript_published(self):
         docmaps_item = get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
@@ -190,8 +199,10 @@ class TestGetDocmapsItemForQueryResultItem:
             }
         ]
 
-    def test_should_populate_third_step_assertions_with_status_peer_reviewed(self):
-        docmaps_item = get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
+    def test_should_populate_assertations_for_peer_reviewed_if_evaluations(self):
+        docmaps_item = get_docmap_item_for_query_result_item(
+            DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS
+        )
         second_step_assertions = docmaps_item['steps']['_:b2']['assertions']
         assert second_step_assertions == [{
             'item': {

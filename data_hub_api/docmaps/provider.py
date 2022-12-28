@@ -282,10 +282,16 @@ def generate_docmap_steps(number_of_steps: int, query_result_item: dict) -> dict
     return remove_key_with_none_value_only(steps_dict)
 
 
+def get_docmap_step(query_result_item: dict) -> int:
+    if not query_result_item['evaluations']:
+        return 2
+    return 3
+
+
 def get_docmap_item_for_query_result_item(query_result_item: dict) -> dict:
     qc_complete_timestamp_str = query_result_item['qc_complete_timestamp'].isoformat()
     publisher_json = query_result_item['publisher_json']
-    number_of_steps = 3  # we need to know which stage we are in
+    number_of_steps = get_docmap_step(query_result_item=query_result_item)
     LOGGER.debug('publisher_json: %r', publisher_json)
     LOGGER.debug('number_of_steps: %r', number_of_steps)
     return {
