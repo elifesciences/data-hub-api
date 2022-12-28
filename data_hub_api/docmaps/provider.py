@@ -42,12 +42,12 @@ def get_docmap_inputs_value_from_query_result(
     step_number: int,
     query_result_item: dict
 ) -> list:
-    if step_number == 0: # manuscript-published
+    if step_number == 0:  # manuscript-published
         return get_docmap_inputs_value_for_preprint_manuscript_published_step()
-    else: # under-review, peer-reviewed
-        return get_docmap_inputs_value_for_preprint_under_review_and_peer_reviewed_steps(
-            query_result_item=query_result_item
-        )
+    # under-review, peer-reviewed
+    return get_docmap_inputs_value_for_preprint_under_review_and_peer_reviewed_steps(
+        query_result_item=query_result_item
+    )
 
 
 def get_docmap_assertions_value_for_preprint_manuscript_published_step(
@@ -74,8 +74,7 @@ def get_docmap_assertions_value_for_preprint_under_review_step(
         },
         'status': 'under-review',
         'happened': query_result_item['qc_complete_timestamp']
-    },
-    {
+    }, {
         'item': {
             'type': 'preprint',
             'doi': query_result_item['elife_doi'],
@@ -89,13 +88,13 @@ def get_docmap_assertions_value_for_preprint_peer_reviewed_step(
     query_result_item: dict
 ) -> list:
     return [{
-            'item': {
-                'type': 'preprint',
-                'doi': query_result_item['preprint_doi'],
-                'versionIdentifier': ''
-            },
-            'status': 'peer-reviewed'
-        }]
+        'item': {
+            'type': 'preprint',
+            'doi': query_result_item['preprint_doi'],
+            'versionIdentifier': ''
+        },
+        'status': 'peer-reviewed'
+    }]
 
 
 def get_docmap_assertions_value_from_query_result(
@@ -106,15 +105,15 @@ def get_docmap_assertions_value_from_query_result(
         return get_docmap_assertions_value_for_preprint_manuscript_published_step(
             query_result_item=query_result_item
         )
-    elif step_number == 1:
+    if step_number == 1:
         return get_docmap_assertions_value_for_preprint_under_review_step(
             query_result_item=query_result_item
         )
-        
-    elif step_number == 2:
+    if step_number == 2:
         return get_docmap_assertions_value_for_preprint_peer_reviewed_step(
             query_result_item=query_result_item
         )
+    return []
 
 
 def get_single_actions_value_for_preprint_manuscript_published_step(
