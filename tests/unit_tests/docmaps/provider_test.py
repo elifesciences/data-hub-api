@@ -183,6 +183,18 @@ class TestGetDocmapsItemForQueryResultItem:
             }
         ]
 
+    def test_should_populate_third_step_assertions_with_status_peer_reviewed(self):
+        docmaps_item = get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
+        second_step_assertions = docmaps_item['steps']['_:b2']['assertions']
+        assert second_step_assertions == [{
+            'item': {
+                'type': 'preprint',
+                'doi': DOI_1,
+                'versionIdentifier': ''
+            },
+            'status': 'peer-reviewed'
+        }]
+
     def test_should_populate_first_step_actions_outputs_with_doi_and_url(self):
         docmaps_item = get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
         first_step = docmaps_item['steps']['_:b0']

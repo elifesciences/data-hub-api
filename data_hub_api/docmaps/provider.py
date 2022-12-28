@@ -52,8 +52,8 @@ def get_docmap_assertions_value_from_query_result(
             },
             'status': 'manuscript-published'
         }]
-    return [
-        {
+    elif step_number == 1:
+        return [{
             'item': {
                 'type': 'preprint',
                 'doi': preprint_doi,
@@ -69,11 +69,21 @@ def get_docmap_assertions_value_from_query_result(
                 'versionIdentifier': ''
             },
             'status': 'draft'
-        }
-    ]
+        }]
+    elif step_number == 2:
+        return [{
+            'item': {
+                'type': 'preprint',
+                'doi': preprint_doi,
+                'versionIdentifier': ''
+            },
+            'status': 'peer-reviewed'
+        }]
+    else:
+        return []
 
 
-def get_single_actions_value_for_first_preprint_published_step(
+def get_single_actions_value_for_preprint_manuscript_published_step(
     preprint_doi: str,
     preprint_published: str
 ) -> dict:
@@ -154,17 +164,17 @@ def iter_single_actions_value_from_query_result(
     step_number: int,
     query_result_item: dict
 ) -> Iterable[dict]:
-    manuscript_id = query_result_item["manuscript_id"]
+    manuscript_id = query_result_item['manuscript_id']
     # currently using qc_complete_timestamp for timestamp fields (it needs to be confimed)
     qc_complete_timestamp_str = query_result_item['qc_complete_timestamp']
-    preprint_doi = query_result_item["preprint_doi"]
+    preprint_doi = query_result_item['preprint_doi']
     elife_doi = query_result_item['elife_doi']
     elife_doi_url = f'{DOI_ROOT_URL}{elife_doi}'
     evaluations = query_result_item['evaluations']
     # filtered for evalutions for now as we dont have example yet
     if evaluations:
         for evaluation in evaluations:
-            hypothesis_id = evaluation["hypothesis_id"]
+            hypothesis_id = evaluation['hypothesis_id']
             annotation_created_timestamp = evaluation['annotation_created_timestamp']
             yield get_single_actions_value_for_preprint_peer_reviewed_step(
                 preprint_doi=preprint_doi,
@@ -174,7 +184,7 @@ def iter_single_actions_value_from_query_result(
                 annotation_created_timestamp=annotation_created_timestamp
             )
     elif step_number == 0:
-        yield get_single_actions_value_for_first_preprint_published_step(
+        yield get_single_actions_value_for_preprint_manuscript_published_step(
             preprint_doi=preprint_doi,
             preprint_published=qc_complete_timestamp_str
         )
@@ -229,7 +239,7 @@ def generate_docmap_steps(number_of_steps: int, query_result_item: dict) -> dict
 def get_docmap_item_for_query_result_item(query_result_item: dict) -> dict:
     qc_complete_timestamp_str = query_result_item['qc_complete_timestamp'].isoformat()
     publisher_json = query_result_item['publisher_json']
-    number_of_steps = 2  # we need to know which stage we are in
+    number_of_steps = 3  # we need to know which stage we are in
     LOGGER.debug('publisher_json: %r', publisher_json)
     LOGGER.debug('number_of_steps: %r', number_of_steps)
     return {
