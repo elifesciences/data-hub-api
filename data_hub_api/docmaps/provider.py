@@ -321,7 +321,7 @@ class DocmapsProvider:
         if only_include_reviewed_preprint_type:
             self.docmaps_index_query += '\nWHERE is_reviewed_preprint_type'
         if only_include_evaluated_preprints:
-            self.docmaps_index_query += '\nWHERE has_evaluations'
+            self.docmaps_index_query += '\nWHERE has_evaluations\nLIMIT 20'
 
     def iter_docmaps(self) -> Iterable[dict]:
         bq_result_iterable = iter_dict_from_bq_query(
