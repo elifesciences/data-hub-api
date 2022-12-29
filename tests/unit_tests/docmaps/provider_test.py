@@ -249,75 +249,109 @@ class TestGetDocmapsItemForQueryResultItem:
             'status': 'peer-reviewed'
         }]
 
-    def test_should_populate_actions_outputs_with_doi_and_url_peer_reviewed_step(self):
+    # def test_should_get_evaluation_summary_type_for_summary_tags_in_peer_reviewed_step(self):
+    #     docmaps_item = get_docmap_item_for_query_result_item(
+    #         DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS
+    #     )
+
+    def test_should_populate_actions_outputs_peer_reviewed_step_for_each_evaluation(self):
+        query_result_with_evaluation = dict(
+            DOCMAPS_QUERY_RESULT_ITEM_1,
+            **{
+                'evaluations': [{
+                    'hypothesis_id': 'hypothesis_id_1',
+                    'annotation_created_timestamp': 'annotation_created_timestamp_1',
+                    'tags': ['PeerReview']
+                }, {
+                    'hypothesis_id': 'hypothesis_id_2',
+                    'annotation_created_timestamp': 'annotation_created_timestamp_2',
+                    'tags': ['PeerReview', 'evaluationSummary']
+                }]
+            }
+        )
         docmaps_item = get_docmap_item_for_query_result_item(
-            DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS
+            query_result_with_evaluation
         )
         peer_reviewed_step = docmaps_item['steps']['_:b2']
-        assert peer_reviewed_step['actions'] == [
-            {
-                'participants': [],
-                'outputs': [
-                    {
-                        'type': 'review-article',
-                        'doi': 'elife_doi_1',
-                        'published': 'annotation_created_timestamp_1',
-                        'url': f'{DOI_ROOT_URL}elife_doi_1',
-                        'content': [
-                            {
-                                'type': 'web-page',
-                                'url': f'{HYPOTHESIS_URL}hypothesis_id_1'
-                            },
-                            {
-                                'type': 'web-page',
-                                'url': (
-                                    f'{SCIETY_ARTICLES_ACTIVITY_URL}'
-                                    f'{DOI_1}#hypothesis:hypothesis_id_1'
-                                )
-                            },
-                            {
-                                'type': 'web-page',
-                                'url': (
-                                    f'{SCIETY_ARTICLES_EVALUATIONS_URL}'
-                                    'hypothesis_id_1/content'
-                                )
-                            }
-                        ]
-                    }
-                ]
-            },
-            {
-                'participants': [],
-                'outputs': [
-                    {
-                        'type': 'evaluation-summary',
-                        'doi': 'elife_doi_1',
-                        'published': 'annotation_created_timestamp_2',
-                        'url': f'{DOI_ROOT_URL}elife_doi_1',
-                        'content': [
-                            {
-                                'type': 'web-page',
-                                'url': f'{HYPOTHESIS_URL}hypothesis_id_2'
-                            },
-                            {
-                                'type': 'web-page',
-                                'url': (
-                                    f'{SCIETY_ARTICLES_ACTIVITY_URL}'
-                                    f'{DOI_1}#hypothesis:hypothesis_id_2'
-                                )
-                            },
-                            {
-                                'type': 'web-page',
-                                'url': (
-                                    f'{SCIETY_ARTICLES_EVALUATIONS_URL}'
-                                    'hypothesis_id_2/content'
-                                )
-                            }
-                        ]
-                    }
-                ]
+        peer_reviewed_actions = peer_reviewed_step['actions']
+        assert len(peer_reviewed_actions) == 2
+        assert peer_reviewed_actions[0]['outputs'][0] == {
+            'type': 'review-article',
+            'doi': 'elife_doi_1',
+            'published': 'annotation_created_timestamp_1',
+            'url': f'{DOI_ROOT_URL}elife_doi_1',
+            'content': [
+                {
+                    'type': 'web-page',
+                    'url': f'{HYPOTHESIS_URL}hypothesis_id_1'
+                },
+                {
+                    'type': 'web-page',
+                    'url': (
+                        f'{SCIETY_ARTICLES_ACTIVITY_URL}'
+                        f'{DOI_1}#hypothesis:hypothesis_id_1'
+                    )
+                },
+                {
+                    'type': 'web-page',
+                    'url': (
+                        f'{SCIETY_ARTICLES_EVALUATIONS_URL}'
+                        'hypothesis_id_1/content'
+                    )
+                }
+            ]
+        }
+        assert peer_reviewed_actions[1]['outputs'][0] == {
+            'type': 'evaluation-summary',
+            'doi': 'elife_doi_1',
+            'published': 'annotation_created_timestamp_2',
+            'url': f'{DOI_ROOT_URL}elife_doi_1',
+            'content': [
+                {
+                    'type': 'web-page',
+                    'url': f'{HYPOTHESIS_URL}hypothesis_id_2'
+                },
+                {
+                    'type': 'web-page',
+                    'url': (
+                        f'{SCIETY_ARTICLES_ACTIVITY_URL}'
+                        f'{DOI_1}#hypothesis:hypothesis_id_2'
+                    )
+                },
+                {
+                    'type': 'web-page',
+                    'url': (
+                        f'{SCIETY_ARTICLES_EVALUATIONS_URL}'
+                        'hypothesis_id_2/content'
+                    )
+                }
+            ]
+        }
+
+    def test_should_populate_outputs_type_according_to_tags_peer_reviewed_step(self):
+        query_result_with_evaluation = dict(
+            DOCMAPS_QUERY_RESULT_ITEM_1,
+            **{
+                'evaluations': [{
+                    'hypothesis_id': 'hypothesis_id_1',
+                    'annotation_created_timestamp': 'annotation_created_timestamp_1',
+                    'tags': ['PeerReview']
+                }, {
+                    'hypothesis_id': 'hypothesis_id_2',
+                    'annotation_created_timestamp': 'annotation_created_timestamp_2',
+                    'tags': ['PeerReview', 'evaluationSummary']
+                }]
             }
-        ]
+        )
+        docmaps_item = get_docmap_item_for_query_result_item(
+            query_result_with_evaluation
+        )
+        peer_reviewed_step = docmaps_item['steps']['_:b2']
+        peer_reviewed_actions = peer_reviewed_step['actions']
+        outputs_for_index_0 = peer_reviewed_actions[0]['outputs'][0]
+        outputs_for_index_1 = peer_reviewed_actions[1]['outputs'][0]
+        assert outputs_for_index_0['type'] == 'review-article'
+        assert outputs_for_index_1['type'] == 'evaluation-summary'
 
 
 class TestEnhancedPreprintsDocmapsProvider:
