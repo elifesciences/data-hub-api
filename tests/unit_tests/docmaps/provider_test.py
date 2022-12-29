@@ -17,7 +17,8 @@ from data_hub_api.docmaps.provider import (
     DOCMAPS_JSONLD_SCHEMA_URL,
     DOCMAP_ID_PREFIX,
     DOCMAP_ID_SUFFIX,
-    generate_docmap_steps
+    generate_docmap_steps,
+    get_outputs_type_for_peer_reviewed_step
 )
 
 
@@ -65,6 +66,18 @@ DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS = {
 def _iter_dict_from_bq_query_mock() -> Iterable[MagicMock]:
     with patch.object(provider_module, 'iter_dict_from_bq_query') as mock:
         yield mock
+
+
+class TestGetOutputsTypeForPeerReviewedStep:
+    def test_should_return_evaluation_summary_when_summary_exist_in_tags_list(self):
+        tag_list_with_summary = ['PeerReview', 'evaluationSummary']
+        actual_result = get_outputs_type_for_peer_reviewed_step(tag_list_with_summary)
+        assert actual_result == 'evaluation-summary'
+
+    def test_should_return_review_article_when_summary_not_exist_in_tags_list(self):
+        tag_list_with_summary = ['PeerReview', 'PeerReview 2']
+        actual_result = get_outputs_type_for_peer_reviewed_step(tag_list_with_summary)
+        assert actual_result == 'review-article'
 
 
 class TestGenerateDocmapSteps:
