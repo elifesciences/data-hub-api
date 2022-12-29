@@ -1,7 +1,7 @@
 import logging
 import json
 from pathlib import Path
-from typing import Iterable
+from typing import Iterable, Optional
 
 from data_hub_api.utils.bigquery import (
     iter_dict_from_bq_query
@@ -149,20 +149,29 @@ def get_docmap_assertions_value_for_preprint_peer_reviewed_step(
     }]
 
 
-def get_outputs_type_for_peer_reviewed_step(
+def get_outputs_type_form_tags(
     tags: list
-) -> str:
+) -> Optional[str]:
+    if len(tags) > 1 and 'AuthorResponse' in tags:
+        for tag in tags:
+            assert 'Summary' not in tag
+    for tag in tags:
+        if 'AuthorResponse' in tag:
+            return 'author-response'
     for tag in tags:
         if 'Summary' in tag:
             return 'evaluation-summary'
-    return 'review-article'
+    for tag in tags:
+        if 'Review' in tag:
+            return 'review-article'
+    return None
 
 
 def get_single_actions_value_for_preprint_peer_reviewed_step(
     query_result_item: dict,
     hypothesis_id: str,
     annotation_created_timestamp: str,
-    tags: list
+    outputs_type: str
 ) -> dict:
     preprint_doi = query_result_item['preprint_doi']
     elife_doi = query_result_item['elife_doi']
@@ -171,7 +180,7 @@ def get_single_actions_value_for_preprint_peer_reviewed_step(
         'participants': [],
         'outputs': [
             {
-                'type': get_outputs_type_for_peer_reviewed_step(tags),
+                'type': outputs_type,
                 'doi': elife_doi,
                 'published': annotation_created_timestamp,
                 'url': elife_doi_url,
@@ -200,27 +209,28 @@ def get_single_actions_value_for_preprint_peer_reviewed_step(
     }
 
 
-def iter_single_actions_value_from_query_result(
+def iter_single_actions_value_from_query_result_for_peer_reviewed_step(
     query_result_item: dict
 ) -> Iterable[dict]:
     evaluations = query_result_item['evaluations']
     for evaluation in evaluations:
         hypothesis_id = evaluation['hypothesis_id']
         annotation_created_timestamp = evaluation['annotation_created_timestamp']
-        tags = evaluation['tags']
-        yield get_single_actions_value_for_preprint_peer_reviewed_step(
-            query_result_item=query_result_item,
-            hypothesis_id=hypothesis_id,
-            annotation_created_timestamp=annotation_created_timestamp,
-            tags=tags
-        )
+        outputs_type = get_outputs_type_form_tags(evaluation['tags'])
+        if outputs_type in ('evaluation-summary', 'review-article'):
+            yield get_single_actions_value_for_preprint_peer_reviewed_step(
+                query_result_item=query_result_item,
+                hypothesis_id=hypothesis_id,
+                annotation_created_timestamp=annotation_created_timestamp,
+                outputs_type=outputs_type
+            )
 
 
 def get_docmaps_step_for_peer_reviewed_status(
     query_result_item
 ):
     return {
-        'actions': list(iter_single_actions_value_from_query_result(
+        'actions': list(iter_single_actions_value_from_query_result_for_peer_reviewed_step(
             query_result_item=query_result_item
             )
         ),

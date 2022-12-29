@@ -18,7 +18,7 @@ from data_hub_api.docmaps.provider import (
     DOCMAP_ID_PREFIX,
     DOCMAP_ID_SUFFIX,
     generate_docmap_steps,
-    get_outputs_type_for_peer_reviewed_step
+    get_outputs_type_form_tags
 )
 
 
@@ -68,16 +68,46 @@ def _iter_dict_from_bq_query_mock() -> Iterable[MagicMock]:
         yield mock
 
 
-class TestGetOutputsTypeForPeerReviewedStep:
+class TestGetOutputsTypeFromTags:
     def test_should_return_evaluation_summary_when_summary_exist_in_tags_list(self):
         tag_list_with_summary = ['PeerReview', 'evaluationSummary']
-        actual_result = get_outputs_type_for_peer_reviewed_step(tag_list_with_summary)
+        actual_result = get_outputs_type_form_tags(tag_list_with_summary)
         assert actual_result == 'evaluation-summary'
 
-    def test_should_return_review_article_when_summary_not_exist_in_tags_list(self):
-        tag_list_with_summary = ['PeerReview', 'PeerReview 2']
-        actual_result = get_outputs_type_for_peer_reviewed_step(tag_list_with_summary)
+    def test_should_return_review_article_when_review_keyword_exists_in_tags_list(self):
+        tag_list_with_summary = ['PeerReview']
+        actual_result = get_outputs_type_form_tags(tag_list_with_summary)
         assert actual_result == 'review-article'
+
+    def test_should_return_review_article_for_review_keyword_even_there_is_undefined_tag(self):
+        tag_list_with_summary = ['PeerReview', 'undefinedTag']
+        actual_result = get_outputs_type_form_tags(tag_list_with_summary)
+        assert actual_result == 'review-article'
+
+    def test_should_return_author_response_when_author_response_keyword_exists_in_tags_list(self):
+        tag_list_with_summary = ['AuthorResponse']
+        actual_result = get_outputs_type_form_tags(tag_list_with_summary)
+        assert actual_result == 'author-response'
+
+    def test_should_return_author_response_when_author_response_even_there_is_review_tag(self):
+        tag_list_with_summary = ['PeerReview', 'AuthorResponse']
+        actual_result = get_outputs_type_form_tags(tag_list_with_summary)
+        assert actual_result == 'author-response'
+
+    def test_should_return_none_when_empty_tags_list(self):
+        tag_list_with_summary = []
+        actual_result = get_outputs_type_form_tags(tag_list_with_summary)
+        assert not actual_result
+
+    def test_should_return_none_when_there_is_not_any_defined_tag_in_tags_list(self):
+        tag_list_with_summary = ['undefinedTag']
+        actual_result = get_outputs_type_form_tags(tag_list_with_summary)
+        assert not actual_result
+
+    def test_should_raise_error_when_summary_and_author_response_in_tag_list_at_same_time(self):
+        tag_list_with_summary = ['PeerReview', 'evaluationSummary', 'AuthorResponse']
+        with pytest.raises(AssertionError):
+            get_outputs_type_form_tags(tag_list_with_summary)
 
 
 class TestGenerateDocmapSteps:
@@ -249,10 +279,24 @@ class TestGetDocmapsItemForQueryResultItem:
             'status': 'peer-reviewed'
         }]
 
-    # def test_should_get_evaluation_summary_type_for_summary_tags_in_peer_reviewed_step(self):
-    #     docmaps_item = get_docmap_item_for_query_result_item(
-    #         DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS
-    #     )
+    def test_should_not_populate_actions_in_peer_reviewed_step_if_tags_are_empty(self):
+        query_result_with_evaluation = dict(
+            DOCMAPS_QUERY_RESULT_ITEM_1,
+            **{
+                'evaluations': [{
+                    'hypothesis_id': 'hypothesis_id_3',
+                    'annotation_created_timestamp': 'annotation_created_timestamp_3',
+                    'tags': []
+                }]
+            }
+        )
+        docmaps_item = get_docmap_item_for_query_result_item(
+            query_result_with_evaluation
+        )
+        peer_reviewed_step = docmaps_item['steps']['_:b2']
+        peer_reviewed_actions = peer_reviewed_step['actions']
+        assert len(peer_reviewed_actions) == 0
+        assert peer_reviewed_actions == []
 
     def test_should_populate_actions_outputs_peer_reviewed_step_for_each_evaluation(self):
         query_result_with_evaluation = dict(
