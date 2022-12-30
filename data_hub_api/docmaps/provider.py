@@ -167,6 +167,22 @@ def get_outputs_type_form_tags(
     return None
 
 
+def get_participants_for_preprint_peer_reviewed_step(
+    outputs_type: str
+) -> list:
+    if outputs_type == 'review-article':
+        return [
+            {
+                'actor': {
+                'name': 'anonymous',
+                'type': 'person'
+                },
+                'role': 'peer-reviewer'
+            }
+        ]
+    return []
+
+
 def get_single_actions_value_for_preprint_peer_reviewed_step(
     query_result_item: dict,
     hypothesis_id: str,
@@ -177,7 +193,9 @@ def get_single_actions_value_for_preprint_peer_reviewed_step(
     elife_doi = query_result_item['elife_doi']
     elife_doi_url = f'{DOI_ROOT_URL}{elife_doi}'
     return {
-        'participants': [],
+        'participants': get_participants_for_preprint_peer_reviewed_step(
+            outputs_type=outputs_type
+        ),
         'outputs': [
             {
                 'type': outputs_type,

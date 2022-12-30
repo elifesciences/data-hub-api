@@ -397,6 +397,39 @@ class TestGetDocmapsItemForQueryResultItem:
         assert outputs_for_index_0['type'] == 'review-article'
         assert outputs_for_index_1['type'] == 'evaluation-summary'
 
+    def test_should_populate_participants_according_to_tags_peer_reviewed_step(self):
+        query_result_with_evaluation = dict(
+            DOCMAPS_QUERY_RESULT_ITEM_1,
+            **{
+                'evaluations': [{
+                    'hypothesis_id': 'hypothesis_id_1',
+                    'annotation_created_timestamp': 'annotation_created_timestamp_1',
+                    'tags': ['PeerReview']
+                }, {
+                    'hypothesis_id': 'hypothesis_id_2',
+                    'annotation_created_timestamp': 'annotation_created_timestamp_2',
+                    'tags': ['PeerReview', 'evaluationSummary']
+                }]
+            }
+        )
+        docmaps_item = get_docmap_item_for_query_result_item(
+            query_result_with_evaluation
+        )
+        peer_reviewed_step = docmaps_item['steps']['_:b2']
+        peer_reviewed_actions = peer_reviewed_step['actions']
+        participants_for_index_0 = peer_reviewed_actions[0]['participants']
+        participants_for_index_1 = peer_reviewed_actions[1]['participants']
+        assert participants_for_index_0 == [
+            {
+                'actor': {
+                'name': 'anonymous',
+                'type': 'person'
+                },
+                'role': 'peer-reviewer'
+            }
+        ]
+        assert participants_for_index_1 == []
+
 
 class TestEnhancedPreprintsDocmapsProvider:
     def test_should_create_index_with_non_empty_docmaps(
