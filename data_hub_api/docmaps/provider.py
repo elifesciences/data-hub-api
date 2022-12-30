@@ -167,6 +167,58 @@ def get_outputs_type_form_tags(
     return None
 
 
+def get_participants_for_peer_reviewed_review_article_type() -> list:
+    return [
+        {
+            'actor': {
+                'name': 'anonymous',
+                'type': 'person'
+            },
+            'role': 'peer-reviewer'
+        }
+    ]
+
+
+def get_participants_for_peer_reviewed_evalution_summary_type(
+    editor_names_list,
+    senior_editor_names_list
+) -> list:
+    participants = []
+    for editor_name in editor_names_list:
+        single_editor_dict = {
+            'actor': {
+                'name': editor_name,
+                'type': 'person'
+            },
+            'role': 'editor'
+        }
+        participants.append(single_editor_dict)
+    for senior_editor_name in senior_editor_names_list:
+        single_senior_editor_dict = {
+            'actor': {
+                'name': senior_editor_name,
+                'type': 'person'
+            },
+            'role': 'senior-editor'
+        }
+        participants.append(single_senior_editor_dict)
+    return participants
+
+
+def get_participants_for_preprint_peer_reviewed_step(
+    query_result_item: dict,
+    outputs_type: str
+) -> list:
+    editor_names_list = query_result_item['editor_names']
+    senior_editor_names_list = query_result_item['senior_editor_names']
+    if outputs_type == 'review-article':
+        return get_participants_for_peer_reviewed_review_article_type()
+    return get_participants_for_peer_reviewed_evalution_summary_type(
+        editor_names_list=editor_names_list,
+        senior_editor_names_list=senior_editor_names_list
+    )
+
+
 def get_single_actions_value_for_preprint_peer_reviewed_step(
     query_result_item: dict,
     hypothesis_id: str,
@@ -177,7 +229,10 @@ def get_single_actions_value_for_preprint_peer_reviewed_step(
     elife_doi = query_result_item['elife_doi']
     elife_doi_url = f'{DOI_ROOT_URL}{elife_doi}'
     return {
-        'participants': [],
+        'participants': get_participants_for_preprint_peer_reviewed_step(
+            query_result_item=query_result_item,
+            outputs_type=outputs_type
+        ),
         'outputs': [
             {
                 'type': outputs_type,

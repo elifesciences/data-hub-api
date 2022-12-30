@@ -82,23 +82,8 @@ t_result AS (
     preprint_doi_and_url.preprint_version,
     COALESCE(preprint_doi_and_url.preprint_url, CONCAT('https://doi.org/', europepmc_response.doi)) AS preprint_url,
     CONCAT('elife/', COALESCE(preprint_doi_and_url.preprint_doi, europepmc_response.doi)) AS docmap_id,
-    PARSE_JSON(ARRAY_TO_STRING(
-      [
-        '{',
-        '  "id": "https://elifesciences.org/",',
-        '  "name": "eLife",',
-        '  "logo": "https://sciety.org/static/groups/elife--b560187e-f2fb-4ff9-a861-a204f3fc0fb0.png",',
-        '  "homepage": "https://elifesciences.org/",',
-        '  "account": {',
-        '    "id": "https://sciety.org/groups/elife",',
-        '    "service": "https://sciety.org"',
-        '  }',
-        '}'
-      ],
-      '\n'
-    )) AS publisher_json,
     Version.Manuscript_Title AS manuscript_title,
-
+    Version.DOI AS elife_doi,
     (Version.Long_Manuscript_Identifier LIKE '%-RP-%') AS is_reviewed_preprint_type,
 
     ARRAY(
@@ -114,7 +99,25 @@ t_result AS (
       WHERE annotation.source_doi = COALESCE(preprint_doi_and_url.preprint_doi, europepmc_response.doi)
     ) AS evaluations,
 
-    Version.DOI AS elife_doi
+    ARRAY(SELECT Name FROM UNNEST(Version.Reviewing_Editors)) AS editor_names,
+    ARRAY(SELECT Name FROM UNNEST(Version.Senior_Editors)) AS senior_editor_names,
+
+    PARSE_JSON(ARRAY_TO_STRING(
+      [
+        '{',
+        '  "id": "https://elifesciences.org/",',
+        '  "name": "eLife",',
+        '  "logo": "https://sciety.org/static/groups/elife--b560187e-f2fb-4ff9-a861-a204f3fc0fb0.png",',
+        '  "homepage": "https://elifesciences.org/",',
+        '  "account": {',
+        '    "id": "https://sciety.org/groups/elife",',
+        '    "service": "https://sciety.org"',
+        '  }',
+        '}'
+      ],
+      '\n'
+    )) AS publisher_json
+
   FROM `elife-data-pipeline.prod.mv_Editorial_Manuscript_Version` AS Version
   LEFT JOIN t_preprint_doi_and_url_by_manuscript_id AS preprint_doi_and_url
     ON preprint_doi_and_url.manuscript_id = Version.Manuscript_ID
