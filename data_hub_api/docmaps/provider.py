@@ -243,49 +243,30 @@ def get_docmaps_step_for_peer_reviewed_status(
     }
 
 
-def generate_docmap_steps(number_of_steps: int, query_result_item: dict) -> dict:
-    step_number = 0
+def iter_docmap_steps_for_query_result_item(query_result_item: dict) -> Iterable[dict]:
+    yield get_docmaps_step_for_manuscript_published_status(query_result_item)
+    yield get_docmaps_step_for_under_review_status(query_result_item)
+    if query_result_item['evaluations']:
+        yield get_docmaps_step_for_peer_reviewed_status(query_result_item)
+
+
+def generate_docmap_steps(step_itearble: Iterable[dict]) -> dict:
     steps_dict = {}
-    while step_number < number_of_steps:
-        LOGGER.debug('step_number: %r', step_number)
+    step_list = list(step_itearble)
+    for step_index, step in enumerate(step_list):
+        LOGGER.debug('step_index: %r', step_index)
         step_ranking_dict = {
-            'next-step': (
-                '_:b' + str(step_number + 1) if step_number + 1 < number_of_steps else None
-            ),
-            'previous-step': '_:b' + str(step_number - 1) if step_number > 0 else None
+            'next-step': ('_:b' + str(step_index + 1) if step_index + 1 < len(step_list) else None),
+            'previous-step': '_:b' + str(step_index - 1) if step_index > 0 else None
         }
-        if step_number == 0:  # manuscript-published
-            step_dict = get_docmaps_step_for_manuscript_published_status(
-                query_result_item=query_result_item
-            )
-        elif step_number == 1:  # under-review
-            step_dict = get_docmaps_step_for_under_review_status(
-                query_result_item=query_result_item
-            )
-        elif step_number == 2:  # peer-reviewed
-            step_dict = get_docmaps_step_for_peer_reviewed_status(
-                query_result_item=query_result_item
-            )
-        steps_dict['_:b'+str(step_number)] = dict(step_dict, **step_ranking_dict)
-        step_number += 1
+        steps_dict['_:b'+str(step_index)] = dict(step, **step_ranking_dict)
     return remove_key_with_none_value_only(steps_dict)
-
-
-def get_docmap_step_count_for_query_result_item(query_result_item: dict) -> int:
-    # currently maximum step we handle is peer-reviewed (which is 3)
-    if not query_result_item['evaluations']:
-        return 2
-    return 3
 
 
 def get_docmap_item_for_query_result_item(query_result_item: dict) -> dict:
     qc_complete_timestamp_str = query_result_item['qc_complete_timestamp'].isoformat()
     publisher_json = query_result_item['publisher_json']
-    number_of_steps = get_docmap_step_count_for_query_result_item(
-        query_result_item=query_result_item
-    )
     LOGGER.debug('publisher_json: %r', publisher_json)
-    LOGGER.debug('number_of_steps: %r', number_of_steps)
     return {
         '@context': DOCMAPS_JSONLD_SCHEMA_URL,
         'type': 'docmap',
@@ -294,7 +275,7 @@ def get_docmap_item_for_query_result_item(query_result_item: dict) -> dict:
         'updated': qc_complete_timestamp_str,
         'publisher': json.loads(publisher_json),
         'first-step': '_:b0',
-        'steps': generate_docmap_steps(number_of_steps, query_result_item)
+        'steps': generate_docmap_steps(iter_docmap_steps_for_query_result_item(query_result_item))
     }
 
 
