@@ -204,7 +204,7 @@ class TestGetDocmapsItemForQueryResultItem:
                 'type': 'preprint',
                 'doi': DOI_1,
                 'url': f'{DOI_ROOT_URL}{DOI_1}',
-                'published': datetime.fromisoformat('2022-01-01T01:02:03+00:00'),
+                'published': '',
                 'versionIdentifier': ''
             }]
         }]

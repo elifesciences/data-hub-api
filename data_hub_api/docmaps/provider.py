@@ -47,7 +47,7 @@ def get_docmap_actions_value_for_preprint_manuscript_published_step(
             'type': 'preprint',
             'doi': preprint_doi,
             'url': f'{DOI_ROOT_URL}{preprint_doi}',
-            'published': query_result_item['qc_complete_timestamp'],
+            'published': '',
             'versionIdentifier': ''
         }]
     }]
