@@ -152,18 +152,16 @@ def get_docmap_assertions_value_for_preprint_peer_reviewed_step(
 def get_outputs_type_form_tags(
     tags: list
 ) -> Optional[str]:
-    if len(tags) > 1 and 'AuthorResponse' in tags:
-        for tag in tags:
-            assert 'Summary' not in tag
-    for tag in tags:
-        if 'AuthorResponse' in tag:
-            return 'author-response'
-    for tag in tags:
-        if 'Summary' in tag:
-            return 'evaluation-summary'
-    for tag in tags:
-        if 'Review' in tag:
-            return 'review-article'
+    has_author_response_tag = any('AuthorResponse' in tag for tag in tags)
+    has_summary_tag = any('Summary' in tag for tag in tags)
+    has_review_tag = any('Review' in tag for tag in tags)
+    assert not (has_author_response_tag and has_summary_tag)
+    if has_author_response_tag:
+        return 'author-response'
+    if has_summary_tag:
+        return 'evaluation-summary'
+    if has_review_tag:
+        return 'review-article'
     return None
 
 
