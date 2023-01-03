@@ -1,7 +1,7 @@
 import logging
 import json
 from pathlib import Path
-from typing import Iterable, Optional
+from typing import Iterable, Optional, Sequence
 
 from data_hub_api.utils.bigquery import (
     iter_dict_from_bq_query
@@ -26,7 +26,7 @@ SCIETY_ARTICLES_EVALUATIONS_URL = 'https://sciety.org/evaluations/hypothesis:'
 
 def get_docmap_assertions_value_for_preprint_manuscript_published_step(
     query_result_item: dict
-) -> list:
+) -> Sequence[dict]:
     return [{
         'item': {
             'type': 'preprint',
@@ -39,7 +39,7 @@ def get_docmap_assertions_value_for_preprint_manuscript_published_step(
 
 def get_docmap_actions_value_for_preprint_manuscript_published_step(
     query_result_item: dict
-) -> list:
+) -> Sequence[dict]:
     preprint_doi = query_result_item['preprint_doi']
     return [{
         'participants': [],
@@ -69,7 +69,7 @@ def get_docmaps_step_for_manuscript_published_status(
 
 def get_docmap_assertions_value_for_preprint_under_review_step(
     query_result_item: dict
-) -> list:
+) -> Sequence[dict]:
     return [{
         'item': {
             'type': 'preprint',
@@ -90,7 +90,7 @@ def get_docmap_assertions_value_for_preprint_under_review_step(
 
 def get_docmap_actions_value_for_preprint_under_review_step(
     query_result_item: dict
-) -> list:
+) -> Sequence[dict]:
     manuscript_id = query_result_item['manuscript_id']
     elife_doi = query_result_item['elife_doi']
     elife_doi_url = f'{DOI_ROOT_URL}{elife_doi}'
@@ -112,7 +112,7 @@ def get_docmap_actions_value_for_preprint_under_review_step(
 
 def get_docmap_inputs_value_for_review_steps(
     query_result_item: dict
-) -> list:
+) -> Sequence[dict]:
     return [{
         'type': 'preprint',
         'doi': query_result_item['preprint_doi'],
@@ -138,7 +138,7 @@ def get_docmaps_step_for_under_review_status(
 
 def get_docmap_assertions_value_for_preprint_peer_reviewed_step(
     query_result_item: dict
-) -> list:
+) -> Sequence[dict]:
     return [{
         'item': {
             'type': 'preprint',
@@ -187,7 +187,7 @@ def get_participants_for_peer_reviewed_review_article_type() -> list:
 def get_participants_for_peer_reviewed_evalution_summary_type(
     editor_names_list,
     senior_editor_names_list
-) -> list:
+) -> Sequence[dict]:
     participants = []
     for editor_name in editor_names_list:
         single_editor_dict = {
@@ -213,7 +213,7 @@ def get_participants_for_peer_reviewed_evalution_summary_type(
 def get_participants_for_preprint_peer_reviewed_step(
     query_result_item: dict,
     outputs_type: str
-) -> list:
+) -> Sequence[dict]:
     editor_names_list = query_result_item['editor_names']
     senior_editor_names_list = query_result_item['senior_editor_names']
     if outputs_type == 'review-article':
