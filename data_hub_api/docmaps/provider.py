@@ -150,7 +150,10 @@ def get_docmap_assertions_value_for_preprint_peer_reviewed_step(
 
 
 def has_tag_containing(tags: list, text: str) -> bool:
-    return any(text in tag for tag in tags)
+    return any(
+        text in tag
+        for tag in tags
+    )
 
 
 def get_outputs_type_form_tags(
