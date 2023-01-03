@@ -23,6 +23,10 @@ HYPOTHESIS_URL = 'https://hypothes.is/a/'
 SCIETY_ARTICLES_ACTIVITY_URL = 'https://sciety.org/articles/activity/'
 SCIETY_ARTICLES_EVALUATIONS_URL = 'https://sciety.org/evaluations/hypothesis:'
 
+DOCMAP_OUTPUT_TYPE_FOR_EVALUATION_SUMMARY = 'evaluation-summary'
+DOCMAP_OUTPUT_TYPE_FOR_AUTHOR_RESPONSE = 'author-response'
+DOCMAP_OUTPUT_TYPE_FOR_REVIEW_ARTICLE = 'review-article'
+
 
 def get_docmap_assertions_value_for_preprint_manuscript_published_step(
     query_result_item: dict
@@ -164,11 +168,11 @@ def get_outputs_type_form_tags(
     has_review_tag = has_tag_containing(tags, 'Review')
     assert not (has_author_response_tag and has_summary_tag)
     if has_author_response_tag:
-        return 'author-response'
+        return DOCMAP_OUTPUT_TYPE_FOR_AUTHOR_RESPONSE
     if has_summary_tag:
-        return 'evaluation-summary'
+        return DOCMAP_OUTPUT_TYPE_FOR_EVALUATION_SUMMARY
     if has_review_tag:
-        return 'review-article'
+        return DOCMAP_OUTPUT_TYPE_FOR_REVIEW_ARTICLE
     return None
 
 
@@ -216,12 +220,14 @@ def get_participants_for_preprint_peer_reviewed_step(
 ) -> Sequence[dict]:
     editor_names_list = query_result_item['editor_names']
     senior_editor_names_list = query_result_item['senior_editor_names']
-    if outputs_type == 'review-article':
+    if outputs_type == DOCMAP_OUTPUT_TYPE_FOR_REVIEW_ARTICLE:
         return get_participants_for_peer_reviewed_review_article_type()
-    return get_participants_for_peer_reviewed_evalution_summary_type(
-        editor_names_list=editor_names_list,
-        senior_editor_names_list=senior_editor_names_list
-    )
+    if outputs_type == DOCMAP_OUTPUT_TYPE_FOR_EVALUATION_SUMMARY:
+        return get_participants_for_peer_reviewed_evalution_summary_type(
+            editor_names_list=editor_names_list,
+            senior_editor_names_list=senior_editor_names_list
+        )
+    return []
 
 
 def get_single_actions_value_for_preprint_peer_reviewed_step(
@@ -277,7 +283,10 @@ def iter_single_actions_value_from_query_result_for_peer_reviewed_step(
         hypothesis_id = evaluation['hypothesis_id']
         annotation_created_timestamp = evaluation['annotation_created_timestamp']
         outputs_type = get_outputs_type_form_tags(evaluation['tags'])
-        if outputs_type in ('evaluation-summary', 'review-article'):
+        if outputs_type in (
+            DOCMAP_OUTPUT_TYPE_FOR_EVALUATION_SUMMARY,
+            DOCMAP_OUTPUT_TYPE_FOR_REVIEW_ARTICLE
+        ):
             yield get_single_actions_value_for_preprint_peer_reviewed_step(
                 query_result_item=query_result_item,
                 hypothesis_id=hypothesis_id,

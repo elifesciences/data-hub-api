@@ -7,6 +7,9 @@ import pytest
 
 from data_hub_api.docmaps import provider as provider_module
 from data_hub_api.docmaps.provider import (
+    DOCMAP_OUTPUT_TYPE_FOR_AUTHOR_RESPONSE,
+    DOCMAP_OUTPUT_TYPE_FOR_EVALUATION_SUMMARY,
+    DOCMAP_OUTPUT_TYPE_FOR_REVIEW_ARTICLE,
     DOI_ROOT_URL,
     ELIFE_REVIEWED_PREPRINTS_URL,
     HYPOTHESIS_URL,
@@ -71,27 +74,27 @@ class TestGetOutputsTypeFromTags:
     def test_should_return_evaluation_summary_when_summary_exist_in_tags_list(self):
         tag_list_with_summary = ['PeerReview', 'evaluationSummary']
         actual_result = get_outputs_type_form_tags(tag_list_with_summary)
-        assert actual_result == 'evaluation-summary'
+        assert actual_result == DOCMAP_OUTPUT_TYPE_FOR_EVALUATION_SUMMARY
 
     def test_should_return_review_article_when_review_keyword_exists_in_tags_list(self):
         tag_list_with_summary = ['PeerReview']
         actual_result = get_outputs_type_form_tags(tag_list_with_summary)
-        assert actual_result == 'review-article'
+        assert actual_result == DOCMAP_OUTPUT_TYPE_FOR_REVIEW_ARTICLE
 
     def test_should_return_review_article_for_review_keyword_even_there_is_undefined_tag(self):
         tag_list_with_summary = ['PeerReview', 'undefinedTag']
         actual_result = get_outputs_type_form_tags(tag_list_with_summary)
-        assert actual_result == 'review-article'
+        assert actual_result == DOCMAP_OUTPUT_TYPE_FOR_REVIEW_ARTICLE
 
     def test_should_return_author_response_when_author_response_keyword_exists_in_tags_list(self):
         tag_list_with_summary = ['AuthorResponse']
         actual_result = get_outputs_type_form_tags(tag_list_with_summary)
-        assert actual_result == 'author-response'
+        assert actual_result == DOCMAP_OUTPUT_TYPE_FOR_AUTHOR_RESPONSE
 
     def test_should_return_author_response_when_author_response_even_there_is_review_tag(self):
         tag_list_with_summary = ['PeerReview', 'AuthorResponse']
         actual_result = get_outputs_type_form_tags(tag_list_with_summary)
-        assert actual_result == 'author-response'
+        assert actual_result == DOCMAP_OUTPUT_TYPE_FOR_AUTHOR_RESPONSE
 
     def test_should_return_none_when_empty_tags_list(self):
         tag_list_with_summary = []
@@ -325,7 +328,7 @@ class TestGetDocmapsItemForQueryResultItem:
         peer_reviewed_actions = peer_reviewed_step['actions']
         assert len(peer_reviewed_actions) == 2
         assert peer_reviewed_actions[0]['outputs'][0] == {
-            'type': 'review-article',
+            'type': DOCMAP_OUTPUT_TYPE_FOR_REVIEW_ARTICLE,
             'doi': 'elife_doi_1',
             'published': 'annotation_created_timestamp_1',
             'url': f'{DOI_ROOT_URL}elife_doi_1',
@@ -351,7 +354,7 @@ class TestGetDocmapsItemForQueryResultItem:
             ]
         }
         assert peer_reviewed_actions[1]['outputs'][0] == {
-            'type': 'evaluation-summary',
+            'type': DOCMAP_OUTPUT_TYPE_FOR_EVALUATION_SUMMARY,
             'doi': 'elife_doi_1',
             'published': 'annotation_created_timestamp_2',
             'url': f'{DOI_ROOT_URL}elife_doi_1',
@@ -399,8 +402,8 @@ class TestGetDocmapsItemForQueryResultItem:
         peer_reviewed_actions = peer_reviewed_step['actions']
         outputs_for_index_0 = peer_reviewed_actions[0]['outputs'][0]
         outputs_for_index_1 = peer_reviewed_actions[1]['outputs'][0]
-        assert outputs_for_index_0['type'] == 'review-article'
-        assert outputs_for_index_1['type'] == 'evaluation-summary'
+        assert outputs_for_index_0['type'] == DOCMAP_OUTPUT_TYPE_FOR_REVIEW_ARTICLE
+        assert outputs_for_index_1['type'] == DOCMAP_OUTPUT_TYPE_FOR_EVALUATION_SUMMARY
 
     def test_should_populate_participants_in_peer_reviewed_step_for_review_article_type(self):
         query_result_with_evaluation = dict(
