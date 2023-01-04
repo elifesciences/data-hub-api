@@ -68,7 +68,8 @@ class TestGetEnhancedPreprintsDocmapsIndex:
             '/enhanced-preprints/docmaps/v1/get-by-doi',
             params={'preprint_doi': PREPRINT_DOI}
         )
-        assert response.json() == {"message": "No Docmaps available for requested DOI"}
+        assert response.status_code == 404
+        assert response.json() == {"detail": "No Docmaps available for requested DOI"}
 
     def test_should_return_json_with_docmap_from_enhanced_preprint_provider_for_individual(
         self,
