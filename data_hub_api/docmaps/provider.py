@@ -365,10 +365,11 @@ class DocmapsProvider:
                 self.gcp_project_name,
                 self.get_query_with_doi_where_clause(preprint_doi)
             )
-        bq_result_iterable = iter_dict_from_bq_query(
-            self.gcp_project_name,
-            self.docmaps_index_query
-        )
+        else:
+            bq_result_iterable = iter_dict_from_bq_query(
+                self.gcp_project_name,
+                self.docmaps_index_query
+            )
         for bq_result in bq_result_iterable:
             yield get_docmap_item_for_query_result_item(bq_result)
 
