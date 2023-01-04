@@ -32,6 +32,13 @@ def create_app():
     def get_enhanced_preprints_docmaps_index():
         return enhanced_preprints_docmaps_provider.get_docmaps_index()
 
+    @app.get("/enhanced-preprints/docmaps/v1/get-by-doi")
+    def get_enhanced_preprints_by_doi(preprint_doi: str):
+        docmaps = enhanced_preprints_docmaps_provider.get_docmaps_by_doi(preprint_doi)
+        if not docmaps:
+            return {"message": "No Docmaps available for requested DOI"}
+        return docmaps
+
     @app.get("/public-reviews/docmaps/v1/index")
     def get_public_reviews_docmaps_index():
         return public_reviews_docmaps_provider.get_docmaps_index()

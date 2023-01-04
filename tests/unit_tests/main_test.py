@@ -9,6 +9,9 @@ from data_hub_api import main as main_module
 from data_hub_api.main import create_app
 
 
+PREPRINT_DOI = '10.1101/doi1'
+
+
 @pytest.fixture(name='enhanced_preprints_docmaps_provider_class_mock', autouse=True)
 def _enhanced_preprints_docmaps_provider_class_mock() -> Iterable[MagicMock]:
     with patch.object(main_module, 'DocmapsProvider') as mock:
@@ -52,8 +55,37 @@ class TestGetEnhancedPreprintsDocmapsIndex:
         docmaps_index = [{'docmaps': [{'id': 'docmap_1'}, {'id': 'docmap_2'}]}]
         enhanced_preprints_docmaps_provider_mock.get_docmaps_index.return_value = docmaps_index
         client = TestClient(create_app())
-        response = client.get("/enhanced-preprints/docmaps/v1/index")
+        response = client.get('/enhanced-preprints/docmaps/v1/index')
         assert response.json() == docmaps_index
+
+    def test_should_return_not_available_message_for_invalid_preprint_doi(
+        self,
+        enhanced_preprints_docmaps_provider_mock: MagicMock
+    ):
+        enhanced_preprints_docmaps_provider_mock.get_docmaps_by_doi.return_value = []
+        client = TestClient(create_app())
+        response = client.get(
+            '/enhanced-preprints/docmaps/v1/get-by-doi',
+            params={'preprint_doi': PREPRINT_DOI}
+        )
+        assert response.json() == {"message": "No Docmaps available for requested DOI"}
+
+    def test_should_return_json_with_docmap_from_enhanced_preprint_provider_for_individual(
+        self,
+        enhanced_preprints_docmaps_provider_mock: MagicMock
+    ):
+        article_docmap_list = [{'id': 'docmap_1'}]
+        enhanced_preprints_docmaps_provider_mock.get_docmaps_by_doi.return_value = (
+            article_docmap_list
+        )
+        client = TestClient(create_app())
+        response = client.get(
+            '/enhanced-preprints/docmaps/v1/get-by-doi',
+            params={'preprint_doi': PREPRINT_DOI}
+        )
+        enhanced_preprints_docmaps_provider_mock.get_docmaps_by_doi.assert_called_with(PREPRINT_DOI)
+        assert response.status_code == 200
+        assert response.json() == article_docmap_list
 
     def test_should_return_json_with_docmaps_list_from_public_review_provider(
         self,
@@ -62,7 +94,7 @@ class TestGetEnhancedPreprintsDocmapsIndex:
         docmaps_index = [{'docmaps': [{'id': 'docmap_1'}, {'id': 'docmap_2'}]}]
         public_reviews_docmaps_provider_mock.get_docmaps_index.return_value = docmaps_index
         client = TestClient(create_app())
-        response = client.get("/public-reviews/docmaps/v1/index")
+        response = client.get('/public-reviews/docmaps/v1/index')
         assert response.json() == docmaps_index
 
     def test_should_pass_correct_parameters_to_provider_class(
