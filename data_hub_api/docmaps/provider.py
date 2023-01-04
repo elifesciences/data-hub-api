@@ -1,7 +1,7 @@
 import logging
 import json
 from pathlib import Path
-from typing import Iterable, Optional
+from typing import Iterable, Optional, Sequence
 
 from data_hub_api.utils.bigquery import (
     iter_dict_from_bq_query
@@ -356,13 +356,23 @@ class DocmapsProvider:
         if only_include_evaluated_preprints:
             self.docmaps_index_query += '\nWHERE has_evaluations\nLIMIT 20'
 
-    def iter_docmaps(self) -> Iterable[dict]:
+    def get_query_with_doi_where_clause(self, preprint_doi: str) -> str:
+        docmaps_index_query = self.docmaps_index_query + f'\nWHERE preprint_doi = "{preprint_doi}"'
+        return iter_dict_from_bq_query(
+            self.gcp_project_name,
+            docmaps_index_query
+        )
+
+    def iter_docmaps(self, doi: Optional[str] = None) -> Iterable[dict]:
         bq_result_iterable = iter_dict_from_bq_query(
             self.gcp_project_name,
             self.docmaps_index_query
         )
         for bq_result in bq_result_iterable:
             yield get_docmap_item_for_query_result_item(bq_result)
+
+    def get_docmaps_by_doi(self, preprint_doi: str) -> Sequence[dict]:
+        return list(self.iter_docmaps(preprint_doi))
 
     def get_docmaps_index(self) -> dict:
         article_docmaps_list = list(self.iter_docmaps())
