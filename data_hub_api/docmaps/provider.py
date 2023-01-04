@@ -14,8 +14,9 @@ LOGGER = logging.getLogger(__name__)
 
 DOCMAPS_JSONLD_SCHEMA_URL = 'https://w3id.org/docmaps/context.jsonld'
 
-DOCMAP_ID_PREFIX = 'https://data-hub-api.elifesciences.org/enhanced-preprints/docmaps/v1/articles/'
-DOCMAP_ID_SUFFIX = '/docmap.json'
+DOCMAP_ID_PREFIX = (
+    'https://data-hub-api.elifesciences.org/enhanced-preprints/docmaps/v1/get-by-doi?preprint_doi='
+)
 
 DOI_ROOT_URL = 'https://doi.org/'
 ELIFE_REVIEWED_PREPRINTS_URL = 'https://elifesciences.org/reviewed-preprints/'
@@ -330,7 +331,7 @@ def get_docmap_item_for_query_result_item(query_result_item: dict) -> dict:
     return {
         '@context': DOCMAPS_JSONLD_SCHEMA_URL,
         'type': 'docmap',
-        'id': DOCMAP_ID_PREFIX + query_result_item['docmap_id'] + DOCMAP_ID_SUFFIX,
+        'id': DOCMAP_ID_PREFIX + query_result_item['docmap_id'],
         'created': qc_complete_timestamp_str,
         'updated': qc_complete_timestamp_str,
         'publisher': json.loads(publisher_json),
