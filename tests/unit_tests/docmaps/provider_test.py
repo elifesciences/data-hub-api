@@ -480,9 +480,8 @@ class TestGetDocmapsItemForQueryResultItem:
 
 class TestGetQueryWithDoiWhereClause:
     def test_should_have_where_clause_for_preprint_doi_in_query(self):
-        assert DocmapsProvider().get_query_with_doi_where_clause(DOI_1).rstrip().endswith(
-            f'WHERE preprint_doi = "{DOI_1}"'
-        )
+        query_with_doi_where_clause = DocmapsProvider().get_query_with_doi_where_clause(DOI_1)
+        assert query_with_doi_where_clause.rstrip().endswith(f'\nAND preprint_doi = {DOI_1}')
 
 
 class TestEnhancedPreprintsDocmapsProvider:

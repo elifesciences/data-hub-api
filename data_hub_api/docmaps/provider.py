@@ -357,13 +357,14 @@ class DocmapsProvider:
             self.docmaps_index_query += '\nWHERE has_evaluations\nLIMIT 20'
 
     def get_query_with_doi_where_clause(self, preprint_doi: str) -> str:
-        docmaps_index_query = self.docmaps_index_query + f'\nWHERE preprint_doi = "{preprint_doi}"'
-        return iter_dict_from_bq_query(
-            self.gcp_project_name,
-            docmaps_index_query
-        )
+        return self.docmaps_index_query + f'\nAND preprint_doi = {preprint_doi}'
 
-    def iter_docmaps(self, doi: Optional[str] = None) -> Iterable[dict]:
+    def iter_docmaps(self, preprint_doi: Optional[str] = None) -> Iterable[dict]:
+        if preprint_doi:
+            bq_result_iterable = iter_dict_from_bq_query(
+                self.gcp_project_name,
+                self.get_query_with_doi_where_clause(preprint_doi)
+            )
         bq_result_iterable = iter_dict_from_bq_query(
             self.gcp_project_name,
             self.docmaps_index_query
