@@ -358,6 +358,7 @@ class DocmapsProvider:
             self.docmaps_index_query += '\nWHERE has_evaluations\nLIMIT 20'
 
     def get_query_with_doi_where_clause(self, preprint_doi: str) -> str:
+        #  Only includes reviewed preprints
         return self.docmaps_index_query + f'\nAND preprint_doi = {preprint_doi}'
 
     def iter_docmaps(self, preprint_doi: Optional[str] = None) -> Iterable[dict]:
