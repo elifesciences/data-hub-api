@@ -340,7 +340,7 @@ def get_docmap_item_for_query_result_item(query_result_item: dict) -> dict:
     return {
         '@context': DOCMAPS_JSONLD_SCHEMA_URL,
         'type': 'docmap',
-        'id': DOCMAP_ID_PREFIX + query_result_item['preprint_doi'],
+        'id': DOCMAP_ID_PREFIX + "'" + query_result_item['preprint_doi'] + "'",
         'created': qc_complete_timestamp_str,
         'updated': qc_complete_timestamp_str,
         'publisher': json.loads(publisher_json),

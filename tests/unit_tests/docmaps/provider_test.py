@@ -162,7 +162,7 @@ class TestGetDocmapsItemForQueryResultItem:
     def test_should_add_prefix_and_suffix_to_id(self):
         docmaps_item = get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
         assert docmaps_item['id'] == (
-            DOCMAP_ID_PREFIX + DOCMAPS_QUERY_RESULT_ITEM_1['preprint_doi']
+            DOCMAP_ID_PREFIX + "'" + DOCMAPS_QUERY_RESULT_ITEM_1['preprint_doi'] + "'"
         )
 
     def test_should_populate_create_and_updated_timestamp_with_qc_complete_timestamp(self):
