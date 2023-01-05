@@ -33,7 +33,7 @@ def create_app():
         return enhanced_preprints_docmaps_provider.get_docmaps_index()
 
     @app.get("/enhanced-preprints/docmaps/v1/get-by-doi")
-    def get_enhanced_preprints_docmaps_by_doi(preprint_doi: str):
+    def get_enhanced_preprints_docmaps_by_preprint_doi(preprint_doi: str):
         docmaps = enhanced_preprints_docmaps_provider.get_docmaps_by_doi(preprint_doi)
         if not docmaps:
             raise HTTPException(
