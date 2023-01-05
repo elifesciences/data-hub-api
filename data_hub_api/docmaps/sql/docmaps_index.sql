@@ -81,7 +81,6 @@ t_result AS (
     COALESCE(preprint_doi_and_url.preprint_doi, europepmc_response.doi) AS preprint_doi,
     preprint_doi_and_url.preprint_version,
     COALESCE(preprint_doi_and_url.preprint_url, CONCAT('https://doi.org/', europepmc_response.doi)) AS preprint_url,
-    CONCAT('elife/', COALESCE(preprint_doi_and_url.preprint_doi, europepmc_response.doi)) AS docmap_id,
     Version.Manuscript_Title AS manuscript_title,
     Version.DOI AS elife_doi,
     (Version.Long_Manuscript_Identifier LIKE '%-RP-%') AS is_reviewed_preprint_type,

@@ -34,7 +34,6 @@ DOCMAPS_QUERY_RESULT_ITEM_1 = {
     'preprint_doi': DOI_1,
     'preprint_version': None,
     'preprint_url': f'{DOI_ROOT_URL}{DOI_1}',
-    'docmap_id': 'docmap_id_1',
     'publisher_json': '{"id": "publisher_1"}',
     'evaluations': [],
     'elife_doi': 'elife_doi_1',
@@ -48,7 +47,6 @@ DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS = {
     'preprint_doi': DOI_1,
     'preprint_version': None,
     'preprint_url': f'{DOI_ROOT_URL}{DOI_1}',
-    'docmap_id': 'docmap_id_1',
     'publisher_json': '{"id": "publisher_1"}',
     'evaluations': [
         {
@@ -164,7 +162,7 @@ class TestGetDocmapsItemForQueryResultItem:
     def test_should_add_prefix_and_suffix_to_id(self):
         docmaps_item = get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
         assert docmaps_item['id'] == (
-            DOCMAP_ID_PREFIX + DOCMAPS_QUERY_RESULT_ITEM_1['docmap_id']
+            DOCMAP_ID_PREFIX + DOCMAPS_QUERY_RESULT_ITEM_1['preprint_doi']
         )
 
     def test_should_populate_create_and_updated_timestamp_with_qc_complete_timestamp(self):
