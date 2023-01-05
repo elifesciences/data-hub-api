@@ -19,7 +19,6 @@ from data_hub_api.docmaps.provider import (
     DocmapsProvider,
     DOCMAPS_JSONLD_SCHEMA_URL,
     DOCMAP_ID_PREFIX,
-    DOCMAP_ID_SUFFIX,
     generate_docmap_steps,
     get_outputs_type_form_tags
 )
@@ -165,7 +164,7 @@ class TestGetDocmapsItemForQueryResultItem:
     def test_should_add_prefix_and_suffix_to_id(self):
         docmaps_item = get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
         assert docmaps_item['id'] == (
-            DOCMAP_ID_PREFIX + DOCMAPS_QUERY_RESULT_ITEM_1['docmap_id'] + DOCMAP_ID_SUFFIX
+            DOCMAP_ID_PREFIX + DOCMAPS_QUERY_RESULT_ITEM_1['docmap_id']
         )
 
     def test_should_populate_create_and_updated_timestamp_with_qc_complete_timestamp(self):
@@ -479,6 +478,12 @@ class TestGetDocmapsItemForQueryResultItem:
                 'role': 'senior-editor'
             }
         ]
+
+
+class TestGetQueryWithDoiWhereClause:
+    def test_should_have_where_clause_for_preprint_doi_in_query(self):
+        query_with_doi_where_clause = DocmapsProvider().get_query_with_doi_where_clause(DOI_1)
+        assert query_with_doi_where_clause.rstrip().endswith(f'\nAND preprint_doi = {DOI_1}')
 
 
 class TestEnhancedPreprintsDocmapsProvider:

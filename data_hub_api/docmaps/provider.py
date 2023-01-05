@@ -14,8 +14,9 @@ LOGGER = logging.getLogger(__name__)
 
 DOCMAPS_JSONLD_SCHEMA_URL = 'https://w3id.org/docmaps/context.jsonld'
 
-DOCMAP_ID_PREFIX = 'https://data-hub-api.elifesciences.org/enhanced-preprints/docmaps/v1/articles/'
-DOCMAP_ID_SUFFIX = '/docmap.json'
+DOCMAP_ID_PREFIX = (
+    'https://data-hub-api.elifesciences.org/enhanced-preprints/docmaps/v1/get-by-doi?preprint_doi='
+)
 
 DOI_ROOT_URL = 'https://doi.org/'
 ELIFE_REVIEWED_PREPRINTS_URL = 'https://elifesciences.org/reviewed-preprints/'
@@ -339,7 +340,7 @@ def get_docmap_item_for_query_result_item(query_result_item: dict) -> dict:
     return {
         '@context': DOCMAPS_JSONLD_SCHEMA_URL,
         'type': 'docmap',
-        'id': DOCMAP_ID_PREFIX + query_result_item['docmap_id'] + DOCMAP_ID_SUFFIX,
+        'id': DOCMAP_ID_PREFIX + query_result_item['docmap_id'],
         'created': qc_complete_timestamp_str,
         'updated': qc_complete_timestamp_str,
         'publisher': json.loads(publisher_json),
@@ -365,13 +366,26 @@ class DocmapsProvider:
         if only_include_evaluated_preprints:
             self.docmaps_index_query += '\nWHERE has_evaluations\nLIMIT 20'
 
-    def iter_docmaps(self) -> Iterable[dict]:
-        bq_result_iterable = iter_dict_from_bq_query(
-            self.gcp_project_name,
-            self.docmaps_index_query
-        )
+    def get_query_with_doi_where_clause(self, preprint_doi: str) -> str:
+        #  Only includes reviewed preprints
+        return self.docmaps_index_query + f'\nAND preprint_doi = {preprint_doi}'
+
+    def iter_docmaps(self, preprint_doi: Optional[str] = None) -> Iterable[dict]:
+        if preprint_doi:
+            bq_result_iterable = iter_dict_from_bq_query(
+                self.gcp_project_name,
+                self.get_query_with_doi_where_clause(preprint_doi)
+            )
+        else:
+            bq_result_iterable = iter_dict_from_bq_query(
+                self.gcp_project_name,
+                self.docmaps_index_query
+            )
         for bq_result in bq_result_iterable:
             yield get_docmap_item_for_query_result_item(bq_result)
+
+    def get_docmaps_by_doi(self, preprint_doi: str) -> Sequence[dict]:
+        return list(self.iter_docmaps(preprint_doi))
 
     def get_docmaps_index(self) -> dict:
         article_docmaps_list = list(self.iter_docmaps())
