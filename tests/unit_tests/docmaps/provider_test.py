@@ -2,6 +2,7 @@ import json
 from datetime import datetime
 from unittest.mock import patch, MagicMock
 from typing import Iterable
+import urllib
 
 import pytest
 
@@ -159,10 +160,11 @@ class TestGetDocmapsItemForQueryResultItem:
         docmaps_item = get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
         assert docmaps_item['type'] == 'docmap'
 
-    def test_should_add_prefix_and_suffix_to_id(self):
+    def test_should_add_prefix_and_url_encode_preprint_doi_to_id(self):
         docmaps_item = get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
+        id_query_param = {'preprint_doi': DOCMAPS_QUERY_RESULT_ITEM_1['preprint_doi']}
         assert docmaps_item['id'] == (
-            DOCMAP_ID_PREFIX + "'" + DOCMAPS_QUERY_RESULT_ITEM_1['preprint_doi'] + "'"
+            DOCMAP_ID_PREFIX + urllib.parse.urlencode(id_query_param)
         )
 
     def test_should_populate_create_and_updated_timestamp_with_qc_complete_timestamp(self):
@@ -478,10 +480,10 @@ class TestGetDocmapsItemForQueryResultItem:
         ]
 
 
-class TestGetQueryWithDoiWhereClause:
-    def test_should_have_where_clause_for_preprint_doi_in_query(self):
-        query_with_doi_where_clause = DocmapsProvider().get_query_with_doi_where_clause(DOI_1)
-        assert query_with_doi_where_clause.rstrip().endswith(f'\nAND preprint_doi = {DOI_1}')
+# class TestGetQueryWithDoiWhereClause:
+#     def test_should_have_where_clause_for_preprint_doi_in_query(self):
+#         query_with_doi_where_clause = DocmapsProvider().get_query_with_doi_where_clause(DOI_1)
+#         assert query_with_doi_where_clause.rstrip().endswith(f'\nAND preprint_doi = {DOI_1}')
 
 
 class TestEnhancedPreprintsDocmapsProvider:
@@ -514,6 +516,17 @@ class TestEnhancedPreprintsDocmapsProvider:
             only_include_evaluated_preprints=True
         )
         assert provider.docmaps_index_query.rstrip().endswith('WHERE has_evaluations\nLIMIT 20')
+
+    def test_should_add_preprint_where_clause_to_query(
+        self
+    ):
+        provider = DocmapsProvider(
+            only_include_reviewed_preprint_type=True,
+            only_include_evaluated_preprints=False
+        )
+        assert provider.docmaps_by_preprint_doi_query.rstrip().endswith(
+            'AND preprint_doi = @preprint_doi'
+        )
 
     def test_should_allow_both_reviewed_prerint_type_and_evaluated_preprints_filter(
         self

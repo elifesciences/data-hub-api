@@ -2,6 +2,9 @@ import logging
 import json
 from pathlib import Path
 from typing import Iterable, Optional, Sequence
+import urllib
+
+from google.cloud import bigquery
 
 from data_hub_api.utils.bigquery import (
     iter_dict_from_bq_query
@@ -15,7 +18,7 @@ LOGGER = logging.getLogger(__name__)
 DOCMAPS_JSONLD_SCHEMA_URL = 'https://w3id.org/docmaps/context.jsonld'
 
 DOCMAP_ID_PREFIX = (
-    'https://data-hub-api.elifesciences.org/enhanced-preprints/docmaps/v1/get-by-doi?preprint_doi='
+    'https://data-hub-api.elifesciences.org/enhanced-preprints/docmaps/v1/get-by-doi?'
 )
 
 DOI_ROOT_URL = 'https://doi.org/'
@@ -337,10 +340,11 @@ def get_docmap_item_for_query_result_item(query_result_item: dict) -> dict:
     qc_complete_timestamp_str = query_result_item['qc_complete_timestamp'].isoformat()
     publisher_json = query_result_item['publisher_json']
     LOGGER.debug('publisher_json: %r', publisher_json)
+    id_query_param = {'preprint_doi': query_result_item['preprint_doi']}
     return {
         '@context': DOCMAPS_JSONLD_SCHEMA_URL,
         'type': 'docmap',
-        'id': DOCMAP_ID_PREFIX + "'" + query_result_item['preprint_doi'] + "'",
+        'id': DOCMAP_ID_PREFIX + urllib.parse.urlencode(id_query_param),
         'created': qc_complete_timestamp_str,
         'updated': qc_complete_timestamp_str,
         'publisher': json.loads(publisher_json),
@@ -365,16 +369,18 @@ class DocmapsProvider:
             self.docmaps_index_query += '\nWHERE is_reviewed_preprint_type'
         if only_include_evaluated_preprints:
             self.docmaps_index_query += '\nWHERE has_evaluations\nLIMIT 20'
-
-    def get_query_with_doi_where_clause(self, preprint_doi: str) -> str:
-        #  Only includes reviewed preprints
-        return self.docmaps_index_query + f'\nAND preprint_doi = {preprint_doi}'
+        self.docmaps_by_preprint_doi_query = (
+            self.docmaps_index_query + '\nAND preprint_doi = @preprint_doi'
+        )
 
     def iter_docmaps(self, preprint_doi: Optional[str] = None) -> Iterable[dict]:
         if preprint_doi:
             bq_result_iterable = iter_dict_from_bq_query(
                 self.gcp_project_name,
-                self.get_query_with_doi_where_clause(preprint_doi)
+                self.docmaps_by_preprint_doi_query,
+                query_parameters=[
+                    bigquery.ScalarQueryParameter("preprint_doi", "STRING", preprint_doi)
+                ]
             )
         else:
             bq_result_iterable = iter_dict_from_bq_query(
