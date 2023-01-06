@@ -39,7 +39,8 @@ DOCMAPS_QUERY_RESULT_ITEM_1 = {
     'evaluations': [],
     'elife_doi': 'elife_doi_1',
     'editor_names': [],
-    'senior_editor_names': []
+    'senior_editor_names': [],
+    'tdm_path': 'tdm_path_1'
 }
 
 DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS = {
@@ -58,7 +59,8 @@ DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS = {
     ],
     'elife_doi': 'elife_doi_1',
     'editor_names': [],
-    'senior_editor_names': []
+    'senior_editor_names': [],
+    'tdm_path': ''
 }
 
 
@@ -207,7 +209,8 @@ class TestGetDocmapsItemForQueryResultItem:
                 'doi': DOI_1,
                 'url': f'{DOI_ROOT_URL}{DOI_1}',
                 'published': '',
-                'versionIdentifier': ''
+                'versionIdentifier': '',
+                '_tdmPath': 'tdm_path_1'
             }]
         }]
 

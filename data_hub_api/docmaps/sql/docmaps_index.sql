@@ -139,8 +139,9 @@ t_tdm_doi_and_path AS(
 
 t_result_with_tdm_details_and_has_evaluations AS (
   SELECT
-    *,
-    (ARRAY_LENGTH(t_result.evaluations) > 0) AS has_evaluations
+    t_result.*,
+    (ARRAY_LENGTH(t_result.evaluations) > 0) AS has_evaluations,
+    tdm.tdm_path
   FROM t_result
   LEFT JOIN t_tdm_doi_and_path AS tdm
   ON t_result.preprint_doi = tdm.tdm_doi
