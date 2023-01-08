@@ -128,22 +128,31 @@ t_result AS (
     AND COALESCE(preprint_doi_and_url.preprint_doi, europepmc_response.doi) IS NOT NULL
 ),
 
-t_tdm_doi_and_path AS(
-  SELECT
-    DISTINCT
-    t_results.tdm_doi, 
-    t_results.tdm_path
-  FROM `elife-data-pipeline.prod.biorxiv_medrxiv_meca_path_metadata`
-  LEFT JOIN UNNEST(results) AS t_results
+t_latest_tdm_doi_and_path AS(
+  SELECT 
+  * EXCEPT(rn) 
+  FROM (
+    SELECT
+      ROW_NUMBER() OVER (
+        PARTITION BY  t_results.tdm_doi
+        ORDER BY imported_timestamp DESC
+      ) AS rn,
+      t_results.tdm_doi,
+      t_results.tdm_path,
+      t_results.ms_version AS tdm_ms_version,
+    FROM `elife-data-pipeline.prod.biorxiv_medrxiv_meca_path_metadata`
+    LEFT JOIN UNNEST(results) AS t_results
+  )
+  WHERE rn=1
 ),
 
 t_result_with_tdm_details_and_has_evaluations AS (
   SELECT
     t_result.*,
     (ARRAY_LENGTH(t_result.evaluations) > 0) AS has_evaluations,
-    tdm.tdm_path
+    tdm.*
   FROM t_result
-  LEFT JOIN t_tdm_doi_and_path AS tdm
+  LEFT JOIN t_latest_tdm_doi_and_path AS tdm
   ON t_result.preprint_doi = tdm.tdm_doi
 )
 
