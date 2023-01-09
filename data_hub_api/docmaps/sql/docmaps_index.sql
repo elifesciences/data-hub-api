@@ -135,7 +135,7 @@ t_latest_tdm_doi_and_path AS(
     SELECT
       ROW_NUMBER() OVER (
         PARTITION BY  t_results.tdm_doi
-        ORDER BY imported_timestamp DESC
+        ORDER BY t_results.ms_version DESC, imported_timestamp DESC
       ) AS rn,
       t_results.tdm_doi,
       t_results.tdm_path,
