@@ -12,7 +12,6 @@ from data_hub_api.docmaps.provider import (
     DOCMAP_OUTPUT_TYPE_FOR_EVALUATION_SUMMARY,
     DOCMAP_OUTPUT_TYPE_FOR_REVIEW_ARTICLE,
     DOI_ROOT_URL,
-    ELIFE_REVIEWED_PREPRINTS_URL,
     HYPOTHESIS_URL,
     SCIETY_ARTICLES_ACTIVITY_URL,
     SCIETY_ARTICLES_EVALUATIONS_URL,
@@ -257,12 +256,7 @@ class TestGetDocmapsItemForQueryResultItem:
                 'identifier': 'manuscript_id_1',
                 'versionIdentifier': '',
                 'type': 'preprint',
-                'doi': 'elife_doi_1',
-                'url': f'{DOI_ROOT_URL}elife_doi_1',
-                'content': [{
-                    'type': 'web-page',
-                    'url': f'{ELIFE_REVIEWED_PREPRINTS_URL}manuscript_id_1'
-                }]
+                'doi': 'elife_doi_1'
             }]
         }]
 

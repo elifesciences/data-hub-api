@@ -102,19 +102,13 @@ def get_docmap_actions_value_for_preprint_under_review_step(
 ) -> Sequence[dict]:
     manuscript_id = query_result_item['manuscript_id']
     elife_doi = query_result_item['elife_doi']
-    elife_doi_url = f'{DOI_ROOT_URL}{elife_doi}'
     return [{
         'participants': [],
         'outputs': [{
             'identifier': manuscript_id,
             'versionIdentifier': '',
             'type': 'preprint',
-            'doi': elife_doi,
-            'url': elife_doi_url,
-            'content': [{
-                'type': 'web-page',
-                'url': f'{ELIFE_REVIEWED_PREPRINTS_URL}{manuscript_id}'
-            }]
+            'doi': elife_doi
         }]
     }]
 
