@@ -109,12 +109,7 @@ def get_docmap_actions_value_for_preprint_under_review_step(
             'identifier': manuscript_id,
             'versionIdentifier': '',
             'type': 'preprint',
-            'doi': elife_doi,
-            'url': elife_doi_url,
-            'content': [{
-                'type': 'web-page',
-                'url': f'{ELIFE_REVIEWED_PREPRINTS_URL}{manuscript_id}'
-            }]
+            'doi': elife_doi
         }]
     }]
 

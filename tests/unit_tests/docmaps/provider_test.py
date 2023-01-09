@@ -257,12 +257,7 @@ class TestGetDocmapsItemForQueryResultItem:
                 'identifier': 'manuscript_id_1',
                 'versionIdentifier': '',
                 'type': 'preprint',
-                'doi': 'elife_doi_1',
-                'url': f'{DOI_ROOT_URL}elife_doi_1',
-                'content': [{
-                    'type': 'web-page',
-                    'url': f'{ELIFE_REVIEWED_PREPRINTS_URL}manuscript_id_1'
-                }]
+                'doi': 'elife_doi_1'
             }]
         }]
 
