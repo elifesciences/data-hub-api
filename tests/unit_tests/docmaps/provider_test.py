@@ -39,7 +39,9 @@ DOCMAPS_QUERY_RESULT_ITEM_1 = {
     'evaluations': [],
     'elife_doi': 'elife_doi_1',
     'editor_names': [],
-    'senior_editor_names': []
+    'senior_editor_names': [],
+    'tdm_path': 'tdm_path_1',
+    'tdm_ms_version': 'tdm_ms_version_1'
 }
 
 DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS = {
@@ -58,7 +60,9 @@ DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS = {
     ],
     'elife_doi': 'elife_doi_1',
     'editor_names': [],
-    'senior_editor_names': []
+    'senior_editor_names': [],
+    'tdm_path': 'tdm_path_1',
+    'tdm_ms_version': 'tdm_ms_version_1'
 }
 
 
@@ -192,7 +196,7 @@ class TestGetDocmapsItemForQueryResultItem:
             'item': {
                 'type': 'preprint',
                 'doi': DOI_1,
-                'versionIdentifier': ''
+                'versionIdentifier': 'tdm_ms_version_1'
             },
             'status': 'manuscript-published'
         }]
@@ -207,7 +211,8 @@ class TestGetDocmapsItemForQueryResultItem:
                 'doi': DOI_1,
                 'url': f'{DOI_ROOT_URL}{DOI_1}',
                 'published': '',
-                'versionIdentifier': ''
+                'versionIdentifier': 'tdm_ms_version_1',
+                '_tdmPath': 'tdm_path_1'
             }]
         }]
 
@@ -228,7 +233,7 @@ class TestGetDocmapsItemForQueryResultItem:
                 'item': {
                     'type': 'preprint',
                     'doi': DOI_1,
-                    'versionIdentifier': ''
+                    'versionIdentifier': 'tdm_ms_version_1'
                 },
                 'status': 'under-review',
                 'happened': datetime.fromisoformat('2022-01-01T01:02:03+00:00')
@@ -281,7 +286,7 @@ class TestGetDocmapsItemForQueryResultItem:
             'item': {
                 'type': 'preprint',
                 'doi': DOI_1,
-                'versionIdentifier': ''
+                'versionIdentifier': 'tdm_ms_version_1'
             },
             'status': 'peer-reviewed'
         }]

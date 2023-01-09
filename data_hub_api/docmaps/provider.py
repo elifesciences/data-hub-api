@@ -39,7 +39,7 @@ def get_docmap_assertions_value_for_preprint_manuscript_published_step(
         'item': {
             'type': 'preprint',
             'doi': query_result_item['preprint_doi'],
-            'versionIdentifier': ''
+            'versionIdentifier': query_result_item['tdm_ms_version']
         },
         'status': 'manuscript-published'
     }]
@@ -56,7 +56,8 @@ def get_docmap_actions_value_for_preprint_manuscript_published_step(
             'doi': preprint_doi,
             'url': f'{DOI_ROOT_URL}{preprint_doi}',
             'published': '',
-            'versionIdentifier': ''
+            'versionIdentifier': query_result_item['tdm_ms_version'],
+            '_tdmPath': query_result_item['tdm_path']
         }]
     }]
 
@@ -82,7 +83,7 @@ def get_docmap_assertions_value_for_preprint_under_review_step(
         'item': {
             'type': 'preprint',
             'doi': query_result_item['preprint_doi'],
-            'versionIdentifier': ''
+            'versionIdentifier': query_result_item['tdm_ms_version']
         },
         'status': 'under-review',
         'happened': query_result_item['qc_complete_timestamp']
@@ -151,7 +152,7 @@ def get_docmap_assertions_value_for_preprint_peer_reviewed_step(
         'item': {
             'type': 'preprint',
             'doi': query_result_item['preprint_doi'],
-            'versionIdentifier': ''
+            'versionIdentifier': query_result_item['tdm_ms_version']
         },
         'status': 'peer-reviewed'
     }]
