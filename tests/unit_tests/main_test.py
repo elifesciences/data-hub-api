@@ -98,6 +98,23 @@ class TestGetEnhancedPreprintsDocmapsIndex:
         response = client.get('/public-reviews/docmaps/v1/index')
         assert response.json() == docmaps_index
 
+    def test_should_return_json_with_docmap_from_public_reviews_provider_for_individual(
+        self,
+        public_reviews_docmaps_provider_mock: MagicMock
+    ):
+        article_docmap_list = [{'id': 'docmap_1'}]
+        public_reviews_docmaps_provider_mock.get_docmaps_by_doi.return_value = (
+            article_docmap_list
+        )
+        client = TestClient(create_app())
+        response = client.get(
+            '/public-reviews/docmaps/v1/get-by-doi',
+            params={'preprint_doi': PREPRINT_DOI}
+        )
+        public_reviews_docmaps_provider_mock.get_docmaps_by_doi.assert_called_with(PREPRINT_DOI)
+        assert response.status_code == 200
+        assert response.json() == article_docmap_list
+
     def test_should_pass_correct_parameters_to_provider_class(
         self,
         enhanced_preprints_docmaps_provider_class_mock: MagicMock
