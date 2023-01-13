@@ -47,7 +47,25 @@ t_preprint_doi_and_url_by_manuscript_id AS (
     ON Version.Long_Manuscript_Identifier = preprint_doi_url.long_manuscript_identifier
 ),
 
-t_europepmc_response_by_normalized_title AS (
+t_latest_biorxiv_medrxiv_api_response AS (
+  -- move to view
+  SELECT
+    * EXCEPT(rn)
+  FROM (
+    SELECT
+      response.* EXCEPT(title),
+      response.title AS title_with_markup,
+      REGEXP_REPLACE(response.title, r"<[^>]*>", "") AS title_without_markup,
+      ROW_NUMBER() OVER(
+        PARTITION BY response.doi, response.version
+        ORDER BY response.imported_timestamp DESC
+      ) AS rn
+    FROM `elife-data-pipeline.prod.biorxiv_medrxiv_api_response` AS response
+  )
+  WHERE rn = 1
+),
+
+t_biorxiv_medrxiv_response_by_normalized_title AS (
   SELECT
     * EXCEPT(rn)
   FROM (
@@ -56,10 +74,9 @@ t_europepmc_response_by_normalized_title AS (
       response.*,
       ROW_NUMBER() OVER(
         PARTITION BY REGEXP_REPLACE(LOWER(response.title_without_markup), r'[^a-z]', '')
-        ORDER BY response.firstIndexDate ASC
+        ORDER BY response.imported_timestamp ASC
       ) AS rn
-    FROM `elife-data-pipeline.prod.v_latest_europepmc_preprint_servers_response` AS response
-    WHERE response.doi LIKE '10.1101/%'
+    FROM t_latest_biorxiv_medrxiv_api_response AS response
   )
   WHERE rn = 1
 ),
@@ -78,9 +95,9 @@ t_result AS (
     Version.Manuscript_ID AS manuscript_id,
     Version.Long_Manuscript_Identifier AS long_manuscript_identifier,
     Version.QC_Complete_Timestamp AS qc_complete_timestamp,
-    COALESCE(preprint_doi_and_url.preprint_doi, europepmc_response.doi) AS preprint_doi,
+    COALESCE(preprint_doi_and_url.preprint_doi, biorxiv_medrxiv_response.doi) AS preprint_doi,
     preprint_doi_and_url.preprint_version,
-    COALESCE(preprint_doi_and_url.preprint_url, CONCAT('https://doi.org/', europepmc_response.doi)) AS preprint_url,
+    COALESCE(preprint_doi_and_url.preprint_url, CONCAT('https://doi.org/', biorxiv_medrxiv_response.doi)) AS preprint_url,
     Version.Manuscript_Title AS manuscript_title,
     Version.DOI AS elife_doi,
     (Version.Long_Manuscript_Identifier LIKE '%-RP-%') AS is_reviewed_preprint_type,
@@ -95,7 +112,7 @@ t_result AS (
         annotation.source_doi,
         annotation.source_version
       FROM t_hypothesis_annotation_with_doi AS annotation
-      WHERE annotation.source_doi = COALESCE(preprint_doi_and_url.preprint_doi, europepmc_response.doi)
+      WHERE annotation.source_doi = COALESCE(preprint_doi_and_url.preprint_doi, biorxiv_medrxiv_response.doi)
     ) AS evaluations,
 
     ARRAY(SELECT Name FROM UNNEST(Version.Reviewing_Editors)) AS editor_names,
@@ -120,12 +137,12 @@ t_result AS (
   FROM `elife-data-pipeline.prod.mv_Editorial_Manuscript_Version` AS Version
   LEFT JOIN t_preprint_doi_and_url_by_manuscript_id AS preprint_doi_and_url
     ON preprint_doi_and_url.manuscript_id = Version.Manuscript_ID
-  LEFT JOIN t_europepmc_response_by_normalized_title AS europepmc_response
-    ON europepmc_response.normalized_title = REGEXP_REPLACE(LOWER(Version.Manuscript_Title), r'[^a-z]', '')
+  LEFT JOIN t_biorxiv_medrxiv_response_by_normalized_title AS biorxiv_medrxiv_response
+    ON biorxiv_medrxiv_response.normalized_title = REGEXP_REPLACE(LOWER(Version.Manuscript_Title), r'[^a-z]', '')
   WHERE
     Version.Overall_Stage = 'Full Submission'
     AND Version.Position_In_Overall_Stage = 1
-    AND COALESCE(preprint_doi_and_url.preprint_doi, europepmc_response.doi) IS NOT NULL
+    AND COALESCE(preprint_doi_and_url.preprint_doi, biorxiv_medrxiv_response.doi) IS NOT NULL
 ),
 
 t_latest_tdm_doi_and_path AS(
