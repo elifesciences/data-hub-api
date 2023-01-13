@@ -5,6 +5,8 @@ from time import monotonic
 from typing import Iterable, Optional, Sequence
 import urllib
 
+import objsize
+
 from data_hub_api.utils.bigquery import (
     iter_dict_from_bq_query
 )
@@ -399,8 +401,10 @@ class DocmapsProvider:
         ))
         end_time = monotonic()
         LOGGER.info(
-            'Loaded query results from BigQuery, rows=%d, time=%.3f seconds',
-            len(result), (end_time - start_time)
+            'Loaded query results from BigQuery, rows=%d, approx_size=%.3fMB, time=%.3f seconds',
+            len(result),
+            objsize.get_deep_size(result) / 1024 / 1024,
+            (end_time - start_time)
         )
         return result
 
