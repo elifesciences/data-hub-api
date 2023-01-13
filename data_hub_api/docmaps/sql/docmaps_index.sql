@@ -214,7 +214,7 @@ t_result_with_preprint_url_and_tdm_details_and_has_evaluations AS (
     tdm.*
   FROM t_result AS result
   LEFT JOIN t_latest_tdm_doi_and_path AS tdm
-    ON result.preprint_doi = tdm.tdm_doi
+    ON tdm.tdm_doi = result.preprint_doi
   LEFT JOIN t_latest_biorxiv_medrxiv_api_response_version_by_doi AS latest_biorxiv_medrxiv_version
     ON latest_biorxiv_medrxiv_version.doi = result.preprint_doi
 ),
