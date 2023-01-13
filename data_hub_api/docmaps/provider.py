@@ -363,10 +363,12 @@ class DocmapsProvider:
         if only_include_reviewed_preprint_type:
             self.docmaps_index_query += '\nWHERE is_reviewed_preprint_type'
         if only_include_evaluated_preprints:
-            self.docmaps_index_query += '\nWHERE has_evaluations\nLIMIT 20'
+            self.docmaps_index_query += '\nWHERE has_evaluations'
         self.docmaps_by_preprint_doi_query = (
             self.docmaps_index_query + '\nAND preprint_doi = @preprint_doi'
         )
+        if only_include_evaluated_preprints:
+            self.docmaps_index_query += '\nLIMIT 20'
 
     def iter_docmaps(self, preprint_doi: Optional[str] = None) -> Iterable[dict]:
         if preprint_doi:
