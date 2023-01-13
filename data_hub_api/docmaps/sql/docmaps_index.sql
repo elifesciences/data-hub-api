@@ -175,14 +175,14 @@ t_result AS (
     AND COALESCE(preprint_doi_and_url.preprint_doi, biorxiv_medrxiv_response.doi) IS NOT NULL
 ),
 
-t_latest_tdm_doi_and_path AS(
+t_latest_tdm_path_by_doi_and_version AS(
   SELECT 
-  * EXCEPT(rn) 
+    * EXCEPT(rn) 
   FROM (
     SELECT
       ROW_NUMBER() OVER (
-        PARTITION BY  t_results.tdm_doi
-        ORDER BY t_results.ms_version DESC, imported_timestamp DESC
+        PARTITION BY t_results.tdm_doi, t_results.ms_version
+        ORDER BY imported_timestamp DESC
       ) AS rn,
       t_results.tdm_doi,
       t_results.tdm_path,
@@ -193,7 +193,7 @@ t_latest_tdm_doi_and_path AS(
   WHERE rn=1
 ),
 
-t_result_with_preprint_url_and_tdm_details_and_has_evaluations AS (
+t_result_with_preprint_url_and_has_evaluations AS (
   SELECT
     result.*,
     CONCAT('https://doi.org/', result.preprint_doi) AS preprint_doi_url,
@@ -210,11 +210,9 @@ t_result_with_preprint_url_and_tdm_details_and_has_evaluations AS (
       WHEN latest_biorxiv_medrxiv_version.preprint_url IS NOT NULL THEN 'latest_biorxiv_medrxiv_version'
     END AS preprint_url_source,
 
-    (ARRAY_LENGTH(result.evaluations) > 0) AS has_evaluations,
-    tdm.*
+    (ARRAY_LENGTH(result.evaluations) > 0) AS has_evaluations
+
   FROM t_result AS result
-  LEFT JOIN t_latest_tdm_doi_and_path AS tdm
-    ON tdm.tdm_doi = result.preprint_doi
   LEFT JOIN t_latest_biorxiv_medrxiv_api_response_version_by_doi AS latest_biorxiv_medrxiv_version
     ON latest_biorxiv_medrxiv_version.doi = result.preprint_doi
 ),
@@ -223,10 +221,21 @@ t_result_with_preprint_version AS (
   SELECT
     *,
     -- extract version from final preprint url to ensure url and version are consistent
-    REGEXP_EXTRACT(preprint_url, r'10\.\d{3,}.*v([1-9])') preprint_version,
-  FROM t_result_with_preprint_url_and_tdm_details_and_has_evaluations
+    REGEXP_EXTRACT(preprint_url, r'10\.\d{3,}.*v([1-9])') AS preprint_version,
+  FROM t_result_with_preprint_url_and_has_evaluations AS result
+),
+
+t_result_with_tdm_path AS (
+  SELECT
+    result.*,
+    tdm.tdm_path
+  FROM t_result_with_preprint_version AS result
+  LEFT JOIN t_latest_tdm_path_by_doi_and_version AS tdm
+    ON tdm.tdm_doi = result.preprint_doi
+    AND CAST(tdm.tdm_ms_version AS STRING) = result.preprint_version
 )
+
 
 SELECT
   *
-FROM t_result_with_preprint_version
+FROM t_result_with_tdm_path
