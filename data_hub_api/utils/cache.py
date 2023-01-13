@@ -13,6 +13,14 @@ class SingleObjectCache(Protocol[T]):
         pass
 
 
+class DummySingleObjectCache(SingleObjectCache[T]):
+    def get(self) -> Optional[T]:
+        return None
+
+    def get_or_load(self, load_fn: Callable[[], T]) -> T:
+        return load_fn()
+
+
 class SingleObjectInMemoryCache(SingleObjectCache[T]):
 
     def __init__(
