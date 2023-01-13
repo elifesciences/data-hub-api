@@ -1,5 +1,5 @@
 import json
-from datetime import datetime
+from datetime import date, datetime
 from unittest.mock import patch, MagicMock
 from typing import Iterable
 import urllib
@@ -35,7 +35,7 @@ PREPRINT_LINK_1 = f'https://test-preprints/{DOI_1}v{PREPRINT_VERSION_1}'
 DOCMAPS_QUERY_RESULT_ITEM_1: dict = {
     'manuscript_id': 'manuscript_id_1',
     'qc_complete_timestamp': datetime.fromisoformat('2022-01-01T01:02:03+00:00'),
-    'preprint_published_at_timestamp': datetime.fromisoformat('2021-01-01T01:02:03+00:00'),
+    'preprint_published_at_date': date.fromisoformat('2021-01-01'),
     'preprint_doi': DOI_1,
     'preprint_version': PREPRINT_VERSION_1,
     'preprint_url': PREPRINT_LINK_1,
@@ -207,7 +207,7 @@ class TestGetDocmapsItemForQueryResultItem:
                 'doi': DOI_1,
                 'url': PREPRINT_LINK_1,
                 'published': (
-                    DOCMAPS_QUERY_RESULT_ITEM_1['preprint_published_at_timestamp']
+                    DOCMAPS_QUERY_RESULT_ITEM_1['preprint_published_at_date']
                     .isoformat()
                 ),
                 'versionIdentifier': DOCMAPS_QUERY_RESULT_ITEM_1['preprint_version'],
@@ -218,7 +218,7 @@ class TestGetDocmapsItemForQueryResultItem:
     def test_should_set_published_to_none_if_unknown(self):
         docmaps_item = get_docmap_item_for_query_result_item({
             **DOCMAPS_QUERY_RESULT_ITEM_1,
-            'preprint_published_at_timestamp': None
+            'preprint_published_at_date': None
         })
         manuscript_published_step = docmaps_item['steps']['_:b0']
         assert not manuscript_published_step['actions'][0]['outputs'][0].get('published')

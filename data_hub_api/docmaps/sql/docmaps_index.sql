@@ -228,7 +228,7 @@ t_latest_tdm_path_by_doi_and_version AS (
 t_result_with_preprint_published_at_date_and_tdm_path AS (
   SELECT
     result.*,
-    TIMESTAMP(biorxiv_medrxiv_api_response.date) AS preprint_published_at_timestamp,
+    biorxiv_medrxiv_api_response.date AS preprint_published_at_date,
     tdm.tdm_path
   FROM t_result_with_preprint_version AS result
   LEFT JOIN t_latest_biorxiv_medrxiv_api_response AS biorxiv_medrxiv_api_response
