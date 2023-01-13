@@ -30,7 +30,7 @@ DOI_2 = '10.1101.test/doi2'
 PREPRINT_LINK_1 = f'https://test-preprints/{DOI_1}'
 
 
-DOCMAPS_QUERY_RESULT_ITEM_1 = {
+DOCMAPS_QUERY_RESULT_ITEM_1: dict = {
     'manuscript_id': 'manuscript_id_1',
     'qc_complete_timestamp': datetime.fromisoformat('2022-01-01T01:02:03+00:00'),
     'preprint_doi': DOI_1,
@@ -55,18 +55,8 @@ DOCMAPS_QUERY_RESULT_EVALUATION__1 = {
 
 
 DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS = {
-    'manuscript_id': 'manuscript_id_1',
-    'qc_complete_timestamp': datetime.fromisoformat('2022-01-01T01:02:03+00:00'),
-    'preprint_doi': DOI_1,
-    'preprint_version': None,
-    'preprint_url': f'{DOI_ROOT_URL}{DOI_1}',
-    'publisher_json': '{"id": "publisher_1"}',
-    'evaluations': [DOCMAPS_QUERY_RESULT_EVALUATION__1],
-    'elife_doi': 'elife_doi_1',
-    'editor_names': [],
-    'senior_editor_names': [],
-    'tdm_path': 'tdm_path_1',
-    'tdm_ms_version': 'tdm_ms_version_1'
+    **DOCMAPS_QUERY_RESULT_ITEM_1,
+    'evaluations': [DOCMAPS_QUERY_RESULT_EVALUATION__1]
 }
 
 
