@@ -198,7 +198,6 @@ t_latest_tdm_doi_and_path AS(
 t_result_with_preprint_url_and_tdm_details_and_has_evaluations AS (
   SELECT
     result.*,
-    result.ejp_preprint_version AS preprint_version,
     CONCAT('https://doi.org/', result.preprint_doi) AS preprint_doi_url,
 
     COALESCE(
@@ -220,8 +219,16 @@ t_result_with_preprint_url_and_tdm_details_and_has_evaluations AS (
     ON result.preprint_doi = tdm.tdm_doi
   LEFT JOIN t_latest_biorxiv_medrxiv_api_response_version_by_doi AS latest_biorxiv_medrxiv_version
     ON latest_biorxiv_medrxiv_version.doi = result.preprint_doi
+),
+
+t_result_with_preprint_version AS (
+  SELECT
+    *,
+    -- extract version from final preprint url to ensure url and version are consistent
+    REGEXP_EXTRACT(preprint_url, r'10\.\d{3,}.*v([1-9])') preprint_version,
+  FROM t_result_with_preprint_url_and_tdm_details_and_has_evaluations
 )
 
 SELECT
   *
-FROM t_result_with_preprint_url_and_tdm_details_and_has_evaluations
+FROM t_result_with_preprint_version
