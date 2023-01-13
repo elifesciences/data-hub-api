@@ -386,8 +386,6 @@ class DocmapsProvider:
         self.docmaps_by_preprint_doi_query = (
             self.docmaps_index_query + '\nAND preprint_doi = @preprint_doi'
         )
-        if only_include_evaluated_preprints:
-            self.docmaps_index_query += '\nLIMIT 20'
         if query_results_cache is None:
             query_results_cache = DummySingleObjectCache[Sequence[dict]]()
         self._query_results_cache = query_results_cache
