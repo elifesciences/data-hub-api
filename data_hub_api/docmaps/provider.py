@@ -49,7 +49,7 @@ def get_docmap_actions_value_for_preprint_manuscript_published_step(
     query_result_item: dict
 ) -> Sequence[dict]:
     preprint_doi = query_result_item['preprint_doi']
-    preprint_published_at_timestamp = query_result_item['preprint_published_at_timestamp']
+    preprint_published_at_date = query_result_item['preprint_published_at_date']
     return [{
         'participants': [],
         'outputs': [{
@@ -57,8 +57,8 @@ def get_docmap_actions_value_for_preprint_manuscript_published_step(
             'doi': preprint_doi,
             'url': query_result_item['preprint_url'],
             'published': (
-                preprint_published_at_timestamp.isoformat()
-                if preprint_published_at_timestamp
+                preprint_published_at_date.isoformat()
+                if preprint_published_at_date
                 else None
             ),
             'versionIdentifier': query_result_item['preprint_version'],
