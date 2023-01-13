@@ -21,7 +21,7 @@ class DummySingleObjectCache(SingleObjectCache[T]):
         return load_fn()
 
 
-class SingleObjectInMemoryCache(SingleObjectCache[T]):
+class InMemorySingleObjectCache(SingleObjectCache[T]):
 
     def __init__(
         self,

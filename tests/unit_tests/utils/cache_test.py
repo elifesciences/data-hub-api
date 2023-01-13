@@ -5,7 +5,7 @@ import pytest
 
 import data_hub_api.utils.cache as cache_module
 from data_hub_api.utils.cache import (
-    SingleObjectInMemoryCache
+    InMemorySingleObjectCache
 )
 
 
@@ -15,18 +15,18 @@ def _monotonic_mock() -> Iterable[MagicMock]:
         yield mock
 
 
-class TestSingleObjectInMemoryCache:
+class TestInMemorySingleObjectCache:
     def test_should_get_none_if_not_initialized(self):
-        cache = SingleObjectInMemoryCache()
+        cache = InMemorySingleObjectCache()
         assert cache.get() is None
 
     def test_should_get_loaded_value(self):
-        cache = SingleObjectInMemoryCache()
+        cache = InMemorySingleObjectCache()
         result = cache.get_or_load(load_fn=lambda: 'value_1')
         assert result == 'value_1'
 
     def test_should_not_call__load_function_multiple_times(self):
-        cache = SingleObjectInMemoryCache()
+        cache = InMemorySingleObjectCache()
         load_fn = MagicMock(name='load_fn')
         load_fn.return_value = 'value_1'
         cache.get_or_load(load_fn=load_fn)
@@ -35,7 +35,7 @@ class TestSingleObjectInMemoryCache:
         assert load_fn.call_count == 1
 
     def test_should_reload_if_max_age_reached(self, monotonic_mock: MagicMock):
-        cache = SingleObjectInMemoryCache[str](
+        cache = InMemorySingleObjectCache[str](
             max_age_in_seconds=60
         )
         load_fn = MagicMock(name='load_fn')
