@@ -20,7 +20,6 @@ t_preprint_doi_and_url_by_long_manuscript_identifier AS (
       REGEXP_EXTRACT(biorxiv_url, r'(10\.\d{3,}[^v]*)v?'),
       CONCAT('10.1101/', REGEXP_EXTRACT(biorxiv_url, r'https://www.biorxiv.org/content/early/\d{4}/\d{2}/\d{2}/(\d{6,})'))
     ) AS preprint_doi,
-    REGEXP_EXTRACT(biorxiv_url, r'10\.\d{3,}.*v([1-9])') preprint_version,
     biorxiv_url AS preprint_url,
     ejp_elife_tracking_number AS long_manuscript_identifier,
     imported_timestamp
@@ -128,7 +127,6 @@ t_result AS (
       WHEN biorxiv_medrxiv_response.doi IS NOT NULL THEN 'biorxiv_medrxiv_title_match'
     END AS preprint_doi_source,
 
-    preprint_doi_and_url.preprint_version AS ejp_preprint_version,
     IF(preprint_doi_and_url.preprint_url LIKE '%doi.org/%', NULL, preprint_doi_and_url.preprint_url) AS ejp_validated_preprint_url,
     Version.Manuscript_Title AS manuscript_title,
     Version.DOI AS elife_doi,
