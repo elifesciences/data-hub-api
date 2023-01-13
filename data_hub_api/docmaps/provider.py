@@ -116,10 +116,21 @@ def get_docmap_actions_value_for_preprint_under_review_step(
 def get_docmap_inputs_value_for_review_steps(
     query_result_item: dict
 ) -> Sequence[dict]:
+    if not query_result_item['evaluations']:
+        return [{
+            'type': 'preprint',
+            'doi': query_result_item['preprint_doi'],
+            'url': query_result_item['preprint_url']
+        }]
+    preprint_links = {
+        evaluation['uri']
+        for evaluation in query_result_item['evaluations']
+    }
+    assert len(preprint_links) == 1
     return [{
         'type': 'preprint',
         'doi': query_result_item['preprint_doi'],
-        'url': query_result_item['preprint_url'],
+        'url': next(iter(preprint_links))
     }]
 
 
