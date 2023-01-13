@@ -27,22 +27,23 @@ from data_hub_api.docmaps.provider import (
 DOI_1 = '10.1101.test/doi1'
 DOI_2 = '10.1101.test/doi2'
 
-PREPRINT_LINK_1 = f'https://test-preprints/{DOI_1}'
+PREPRINT_VERSION_1 = '10'
+
+PREPRINT_LINK_1 = f'https://test-preprints/{DOI_1}v{PREPRINT_VERSION_1}'
 
 
 DOCMAPS_QUERY_RESULT_ITEM_1: dict = {
     'manuscript_id': 'manuscript_id_1',
     'qc_complete_timestamp': datetime.fromisoformat('2022-01-01T01:02:03+00:00'),
     'preprint_doi': DOI_1,
-    'preprint_version': None,
+    'preprint_version': PREPRINT_VERSION_1,
     'preprint_url': PREPRINT_LINK_1,
     'publisher_json': '{"id": "publisher_1"}',
     'evaluations': [],
     'elife_doi': 'elife_doi_1',
     'editor_names': [],
     'senior_editor_names': [],
-    'tdm_path': 'tdm_path_1',
-    'tdm_ms_version': 'tdm_ms_version_1'
+    'tdm_path': 'tdm_path_1'
 }
 
 DOCMAPS_QUERY_RESULT_EVALUATION__1 = {
@@ -190,7 +191,7 @@ class TestGetDocmapsItemForQueryResultItem:
             'item': {
                 'type': 'preprint',
                 'doi': DOI_1,
-                'versionIdentifier': 'tdm_ms_version_1'
+                'versionIdentifier': DOCMAPS_QUERY_RESULT_ITEM_1['preprint_version']
             },
             'status': 'manuscript-published'
         }]
@@ -205,7 +206,7 @@ class TestGetDocmapsItemForQueryResultItem:
                 'doi': DOI_1,
                 'url': PREPRINT_LINK_1,
                 'published': '',
-                'versionIdentifier': 'tdm_ms_version_1',
+                'versionIdentifier': DOCMAPS_QUERY_RESULT_ITEM_1['preprint_version'],
                 '_tdmPath': 'tdm_path_1'
             }]
         }]
@@ -227,7 +228,7 @@ class TestGetDocmapsItemForQueryResultItem:
                 'item': {
                     'type': 'preprint',
                     'doi': DOI_1,
-                    'versionIdentifier': 'tdm_ms_version_1'
+                    'versionIdentifier': DOCMAPS_QUERY_RESULT_ITEM_1['preprint_version']
                 },
                 'status': 'under-review',
                 'happened': datetime.fromisoformat('2022-01-01T01:02:03+00:00')
@@ -283,7 +284,9 @@ class TestGetDocmapsItemForQueryResultItem:
             'item': {
                 'type': 'preprint',
                 'doi': DOI_1,
-                'versionIdentifier': 'tdm_ms_version_1'
+                'versionIdentifier': (
+                    DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS['preprint_version']
+                )
             },
             'status': 'peer-reviewed'
         }]
