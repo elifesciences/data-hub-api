@@ -3,6 +3,7 @@ import logging
 from fastapi import APIRouter, FastAPI, HTTPException
 from fastapi.responses import HTMLResponse
 
+from data_hub_api.utils.cache import InMemorySingleObjectCache
 from data_hub_api.docmaps.provider import DocmapsProvider
 
 
@@ -34,14 +35,18 @@ def create_docmaps_router(
 def create_app():
     app = FastAPI()
 
+    max_age_in_seconds = 60 * 60  # 1 hour
+
     enhanced_preprints_docmaps_provider = DocmapsProvider(
         only_include_reviewed_preprint_type=True,
-        only_include_evaluated_preprints=False
+        only_include_evaluated_preprints=False,
+        query_results_cache=InMemorySingleObjectCache(max_age_in_seconds=max_age_in_seconds)
     )
 
     public_reviews_docmaps_provider = DocmapsProvider(
         only_include_reviewed_preprint_type=False,
-        only_include_evaluated_preprints=True
+        only_include_evaluated_preprints=True,
+        query_results_cache=InMemorySingleObjectCache(max_age_in_seconds=max_age_in_seconds)
     )
 
     @app.get("/")

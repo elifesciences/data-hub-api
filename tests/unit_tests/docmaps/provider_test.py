@@ -6,6 +6,7 @@ import urllib
 
 import pytest
 
+from data_hub_api.utils.cache import InMemorySingleObjectCache
 from data_hub_api.docmaps import provider as provider_module
 from data_hub_api.docmaps.provider import (
     DOCMAP_OUTPUT_TYPE_FOR_AUTHOR_RESPONSE,
@@ -519,6 +520,21 @@ class TestEnhancedPreprintsDocmapsProvider:
             DOCMAPS_QUERY_RESULT_ITEM_1
         ])
         docmaps_index = DocmapsProvider().get_docmaps_index()
+        assert docmaps_index['docmaps'] == [
+            get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
+        ]
+
+    def test_should_cache_docmaps_query_results(
+        self,
+        iter_dict_from_bq_query_mock: MagicMock
+    ):
+        iter_dict_from_bq_query_mock.return_value = [
+            DOCMAPS_QUERY_RESULT_ITEM_1
+        ]
+        docmaps_provider = DocmapsProvider(query_results_cache=InMemorySingleObjectCache())
+        docmaps_provider.get_docmaps_index()
+        docmaps_index = docmaps_provider.get_docmaps_index()
+        assert iter_dict_from_bq_query_mock.call_count == 1
         assert docmaps_index['docmaps'] == [
             get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
         ]
