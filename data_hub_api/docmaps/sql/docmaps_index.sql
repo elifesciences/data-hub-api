@@ -56,11 +56,36 @@ t_latest_biorxiv_medrxiv_api_response AS (
       response.* EXCEPT(title),
       response.title AS title_with_markup,
       REGEXP_REPLACE(response.title, r"<[^>]*>", "") AS title_without_markup,
+
+      CONCAT(
+        'https://www.',
+        response.server,
+        '.org/content/',
+        response.doi,
+        'v',
+        response.version
+      ) AS preprint_url,
+
       ROW_NUMBER() OVER(
         PARTITION BY response.doi, response.version
         ORDER BY response.imported_timestamp DESC
       ) AS rn
     FROM `elife-data-pipeline.prod.biorxiv_medrxiv_api_response` AS response
+  )
+  WHERE rn = 1
+),
+
+t_latest_biorxiv_medrxiv_api_response_version_by_doi AS (
+  SELECT
+    * EXCEPT(rn)
+  FROM (
+    SELECT
+      response.*,
+      ROW_NUMBER() OVER(
+        PARTITION BY response.doi
+        ORDER BY response.version DESC, response.imported_timestamp DESC
+      ) AS rn
+    FROM t_latest_biorxiv_medrxiv_api_response AS response
   )
   WHERE rn = 1
 ),
@@ -103,8 +128,8 @@ t_result AS (
       WHEN biorxiv_medrxiv_response.doi IS NOT NULL THEN 'biorxiv_medrxiv_title_match'
     END AS preprint_doi_source,
 
-    preprint_doi_and_url.preprint_version,
-    COALESCE(preprint_doi_and_url.preprint_url, CONCAT('https://doi.org/', biorxiv_medrxiv_response.doi)) AS preprint_url,
+    preprint_doi_and_url.preprint_version AS ejp_preprint_version,
+    IF(preprint_doi_and_url.preprint_url LIKE '%doi.org/%', NULL, preprint_doi_and_url.preprint_url) AS ejp_validated_preprint_url,
     Version.Manuscript_Title AS manuscript_title,
     Version.DOI AS elife_doi,
     (Version.Long_Manuscript_Identifier LIKE '%-RP-%') AS is_reviewed_preprint_type,
@@ -170,16 +195,33 @@ t_latest_tdm_doi_and_path AS(
   WHERE rn=1
 ),
 
-t_result_with_tdm_details_and_has_evaluations AS (
+t_result_with_preprint_url_and_tdm_details_and_has_evaluations AS (
   SELECT
-    t_result.*,
-    (ARRAY_LENGTH(t_result.evaluations) > 0) AS has_evaluations,
+    result.*,
+    result.ejp_preprint_version AS preprint_version,
+    CONCAT('https://doi.org/', result.preprint_doi) AS preprint_doi_url,
+
+    COALESCE(
+      result.evaluations[SAFE_OFFSET(0)].uri,
+      result.ejp_validated_preprint_url,
+      latest_biorxiv_medrxiv_version.preprint_url
+    ) AS preprint_url,
+
+    CASE
+      WHEN result.evaluations[SAFE_OFFSET(0)].uri IS NOT NULL THEN 'evaluations'
+      WHEN result.ejp_validated_preprint_url IS NOT NULL THEN 'ejp_preprint_url'
+      WHEN latest_biorxiv_medrxiv_version.preprint_url IS NOT NULL THEN 'latest_biorxiv_medrxiv_version'
+    END AS preprint_url_source,
+
+    (ARRAY_LENGTH(result.evaluations) > 0) AS has_evaluations,
     tdm.*
-  FROM t_result
+  FROM t_result AS result
   LEFT JOIN t_latest_tdm_doi_and_path AS tdm
-  ON t_result.preprint_doi = tdm.tdm_doi
+    ON result.preprint_doi = tdm.tdm_doi
+  LEFT JOIN t_latest_biorxiv_medrxiv_api_response_version_by_doi AS latest_biorxiv_medrxiv_version
+    ON latest_biorxiv_medrxiv_version.doi = result.preprint_doi
 )
 
 SELECT
   *
-FROM t_result_with_tdm_details_and_has_evaluations
+FROM t_result_with_preprint_url_and_tdm_details_and_has_evaluations
