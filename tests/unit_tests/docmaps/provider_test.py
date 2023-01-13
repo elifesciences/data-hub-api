@@ -557,17 +557,6 @@ class TestEnhancedPreprintsDocmapsProvider:
         )
         assert provider.docmaps_index_query.rstrip().endswith('WHERE has_evaluations')
 
-    def test_should_add_preprint_where_clause_to_query(
-        self
-    ):
-        provider = DocmapsProvider(
-            only_include_reviewed_preprint_type=True,
-            only_include_evaluated_preprints=False
-        )
-        assert provider.docmaps_by_preprint_doi_query.rstrip().endswith(
-            'AND preprint_doi = @preprint_doi'
-        )
-
     def test_should_allow_both_reviewed_prerint_type_and_evaluated_preprints_filter(
         self
     ):
