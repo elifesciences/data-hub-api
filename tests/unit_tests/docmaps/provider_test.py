@@ -49,7 +49,8 @@ DOCMAPS_QUERY_RESULT_EVALUATION__1 = {
     'hypothesis_id': '',
     'annotation_created_timestamp': '',
     'tags': [],
-    'uri': PREPRINT_LINK_1
+    'uri': PREPRINT_LINK_1,
+    'source_version': 1
 }
 
 
@@ -270,7 +271,8 @@ class TestGetDocmapsItemForQueryResultItem:
                 **DOCMAPS_QUERY_RESULT_ITEM_1,
                 'evaluations': [{
                     **DOCMAPS_QUERY_RESULT_EVALUATION__1,
-                    'uri': PREPRINT_LINK_1
+                    'uri': PREPRINT_LINK_1,
+                    'source_version': 123
                 }]
             }
         )
@@ -279,6 +281,7 @@ class TestGetDocmapsItemForQueryResultItem:
             'type': 'preprint',
             'doi': DOI_1,
             'url': PREPRINT_LINK_1,
+            'versionIdentifier': 123
         }]
 
     def test_should_populate_assertions_peer_reviewed_step(self):

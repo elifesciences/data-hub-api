@@ -126,11 +126,17 @@ def get_docmap_inputs_value_for_review_steps(
         evaluation['uri']
         for evaluation in query_result_item['evaluations']
     }
+    preprint_versions = {
+        evaluation['source_version']
+        for evaluation in query_result_item['evaluations']
+    }
     assert len(preprint_links) == 1
+    assert len(preprint_versions) == 1
     return [{
         'type': 'preprint',
         'doi': query_result_item['preprint_doi'],
-        'url': next(iter(preprint_links))
+        'url': next(iter(preprint_links)),
+        'versionIdentifier': next(iter(preprint_versions))
     }]
 
 
