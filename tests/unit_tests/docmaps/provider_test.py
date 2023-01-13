@@ -35,6 +35,7 @@ PREPRINT_LINK_1 = f'https://test-preprints/{DOI_1}v{PREPRINT_VERSION_1}'
 DOCMAPS_QUERY_RESULT_ITEM_1: dict = {
     'manuscript_id': 'manuscript_id_1',
     'qc_complete_timestamp': datetime.fromisoformat('2022-01-01T01:02:03+00:00'),
+    'preprint_published_at_timestamp': datetime.fromisoformat('2021-01-01T01:02:03+00:00'),
     'preprint_doi': DOI_1,
     'preprint_version': PREPRINT_VERSION_1,
     'preprint_url': PREPRINT_LINK_1,
@@ -205,11 +206,22 @@ class TestGetDocmapsItemForQueryResultItem:
                 'type': 'preprint',
                 'doi': DOI_1,
                 'url': PREPRINT_LINK_1,
-                'published': '',
+                'published': (
+                    DOCMAPS_QUERY_RESULT_ITEM_1['preprint_published_at_timestamp']
+                    .isoformat()
+                ),
                 'versionIdentifier': DOCMAPS_QUERY_RESULT_ITEM_1['preprint_version'],
                 '_tdmPath': 'tdm_path_1'
             }]
         }]
+
+    def test_should_set_published_to_none_if_unknown(self):
+        docmaps_item = get_docmap_item_for_query_result_item({
+            **DOCMAPS_QUERY_RESULT_ITEM_1,
+            'preprint_published_at_timestamp': None
+        })
+        manuscript_published_step = docmaps_item['steps']['_:b0']
+        assert not manuscript_published_step['actions'][0]['outputs'][0].get('published')
 
     def test_should_populate_inputs_under_review_step(self):
         docmaps_item = get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
