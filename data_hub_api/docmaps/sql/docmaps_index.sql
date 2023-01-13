@@ -95,7 +95,14 @@ t_result AS (
     Version.Manuscript_ID AS manuscript_id,
     Version.Long_Manuscript_Identifier AS long_manuscript_identifier,
     Version.QC_Complete_Timestamp AS qc_complete_timestamp,
+  
     COALESCE(preprint_doi_and_url.preprint_doi, biorxiv_medrxiv_response.doi) AS preprint_doi,
+
+    CASE
+      WHEN preprint_doi_and_url.preprint_doi IS NOT NULL THEN 'ejp_preprint_doi'
+      WHEN biorxiv_medrxiv_response.doi IS NOT NULL THEN 'biorxiv_medrxiv_title_match'
+    END AS preprint_doi_source,
+
     preprint_doi_and_url.preprint_version,
     COALESCE(preprint_doi_and_url.preprint_url, CONCAT('https://doi.org/', biorxiv_medrxiv_response.doi)) AS preprint_url,
     Version.Manuscript_Title AS manuscript_title,
