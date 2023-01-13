@@ -175,24 +175,6 @@ t_result AS (
     AND COALESCE(preprint_doi_and_url.preprint_doi, biorxiv_medrxiv_response.doi) IS NOT NULL
 ),
 
-t_latest_tdm_path_by_doi_and_version AS(
-  SELECT 
-    * EXCEPT(rn) 
-  FROM (
-    SELECT
-      ROW_NUMBER() OVER (
-        PARTITION BY t_results.tdm_doi, t_results.ms_version
-        ORDER BY imported_timestamp DESC
-      ) AS rn,
-      t_results.tdm_doi,
-      t_results.tdm_path,
-      t_results.ms_version AS tdm_ms_version,
-    FROM `elife-data-pipeline.prod.biorxiv_medrxiv_meca_path_metadata`
-    LEFT JOIN UNNEST(results) AS t_results
-  )
-  WHERE rn=1
-),
-
 t_result_with_preprint_url_and_has_evaluations AS (
   SELECT
     result.*,
@@ -223,6 +205,24 @@ t_result_with_preprint_version AS (
     -- extract version from final preprint url to ensure url and version are consistent
     REGEXP_EXTRACT(preprint_url, r'10\.\d{3,}.*v([1-9])') AS preprint_version,
   FROM t_result_with_preprint_url_and_has_evaluations AS result
+),
+
+t_latest_tdm_path_by_doi_and_version AS (
+  SELECT 
+    * EXCEPT(rn) 
+  FROM (
+    SELECT
+      ROW_NUMBER() OVER (
+        PARTITION BY t_results.tdm_doi, t_results.ms_version
+        ORDER BY imported_timestamp DESC
+      ) AS rn,
+      t_results.tdm_doi,
+      t_results.tdm_path,
+      t_results.ms_version AS tdm_ms_version,
+    FROM `elife-data-pipeline.prod.biorxiv_medrxiv_meca_path_metadata`
+    LEFT JOIN UNNEST(results) AS t_results
+  )
+  WHERE rn=1
 ),
 
 t_result_with_tdm_path AS (
