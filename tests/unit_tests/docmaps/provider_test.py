@@ -35,7 +35,7 @@ DOCMAPS_QUERY_RESULT_ITEM_1: dict = {
     'qc_complete_timestamp': datetime.fromisoformat('2022-01-01T01:02:03+00:00'),
     'preprint_doi': DOI_1,
     'preprint_version': None,
-    'preprint_url': f'{DOI_ROOT_URL}{DOI_1}',
+    'preprint_url': PREPRINT_LINK_1,
     'publisher_json': '{"id": "publisher_1"}',
     'evaluations': [],
     'elife_doi': 'elife_doi_1',
@@ -203,7 +203,7 @@ class TestGetDocmapsItemForQueryResultItem:
             'outputs': [{
                 'type': 'preprint',
                 'doi': DOI_1,
-                'url': f'{DOI_ROOT_URL}{DOI_1}',
+                'url': PREPRINT_LINK_1,
                 'published': '',
                 'versionIdentifier': 'tdm_ms_version_1',
                 '_tdmPath': 'tdm_path_1'

@@ -54,7 +54,7 @@ def get_docmap_actions_value_for_preprint_manuscript_published_step(
         'outputs': [{
             'type': 'preprint',
             'doi': preprint_doi,
-            'url': f'{DOI_ROOT_URL}{preprint_doi}',
+            'url': query_result_item['preprint_url'],
             'published': '',
             'versionIdentifier': query_result_item['tdm_ms_version'],
             '_tdmPath': query_result_item['tdm_path']
