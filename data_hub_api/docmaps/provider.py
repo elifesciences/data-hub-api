@@ -1,6 +1,7 @@
 import logging
 import json
 from pathlib import Path
+from time import monotonic
 from typing import Iterable, Optional, Sequence
 import urllib
 
@@ -392,11 +393,18 @@ class DocmapsProvider:
         self._query_results_cache = query_results_cache
 
     def _load_query_results_from_bq(self) -> Sequence[dict]:
-        LOGGER.info('loading query results from BigQuery')
-        return list(iter_dict_from_bq_query(
+        LOGGER.info('Loading query results from BigQuery...')
+        start_time = monotonic()
+        result = list(iter_dict_from_bq_query(
             self.gcp_project_name,
             self.docmaps_index_query
         ))
+        end_time = monotonic()
+        LOGGER.info(
+            'Loaded query results from BigQuery, rows=%d, time=%.3f seconds',
+            len(result), (end_time - start_time)
+        )
+        return result
 
     def iter_docmaps(self, preprint_doi: Optional[str] = None) -> Iterable[dict]:
         bq_result_list = self._query_results_cache.get_or_load(
