@@ -1,3 +1,4 @@
+from ast import Add
 from unittest.mock import call, patch, MagicMock
 from typing import Iterable, Sequence
 
@@ -6,6 +7,7 @@ import pytest
 from fastapi.testclient import TestClient
 
 from data_hub_api import main as main_module
+from data_hub_api.docmaps.provider import ADDITIONAL_PREPRINT_DOIS
 from data_hub_api.main import create_app
 
 
@@ -124,7 +126,8 @@ class TestGetEnhancedPreprintsDocmapsIndex:
             [
                 call(
                     only_include_reviewed_preprint_type=True,
-                    only_include_evaluated_preprints=False
+                    only_include_evaluated_preprints=False,
+                    additionally_include_preprint_dois=ADDITIONAL_PREPRINT_DOIS
                 ),
                 call(
                     only_include_reviewed_preprint_type=False,

@@ -392,7 +392,7 @@ class DocmapsProvider:
         if only_include_reviewed_preprint_type:
             self.docmaps_index_query += '\nWHERE is_reviewed_preprint_type'
         if only_include_reviewed_preprint_type and additionally_include_preprint_dois:
-            self.docmaps_index_query += f'\nWHERE is_reviewed_preprint_type\nOR preprint_doi IN {additionally_include_preprint_dois}'
+            self.docmaps_index_query += f'\nOR preprint_doi IN {additionally_include_preprint_dois}'
         if only_include_evaluated_preprints:
             self.docmaps_index_query += '\nWHERE has_evaluations'
         self.docmaps_by_preprint_doi_query = (

@@ -523,7 +523,8 @@ class TestEnhancedPreprintsDocmapsProvider:
     ):
         provider = DocmapsProvider(
             only_include_reviewed_preprint_type=True,
-            only_include_evaluated_preprints=False
+            only_include_evaluated_preprints=False,
+            additionally_include_preprint_dois=[]
         )
         assert provider.docmaps_index_query.rstrip().endswith('WHERE is_reviewed_preprint_type')
 
