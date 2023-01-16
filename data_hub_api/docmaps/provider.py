@@ -1,7 +1,7 @@
 import logging
 import json
 from pathlib import Path
-from typing import Iterable, Optional, Sequence
+from typing import Iterable, Optional, Sequence, Tuple
 import urllib
 
 from google.cloud import bigquery
@@ -30,6 +30,15 @@ SCIETY_ARTICLES_EVALUATIONS_URL = 'https://sciety.org/evaluations/hypothesis:'
 DOCMAP_OUTPUT_TYPE_FOR_EVALUATION_SUMMARY = 'evaluation-summary'
 DOCMAP_OUTPUT_TYPE_FOR_AUTHOR_RESPONSE = 'author-response'
 DOCMAP_OUTPUT_TYPE_FOR_REVIEW_ARTICLE = 'review-article'
+
+ADDITIONAL_PREPRINT_DOIS = (
+  '10.1101/2022.06.24.497502',
+  '10.1101/2022.07.26.501569',
+  '10.1101/2022.06.30.498369',
+  '10.1101/2022.05.30.22275761',
+  '10.1101/2022.07.21.500925',
+  '10.1101/2021.11.12.468444'
+)
 
 
 def get_docmap_assertions_value_for_preprint_manuscript_published_step(
@@ -371,15 +380,19 @@ class DocmapsProvider:
         self,
         gcp_project_name: str = 'elife-data-pipeline',
         only_include_reviewed_preprint_type: bool = True,
-        only_include_evaluated_preprints: bool = False
+        only_include_evaluated_preprints: bool = False,
+        additionally_include_preprint_dois: Optional[Tuple[str]] = None
     ) -> None:
         self.gcp_project_name = gcp_project_name
         self.docmaps_index_query = (
             Path(get_sql_path('docmaps_index.sql')).read_text(encoding='utf-8')
         )
         assert not (only_include_reviewed_preprint_type and only_include_evaluated_preprints)
+        assert not (additionally_include_preprint_dois and not only_include_reviewed_preprint_type)
         if only_include_reviewed_preprint_type:
             self.docmaps_index_query += '\nWHERE is_reviewed_preprint_type'
+        if only_include_reviewed_preprint_type and additionally_include_preprint_dois:
+            self.docmaps_index_query += f'\nOR preprint_doi IN {additionally_include_preprint_dois}'
         if only_include_evaluated_preprints:
             self.docmaps_index_query += '\nWHERE has_evaluations'
         self.docmaps_by_preprint_doi_query = (

@@ -3,7 +3,7 @@ import logging
 from fastapi import APIRouter, FastAPI, HTTPException
 from fastapi.responses import HTMLResponse
 
-from data_hub_api.docmaps.provider import DocmapsProvider
+from data_hub_api.docmaps.provider import ADDITIONAL_PREPRINT_DOIS, DocmapsProvider
 
 
 LOGGER = logging.getLogger(__name__)
@@ -36,7 +36,8 @@ def create_app():
 
     enhanced_preprints_docmaps_provider = DocmapsProvider(
         only_include_reviewed_preprint_type=True,
-        only_include_evaluated_preprints=False
+        only_include_evaluated_preprints=False,
+        additionally_include_preprint_dois=ADDITIONAL_PREPRINT_DOIS
     )
 
     public_reviews_docmaps_provider = DocmapsProvider(
