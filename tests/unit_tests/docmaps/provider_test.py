@@ -536,7 +536,9 @@ class TestEnhancedPreprintsDocmapsProvider:
             only_include_evaluated_preprints=False,
             additionally_include_preprint_dois=ADDITIONAL_PREPRINT_DOIS
         )
-        assert provider.docmaps_index_query.rstrip().endswith(f'OR preprint_doi IN {ADDITIONAL_PREPRINT_DOIS}')
+        assert provider.docmaps_index_query.rstrip().endswith(
+            f'OR preprint_doi IN {ADDITIONAL_PREPRINT_DOIS}'
+        )
 
     def test_should_add_has_evaluatons_where_clause_to_query(
         self
