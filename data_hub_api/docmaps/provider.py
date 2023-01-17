@@ -273,9 +273,7 @@ def get_single_actions_value_for_preprint_peer_reviewed_step(
         'outputs': [
             {
                 'type': outputs_type,
-                'doi': elife_doi,
                 'published': annotation_created_timestamp,
-                'url': elife_doi_url,
                 'content': [
                     {
                         'type': 'web-page',
