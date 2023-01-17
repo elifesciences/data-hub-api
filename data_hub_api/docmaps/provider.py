@@ -263,8 +263,6 @@ def get_single_actions_value_for_preprint_peer_reviewed_step(
     outputs_type: str
 ) -> dict:
     preprint_doi = query_result_item['preprint_doi']
-    elife_doi = query_result_item['elife_doi']
-    elife_doi_url = f'{DOI_ROOT_URL}{elife_doi}'
     return {
         'participants': get_participants_for_preprint_peer_reviewed_step(
             query_result_item=query_result_item,
