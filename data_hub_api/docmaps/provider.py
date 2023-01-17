@@ -387,6 +387,7 @@ class DocmapsProvider:
         self.docmaps_index_query = (
             Path(get_sql_path('docmaps_index.sql')).read_text(encoding='utf-8')
         )
+        base_docmaps_index_query = self.docmaps_index_query
         assert not (only_include_reviewed_preprint_type and only_include_evaluated_preprints)
         assert not (additionally_include_preprint_dois and not only_include_reviewed_preprint_type)
         if only_include_reviewed_preprint_type:
@@ -396,7 +397,7 @@ class DocmapsProvider:
         if only_include_evaluated_preprints:
             self.docmaps_index_query += '\nWHERE has_evaluations'
         self.docmaps_by_preprint_doi_query = (
-            self.docmaps_index_query + '\nAND preprint_doi = @preprint_doi'
+            base_docmaps_index_query + '\nWHERE preprint_doi = @preprint_doi'
         )
         if only_include_evaluated_preprints:
             self.docmaps_index_query += '\nLIMIT 20'
