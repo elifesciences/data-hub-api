@@ -12,7 +12,6 @@ from data_hub_api.docmaps.provider import (
     DOCMAP_OUTPUT_TYPE_FOR_AUTHOR_RESPONSE,
     DOCMAP_OUTPUT_TYPE_FOR_EVALUATION_SUMMARY,
     DOCMAP_OUTPUT_TYPE_FOR_REVIEW_ARTICLE,
-    DOI_ROOT_URL,
     HYPOTHESIS_URL,
     SCIETY_ARTICLES_ACTIVITY_URL,
     SCIETY_ARTICLES_EVALUATIONS_URL,
@@ -349,9 +348,7 @@ class TestGetDocmapsItemForQueryResultItem:
         assert len(peer_reviewed_actions) == 2
         assert peer_reviewed_actions[0]['outputs'][0] == {
             'type': DOCMAP_OUTPUT_TYPE_FOR_REVIEW_ARTICLE,
-            'doi': 'elife_doi_1',
             'published': 'annotation_created_timestamp_1',
-            'url': f'{DOI_ROOT_URL}elife_doi_1',
             'content': [
                 {
                     'type': 'web-page',
@@ -375,9 +372,7 @@ class TestGetDocmapsItemForQueryResultItem:
         }
         assert peer_reviewed_actions[1]['outputs'][0] == {
             'type': DOCMAP_OUTPUT_TYPE_FOR_EVALUATION_SUMMARY,
-            'doi': 'elife_doi_1',
             'published': 'annotation_created_timestamp_2',
-            'url': f'{DOI_ROOT_URL}elife_doi_1',
             'content': [
                 {
                     'type': 'web-page',
