@@ -16,10 +16,6 @@ def _monotonic_mock() -> Iterable[MagicMock]:
 
 
 class TestInMemorySingleObjectCache:
-    def test_should_get_none_if_not_initialized(self):
-        cache = InMemorySingleObjectCache(max_age_in_seconds=10)
-        assert cache.get() is None
-
     def test_should_get_loaded_value(self):
         cache = InMemorySingleObjectCache(max_age_in_seconds=10)
         result = cache.get_or_load(load_fn=lambda: 'value_1')

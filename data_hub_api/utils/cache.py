@@ -6,17 +6,11 @@ T = TypeVar('T')
 
 
 class SingleObjectCache(Protocol[T]):
-    def get(self) -> Optional[T]:
-        pass
-
     def get_or_load(self, load_fn: Callable[[], T]) -> T:
         pass
 
 
 class DummySingleObjectCache(SingleObjectCache[T]):
-    def get(self) -> Optional[T]:
-        return None
-
     def get_or_load(self, load_fn: Callable[[], T]) -> T:
         return load_fn()
 
@@ -36,9 +30,6 @@ class InMemorySingleObjectCache(SingleObjectCache[T]):
             self._last_updated_time is not None
             and (now - self._last_updated_time > self.max_age_in_seconds)
         )
-
-    def get(self) -> Optional[T]:
-        return self._value
 
     def get_or_load(self, load_fn: Callable[[], T]) -> T:
         now = monotonic()
