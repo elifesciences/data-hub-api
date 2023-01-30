@@ -1,4 +1,5 @@
 from time import monotonic
+from threading import Lock
 from typing import Callable, Optional,  Protocol, TypeVar
 
 
@@ -21,6 +22,7 @@ class InMemorySingleObjectCache(SingleObjectCache[T]):
         max_age_in_seconds: float
     ) -> None:
         self.max_age_in_seconds = max_age_in_seconds
+        self._lock = Lock()
         self._value: Optional[T] = None
         self._last_updated_time: Optional[float] = None
 
@@ -31,12 +33,13 @@ class InMemorySingleObjectCache(SingleObjectCache[T]):
         )
 
     def get_or_load(self, load_fn: Callable[[], T]) -> T:
-        now = monotonic()
-        result = self._value
-        if result is not None and not self._is_max_age_reached(now):
+        with self._lock:
+            now = monotonic()
+            result = self._value
+            if result is not None and not self._is_max_age_reached(now):
+                return result
+            result = load_fn()
+            assert result is not None
+            self._value = result
+            self._last_updated_time = now
             return result
-        result = load_fn()
-        assert result is not None
-        self._value = result
-        self._last_updated_time = now
-        return result
