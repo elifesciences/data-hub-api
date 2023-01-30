@@ -9,10 +9,10 @@ import pytest
 from data_hub_api.utils.cache import InMemorySingleObjectCache
 from data_hub_api.docmaps import provider as provider_module
 from data_hub_api.docmaps.provider import (
+    ADDITIONAL_PREPRINT_DOIS,
     DOCMAP_OUTPUT_TYPE_FOR_AUTHOR_RESPONSE,
     DOCMAP_OUTPUT_TYPE_FOR_EVALUATION_SUMMARY,
     DOCMAP_OUTPUT_TYPE_FOR_REVIEW_ARTICLE,
-    DOI_ROOT_URL,
     HYPOTHESIS_URL,
     SCIETY_ARTICLES_ACTIVITY_URL,
     SCIETY_ARTICLES_EVALUATIONS_URL,
@@ -349,9 +349,7 @@ class TestGetDocmapsItemForQueryResultItem:
         assert len(peer_reviewed_actions) == 2
         assert peer_reviewed_actions[0]['outputs'][0] == {
             'type': DOCMAP_OUTPUT_TYPE_FOR_REVIEW_ARTICLE,
-            'doi': 'elife_doi_1',
             'published': 'annotation_created_timestamp_1',
-            'url': f'{DOI_ROOT_URL}elife_doi_1',
             'content': [
                 {
                     'type': 'web-page',
@@ -375,9 +373,7 @@ class TestGetDocmapsItemForQueryResultItem:
         }
         assert peer_reviewed_actions[1]['outputs'][0] == {
             'type': DOCMAP_OUTPUT_TYPE_FOR_EVALUATION_SUMMARY,
-            'doi': 'elife_doi_1',
             'published': 'annotation_created_timestamp_2',
-            'url': f'{DOI_ROOT_URL}elife_doi_1',
             'content': [
                 {
                     'type': 'web-page',
@@ -505,12 +501,6 @@ class TestGetDocmapsItemForQueryResultItem:
         ]
 
 
-# class TestGetQueryWithDoiWhereClause:
-#     def test_should_have_where_clause_for_preprint_doi_in_query(self):
-#         query_with_doi_where_clause = DocmapsProvider().get_query_with_doi_where_clause(DOI_1)
-#         assert query_with_doi_where_clause.rstrip().endswith(f'\nAND preprint_doi = {DOI_1}')
-
-
 class TestEnhancedPreprintsDocmapsProvider:
     def test_should_create_index_with_non_empty_docmaps(
         self,
@@ -544,9 +534,22 @@ class TestEnhancedPreprintsDocmapsProvider:
     ):
         provider = DocmapsProvider(
             only_include_reviewed_preprint_type=True,
-            only_include_evaluated_preprints=False
+            only_include_evaluated_preprints=False,
+            additionally_include_preprint_dois=[]
         )
         assert provider.docmaps_index_query.rstrip().endswith('WHERE is_reviewed_preprint_type')
+
+    def test_should_add_additional_preprint_dois_to_query_filter(
+        self
+    ):
+        provider = DocmapsProvider(
+            only_include_reviewed_preprint_type=True,
+            only_include_evaluated_preprints=False,
+            additionally_include_preprint_dois=ADDITIONAL_PREPRINT_DOIS
+        )
+        assert provider.docmaps_index_query.rstrip().endswith(
+            f'OR preprint_doi IN {ADDITIONAL_PREPRINT_DOIS}'
+        )
 
     def test_should_add_has_evaluatons_where_clause_to_query(
         self

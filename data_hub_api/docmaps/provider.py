@@ -2,7 +2,7 @@ import logging
 import json
 from pathlib import Path
 from time import monotonic
-from typing import Iterable, Optional, Sequence
+from typing import Iterable, Optional, Sequence, Tuple
 import urllib
 
 import objsize
@@ -32,6 +32,15 @@ SCIETY_ARTICLES_EVALUATIONS_URL = 'https://sciety.org/evaluations/hypothesis:'
 DOCMAP_OUTPUT_TYPE_FOR_EVALUATION_SUMMARY = 'evaluation-summary'
 DOCMAP_OUTPUT_TYPE_FOR_AUTHOR_RESPONSE = 'author-response'
 DOCMAP_OUTPUT_TYPE_FOR_REVIEW_ARTICLE = 'review-article'
+
+ADDITIONAL_PREPRINT_DOIS = (
+  '10.1101/2022.06.24.497502',
+  '10.1101/2022.07.26.501569',
+  '10.1101/2022.06.30.498369',
+  '10.1101/2022.05.30.22275761',
+  '10.1101/2022.07.21.500925',
+  '10.1101/2021.11.12.468444'
+)
 
 
 def get_docmap_assertions_value_for_preprint_manuscript_published_step(
@@ -256,8 +265,6 @@ def get_single_actions_value_for_preprint_peer_reviewed_step(
     outputs_type: str
 ) -> dict:
     preprint_doi = query_result_item['preprint_doi']
-    elife_doi = query_result_item['elife_doi']
-    elife_doi_url = f'{DOI_ROOT_URL}{elife_doi}'
     return {
         'participants': get_participants_for_preprint_peer_reviewed_step(
             query_result_item=query_result_item,
@@ -266,9 +273,7 @@ def get_single_actions_value_for_preprint_peer_reviewed_step(
         'outputs': [
             {
                 'type': outputs_type,
-                'doi': elife_doi,
                 'published': annotation_created_timestamp,
-                'url': elife_doi_url,
                 'content': [
                     {
                         'type': 'web-page',
@@ -369,20 +374,24 @@ def get_docmap_item_for_query_result_item(query_result_item: dict) -> dict:
 
 
 class DocmapsProvider:
-    def __init__(
+    def __init__(  # pylint: disable=too-many-arguments
         self,
         gcp_project_name: str = 'elife-data-pipeline',
         query_results_cache: Optional[SingleObjectCache[Sequence[dict]]] = None,
         only_include_reviewed_preprint_type: bool = True,
-        only_include_evaluated_preprints: bool = False
+        only_include_evaluated_preprints: bool = False,
+        additionally_include_preprint_dois: Optional[Tuple[str]] = None
     ) -> None:
         self.gcp_project_name = gcp_project_name
         self.docmaps_index_query = (
             Path(get_sql_path('docmaps_index.sql')).read_text(encoding='utf-8')
         )
         assert not (only_include_reviewed_preprint_type and only_include_evaluated_preprints)
+        assert not (additionally_include_preprint_dois and not only_include_reviewed_preprint_type)
         if only_include_reviewed_preprint_type:
             self.docmaps_index_query += '\nWHERE is_reviewed_preprint_type'
+        if only_include_reviewed_preprint_type and additionally_include_preprint_dois:
+            self.docmaps_index_query += f'\nOR preprint_doi IN {additionally_include_preprint_dois}'
         if only_include_evaluated_preprints:
             self.docmaps_index_query += '\nWHERE has_evaluations'
         if query_results_cache is None:
