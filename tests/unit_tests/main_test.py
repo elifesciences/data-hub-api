@@ -1,4 +1,4 @@
-from unittest.mock import call, patch, MagicMock
+from unittest.mock import ANY, call, patch, MagicMock
 from typing import Iterable, Sequence
 
 import pytest
@@ -126,11 +126,13 @@ class TestGetEnhancedPreprintsDocmapsIndex:
                 call(
                     only_include_reviewed_preprint_type=True,
                     only_include_evaluated_preprints=False,
-                    additionally_include_preprint_dois=ADDITIONAL_PREPRINT_DOIS
+                    additionally_include_preprint_dois=ADDITIONAL_PREPRINT_DOIS,
+                    query_results_cache=ANY
                 ),
                 call(
                     only_include_reviewed_preprint_type=False,
-                    only_include_evaluated_preprints=True
+                    only_include_evaluated_preprints=True,
+                    query_results_cache=ANY
                 )
             ],
             any_order=False

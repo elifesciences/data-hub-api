@@ -1,14 +1,16 @@
 import logging
 import json
 from pathlib import Path
+from time import monotonic
 from typing import Iterable, Optional, Sequence, Tuple
 import urllib
 
-from google.cloud import bigquery
+import objsize
 
 from data_hub_api.utils.bigquery import (
     iter_dict_from_bq_query
 )
+from data_hub_api.utils.cache import SingleObjectCache, DummySingleObjectCache
 from data_hub_api.docmaps.sql import get_sql_path
 from data_hub_api.utils.json import remove_key_with_none_value_only
 
@@ -140,6 +142,13 @@ def get_docmap_inputs_value_for_review_steps(
         (evaluation['uri'], evaluation['source_version'])
         for evaluation in query_result_item['evaluations']
     }
+    if not preprint_links_and_versions:
+        LOGGER.error('no preprint link found for doi: %r', query_result_item['preprint_doi'])
+    if len(preprint_links_and_versions) > 1:
+        LOGGER.error(
+            'multiple preprint links found for doi: %r, preprint links: %r',
+            query_result_item['preprint_doi'], preprint_links_and_versions
+        )
     assert len(preprint_links_and_versions) == 1
     preprint_link, preprint_version = next(iter(preprint_links_and_versions))
     return [{
@@ -372,9 +381,10 @@ def get_docmap_item_for_query_result_item(query_result_item: dict) -> dict:
 
 
 class DocmapsProvider:
-    def __init__(
+    def __init__(  # pylint: disable=too-many-arguments
         self,
         gcp_project_name: str = 'elife-data-pipeline',
+        query_results_cache: Optional[SingleObjectCache[Sequence[dict]]] = None,
         only_include_reviewed_preprint_type: bool = True,
         only_include_evaluated_preprints: bool = False,
         additionally_include_preprint_dois: Optional[Tuple[str]] = None
@@ -383,7 +393,6 @@ class DocmapsProvider:
         self.docmaps_index_query = (
             Path(get_sql_path('docmaps_index.sql')).read_text(encoding='utf-8')
         )
-        base_docmaps_index_query = self.docmaps_index_query
         assert not (only_include_reviewed_preprint_type and only_include_evaluated_preprints)
         assert not (additionally_include_preprint_dois and not only_include_reviewed_preprint_type)
         if only_include_reviewed_preprint_type:
@@ -392,27 +401,37 @@ class DocmapsProvider:
             self.docmaps_index_query += f'\nOR preprint_doi IN {additionally_include_preprint_dois}'
         if only_include_evaluated_preprints:
             self.docmaps_index_query += '\nWHERE has_evaluations'
-        self.docmaps_by_preprint_doi_query = (
-            base_docmaps_index_query + '\nWHERE preprint_doi = @preprint_doi'
+        if query_results_cache is None:
+            query_results_cache = DummySingleObjectCache[Sequence[dict]]()
+        self._query_results_cache = query_results_cache
+
+    def _load_query_results_from_bq(self) -> Sequence[dict]:
+        LOGGER.info('Loading query results from BigQuery...')
+        start_time = monotonic()
+        result = list(iter_dict_from_bq_query(
+            self.gcp_project_name,
+            self.docmaps_index_query
+        ))
+        end_time = monotonic()
+        LOGGER.info(
+            'Loaded query results from BigQuery, rows=%d, approx_size=%.3fMB, time=%.3f seconds',
+            len(result),
+            objsize.get_deep_size(result) / 1024 / 1024,
+            (end_time - start_time)
         )
-        if only_include_evaluated_preprints:
-            self.docmaps_index_query += '\nLIMIT 20'
+        return result
 
     def iter_docmaps(self, preprint_doi: Optional[str] = None) -> Iterable[dict]:
+        bq_result_list = self._query_results_cache.get_or_load(
+            load_fn=self._load_query_results_from_bq
+        )
         if preprint_doi:
-            bq_result_iterable = iter_dict_from_bq_query(
-                self.gcp_project_name,
-                self.docmaps_by_preprint_doi_query,
-                query_parameters=[
-                    bigquery.ScalarQueryParameter("preprint_doi", "STRING", preprint_doi)
-                ]
-            )
-        else:
-            bq_result_iterable = iter_dict_from_bq_query(
-                self.gcp_project_name,
-                self.docmaps_index_query
-            )
-        for bq_result in bq_result_iterable:
+            bq_result_list = [
+                bq_result
+                for bq_result in bq_result_list
+                if bq_result['preprint_doi'] == preprint_doi
+            ]
+        for bq_result in bq_result_list:
             yield get_docmap_item_for_query_result_item(bq_result)
 
     def get_docmaps_by_doi(self, preprint_doi: str) -> Sequence[dict]:

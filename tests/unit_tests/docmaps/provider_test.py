@@ -6,6 +6,7 @@ import urllib
 
 import pytest
 
+from data_hub_api.utils.cache import InMemorySingleObjectCache
 from data_hub_api.docmaps import provider as provider_module
 from data_hub_api.docmaps.provider import (
     ADDITIONAL_PREPRINT_DOIS,
@@ -513,6 +514,23 @@ class TestEnhancedPreprintsDocmapsProvider:
             get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
         ]
 
+    def test_should_cache_docmaps_query_results(
+        self,
+        iter_dict_from_bq_query_mock: MagicMock
+    ):
+        iter_dict_from_bq_query_mock.return_value = [
+            DOCMAPS_QUERY_RESULT_ITEM_1
+        ]
+        docmaps_provider = DocmapsProvider(
+            query_results_cache=InMemorySingleObjectCache(max_age_in_seconds=10)
+        )
+        docmaps_provider.get_docmaps_index()
+        docmaps_index = docmaps_provider.get_docmaps_index()
+        assert iter_dict_from_bq_query_mock.call_count == 1
+        assert docmaps_index['docmaps'] == [
+            get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
+        ]
+
     def test_should_add_is_reviewed_preprint_type_where_clause_to_query(
         self
     ):
@@ -542,18 +560,7 @@ class TestEnhancedPreprintsDocmapsProvider:
             only_include_reviewed_preprint_type=False,
             only_include_evaluated_preprints=True
         )
-        assert provider.docmaps_index_query.rstrip().endswith('WHERE has_evaluations\nLIMIT 20')
-
-    def test_should_add_preprint_where_clause_to_query(
-        self
-    ):
-        provider = DocmapsProvider(
-            only_include_reviewed_preprint_type=True,
-            only_include_evaluated_preprints=False
-        )
-        assert provider.docmaps_by_preprint_doi_query.rstrip().endswith(
-            'WHERE preprint_doi = @preprint_doi'
-        )
+        assert provider.docmaps_index_query.rstrip().endswith('WHERE has_evaluations')
 
     def test_should_allow_both_reviewed_prerint_type_and_evaluated_preprints_filter(
         self
