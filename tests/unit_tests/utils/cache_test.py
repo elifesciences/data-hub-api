@@ -21,7 +21,7 @@ class TestInMemorySingleObjectCache:
         result = cache.get_or_load(load_fn=lambda: 'value_1')
         assert result == 'value_1'
 
-    def test_should_not_call__load_function_multiple_times(self):
+    def test_should_not_call_load_function_multiple_times(self):
         cache = InMemorySingleObjectCache(max_age_in_seconds=10)
         load_fn = MagicMock(name='load_fn')
         load_fn.return_value = 'value_1'
