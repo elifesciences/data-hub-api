@@ -17,16 +17,16 @@ def _monotonic_mock() -> Iterable[MagicMock]:
 
 class TestInMemorySingleObjectCache:
     def test_should_get_none_if_not_initialized(self):
-        cache = InMemorySingleObjectCache()
+        cache = InMemorySingleObjectCache(max_age_in_seconds=10)
         assert cache.get() is None
 
     def test_should_get_loaded_value(self):
-        cache = InMemorySingleObjectCache()
+        cache = InMemorySingleObjectCache(max_age_in_seconds=10)
         result = cache.get_or_load(load_fn=lambda: 'value_1')
         assert result == 'value_1'
 
     def test_should_not_call__load_function_multiple_times(self):
-        cache = InMemorySingleObjectCache()
+        cache = InMemorySingleObjectCache(max_age_in_seconds=10)
         load_fn = MagicMock(name='load_fn')
         load_fn.return_value = 'value_1'
         cache.get_or_load(load_fn=load_fn)

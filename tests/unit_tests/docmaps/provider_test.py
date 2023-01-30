@@ -521,7 +521,9 @@ class TestEnhancedPreprintsDocmapsProvider:
         iter_dict_from_bq_query_mock.return_value = [
             DOCMAPS_QUERY_RESULT_ITEM_1
         ]
-        docmaps_provider = DocmapsProvider(query_results_cache=InMemorySingleObjectCache())
+        docmaps_provider = DocmapsProvider(
+            query_results_cache=InMemorySingleObjectCache(max_age_in_seconds=10)
+        )
         docmaps_provider.get_docmaps_index()
         docmaps_index = docmaps_provider.get_docmaps_index()
         assert iter_dict_from_bq_query_mock.call_count == 1

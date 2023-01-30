@@ -25,8 +25,8 @@ class InMemorySingleObjectCache(SingleObjectCache[T]):
 
     def __init__(
         self,
+        max_age_in_seconds: float,
         initial_value: Optional[T] = None,
-        max_age_in_seconds: Optional[float] = None
     ) -> None:
         self._value = initial_value
         self.max_age_in_seconds = max_age_in_seconds
@@ -34,8 +34,7 @@ class InMemorySingleObjectCache(SingleObjectCache[T]):
 
     def _is_max_age_reached(self, now: float) -> bool:
         return bool(
-            self.max_age_in_seconds
-            and self._last_updated_time is not None
+            self._last_updated_time is not None
             and (now - self._last_updated_time > self.max_age_in_seconds)
         )
 
