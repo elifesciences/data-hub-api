@@ -142,6 +142,13 @@ def get_docmap_inputs_value_for_review_steps(
         (evaluation['uri'], evaluation['source_version'])
         for evaluation in query_result_item['evaluations']
     }
+    if not preprint_links_and_versions:
+        LOGGER.error('no preprint link found for doi: %r', query_result_item['preprint_doi'])
+    if len(preprint_links_and_versions) > 1:
+        LOGGER.error(
+            'multiple preprint links found for doi: %r, preprint links: %r',
+            query_result_item['preprint_doi'], preprint_links_and_versions
+        )
     assert len(preprint_links_and_versions) == 1
     preprint_link, preprint_version = next(iter(preprint_links_and_versions))
     return [{
