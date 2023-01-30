@@ -16,7 +16,6 @@ class DummySingleObjectCache(SingleObjectCache[T]):
 
 
 class InMemorySingleObjectCache(SingleObjectCache[T]):
-
     def __init__(
         self,
         max_age_in_seconds: float
