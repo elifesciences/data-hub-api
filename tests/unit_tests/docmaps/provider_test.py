@@ -29,8 +29,11 @@ DOI_1 = '10.1101.test/doi1'
 DOI_2 = '10.1101.test/doi2'
 
 PREPRINT_VERSION_1 = '10'
+PREPRINT_VERSION_2 = '11'
 
-PREPRINT_LINK_1 = f'https://test-preprints/{DOI_1}v{PREPRINT_VERSION_1}'
+PREPRINT_LINK_PREFIX = 'https://test-preprints/'
+PREPRINT_LINK_1_PREFIX = f'{PREPRINT_LINK_PREFIX}{DOI_1}'
+PREPRINT_LINK_1 = f'{PREPRINT_LINK_1_PREFIX}v{PREPRINT_VERSION_1}'
 
 
 DOCMAPS_QUERY_RESULT_ITEM_1: dict = {
@@ -48,18 +51,23 @@ DOCMAPS_QUERY_RESULT_ITEM_1: dict = {
     'tdm_path': 'tdm_path_1'
 }
 
-DOCMAPS_QUERY_RESULT_EVALUATION__1 = {
-    'hypothesis_id': '',
+HYPOTHESIS_ID_1 = 'hypothesis_1'
+HYPOTHESIS_ID_2 = 'hypothesis_2'
+HYPOTHESIS_ID_3 = 'hypothesis_3'
+
+
+DOCMAPS_QUERY_RESULT_EVALUATION_1 = {
+    'hypothesis_id': HYPOTHESIS_ID_1,
     'annotation_created_timestamp': '',
     'tags': [],
     'uri': PREPRINT_LINK_1,
-    'source_version': 1
+    'source_version': PREPRINT_VERSION_1
 }
 
 
 DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS = {
     **DOCMAPS_QUERY_RESULT_ITEM_1,
-    'evaluations': [DOCMAPS_QUERY_RESULT_EVALUATION__1]
+    'evaluations': [DOCMAPS_QUERY_RESULT_EVALUATION_1]
 }
 
 
@@ -67,6 +75,24 @@ DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS = {
 def _iter_dict_from_bq_query_mock() -> Iterable[MagicMock]:
     with patch.object(provider_module, 'iter_dict_from_bq_query') as mock:
         yield mock
+
+
+def get_hypothesis_urls_from_step_dict(step_dict: dict) -> Iterable[str]:
+    return [
+        content['url']
+        for action in step_dict['actions']
+        for output in action['outputs']
+        for content in output['content']
+        if content['url'].startswith(HYPOTHESIS_URL)
+    ]
+
+
+def get_hypothesis_ids_from_urls(hypothesis_urls: Iterable[str]) -> Iterable[str]:
+    return [
+        hypothesis_url[len(HYPOTHESIS_URL):]
+        for hypothesis_url in hypothesis_urls
+        if hypothesis_url.startswith(HYPOTHESIS_URL)
+    ]
 
 
 class TestGetOutputsTypeFromTags:
@@ -231,6 +257,7 @@ class TestGetDocmapsItemForQueryResultItem:
             'type': 'preprint',
             'doi': DOI_1,
             'url': DOCMAPS_QUERY_RESULT_ITEM_1['preprint_url'],
+            'versionIdentifier': DOCMAPS_QUERY_RESULT_ITEM_1['preprint_version']
         }]
 
     def test_should_populate_assertions_under_review_step(self):
@@ -269,14 +296,16 @@ class TestGetDocmapsItemForQueryResultItem:
             }]
         }]
 
-    def test_should_populate_inputs_peer_reviewed_step_from_evaluation(self):
+    def test_should_populate_inputs_peer_reviewed_step_from_preprint_url(self):
         docmaps_item = get_docmap_item_for_query_result_item(
             {
                 **DOCMAPS_QUERY_RESULT_ITEM_1,
+                'preprint_url': PREPRINT_LINK_1,
+                'preprint_version': PREPRINT_VERSION_1,
                 'evaluations': [{
-                    **DOCMAPS_QUERY_RESULT_EVALUATION__1,
-                    'uri': PREPRINT_LINK_1,
-                    'source_version': 123
+                    **DOCMAPS_QUERY_RESULT_EVALUATION_1,
+                    'uri': f'{PREPRINT_LINK_PREFIX}{DOI_1}v{PREPRINT_VERSION_2}',
+                    'source_version': PREPRINT_VERSION_2
                 }]
             }
         )
@@ -285,8 +314,51 @@ class TestGetDocmapsItemForQueryResultItem:
             'type': 'preprint',
             'doi': DOI_1,
             'url': PREPRINT_LINK_1,
-            'versionIdentifier': 123
+            'versionIdentifier': PREPRINT_VERSION_1
         }]
+
+    def test_should_filter_evaluations_by_preprint_link(self):
+        expected_hypothesis_ids_of_first_version = {HYPOTHESIS_ID_1, HYPOTHESIS_ID_2}
+        evaluations_of_first_version = [{
+            **DOCMAPS_QUERY_RESULT_EVALUATION_1,
+            'hypothesis_id': HYPOTHESIS_ID_1,
+            'tags': ['PeerReview'],
+            'uri': f'{PREPRINT_LINK_PREFIX}{DOI_1}v{PREPRINT_VERSION_1}',
+            'source_version': PREPRINT_VERSION_1
+        }, {
+            **DOCMAPS_QUERY_RESULT_EVALUATION_1,
+            'hypothesis_id': HYPOTHESIS_ID_2,
+            'tags': ['PeerReview'],
+            'uri': f'{PREPRINT_LINK_PREFIX}{DOI_1}v{PREPRINT_VERSION_1}',
+            'source_version': PREPRINT_VERSION_1
+        }]
+        evaluations_of_other_version = [{
+            **DOCMAPS_QUERY_RESULT_EVALUATION_1,
+            'hypothesis_id': HYPOTHESIS_ID_3,
+            'tags': ['PeerReview'],
+            'uri': f'{PREPRINT_LINK_PREFIX}{DOI_1}v{PREPRINT_VERSION_2}',
+            'source_version': PREPRINT_VERSION_2
+        }]
+        docmaps_item = get_docmap_item_for_query_result_item({
+            **DOCMAPS_QUERY_RESULT_ITEM_1,
+            'preprint_version': PREPRINT_VERSION_1,
+            'preprint_url': PREPRINT_LINK_1,
+            'evaluations': (
+                evaluations_of_first_version
+                + evaluations_of_other_version
+            )
+        })
+        peer_reviewed_step = docmaps_item['steps']['_:b2']
+        assert peer_reviewed_step['inputs'] == [{
+            'type': 'preprint',
+            'doi': DOI_1,
+            'url': f'{PREPRINT_LINK_PREFIX}{DOI_1}v{PREPRINT_VERSION_1}',
+            'versionIdentifier': PREPRINT_VERSION_1
+        }]
+        actual_hypothesis_ids = set(get_hypothesis_ids_from_urls(
+            get_hypothesis_urls_from_step_dict(peer_reviewed_step)
+        ))
+        assert actual_hypothesis_ids == expected_hypothesis_ids_of_first_version
 
     def test_should_populate_assertions_peer_reviewed_step(self):
         docmaps_item = get_docmap_item_for_query_result_item(
@@ -309,7 +381,7 @@ class TestGetDocmapsItemForQueryResultItem:
             DOCMAPS_QUERY_RESULT_ITEM_1,
             **{
                 'evaluations': [{
-                    **DOCMAPS_QUERY_RESULT_EVALUATION__1,
+                    **DOCMAPS_QUERY_RESULT_EVALUATION_1,
                     'hypothesis_id': 'hypothesis_id_3',
                     'annotation_created_timestamp': 'annotation_created_timestamp_3',
                     'tags': []
@@ -329,12 +401,12 @@ class TestGetDocmapsItemForQueryResultItem:
             DOCMAPS_QUERY_RESULT_ITEM_1,
             **{
                 'evaluations': [{
-                    **DOCMAPS_QUERY_RESULT_EVALUATION__1,
+                    **DOCMAPS_QUERY_RESULT_EVALUATION_1,
                     'hypothesis_id': 'hypothesis_id_1',
                     'annotation_created_timestamp': 'annotation_created_timestamp_1',
                     'tags': ['PeerReview']
                 }, {
-                    **DOCMAPS_QUERY_RESULT_EVALUATION__1,
+                    **DOCMAPS_QUERY_RESULT_EVALUATION_1,
                     'hypothesis_id': 'hypothesis_id_2',
                     'annotation_created_timestamp': 'annotation_created_timestamp_2',
                     'tags': ['PeerReview', 'evaluationSummary']
@@ -401,12 +473,12 @@ class TestGetDocmapsItemForQueryResultItem:
             DOCMAPS_QUERY_RESULT_ITEM_1,
             **{
                 'evaluations': [{
-                    **DOCMAPS_QUERY_RESULT_EVALUATION__1,
+                    **DOCMAPS_QUERY_RESULT_EVALUATION_1,
                     'hypothesis_id': 'hypothesis_id_1',
                     'annotation_created_timestamp': 'annotation_created_timestamp_1',
                     'tags': ['PeerReview']
                 }, {
-                    **DOCMAPS_QUERY_RESULT_EVALUATION__1,
+                    **DOCMAPS_QUERY_RESULT_EVALUATION_1,
                     'hypothesis_id': 'hypothesis_id_2',
                     'annotation_created_timestamp': 'annotation_created_timestamp_2',
                     'tags': ['PeerReview', 'evaluationSummary']
@@ -428,7 +500,7 @@ class TestGetDocmapsItemForQueryResultItem:
             DOCMAPS_QUERY_RESULT_ITEM_1,
             **{
                 'evaluations': [{
-                    **DOCMAPS_QUERY_RESULT_EVALUATION__1,
+                    **DOCMAPS_QUERY_RESULT_EVALUATION_1,
                     'hypothesis_id': 'hypothesis_id_1',
                     'annotation_created_timestamp': 'annotation_created_timestamp_1',
                     'tags': ['PeerReview']
@@ -456,7 +528,7 @@ class TestGetDocmapsItemForQueryResultItem:
             DOCMAPS_QUERY_RESULT_ITEM_1,
             **{
                 'evaluations': [{
-                    **DOCMAPS_QUERY_RESULT_EVALUATION__1,
+                    **DOCMAPS_QUERY_RESULT_EVALUATION_1,
                     'hypothesis_id': 'hypothesis_id_2',
                     'annotation_created_timestamp': 'annotation_created_timestamp_2',
                     'tags': ['PeerReview', 'evaluationSummary']
