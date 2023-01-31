@@ -300,8 +300,8 @@ class TestGetDocmapsItemForQueryResultItem:
 
     def test_should_filter_evaluations_by_preprint_link(self):
         expected_hypothesis_urls_of_first_version = {
-            f'https://hypothes.is/a/{HYPOTHESIS_ID_1}',
-            f'https://hypothes.is/a/{HYPOTHESIS_ID_2}'
+            f'{HYPOTHESIS_URL}{HYPOTHESIS_ID_1}',
+            f'{HYPOTHESIS_URL}{HYPOTHESIS_ID_2}'
         }
         evaluations_of_first_version = [{
             **DOCMAPS_QUERY_RESULT_EVALUATION_1,
@@ -344,7 +344,7 @@ class TestGetDocmapsItemForQueryResultItem:
             for action in peer_reviewed_step['actions']
             for output in action['outputs']
             for content in output['content']
-            if content['url'].startswith('https://hypothes.is/a/')
+            if content['url'].startswith(HYPOTHESIS_URL)
         }
         assert actual_hypothesis_urls == expected_hypothesis_urls_of_first_version
 
