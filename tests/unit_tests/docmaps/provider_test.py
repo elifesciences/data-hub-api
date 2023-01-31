@@ -57,7 +57,7 @@ HYPOTHESIS_ID_3 = 'hypothesis_3'
 
 
 DOCMAPS_QUERY_RESULT_EVALUATION_1 = {
-    'hypothesis_id': '',
+    'hypothesis_id': HYPOTHESIS_ID_1,
     'annotation_created_timestamp': '',
     'tags': [],
     'uri': PREPRINT_LINK_1,
