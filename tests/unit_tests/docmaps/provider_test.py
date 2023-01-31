@@ -61,7 +61,7 @@ DOCMAPS_QUERY_RESULT_EVALUATION_1 = {
     'annotation_created_timestamp': '',
     'tags': [],
     'uri': PREPRINT_LINK_1,
-    'source_version': 1
+    'source_version': PREPRINT_VERSION_1
 }
 
 
