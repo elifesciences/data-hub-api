@@ -87,6 +87,14 @@ def get_hypothesis_urls_from_step_dict(step_dict: dict) -> Iterable[str]:
     ]
 
 
+def get_hypothesis_ids_from_urls(hypothesis_urls: Iterable[str]) -> Iterable[str]:
+    return [
+        hypothesis_url[len(HYPOTHESIS_URL):]
+        for hypothesis_url in hypothesis_urls
+        if hypothesis_url.startswith(HYPOTHESIS_URL)
+    ]
+
+
 class TestGetOutputsTypeFromTags:
     def test_should_return_evaluation_summary_when_summary_exist_in_tags_list(self):
         tag_list_with_summary = ['PeerReview', 'evaluationSummary']
@@ -310,10 +318,7 @@ class TestGetDocmapsItemForQueryResultItem:
         }]
 
     def test_should_filter_evaluations_by_preprint_link(self):
-        expected_hypothesis_urls_of_first_version = {
-            f'{HYPOTHESIS_URL}{HYPOTHESIS_ID_1}',
-            f'{HYPOTHESIS_URL}{HYPOTHESIS_ID_2}'
-        }
+        expected_hypothesis_ids_of_first_version = {HYPOTHESIS_ID_1, HYPOTHESIS_ID_2}
         evaluations_of_first_version = [{
             **DOCMAPS_QUERY_RESULT_EVALUATION_1,
             'hypothesis_id': HYPOTHESIS_ID_1,
@@ -350,8 +355,10 @@ class TestGetDocmapsItemForQueryResultItem:
             'url': f'{PREPRINT_LINK_PREFIX}{DOI_1}v{PREPRINT_VERSION_1}',
             'versionIdentifier': PREPRINT_VERSION_1
         }]
-        actual_hypothesis_urls = set(get_hypothesis_urls_from_step_dict(peer_reviewed_step))
-        assert actual_hypothesis_urls == expected_hypothesis_urls_of_first_version
+        actual_hypothesis_ids = set(get_hypothesis_ids_from_urls(
+            get_hypothesis_urls_from_step_dict(peer_reviewed_step)
+        ))
+        assert actual_hypothesis_ids == expected_hypothesis_ids_of_first_version
 
     def test_should_populate_assertions_peer_reviewed_step(self):
         docmaps_item = get_docmap_item_for_query_result_item(
