@@ -239,6 +239,7 @@ class TestGetDocmapsItemForQueryResultItem:
             'type': 'preprint',
             'doi': DOI_1,
             'url': DOCMAPS_QUERY_RESULT_ITEM_1['preprint_url'],
+            'versionIdentifier': DOCMAPS_QUERY_RESULT_ITEM_1['preprint_version']
         }]
 
     def test_should_populate_assertions_under_review_step(self):
