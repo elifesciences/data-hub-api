@@ -77,6 +77,16 @@ def _iter_dict_from_bq_query_mock() -> Iterable[MagicMock]:
         yield mock
 
 
+def get_hypothesis_urls_from_step_dict(step_dict: dict) -> Iterable[str]:
+    return [
+        content['url']
+        for action in step_dict['actions']
+        for output in action['outputs']
+        for content in output['content']
+        if content['url'].startswith(HYPOTHESIS_URL)
+    ]
+
+
 class TestGetOutputsTypeFromTags:
     def test_should_return_evaluation_summary_when_summary_exist_in_tags_list(self):
         tag_list_with_summary = ['PeerReview', 'evaluationSummary']
@@ -340,13 +350,7 @@ class TestGetDocmapsItemForQueryResultItem:
             'url': f'{PREPRINT_LINK_PREFIX}{DOI_1}v{PREPRINT_VERSION_1}',
             'versionIdentifier': PREPRINT_VERSION_1
         }]
-        actual_hypothesis_urls = {
-            content['url']
-            for action in peer_reviewed_step['actions']
-            for output in action['outputs']
-            for content in output['content']
-            if content['url'].startswith(HYPOTHESIS_URL)
-        }
+        actual_hypothesis_urls = set(get_hypothesis_urls_from_step_dict(peer_reviewed_step))
         assert actual_hypothesis_urls == expected_hypothesis_urls_of_first_version
 
     def test_should_populate_assertions_peer_reviewed_step(self):
