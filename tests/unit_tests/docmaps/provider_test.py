@@ -29,8 +29,11 @@ DOI_1 = '10.1101.test/doi1'
 DOI_2 = '10.1101.test/doi2'
 
 PREPRINT_VERSION_1 = '10'
+PREPRINT_VERSION_2 = '11'
 
-PREPRINT_LINK_1 = f'https://test-preprints/{DOI_1}v{PREPRINT_VERSION_1}'
+PREPRINT_LINK_PREFIX = 'https://test-preprints/'
+PREPRINT_LINK_1_PREFIX = f'{PREPRINT_LINK_PREFIX}{DOI_1}'
+PREPRINT_LINK_1 = f'{PREPRINT_LINK_1_PREFIX}v{PREPRINT_VERSION_1}'
 
 
 DOCMAPS_QUERY_RESULT_ITEM_1: dict = {
@@ -47,6 +50,11 @@ DOCMAPS_QUERY_RESULT_ITEM_1: dict = {
     'senior_editor_names': [],
     'tdm_path': 'tdm_path_1'
 }
+
+HYPOTHESIS_ID_1 = 'hypothesis_1'
+HYPOTHESIS_ID_2 = 'hypothesis_2'
+HYPOTHESIS_ID_3 = 'hypothesis_3'
+
 
 DOCMAPS_QUERY_RESULT_EVALUATION__1 = {
     'hypothesis_id': '',
@@ -269,14 +277,16 @@ class TestGetDocmapsItemForQueryResultItem:
             }]
         }]
 
-    def test_should_populate_inputs_peer_reviewed_step_from_evaluation(self):
+    def test_should_populate_inputs_peer_reviewed_step_from_preprint_url(self):
         docmaps_item = get_docmap_item_for_query_result_item(
             {
                 **DOCMAPS_QUERY_RESULT_ITEM_1,
+                'preprint_url': PREPRINT_LINK_1,
+                'preprint_version': PREPRINT_VERSION_1,
                 'evaluations': [{
                     **DOCMAPS_QUERY_RESULT_EVALUATION__1,
-                    'uri': PREPRINT_LINK_1,
-                    'source_version': 123
+                    'uri': f'{PREPRINT_LINK_PREFIX}{DOI_1}v{PREPRINT_VERSION_2}',
+                    'source_version': PREPRINT_VERSION_2
                 }]
             }
         )
@@ -285,8 +295,58 @@ class TestGetDocmapsItemForQueryResultItem:
             'type': 'preprint',
             'doi': DOI_1,
             'url': PREPRINT_LINK_1,
-            'versionIdentifier': 123
+            'versionIdentifier': PREPRINT_VERSION_1
         }]
+
+    def test_should_filter_evaluations_by_preprint_link(self):
+        expected_hypothesis_urls_of_first_version = {
+            f'https://hypothes.is/a/{HYPOTHESIS_ID_1}',
+            f'https://hypothes.is/a/{HYPOTHESIS_ID_2}'
+        }
+        evaluations_of_first_version = [{
+            **DOCMAPS_QUERY_RESULT_EVALUATION__1,
+            'hypothesis_id': HYPOTHESIS_ID_1,
+            'tags': ['PeerReview'],
+            'uri': f'{PREPRINT_LINK_PREFIX}{DOI_1}v{PREPRINT_VERSION_1}',
+            'source_version': PREPRINT_VERSION_1
+        }, {
+            **DOCMAPS_QUERY_RESULT_EVALUATION__1,
+            'hypothesis_id': HYPOTHESIS_ID_2,
+            'tags': ['PeerReview'],
+            'uri': f'{PREPRINT_LINK_PREFIX}{DOI_1}v{PREPRINT_VERSION_1}',
+            'source_version': PREPRINT_VERSION_1
+        }]
+        evaluations_of_other_version = [{
+            **DOCMAPS_QUERY_RESULT_EVALUATION__1,
+            'hypothesis_id': HYPOTHESIS_ID_3,
+            'tags': ['PeerReview'],
+            'uri': f'{PREPRINT_LINK_PREFIX}{DOI_1}v{PREPRINT_VERSION_2}',
+            'source_version': PREPRINT_VERSION_2
+        }]
+        docmaps_item = get_docmap_item_for_query_result_item({
+            **DOCMAPS_QUERY_RESULT_ITEM_1,
+            'preprint_version': PREPRINT_VERSION_1,
+            'preprint_url': PREPRINT_LINK_1,
+            'evaluations': (
+                evaluations_of_first_version
+                + evaluations_of_other_version
+            )
+        })
+        peer_reviewed_step = docmaps_item['steps']['_:b2']
+        assert peer_reviewed_step['inputs'] == [{
+            'type': 'preprint',
+            'doi': DOI_1,
+            'url': f'{PREPRINT_LINK_PREFIX}{DOI_1}v{PREPRINT_VERSION_1}',
+            'versionIdentifier': PREPRINT_VERSION_1
+        }]
+        actual_hypothesis_urls = {
+            content['url']
+            for action in peer_reviewed_step['actions']
+            for output in action['outputs']
+            for content in output['content']
+            if content['url'].startswith('https://hypothes.is/a/')
+        }
+        assert actual_hypothesis_urls == expected_hypothesis_urls_of_first_version
 
     def test_should_populate_assertions_peer_reviewed_step(self):
         docmaps_item = get_docmap_item_for_query_result_item(

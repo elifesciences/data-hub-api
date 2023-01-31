@@ -138,24 +138,11 @@ def get_docmap_inputs_value_for_review_steps(
             'doi': query_result_item['preprint_doi'],
             'url': query_result_item['preprint_url']
         }]
-    preprint_links_and_versions = {
-        (evaluation['uri'], evaluation['source_version'])
-        for evaluation in query_result_item['evaluations']
-    }
-    if not preprint_links_and_versions:
-        LOGGER.error('no preprint link found for doi: %r', query_result_item['preprint_doi'])
-    if len(preprint_links_and_versions) > 1:
-        LOGGER.error(
-            'multiple preprint links found for doi: %r, preprint links: %r',
-            query_result_item['preprint_doi'], preprint_links_and_versions
-        )
-    assert len(preprint_links_and_versions) == 1
-    preprint_link, preprint_version = next(iter(preprint_links_and_versions))
     return [{
         'type': 'preprint',
         'doi': query_result_item['preprint_doi'],
-        'url': preprint_link,
-        'versionIdentifier': preprint_version
+        'url': query_result_item['preprint_url'],
+        'versionIdentifier': query_result_item['preprint_version']
     }]
 
 
@@ -310,10 +297,18 @@ def iter_single_actions_value_from_query_result_for_peer_reviewed_step(
     query_result_item: dict
 ) -> Iterable[dict]:
     evaluations = query_result_item['evaluations']
+    preprint_url = query_result_item['preprint_url']
     for evaluation in evaluations:
         hypothesis_id = evaluation['hypothesis_id']
         annotation_created_timestamp = evaluation['annotation_created_timestamp']
         outputs_type = get_outputs_type_form_tags(evaluation['tags'])
+        evaluation_preprint_url = evaluation['uri']
+        if evaluation_preprint_url != preprint_url:
+            LOGGER.debug(
+                'ignoring evaluation on another version: %r != %r',
+                evaluation_preprint_url, preprint_url
+            )
+            continue
         if outputs_type in (
             DOCMAP_OUTPUT_TYPE_FOR_EVALUATION_SUMMARY,
             DOCMAP_OUTPUT_TYPE_FOR_REVIEW_ARTICLE
