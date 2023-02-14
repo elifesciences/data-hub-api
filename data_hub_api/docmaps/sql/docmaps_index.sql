@@ -114,6 +114,21 @@ t_hypothesis_annotation_with_doi AS (
   WHERE annotation.group = 'q5X6RWJ6'
 ),
 
+t_editorial_manuscript_version_with_rp_site_data AS (
+  SELECT
+    Version.* EXCEPT(Position, Position_In_Overall_Stage),
+    -- re-calculating Position_In_Overall_Stage using our filters
+    ROW_NUMBER() OVER(
+      PARTITION BY Version.Manuscript_ID, Version.Overall_Stage
+      ORDER BY Version.Version_ID
+    ) AS Position_In_Overall_Stage
+
+  FROM `elife-data-pipeline.prod.mv_Editorial_All_Manuscript_Version` AS Version
+  WHERE Version.Is_Research_Content
+    -- only include manuscripts that went through QC
+    AND Version.QC_Complete_Timestamp IS NOT NULL
+),
+
 t_result AS (
   SELECT
     Version.Manuscript_ID AS manuscript_id,
@@ -164,7 +179,7 @@ t_result AS (
       '\n'
     )) AS publisher_json
 
-  FROM `elife-data-pipeline.prod.mv_Editorial_Manuscript_Version` AS Version
+  FROM t_editorial_manuscript_version_with_rp_site_data AS Version
   LEFT JOIN t_preprint_doi_and_url_by_manuscript_id AS preprint_doi_and_url
     ON preprint_doi_and_url.manuscript_id = Version.Manuscript_ID
   LEFT JOIN t_biorxiv_medrxiv_response_by_normalized_title AS biorxiv_medrxiv_response
