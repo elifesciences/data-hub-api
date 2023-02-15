@@ -37,12 +37,42 @@ t_preprint_doi_and_url_by_long_manuscript_identifier AS (
   WHERE rn = 1
 ),
 
+t_editorial_manuscript_version_with_rp_site_data AS (
+  SELECT
+    Version.* EXCEPT(Position, Position_In_Overall_Stage),
+    -- re-calculating Position_In_Overall_Stage using our filters
+    ROW_NUMBER() OVER(
+      PARTITION BY Version.Manuscript_ID, Version.Overall_Stage
+      ORDER BY Version.Version_ID
+    ) AS Position_In_Overall_Stage
+
+  FROM `elife-data-pipeline.prod.mv_Editorial_All_Manuscript_Version` AS Version
+  WHERE Version.Is_Research_Content
+    -- only include manuscripts that went through QC
+    AND Version.QC_Complete_Timestamp IS NOT NULL
+),
+
+t_manuscript_version_with_rp_site_data_last_version AS (
+  SELECT 
+    last_version.*
+  FROM (
+    SELECT 
+      last_version, 
+      ROW_NUMBER() OVER(
+        PARTITION BY last_version.manuscript_id
+        ORDER BY last_version.Version_ID DESC
+      ) AS last_row
+    FROM t_editorial_manuscript_version_with_rp_site_data AS last_version
+  )
+  WHERE last_row = 1
+),
+
 t_preprint_doi_and_url_by_manuscript_id AS (
   SELECT
     Version.Manuscript_ID AS manuscript_id,
     preprint_doi_url.*
   FROM t_preprint_doi_and_url_by_long_manuscript_identifier AS preprint_doi_url
-  JOIN `elife-data-pipeline.prod.mv_Editorial_Last_Manuscript_Version` AS Version
+  JOIN t_manuscript_version_with_rp_site_data_last_version AS Version
     ON Version.Long_Manuscript_Identifier = preprint_doi_url.long_manuscript_identifier
 ),
 
@@ -112,21 +142,6 @@ t_hypothesis_annotation_with_doi AS (
     REGEXP_EXTRACT(annotation.uri, r'10\.\d{3,}.*v([1-9])') AS source_version
   FROM `elife-data-pipeline.de_proto.v_hypothesis_annotation` AS annotation
   WHERE annotation.group = 'q5X6RWJ6'
-),
-
-t_editorial_manuscript_version_with_rp_site_data AS (
-  SELECT
-    Version.* EXCEPT(Position, Position_In_Overall_Stage),
-    -- re-calculating Position_In_Overall_Stage using our filters
-    ROW_NUMBER() OVER(
-      PARTITION BY Version.Manuscript_ID, Version.Overall_Stage
-      ORDER BY Version.Version_ID
-    ) AS Position_In_Overall_Stage
-
-  FROM `elife-data-pipeline.prod.mv_Editorial_All_Manuscript_Version` AS Version
-  WHERE Version.Is_Research_Content
-    -- only include manuscripts that went through QC
-    AND Version.QC_Complete_Timestamp IS NOT NULL
 ),
 
 t_result AS (
@@ -266,7 +281,6 @@ t_result_with_preprint_published_at_date_and_tdm_path AS (
     ON tdm.tdm_doi = result.preprint_doi
     AND CAST(tdm.tdm_ms_version AS STRING) = result.preprint_version
 )
-
 
 SELECT
   *
