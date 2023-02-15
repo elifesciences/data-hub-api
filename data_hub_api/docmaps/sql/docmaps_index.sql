@@ -144,36 +144,16 @@ t_hypothesis_annotation_with_doi AS (
   WHERE annotation.group = 'q5X6RWJ6'
 ),
 
-t_result AS (
+t_initial_result AS (
   SELECT
     Version.Manuscript_ID AS manuscript_id,
     Version.Long_Manuscript_Identifier AS long_manuscript_identifier,
     Version.QC_Complete_Timestamp AS qc_complete_timestamp,
-  
-    COALESCE(preprint_doi_and_url.preprint_doi, biorxiv_medrxiv_response.doi) AS preprint_doi,
-
-    CASE
-      WHEN preprint_doi_and_url.preprint_doi IS NOT NULL THEN 'ejp_preprint_doi'
-      WHEN biorxiv_medrxiv_response.doi IS NOT NULL THEN 'biorxiv_medrxiv_title_match'
-    END AS preprint_doi_source,
 
     IF(preprint_doi_and_url.preprint_url LIKE '%doi.org/%', NULL, preprint_doi_and_url.preprint_url) AS ejp_validated_preprint_url,
     Version.Manuscript_Title AS manuscript_title,
     Version.DOI AS elife_doi,
     (Version.Long_Manuscript_Identifier LIKE '%-RP-%') AS is_reviewed_preprint_type,
-
-    ARRAY(
-      SELECT AS STRUCT
-        annotation.id AS hypothesis_id,
-        annotation.created AS annotation_created_timestamp,
-        annotation.uri,
-        annotation.tags,
-        annotation.normalized_tags,
-        annotation.source_doi,
-        annotation.source_version
-      FROM t_hypothesis_annotation_with_doi AS annotation
-      WHERE annotation.source_doi = COALESCE(preprint_doi_and_url.preprint_doi, biorxiv_medrxiv_response.doi)
-    ) AS evaluations,
 
     ARRAY(SELECT Name FROM UNNEST(Version.Reviewing_Editors)) AS editor_names,
     ARRAY(SELECT Name FROM UNNEST(Version.Senior_Editors)) AS senior_editor_names,
@@ -192,7 +172,16 @@ t_result AS (
         '}'
       ],
       '\n'
-    )) AS publisher_json
+    )) AS publisher_json,
+
+    REGEXP_REPLACE(LOWER(Version.Manuscript_Title), r'[^a-z]', '') AS ejp_normalized_title,
+
+    COALESCE(preprint_doi_and_url.preprint_doi, biorxiv_medrxiv_response.doi) AS preprint_doi,
+    
+    CASE
+      WHEN preprint_doi_and_url.preprint_doi IS NOT NULL THEN 'ejp_preprint_doi'
+      WHEN biorxiv_medrxiv_response.doi IS NOT NULL THEN 'biorxiv_medrxiv_title_match'
+    END AS preprint_doi_source,
 
   FROM t_editorial_manuscript_version_with_rp_site_data AS Version
   LEFT JOIN t_preprint_doi_and_url_by_manuscript_id AS preprint_doi_and_url
@@ -202,7 +191,53 @@ t_result AS (
   WHERE
     Version.Overall_Stage = 'Full Submission'
     AND Version.Position_In_Overall_Stage = 1
-    AND COALESCE(preprint_doi_and_url.preprint_doi, biorxiv_medrxiv_response.doi) IS NOT NULL
+),
+
+t_result_with_preprint_dois AS (
+  SELECT 
+    * EXCEPT(ejp_normalized_title)
+  FROM t_initial_result
+  WHERE t_initial_result.preprint_doi IS NOT NULL
+),
+
+t_result_for_partially_match_title AS (
+  SELECT
+    t_initial_result.* EXCEPT(ejp_normalized_title, preprint_doi, preprint_doi_source),
+    biorxiv_medrxiv_response.doi AS preprint_doi,
+    'biorxiv_medrxiv_title_match_partial' AS preprint_doi_source,
+
+  FROM t_biorxiv_medrxiv_response_by_normalized_title AS biorxiv_medrxiv_response
+  INNER JOIN t_initial_result
+    ON biorxiv_medrxiv_response.normalized_title LIKE CONCAT('%', t_initial_result.ejp_normalized_title, '%')
+  WHERE t_initial_result.preprint_doi IS NULL
+  AND t_initial_result.long_manuscript_identifier LIKE '%-RP-%'
+  AND biorxiv_medrxiv_response.doi NOT IN (
+    SELECT preprint_doi FROM t_result_with_preprint_dois
+    )
+),
+
+t_result AS (
+  SELECT * FROM t_result_with_preprint_dois
+  UNION ALL
+  SELECT * FROM t_result_for_partially_match_title
+),
+
+t_result_with_evaluations AS (
+  SELECT 
+    *,
+    ARRAY(
+      SELECT AS STRUCT
+        annotation.id AS hypothesis_id,
+        annotation.created AS annotation_created_timestamp,
+        annotation.uri,
+        annotation.tags,
+        annotation.normalized_tags,
+        annotation.source_doi,
+        annotation.source_version
+      FROM t_hypothesis_annotation_with_doi AS annotation
+      WHERE annotation.source_doi = t_result.preprint_doi
+    ) AS evaluations,
+  FROM t_result
 ),
 
 t_result_with_sorted_evaluations AS (
@@ -215,7 +250,7 @@ t_result_with_sorted_evaluations AS (
       ORDER BY evaluation.annotation_created_timestamp
     ) AS evaluations
 
-  FROM t_result AS result
+  FROM t_result_with_evaluations AS result
 ),
 
 t_result_with_preprint_url_and_has_evaluations AS (
