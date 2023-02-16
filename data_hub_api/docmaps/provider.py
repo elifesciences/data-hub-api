@@ -305,7 +305,8 @@ def iter_single_actions_value_from_query_result_for_peer_reviewed_step(
             continue
         if outputs_type in (
             DOCMAP_OUTPUT_TYPE_FOR_EVALUATION_SUMMARY,
-            DOCMAP_OUTPUT_TYPE_FOR_REVIEW_ARTICLE
+            DOCMAP_OUTPUT_TYPE_FOR_REVIEW_ARTICLE,
+            DOCMAP_OUTPUT_TYPE_FOR_AUTHOR_RESPONSE
         ):
             yield get_single_actions_value_for_preprint_peer_reviewed_step(
                 query_result_item=query_result_item,
