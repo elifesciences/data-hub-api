@@ -37,7 +37,7 @@ t_preprint_doi_and_url_by_long_manuscript_identifier AS (
   WHERE rn = 1
 ),
 
-t_editorial_manuscript_version_with_rp_site_data AS (
+t_manuscript_version_with_rp_site_data AS (
   SELECT
     Version.* EXCEPT(Position, Position_In_Overall_Stage),
     -- re-calculating Position_In_Overall_Stage using our filters
@@ -52,6 +52,13 @@ t_editorial_manuscript_version_with_rp_site_data AS (
     AND Version.QC_Complete_Timestamp IS NOT NULL
 ),
 
+t_manuscript_version_with_under_review_rp_site_data AS (
+  SELECT
+    * 
+  FROM t_manuscript_version_with_rp_site_data
+  WHERE Is_Under_Review
+),
+
 t_manuscript_version_with_rp_site_data_last_version AS (
   SELECT 
     last_version.*
@@ -62,7 +69,7 @@ t_manuscript_version_with_rp_site_data_last_version AS (
         PARTITION BY last_version.manuscript_id
         ORDER BY last_version.Version_ID DESC
       ) AS last_row
-    FROM t_editorial_manuscript_version_with_rp_site_data AS last_version
+    FROM t_manuscript_version_with_under_review_rp_site_data AS last_version
   )
   WHERE last_row = 1
 ),
@@ -183,7 +190,7 @@ t_initial_result AS (
       WHEN biorxiv_medrxiv_response.doi IS NOT NULL THEN 'biorxiv_medrxiv_title_match'
     END AS preprint_doi_source,
 
-  FROM t_editorial_manuscript_version_with_rp_site_data AS Version
+  FROM t_manuscript_version_with_under_review_rp_site_data AS Version
   LEFT JOIN t_preprint_doi_and_url_by_manuscript_id AS preprint_doi_and_url
     ON preprint_doi_and_url.manuscript_id = Version.Manuscript_ID
   LEFT JOIN t_biorxiv_medrxiv_response_by_normalized_title AS biorxiv_medrxiv_response
