@@ -207,28 +207,6 @@ t_result_with_preprint_dois AS (
   WHERE t_initial_result.preprint_doi IS NOT NULL
 ),
 
-t_result_for_partially_match_title AS (
-  SELECT
-    t_initial_result.* EXCEPT(ejp_normalized_title, preprint_doi, preprint_doi_source),
-    biorxiv_medrxiv_response.doi AS preprint_doi,
-    'biorxiv_medrxiv_title_match_partial' AS preprint_doi_source,
-
-  FROM t_biorxiv_medrxiv_response_by_normalized_title AS biorxiv_medrxiv_response
-  INNER JOIN t_initial_result
-    ON biorxiv_medrxiv_response.normalized_title LIKE CONCAT('%', t_initial_result.ejp_normalized_title, '%')
-  WHERE t_initial_result.preprint_doi IS NULL
-  AND t_initial_result.long_manuscript_identifier LIKE '%-RP-%'
-  AND biorxiv_medrxiv_response.doi NOT IN (
-    SELECT preprint_doi FROM t_result_with_preprint_dois
-    )
-),
-
-t_result AS (
-  SELECT * FROM t_result_with_preprint_dois
-  UNION ALL
-  SELECT * FROM t_result_for_partially_match_title
-),
-
 t_result_with_evaluations AS (
   SELECT 
     *,
@@ -242,9 +220,9 @@ t_result_with_evaluations AS (
         annotation.source_doi,
         annotation.source_version
       FROM t_hypothesis_annotation_with_doi AS annotation
-      WHERE annotation.source_doi = t_result.preprint_doi
+      WHERE annotation.source_doi = t_result_with_preprint_dois.preprint_doi
     ) AS evaluations,
-  FROM t_result
+  FROM t_result_with_preprint_dois
 ),
 
 t_result_with_sorted_evaluations AS (
