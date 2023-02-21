@@ -647,7 +647,9 @@ class TestEnhancedPreprintsDocmapsProvider:
             only_include_evaluated_preprints=False,
             additionally_include_preprint_dois=[]
         )
-        assert provider.docmaps_index_query.rstrip().endswith('WHERE is_reviewed_preprint_type AND is_under_review')
+        assert provider.docmaps_index_query.rstrip().endswith(
+            'WHERE is_reviewed_preprint_type AND is_or_was_under_review'
+        )
 
     def test_should_add_additional_preprint_dois_to_query_filter(
         self

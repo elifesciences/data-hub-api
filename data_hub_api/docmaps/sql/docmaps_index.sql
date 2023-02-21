@@ -149,7 +149,7 @@ t_initial_result AS (
     Version.Manuscript_ID AS manuscript_id,
     Version.Long_Manuscript_Identifier AS long_manuscript_identifier,
     Version.QC_Complete_Timestamp AS qc_complete_timestamp,
-    Version.Is_Under_Review AS is_under_review,
+    Version.Is_Or_Was_Under_Review AS is_or_was_under_review,
     IF(preprint_doi_and_url.preprint_url LIKE '%doi.org/%', NULL, preprint_doi_and_url.preprint_url) AS ejp_validated_preprint_url,
     Version.Manuscript_Title AS manuscript_title,
     Version.DOI AS elife_doi,
