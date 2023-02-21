@@ -30,7 +30,7 @@ SCIETY_ARTICLES_ACTIVITY_URL = 'https://sciety.org/articles/activity/'
 SCIETY_ARTICLES_EVALUATIONS_URL = 'https://sciety.org/evaluations/hypothesis:'
 
 DOCMAP_OUTPUT_TYPE_FOR_EVALUATION_SUMMARY = 'evaluation-summary'
-DOCMAP_OUTPUT_TYPE_FOR_AUTHOR_RESPONSE = 'author-response'
+DOCMAP_OUTPUT_TYPE_FOR_REPLY = 'reply'
 DOCMAP_OUTPUT_TYPE_FOR_REVIEW_ARTICLE = 'review-article'
 
 ADDITIONAL_PREPRINT_DOIS = (
@@ -184,7 +184,7 @@ def get_outputs_type_form_tags(
     has_review_tag = has_tag_containing(tags, 'Review')
     assert not (has_author_response_tag and has_summary_tag)
     if has_author_response_tag:
-        return DOCMAP_OUTPUT_TYPE_FOR_AUTHOR_RESPONSE
+        return DOCMAP_OUTPUT_TYPE_FOR_REPLY
     if has_summary_tag:
         return DOCMAP_OUTPUT_TYPE_FOR_EVALUATION_SUMMARY
     if has_review_tag:
@@ -306,7 +306,7 @@ def iter_single_actions_value_from_query_result_for_peer_reviewed_step(
         if outputs_type in (
             DOCMAP_OUTPUT_TYPE_FOR_EVALUATION_SUMMARY,
             DOCMAP_OUTPUT_TYPE_FOR_REVIEW_ARTICLE,
-            DOCMAP_OUTPUT_TYPE_FOR_AUTHOR_RESPONSE
+            DOCMAP_OUTPUT_TYPE_FOR_REPLY
         ):
             yield get_single_actions_value_for_preprint_peer_reviewed_step(
                 query_result_item=query_result_item,
