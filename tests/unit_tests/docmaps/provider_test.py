@@ -639,7 +639,7 @@ class TestEnhancedPreprintsDocmapsProvider:
             get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
         ]
 
-    def test_should_add_is_reviewed_preprint_type_where_clause_to_query(
+    def test_should_add_is_reviewed_preprint_and_is_under_review_type_where_clause_to_query(
         self
     ):
         provider = DocmapsProvider(
@@ -647,7 +647,9 @@ class TestEnhancedPreprintsDocmapsProvider:
             only_include_evaluated_preprints=False,
             additionally_include_preprint_dois=[]
         )
-        assert provider.docmaps_index_query.rstrip().endswith('WHERE is_reviewed_preprint_type')
+        assert provider.docmaps_index_query.rstrip().endswith(
+            'WHERE is_reviewed_preprint_type AND is_or_was_under_review'
+        )
 
     def test_should_add_additional_preprint_dois_to_query_filter(
         self

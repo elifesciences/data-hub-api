@@ -52,13 +52,6 @@ t_manuscript_version_with_rp_site_data AS (
     AND Version.QC_Complete_Timestamp IS NOT NULL
 ),
 
-t_manuscript_version_with_under_review_rp_site_data AS (
-  SELECT
-    * 
-  FROM t_manuscript_version_with_rp_site_data
-  WHERE Is_Under_Review
-),
-
 t_manuscript_version_with_rp_site_data_last_version AS (
   SELECT 
     last_version.*
@@ -69,7 +62,7 @@ t_manuscript_version_with_rp_site_data_last_version AS (
         PARTITION BY last_version.manuscript_id
         ORDER BY last_version.Version_ID DESC
       ) AS last_row
-    FROM t_manuscript_version_with_under_review_rp_site_data AS last_version
+    FROM t_manuscript_version_with_rp_site_data AS last_version
   )
   WHERE last_row = 1
 ),
@@ -156,7 +149,7 @@ t_initial_result AS (
     Version.Manuscript_ID AS manuscript_id,
     Version.Long_Manuscript_Identifier AS long_manuscript_identifier,
     Version.QC_Complete_Timestamp AS qc_complete_timestamp,
-
+    Version.Is_Or_Was_Under_Review AS is_or_was_under_review,
     IF(preprint_doi_and_url.preprint_url LIKE '%doi.org/%', NULL, preprint_doi_and_url.preprint_url) AS ejp_validated_preprint_url,
     Version.Manuscript_Title AS manuscript_title,
     Version.DOI AS elife_doi,
@@ -181,8 +174,6 @@ t_initial_result AS (
       '\n'
     )) AS publisher_json,
 
-    REGEXP_REPLACE(LOWER(Version.Manuscript_Title), r'[^a-z]', '') AS ejp_normalized_title,
-
     COALESCE(preprint_doi_and_url.preprint_doi, biorxiv_medrxiv_response.doi) AS preprint_doi,
     
     CASE
@@ -190,7 +181,7 @@ t_initial_result AS (
       WHEN biorxiv_medrxiv_response.doi IS NOT NULL THEN 'biorxiv_medrxiv_title_match'
     END AS preprint_doi_source,
 
-  FROM t_manuscript_version_with_under_review_rp_site_data AS Version
+  FROM t_manuscript_version_with_rp_site_data AS Version
   LEFT JOIN t_preprint_doi_and_url_by_manuscript_id AS preprint_doi_and_url
     ON preprint_doi_and_url.manuscript_id = Version.Manuscript_ID
   LEFT JOIN t_biorxiv_medrxiv_response_by_normalized_title AS biorxiv_medrxiv_response
@@ -202,7 +193,7 @@ t_initial_result AS (
 
 t_result_with_preprint_dois AS (
   SELECT 
-    * EXCEPT(ejp_normalized_title)
+    *
   FROM t_initial_result
   WHERE t_initial_result.preprint_doi IS NOT NULL
 ),
