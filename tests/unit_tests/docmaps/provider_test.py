@@ -46,8 +46,8 @@ DOCMAPS_QUERY_RESULT_ITEM_1: dict = {
     'publisher_json': '{"id": "publisher_1"}',
     'evaluations': [],
     'elife_doi': 'elife_doi_1',
-    'editor_names': [],
-    'senior_editor_names': [],
+    'editor_details': [],
+    'senior_editor_details': [],
     'tdm_path': 'tdm_path_1'
 }
 
@@ -571,15 +571,27 @@ class TestGetDocmapsItemForQueryResultItem:
                 }]
             }
         )
-        query_result_with_editor_names = dict(
+        query_result_with_editor_details = dict(
             query_result_with_evaluation,
             **{
-                'editor_names': ['editor_name_1', 'editor_name_2'],
-                'senior_editor_names': ['senior_editor_name_1']
+                'editor_details': [{
+                    'name': 'editor_name_1',
+                    'institution': 'editor_institution_1',
+                    'country': 'editor_country_1'
+                }, {
+                    'name': 'editor_name_2',
+                    'institution': 'editor_institution_2',
+                    'country': 'editor_country_2'
+                }],
+                'senior_editor_details': [{
+                    'name': 'senior_editor_name_1',
+                    'institution': 'senior_editor_institution_1',
+                    'country': 'senior_editor_country_1'
+                }]
             }
         )
         docmaps_item = get_docmap_item_for_query_result_item(
-            query_result_with_editor_names
+            query_result_with_editor_details
         )
         peer_reviewed_step = docmaps_item['steps']['_:b2']
         peer_reviewed_actions = peer_reviewed_step['actions']
@@ -588,21 +600,24 @@ class TestGetDocmapsItemForQueryResultItem:
             {
                 'actor': {
                     'name': 'editor_name_1',
-                    'type': 'person'
+                    'type': 'person',
+                    '_relatesToOrganization': 'editor_institution_1'
                 },
                 'role': 'editor'
             },
             {
                 'actor': {
                     'name': 'editor_name_2',
-                    'type': 'person'
+                    'type': 'person',
+                    '_relatesToOrganization': 'editor_institution_2'
                 },
                 'role': 'editor'
             },
             {
                 'actor': {
                     'name': 'senior_editor_name_1',
-                    'type': 'person'
+                    'type': 'person',
+                    '_relatesToOrganization': 'senior_editor_institution_1'
                 },
                 'role': 'senior-editor'
             }

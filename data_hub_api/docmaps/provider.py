@@ -205,24 +205,26 @@ def get_participants_for_peer_reviewed_review_article_type() -> list:
 
 
 def get_participants_for_peer_reviewed_evalution_summary_type(
-    editor_names_list,
-    senior_editor_names_list
+    editor_details_list,
+    senior_editor_details_list
 ) -> Sequence[dict]:
     participants = []
-    for editor_name in editor_names_list:
+    for editor_detail in editor_details_list:
         single_editor_dict = {
             'actor': {
-                'name': editor_name,
-                'type': 'person'
+                'name': editor_detail['name'],
+                'type': 'person',
+                '_relatesToOrganization': editor_detail['institution']
             },
             'role': 'editor'
         }
         participants.append(single_editor_dict)
-    for senior_editor_name in senior_editor_names_list:
+    for senior_editor_detail in senior_editor_details_list:
         single_senior_editor_dict = {
             'actor': {
-                'name': senior_editor_name,
-                'type': 'person'
+                'name': senior_editor_detail['name'],
+                'type': 'person',
+                '_relatesToOrganization': senior_editor_detail['institution']
             },
             'role': 'senior-editor'
         }
@@ -234,14 +236,14 @@ def get_participants_for_preprint_peer_reviewed_step(
     query_result_item: dict,
     outputs_type: str
 ) -> Sequence[dict]:
-    editor_names_list = query_result_item['editor_names']
-    senior_editor_names_list = query_result_item['senior_editor_names']
+    editor_details_list = query_result_item['editor_details']
+    senior_editor_details_list = query_result_item['senior_editor_details']
     if outputs_type == DOCMAP_OUTPUT_TYPE_FOR_REVIEW_ARTICLE:
         return get_participants_for_peer_reviewed_review_article_type()
     if outputs_type == DOCMAP_OUTPUT_TYPE_FOR_EVALUATION_SUMMARY:
         return get_participants_for_peer_reviewed_evalution_summary_type(
-            editor_names_list=editor_names_list,
-            senior_editor_names_list=senior_editor_names_list
+            editor_details_list=editor_details_list,
+            senior_editor_details_list=senior_editor_details_list
         )
     return []
 
