@@ -601,7 +601,7 @@ class TestGetDocmapsItemForQueryResultItem:
                 'actor': {
                     'name': 'editor_name_1',
                     'type': 'person',
-                    '_relatesToOrganization': 'editor_institution_1'
+                    '_relatesToOrganization': 'editor_institution_1, editor_country_1'
                 },
                 'role': 'editor'
             },
@@ -609,7 +609,7 @@ class TestGetDocmapsItemForQueryResultItem:
                 'actor': {
                     'name': 'editor_name_2',
                     'type': 'person',
-                    '_relatesToOrganization': 'editor_institution_2'
+                    '_relatesToOrganization': 'editor_institution_2, editor_country_2'
                 },
                 'role': 'editor'
             },
@@ -617,7 +617,7 @@ class TestGetDocmapsItemForQueryResultItem:
                 'actor': {
                     'name': 'senior_editor_name_1',
                     'type': 'person',
-                    '_relatesToOrganization': 'senior_editor_institution_1'
+                    '_relatesToOrganization': 'senior_editor_institution_1, senior_editor_country_1'
                 },
                 'role': 'senior-editor'
             }
