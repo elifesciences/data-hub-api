@@ -204,6 +204,14 @@ def get_participants_for_peer_reviewed_review_article_type() -> list:
     ]
 
 
+def get_related_organization_detail(
+    editor_detail: dict
+) -> str:
+    if editor_detail['country']:
+        return editor_detail['institution'] + ', ' + editor_detail['country']
+    return editor_detail['institution']
+
+
 def get_participants_for_peer_reviewed_evalution_summary_type(
     editor_details_list,
     senior_editor_details_list
@@ -214,7 +222,7 @@ def get_participants_for_peer_reviewed_evalution_summary_type(
             'actor': {
                 'name': editor_detail['name'],
                 'type': 'person',
-                '_relatesToOrganization': editor_detail['institution']
+                '_relatesToOrganization': get_related_organization_detail(editor_detail)
             },
             'role': 'editor'
         }
@@ -224,7 +232,7 @@ def get_participants_for_peer_reviewed_evalution_summary_type(
             'actor': {
                 'name': senior_editor_detail['name'],
                 'type': 'person',
-                '_relatesToOrganization': senior_editor_detail['institution']
+                '_relatesToOrganization': get_related_organization_detail(senior_editor_detail)
             },
             'role': 'senior-editor'
         }
