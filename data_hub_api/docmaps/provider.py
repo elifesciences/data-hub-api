@@ -20,7 +20,9 @@ LOGGER = logging.getLogger(__name__)
 DOCMAPS_JSONLD_SCHEMA_URL = 'https://w3id.org/docmaps/context.jsonld'
 
 DOCMAP_ID_PREFIX = (
-    'https://data-hub-api.elifesciences.org/enhanced-preprints/docmaps/v1/get-by-doi?'
+    'https://data-hub-api.elifesciences.org/enhanced-preprints/docmaps/v1/'
+    +
+    'by-publisher/elife/get-by-doi?'
 )
 
 DOI_ROOT_URL = 'https://doi.org/'
