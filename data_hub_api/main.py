@@ -37,6 +37,7 @@ def create_docmaps_router(
                 status_code=404,
                 detail="No Docmaps available for requested DOI from the publisher eLife"
             )
+        assert len(docmaps) == 1
         return docmaps[0]
 
     return router
