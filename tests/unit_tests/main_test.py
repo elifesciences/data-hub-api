@@ -79,7 +79,7 @@ class TestGetEnhancedPreprintsDocmapsIndex:
         enhanced_preprints_docmaps_provider_mock.get_docmaps_by_doi.return_value = []
         client = TestClient(create_app())
         response = client.get(
-            '/enhanced-preprints/docmaps/v1/by_publisher/elife/get-by-doi',
+            '/enhanced-preprints/docmaps/v1/by-publisher/elife/get-by-doi',
             params={'preprint_doi': PREPRINT_DOI}
         )
         assert response.status_code == 404
@@ -114,7 +114,7 @@ class TestGetEnhancedPreprintsDocmapsIndex:
         )
         client = TestClient(create_app())
         response = client.get(
-            '/enhanced-preprints/docmaps/v1/by_publisher/elife/get-by-doi',
+            '/enhanced-preprints/docmaps/v1/by-publisher/elife/get-by-doi',
             params={'preprint_doi': PREPRINT_DOI}
         )
         enhanced_preprints_docmaps_provider_mock.get_docmaps_by_doi.assert_called_with(PREPRINT_DOI)

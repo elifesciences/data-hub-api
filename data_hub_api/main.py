@@ -29,7 +29,7 @@ def create_docmaps_router(
             )
         return docmaps
 
-    @router.get("/v1/by_publisher/elife/get-by-doi")
+    @router.get("/v1/by-publisher/elife/get-by-doi")
     def get_enhanced_preprints_docmaps_by_preprint_doi_by_publisher_elife(preprint_doi: str):
         docmaps = docmaps_provider.get_docmaps_by_doi(preprint_doi)
         if not docmaps:
