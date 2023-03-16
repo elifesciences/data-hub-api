@@ -98,7 +98,7 @@ t_result_with_preprint_url_and_has_evaluations AS (
   SELECT
     result.*,
     CONCAT('https://doi.org/', result.preprint_doi) AS preprint_doi_url,
-
+    COALESCE(result.evaluations[SAFE_OFFSET(0)].elife_doi_version, 1) AS elife_doi_version,
     COALESCE(
       result.evaluations[SAFE_OFFSET(0)].uri,
       result.ejp_validated_preprint_url,
