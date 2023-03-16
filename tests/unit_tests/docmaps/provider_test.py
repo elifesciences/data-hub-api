@@ -277,7 +277,7 @@ class TestGetDocmapsItemForQueryResultItem:
             {
                 'item': {
                     'type': 'preprint',
-                    'doi': 'elife_doi_1',
+                    'doi': 'elife_doi_1' + '.' + 'elife_doi_version_1',
                     'versionIdentifier': 'elife_doi_version_1'
                 },
                 'status': 'draft'
@@ -293,7 +293,7 @@ class TestGetDocmapsItemForQueryResultItem:
                 'identifier': 'manuscript_id_1',
                 'versionIdentifier': '',
                 'type': 'preprint',
-                'doi': 'elife_doi_1'
+                'doi': 'elife_doi_1' + '.' + 'elife_doi_version_1'
             }]
         }]
 
