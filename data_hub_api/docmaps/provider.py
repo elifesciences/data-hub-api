@@ -109,7 +109,7 @@ def get_docmap_assertions_value_for_preprint_under_review_step(
         'item': {
             'type': 'preprint',
             'doi': query_result_item['elife_doi'],
-            'versionIdentifier': ''
+            'versionIdentifier': query_result_item['elife_doi_version']
         },
         'status': 'draft'
     }]

@@ -46,6 +46,7 @@ DOCMAPS_QUERY_RESULT_ITEM_1: dict = {
     'publisher_json': '{"id": "publisher_1"}',
     'evaluations': [],
     'elife_doi': 'elife_doi_1',
+    'elife_doi_version': 'elife_doi_version_1',
     'editor_details': [],
     'senior_editor_details': [],
     'tdm_path': 'tdm_path_1'
@@ -277,7 +278,7 @@ class TestGetDocmapsItemForQueryResultItem:
                 'item': {
                     'type': 'preprint',
                     'doi': 'elife_doi_1',
-                    'versionIdentifier': ''
+                    'versionIdentifier': 'elife_doi_version_1'
                 },
                 'status': 'draft'
             }
