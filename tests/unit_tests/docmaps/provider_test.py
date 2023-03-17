@@ -440,7 +440,12 @@ class TestGetDocmapsItemForQueryResultItem:
             'type': DOCMAP_OUTPUT_TYPE_FOR_REVIEW_ARTICLE,
             'published': 'annotation_created_timestamp_1',
             'doi': 'elife_doi_1'+'.'+'elife_doi_version_1'+'.'+'peer_review_suffix_1',
-            'url': f'{DOI_ROOT_URL}'+'elife_doi_1'+'.'+'elife_doi_version_1'+'.'+'peer_review_suffix_1',
+            'url': (
+                f'{DOI_ROOT_URL}'
+                + 'elife_doi_1' + '.'
+                + 'elife_doi_version_1' + '.'
+                + 'peer_review_suffix_1'
+            ),
             'content': [
                 {
                     'type': 'web-page',
@@ -466,7 +471,12 @@ class TestGetDocmapsItemForQueryResultItem:
             'type': DOCMAP_OUTPUT_TYPE_FOR_EVALUATION_SUMMARY,
             'published': 'annotation_created_timestamp_2',
             'doi': 'elife_doi_1'+'.'+'elife_doi_version_1'+'.'+'peer_review_suffix_2',
-            'url': f'{DOI_ROOT_URL}'+'elife_doi_1'+'.'+'elife_doi_version_1'+'.'+'peer_review_suffix_2',
+            'url': (
+                f'{DOI_ROOT_URL}'
+                + 'elife_doi_1' + '.'
+                + 'elife_doi_version_1' + '.'
+                + 'peer_review_suffix_2'
+            ),
             'content': [
                 {
                     'type': 'web-page',
@@ -492,7 +502,12 @@ class TestGetDocmapsItemForQueryResultItem:
             'type': DOCMAP_OUTPUT_TYPE_FOR_REPLY,
             'published': 'annotation_created_timestamp_3',
             'doi': 'elife_doi_1'+'.'+'elife_doi_version_1'+'.'+'peer_review_suffix_3',
-            'url': f'{DOI_ROOT_URL}'+'elife_doi_1'+'.'+'elife_doi_version_1'+'.'+'peer_review_suffix_3',
+            'url': (
+                f'{DOI_ROOT_URL}'
+                + 'elife_doi_1' + '.'
+                + 'elife_doi_version_1' + '.'
+                + 'peer_review_suffix_3'
+            ),
             'content': [
                 {
                     'type': 'web-page',
