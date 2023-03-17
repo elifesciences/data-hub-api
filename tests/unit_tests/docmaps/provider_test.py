@@ -13,6 +13,7 @@ from data_hub_api.docmaps.provider import (
     DOCMAP_OUTPUT_TYPE_FOR_REPLY,
     DOCMAP_OUTPUT_TYPE_FOR_EVALUATION_SUMMARY,
     DOCMAP_OUTPUT_TYPE_FOR_REVIEW_ARTICLE,
+    DOI_ROOT_URL,
     HYPOTHESIS_URL,
     SCIETY_ARTICLES_ACTIVITY_URL,
     SCIETY_ARTICLES_EVALUATIONS_URL,
@@ -56,13 +57,17 @@ HYPOTHESIS_ID_1 = 'hypothesis_1'
 HYPOTHESIS_ID_2 = 'hypothesis_2'
 HYPOTHESIS_ID_3 = 'hypothesis_3'
 
+PEER_REVIEW_SUFFIX_1 = 'peer_review_suffix_1'
+PEER_REVIEW_SUFFIX_2 = 'peer_review_suffix_2'
+PEER_REVIEW_SUFFIX_3 = 'peer_review_suffix_3'
 
 DOCMAPS_QUERY_RESULT_EVALUATION_1 = {
     'hypothesis_id': HYPOTHESIS_ID_1,
     'annotation_created_timestamp': '',
     'tags': [],
     'uri': PREPRINT_LINK_1,
-    'source_version': PREPRINT_VERSION_1
+    'source_version': PREPRINT_VERSION_1,
+    'peer_review_suffix': PEER_REVIEW_SUFFIX_1
 }
 
 
@@ -325,20 +330,23 @@ class TestGetDocmapsItemForQueryResultItem:
             'hypothesis_id': HYPOTHESIS_ID_1,
             'tags': ['PeerReview'],
             'uri': f'{PREPRINT_LINK_PREFIX}{DOI_1}v{PREPRINT_VERSION_1}',
-            'source_version': PREPRINT_VERSION_1
+            'source_version': PREPRINT_VERSION_1,
+            'peer_review_suffix': PEER_REVIEW_SUFFIX_1
         }, {
             **DOCMAPS_QUERY_RESULT_EVALUATION_1,
             'hypothesis_id': HYPOTHESIS_ID_2,
             'tags': ['PeerReview'],
             'uri': f'{PREPRINT_LINK_PREFIX}{DOI_1}v{PREPRINT_VERSION_1}',
-            'source_version': PREPRINT_VERSION_1
+            'source_version': PREPRINT_VERSION_1,
+            'peer_review_suffix': PEER_REVIEW_SUFFIX_2
         }]
         evaluations_of_other_version = [{
             **DOCMAPS_QUERY_RESULT_EVALUATION_1,
             'hypothesis_id': HYPOTHESIS_ID_3,
             'tags': ['PeerReview'],
             'uri': f'{PREPRINT_LINK_PREFIX}{DOI_1}v{PREPRINT_VERSION_2}',
-            'source_version': PREPRINT_VERSION_2
+            'source_version': PREPRINT_VERSION_2,
+            'peer_review_suffix': PEER_REVIEW_SUFFIX_1
         }]
         docmaps_item = get_docmap_item_for_query_result_item({
             **DOCMAPS_QUERY_RESULT_ITEM_1,
@@ -405,17 +413,20 @@ class TestGetDocmapsItemForQueryResultItem:
                     **DOCMAPS_QUERY_RESULT_EVALUATION_1,
                     'hypothesis_id': 'hypothesis_id_1',
                     'annotation_created_timestamp': 'annotation_created_timestamp_1',
-                    'tags': ['PeerReview']
+                    'tags': ['PeerReview'],
+                    'peer_review_suffix': 'peer_review_suffix_1'
                 }, {
                     **DOCMAPS_QUERY_RESULT_EVALUATION_1,
                     'hypothesis_id': 'hypothesis_id_2',
                     'annotation_created_timestamp': 'annotation_created_timestamp_2',
-                    'tags': ['PeerReview', 'evaluationSummary']
+                    'tags': ['PeerReview', 'evaluationSummary'],
+                    'peer_review_suffix': 'peer_review_suffix_2'
                 }, {
                     **DOCMAPS_QUERY_RESULT_EVALUATION_1,
                     'hypothesis_id': 'hypothesis_id_3',
                     'annotation_created_timestamp': 'annotation_created_timestamp_3',
-                    'tags': ['PeerReview', 'AuthorResponse']
+                    'tags': ['PeerReview', 'AuthorResponse'],
+                    'peer_review_suffix': 'peer_review_suffix_3'
                 }]
             }
         )
@@ -428,6 +439,8 @@ class TestGetDocmapsItemForQueryResultItem:
         assert peer_reviewed_actions[0]['outputs'][0] == {
             'type': DOCMAP_OUTPUT_TYPE_FOR_REVIEW_ARTICLE,
             'published': 'annotation_created_timestamp_1',
+            'doi': 'elife_doi_1'+'.'+'elife_doi_version_1'+'.'+'peer_review_suffix_1',
+            'url': f'{DOI_ROOT_URL}'+'elife_doi_1'+'.'+'elife_doi_version_1'+'.'+'peer_review_suffix_1',
             'content': [
                 {
                     'type': 'web-page',
@@ -452,6 +465,8 @@ class TestGetDocmapsItemForQueryResultItem:
         assert peer_reviewed_actions[1]['outputs'][0] == {
             'type': DOCMAP_OUTPUT_TYPE_FOR_EVALUATION_SUMMARY,
             'published': 'annotation_created_timestamp_2',
+            'doi': 'elife_doi_1'+'.'+'elife_doi_version_1'+'.'+'peer_review_suffix_2',
+            'url': f'{DOI_ROOT_URL}'+'elife_doi_1'+'.'+'elife_doi_version_1'+'.'+'peer_review_suffix_2',
             'content': [
                 {
                     'type': 'web-page',
@@ -476,6 +491,8 @@ class TestGetDocmapsItemForQueryResultItem:
         assert peer_reviewed_actions[2]['outputs'][0] == {
             'type': DOCMAP_OUTPUT_TYPE_FOR_REPLY,
             'published': 'annotation_created_timestamp_3',
+            'doi': 'elife_doi_1'+'.'+'elife_doi_version_1'+'.'+'peer_review_suffix_3',
+            'url': f'{DOI_ROOT_URL}'+'elife_doi_1'+'.'+'elife_doi_version_1'+'.'+'peer_review_suffix_3',
             'content': [
                 {
                     'type': 'web-page',

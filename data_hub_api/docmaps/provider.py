@@ -259,10 +259,17 @@ def get_participants_for_preprint_peer_reviewed_step(
 def get_single_actions_value_for_preprint_peer_reviewed_step(
     query_result_item: dict,
     hypothesis_id: str,
+    peer_review_suffix: str,
     annotation_created_timestamp: str,
     outputs_type: str
 ) -> dict:
     preprint_doi = query_result_item['preprint_doi']
+    elife_doi_and_version = (
+        query_result_item['elife_doi']
+        + '.'
+        + query_result_item['elife_doi_version']
+    )
+    elife_doi_with_peer_review_suffix = elife_doi_and_version + '.' + peer_review_suffix
     return {
         'participants': get_participants_for_preprint_peer_reviewed_step(
             query_result_item=query_result_item,
@@ -272,6 +279,8 @@ def get_single_actions_value_for_preprint_peer_reviewed_step(
             {
                 'type': outputs_type,
                 'published': annotation_created_timestamp,
+                'doi': elife_doi_with_peer_review_suffix,
+                'url': f'{DOI_ROOT_URL}' + elife_doi_with_peer_review_suffix,
                 'content': [
                     {
                         'type': 'web-page',
@@ -305,6 +314,7 @@ def iter_single_actions_value_from_query_result_for_peer_reviewed_step(
     for evaluation in evaluations:
         hypothesis_id = evaluation['hypothesis_id']
         annotation_created_timestamp = evaluation['annotation_created_timestamp']
+        peer_review_suffix = evaluation['peer_review_suffix']
         outputs_type = get_outputs_type_form_tags(evaluation['tags'])
         evaluation_preprint_url = evaluation['uri']
         if evaluation_preprint_url != preprint_url:
@@ -322,6 +332,7 @@ def iter_single_actions_value_from_query_result_for_peer_reviewed_step(
                 query_result_item=query_result_item,
                 hypothesis_id=hypothesis_id,
                 annotation_created_timestamp=annotation_created_timestamp,
+                peer_review_suffix=peer_review_suffix,
                 outputs_type=outputs_type
             )
 
