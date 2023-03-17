@@ -108,8 +108,8 @@ def get_docmap_assertions_value_for_preprint_under_review_step(
     }, {
         'item': {
             'type': 'preprint',
-            'doi': query_result_item['elife_doi'],
-            'versionIdentifier': ''
+            'doi': query_result_item['elife_doi'] + '.' + query_result_item['elife_doi_version'],
+            'versionIdentifier': query_result_item['elife_doi_version']
         },
         'status': 'draft'
     }]
@@ -118,15 +118,13 @@ def get_docmap_assertions_value_for_preprint_under_review_step(
 def get_docmap_actions_value_for_preprint_under_review_step(
     query_result_item: dict
 ) -> Sequence[dict]:
-    manuscript_id = query_result_item['manuscript_id']
-    elife_doi = query_result_item['elife_doi']
     return [{
         'participants': [],
         'outputs': [{
-            'identifier': manuscript_id,
-            'versionIdentifier': '',
+            'identifier': query_result_item['manuscript_id'],
+            'versionIdentifier': query_result_item['elife_doi_version'],
             'type': 'preprint',
-            'doi': elife_doi
+            'doi': query_result_item['elife_doi'] + '.' + query_result_item['elife_doi_version']
         }]
     }]
 

@@ -7,6 +7,40 @@ WITH t_hypothesis_annotation_with_doi AS (
   WHERE annotation.group = 'q5X6RWJ6'
 ),
 
+t_distinct_hypothesis_uri_doi_version AS(
+  SELECT 
+    DISTINCT
+    uri,
+    source_doi,
+    source_version
+  FROM t_hypothesis_annotation_with_doi
+),
+
+t_distinct_hypothesis_uri_doi_version_with_elife_doi_version AS (
+  SELECT
+    *,
+    ROW_NUMBER() OVER(
+      PARTITION BY source_doi
+      ORDER BY source_version
+    ) AS elife_doi_version
+  FROM t_distinct_hypothesis_uri_doi_version
+),
+
+t_hypothesis_annotation_with_elife_doi_version AS (
+  SELECT 
+    elife_doi_version.elife_doi_version,
+    annotation.id AS hypothesis_id,
+    annotation.created AS annotation_created_timestamp,
+    annotation.uri,
+    annotation.tags,
+    annotation.normalized_tags,
+    annotation.source_doi,
+    annotation.source_version
+  FROM t_hypothesis_annotation_with_doi AS annotation
+  INNER JOIN t_distinct_hypothesis_uri_doi_version_with_elife_doi_version AS elife_doi_version
+  ON annotation.uri = elife_doi_version.uri
+),
+
 t_result_with_preprint_dois AS (
   SELECT 
     * EXCEPT(
@@ -23,14 +57,8 @@ t_result_with_evaluations AS (
     *,
     ARRAY(
       SELECT AS STRUCT
-        annotation.id AS hypothesis_id,
-        annotation.created AS annotation_created_timestamp,
-        annotation.uri,
-        annotation.tags,
-        annotation.normalized_tags,
-        annotation.source_doi,
-        annotation.source_version
-      FROM t_hypothesis_annotation_with_doi AS annotation
+        *
+      FROM t_hypothesis_annotation_with_elife_doi_version AS annotation
       WHERE annotation.source_doi = t_result_with_preprint_dois.preprint_doi
     ) AS evaluations,
   FROM t_result_with_preprint_dois
@@ -70,7 +98,7 @@ t_result_with_preprint_url_and_has_evaluations AS (
   SELECT
     result.*,
     CONCAT('https://doi.org/', result.preprint_doi) AS preprint_doi_url,
-
+    COALESCE(result.evaluations[SAFE_OFFSET(0)].elife_doi_version, 1) AS elife_doi_version,
     COALESCE(
       result.evaluations[SAFE_OFFSET(0)].uri,
       result.ejp_validated_preprint_url,
