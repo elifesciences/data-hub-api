@@ -291,7 +291,7 @@ class TestGetDocmapsItemForQueryResultItem:
             'participants': [],
             'outputs': [{
                 'identifier': 'manuscript_id_1',
-                'versionIdentifier': PREPRINT_VERSION_1,
+                'versionIdentifier': 'elife_doi_version_1',
                 'type': 'preprint',
                 'doi': 'elife_doi_1' + '.' + 'elife_doi_version_1'
             }]

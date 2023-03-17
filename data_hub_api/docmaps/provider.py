@@ -122,7 +122,7 @@ def get_docmap_actions_value_for_preprint_under_review_step(
         'participants': [],
         'outputs': [{
             'identifier': query_result_item['manuscript_id'],
-            'versionIdentifier': query_result_item['preprint_version'],
+            'versionIdentifier': query_result_item['elife_doi_version'],
             'type': 'preprint',
             'doi': query_result_item['elife_doi'] + '.' + query_result_item['elife_doi_version']
         }]
