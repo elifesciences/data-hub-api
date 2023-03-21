@@ -38,19 +38,19 @@ t_distinct_hypothesis_uri_id_and_timestamp AS(
   FROM t_hypothesis_annotation_with_doi
 ),
 
-t_distinct_hypothesis_with_peer_review_suffix_number AS (
+t_distinct_hypothesis_with_evaluation_suffix_number AS (
   SELECT
     *,
     ROW_NUMBER() OVER(
       PARTITION BY source_doi, source_doi_version
       ORDER BY annotation_created_timestamp, hypothesis_id
-    ) AS peer_review_suffix_number
+    ) AS evaluation_suffix_number
   FROM t_distinct_hypothesis_uri_id_and_timestamp
 ),
 
 t_hypothesis_annotation_with_elife_doi_version AS (
   SELECT 
-    CAST(elife_doi_version.elife_doi_version AS STRING) AS elife_doi_version,
+    CAST(elife_doi_version.elife_doi_version AS STRING) AS elife_doi_version_str,
     annotation.hypothesis_id,
     annotation.annotation_created_timestamp,
     annotation.uri,
@@ -58,13 +58,13 @@ t_hypothesis_annotation_with_elife_doi_version AS (
     annotation.normalized_tags,
     annotation.source_doi,
     annotation.source_doi_version,
-    CONCAT('sa',CAST(t_peer_review.peer_review_suffix_number AS STRING)) AS peer_review_suffix
+    CONCAT('sa',CAST(t_evaluation_suffix.evaluation_suffix_number AS STRING)) AS evaluation_suffix
   FROM t_hypothesis_annotation_with_doi AS annotation
   INNER JOIN t_distinct_hypothesis_uri_doi_version_with_elife_doi_version AS elife_doi_version
     ON annotation.uri = elife_doi_version.uri
-  INNER JOIN t_distinct_hypothesis_with_peer_review_suffix_number AS t_peer_review
-    ON annotation.uri = t_peer_review.uri 
-    AND annotation.hypothesis_id = t_peer_review.hypothesis_id
+  INNER JOIN t_distinct_hypothesis_with_evaluation_suffix_number AS t_evaluation_suffix
+    ON annotation.uri = t_evaluation_suffix.uri 
+    AND annotation.hypothesis_id = t_evaluation_suffix.hypothesis_id
 ),
 
 t_result_with_preprint_dois AS (
@@ -124,7 +124,7 @@ t_result_with_preprint_url_and_has_evaluations AS (
   SELECT
     result.*,
     CONCAT('https://doi.org/', result.preprint_doi) AS preprint_doi_url,
-    COALESCE(result.evaluations[SAFE_OFFSET(0)].elife_doi_version, '1') AS elife_doi_version,
+    COALESCE(result.evaluations[SAFE_OFFSET(0)].elife_doi_version_str, '1') AS elife_doi_version_str,
     COALESCE(
       result.evaluations[SAFE_OFFSET(0)].uri,
       result.ejp_validated_preprint_url,
