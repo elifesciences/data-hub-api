@@ -47,7 +47,7 @@ DOCMAPS_QUERY_RESULT_ITEM_1: dict = {
     'publisher_json': '{"id": "publisher_1"}',
     'evaluations': [],
     'elife_doi': 'elife_doi_1',
-    'elife_doi_version': 'elife_doi_version_1',
+    'elife_doi_version_str': 'elife_doi_version_str_1',
     'editor_details': [],
     'senior_editor_details': [],
     'tdm_path': 'tdm_path_1'
@@ -282,8 +282,8 @@ class TestGetDocmapsItemForQueryResultItem:
             {
                 'item': {
                     'type': 'preprint',
-                    'doi': 'elife_doi_1' + '.' + 'elife_doi_version_1',
-                    'versionIdentifier': 'elife_doi_version_1'
+                    'doi': 'elife_doi_1' + '.' + 'elife_doi_version_str_1',
+                    'versionIdentifier': 'elife_doi_version_str_1'
                 },
                 'status': 'draft'
             }
@@ -296,9 +296,9 @@ class TestGetDocmapsItemForQueryResultItem:
             'participants': [],
             'outputs': [{
                 'identifier': 'manuscript_id_1',
-                'versionIdentifier': 'elife_doi_version_1',
+                'versionIdentifier': 'elife_doi_version_str_1',
                 'type': 'preprint',
-                'doi': 'elife_doi_1' + '.' + 'elife_doi_version_1'
+                'doi': 'elife_doi_1' + '.' + 'elife_doi_version_str_1'
             }]
         }]
 
@@ -439,11 +439,11 @@ class TestGetDocmapsItemForQueryResultItem:
         assert peer_reviewed_actions[0]['outputs'][0] == {
             'type': DOCMAP_OUTPUT_TYPE_FOR_REVIEW_ARTICLE,
             'published': 'annotation_created_timestamp_1',
-            'doi': 'elife_doi_1'+'.'+'elife_doi_version_1'+'.'+'peer_review_suffix_1',
+            'doi': 'elife_doi_1'+'.'+'elife_doi_version_str_1'+'.'+'peer_review_suffix_1',
             'url': (
                 f'{DOI_ROOT_URL}'
                 + 'elife_doi_1' + '.'
-                + 'elife_doi_version_1' + '.'
+                + 'elife_doi_version_str_1' + '.'
                 + 'peer_review_suffix_1'
             ),
             'content': [
@@ -470,11 +470,11 @@ class TestGetDocmapsItemForQueryResultItem:
         assert peer_reviewed_actions[1]['outputs'][0] == {
             'type': DOCMAP_OUTPUT_TYPE_FOR_EVALUATION_SUMMARY,
             'published': 'annotation_created_timestamp_2',
-            'doi': 'elife_doi_1'+'.'+'elife_doi_version_1'+'.'+'peer_review_suffix_2',
+            'doi': 'elife_doi_1'+'.'+'elife_doi_version_str_1'+'.'+'peer_review_suffix_2',
             'url': (
                 f'{DOI_ROOT_URL}'
                 + 'elife_doi_1' + '.'
-                + 'elife_doi_version_1' + '.'
+                + 'elife_doi_version_str_1' + '.'
                 + 'peer_review_suffix_2'
             ),
             'content': [
@@ -501,11 +501,11 @@ class TestGetDocmapsItemForQueryResultItem:
         assert peer_reviewed_actions[2]['outputs'][0] == {
             'type': DOCMAP_OUTPUT_TYPE_FOR_REPLY,
             'published': 'annotation_created_timestamp_3',
-            'doi': 'elife_doi_1'+'.'+'elife_doi_version_1'+'.'+'peer_review_suffix_3',
+            'doi': 'elife_doi_1'+'.'+'elife_doi_version_str_1'+'.'+'peer_review_suffix_3',
             'url': (
                 f'{DOI_ROOT_URL}'
                 + 'elife_doi_1' + '.'
-                + 'elife_doi_version_1' + '.'
+                + 'elife_doi_version_str_1' + '.'
                 + 'peer_review_suffix_3'
             ),
             'content': [
