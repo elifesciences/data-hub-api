@@ -264,12 +264,12 @@ def get_single_actions_value_for_preprint_peer_reviewed_step(
     outputs_type: str
 ) -> dict:
     preprint_doi = query_result_item['preprint_doi']
-    elife_doi_and_version = (
+    elife_version_doi = (
         query_result_item['elife_doi']
         + '.'
         + query_result_item['elife_doi_version_str']
     )
-    elife_doi_with_peer_review_suffix = elife_doi_and_version + '.' + peer_review_suffix
+    elife_doi_with_peer_review_suffix = elife_version_doi + '.' + peer_review_suffix
     return {
         'participants': get_participants_for_preprint_peer_reviewed_step(
             query_result_item=query_result_item,
