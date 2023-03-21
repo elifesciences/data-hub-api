@@ -49,7 +49,7 @@ def get_elife_version_doi(
     elife_doi: str,
     elife_doi_version_str: str
 ) -> str:
-    return (elife_doi + '.' + elife_doi_version_str)
+    return elife_doi + '.' + elife_doi_version_str
 
 
 def get_docmap_assertions_value_for_preprint_manuscript_published_step(
