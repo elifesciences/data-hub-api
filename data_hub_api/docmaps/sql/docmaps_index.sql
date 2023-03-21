@@ -30,7 +30,6 @@ t_distinct_hypothesis_uri_doi_version_with_elife_doi_version AS (
 
 t_distinct_hypothesis_uri_id_and_timestamp AS(
   SELECT 
-    DISTINCT
     uri,
     source_doi,
     source_doi_version,
