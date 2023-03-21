@@ -259,7 +259,7 @@ def get_participants_for_preprint_peer_reviewed_step(
 def get_single_actions_value_for_preprint_peer_reviewed_step(
     query_result_item: dict,
     hypothesis_id: str,
-    peer_review_suffix: str,
+    evaluation_suffix: str,
     annotation_created_timestamp: str,
     outputs_type: str
 ) -> dict:
@@ -269,7 +269,7 @@ def get_single_actions_value_for_preprint_peer_reviewed_step(
         + '.'
         + query_result_item['elife_doi_version_str']
     )
-    elife_doi_with_peer_review_suffix = elife_version_doi + '.' + peer_review_suffix
+    elife_evaluation_doi = elife_version_doi + '.' + evaluation_suffix
     return {
         'participants': get_participants_for_preprint_peer_reviewed_step(
             query_result_item=query_result_item,
@@ -279,8 +279,8 @@ def get_single_actions_value_for_preprint_peer_reviewed_step(
             {
                 'type': outputs_type,
                 'published': annotation_created_timestamp,
-                'doi': elife_doi_with_peer_review_suffix,
-                'url': f'{DOI_ROOT_URL}' + elife_doi_with_peer_review_suffix,
+                'doi': elife_evaluation_doi,
+                'url': f'{DOI_ROOT_URL}' + elife_evaluation_doi,
                 'content': [
                     {
                         'type': 'web-page',
@@ -314,7 +314,7 @@ def iter_single_actions_value_from_query_result_for_peer_reviewed_step(
     for evaluation in evaluations:
         hypothesis_id = evaluation['hypothesis_id']
         annotation_created_timestamp = evaluation['annotation_created_timestamp']
-        peer_review_suffix = evaluation['peer_review_suffix']
+        evaluation_suffix = evaluation['evaluation_suffix']
         outputs_type = get_outputs_type_form_tags(evaluation['tags'])
         evaluation_preprint_url = evaluation['uri']
         if evaluation_preprint_url != preprint_url:
@@ -332,7 +332,7 @@ def iter_single_actions_value_from_query_result_for_peer_reviewed_step(
                 query_result_item=query_result_item,
                 hypothesis_id=hypothesis_id,
                 annotation_created_timestamp=annotation_created_timestamp,
-                peer_review_suffix=peer_review_suffix,
+                evaluation_suffix=evaluation_suffix,
                 outputs_type=outputs_type
             )
 
