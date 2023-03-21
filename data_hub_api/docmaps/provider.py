@@ -45,6 +45,13 @@ ADDITIONAL_PREPRINT_DOIS = (
 )
 
 
+def get_elife_version_doi(
+    elife_doi: str,
+    elife_doi_version_str: str
+) -> str:
+    return elife_doi + '.' + elife_doi_version_str
+
+
 def get_docmap_assertions_value_for_preprint_manuscript_published_step(
     query_result_item: dict
 ) -> Sequence[dict]:
@@ -108,8 +115,11 @@ def get_docmap_assertions_value_for_preprint_under_review_step(
     }, {
         'item': {
             'type': 'preprint',
-            'doi': query_result_item['elife_doi'] + '.' + query_result_item['elife_doi_version'],
-            'versionIdentifier': query_result_item['elife_doi_version']
+            'doi': get_elife_version_doi(
+                elife_doi=query_result_item['elife_doi'],
+                elife_doi_version_str=query_result_item['elife_doi_version_str']
+            ),
+            'versionIdentifier': query_result_item['elife_doi_version_str']
         },
         'status': 'draft'
     }]
@@ -122,9 +132,12 @@ def get_docmap_actions_value_for_preprint_under_review_step(
         'participants': [],
         'outputs': [{
             'identifier': query_result_item['manuscript_id'],
-            'versionIdentifier': query_result_item['elife_doi_version'],
+            'versionIdentifier': query_result_item['elife_doi_version_str'],
             'type': 'preprint',
-            'doi': query_result_item['elife_doi'] + '.' + query_result_item['elife_doi_version']
+            'doi': get_elife_version_doi(
+                elife_doi=query_result_item['elife_doi'],
+                elife_doi_version_str=query_result_item['elife_doi_version_str']
+            )
         }]
     }]
 
@@ -259,10 +272,16 @@ def get_participants_for_preprint_peer_reviewed_step(
 def get_single_actions_value_for_preprint_peer_reviewed_step(
     query_result_item: dict,
     hypothesis_id: str,
+    evaluation_suffix: str,
     annotation_created_timestamp: str,
     outputs_type: str
 ) -> dict:
     preprint_doi = query_result_item['preprint_doi']
+    elife_version_doi = get_elife_version_doi(
+        elife_doi=query_result_item['elife_doi'],
+        elife_doi_version_str=query_result_item['elife_doi_version_str']
+    )
+    elife_evaluation_doi = elife_version_doi + '.' + evaluation_suffix
     return {
         'participants': get_participants_for_preprint_peer_reviewed_step(
             query_result_item=query_result_item,
@@ -272,6 +291,8 @@ def get_single_actions_value_for_preprint_peer_reviewed_step(
             {
                 'type': outputs_type,
                 'published': annotation_created_timestamp,
+                'doi': elife_evaluation_doi,
+                'url': f'{DOI_ROOT_URL}' + elife_evaluation_doi,
                 'content': [
                     {
                         'type': 'web-page',
@@ -305,6 +326,7 @@ def iter_single_actions_value_from_query_result_for_peer_reviewed_step(
     for evaluation in evaluations:
         hypothesis_id = evaluation['hypothesis_id']
         annotation_created_timestamp = evaluation['annotation_created_timestamp']
+        evaluation_suffix = evaluation['evaluation_suffix']
         outputs_type = get_outputs_type_form_tags(evaluation['tags'])
         evaluation_preprint_url = evaluation['uri']
         if evaluation_preprint_url != preprint_url:
@@ -322,6 +344,7 @@ def iter_single_actions_value_from_query_result_for_peer_reviewed_step(
                 query_result_item=query_result_item,
                 hypothesis_id=hypothesis_id,
                 annotation_created_timestamp=annotation_created_timestamp,
+                evaluation_suffix=evaluation_suffix,
                 outputs_type=outputs_type
             )
 

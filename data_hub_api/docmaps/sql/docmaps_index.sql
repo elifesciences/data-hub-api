@@ -1,8 +1,10 @@
 WITH t_hypothesis_annotation_with_doi AS (
   SELECT
-    *,
+    * EXCEPT (id, created),
     REGEXP_EXTRACT(annotation.uri, r'(10\.\d{3,}[^v]*)v?') AS source_doi,
-    REGEXP_EXTRACT(annotation.uri, r'10\.\d{3,}.*v([1-9])') AS source_version
+    REGEXP_EXTRACT(annotation.uri, r'10\.\d{3,}.*v([1-9])') AS source_doi_version,
+    annotation.id AS hypothesis_id,
+    annotation.created AS annotation_created_timestamp,
   FROM `elife-data-pipeline.de_proto.v_hypothesis_annotation` AS annotation
   WHERE annotation.group = 'q5X6RWJ6'
 ),
@@ -12,7 +14,7 @@ t_distinct_hypothesis_uri_doi_version AS(
     DISTINCT
     uri,
     source_doi,
-    source_version
+    source_doi_version
   FROM t_hypothesis_annotation_with_doi
 ),
 
@@ -21,24 +23,48 @@ t_distinct_hypothesis_uri_doi_version_with_elife_doi_version AS (
     *,
     ROW_NUMBER() OVER(
       PARTITION BY source_doi
-      ORDER BY source_version
+      ORDER BY source_doi_version
     ) AS elife_doi_version
   FROM t_distinct_hypothesis_uri_doi_version
 ),
 
+t_distinct_hypothesis_uri_id_and_timestamp AS(
+  SELECT 
+    uri,
+    source_doi,
+    source_doi_version,
+    annotation_created_timestamp,
+    hypothesis_id
+  FROM t_hypothesis_annotation_with_doi
+),
+
+t_distinct_hypothesis_with_evaluation_suffix_number AS (
+  SELECT
+    *,
+    ROW_NUMBER() OVER(
+      PARTITION BY source_doi, source_doi_version
+      ORDER BY annotation_created_timestamp, hypothesis_id
+    ) AS evaluation_suffix_number
+  FROM t_distinct_hypothesis_uri_id_and_timestamp
+),
+
 t_hypothesis_annotation_with_elife_doi_version AS (
   SELECT 
-    elife_doi_version.elife_doi_version,
-    annotation.id AS hypothesis_id,
-    annotation.created AS annotation_created_timestamp,
+    CAST(elife_doi_version.elife_doi_version AS STRING) AS elife_doi_version_str,
+    annotation.hypothesis_id,
+    annotation.annotation_created_timestamp,
     annotation.uri,
     annotation.tags,
     annotation.normalized_tags,
     annotation.source_doi,
-    annotation.source_version
+    annotation.source_doi_version,
+    CONCAT('sa',CAST(t_evaluation_suffix.evaluation_suffix_number AS STRING)) AS evaluation_suffix
   FROM t_hypothesis_annotation_with_doi AS annotation
   INNER JOIN t_distinct_hypothesis_uri_doi_version_with_elife_doi_version AS elife_doi_version
-  ON annotation.uri = elife_doi_version.uri
+    ON annotation.uri = elife_doi_version.uri
+  INNER JOIN t_distinct_hypothesis_with_evaluation_suffix_number AS t_evaluation_suffix
+    ON annotation.uri = t_evaluation_suffix.uri 
+    AND annotation.hypothesis_id = t_evaluation_suffix.hypothesis_id
 ),
 
 t_result_with_preprint_dois AS (
@@ -98,7 +124,7 @@ t_result_with_preprint_url_and_has_evaluations AS (
   SELECT
     result.*,
     CONCAT('https://doi.org/', result.preprint_doi) AS preprint_doi_url,
-    COALESCE(result.evaluations[SAFE_OFFSET(0)].elife_doi_version, 1) AS elife_doi_version,
+    COALESCE(result.evaluations[SAFE_OFFSET(0)].elife_doi_version_str, '1') AS elife_doi_version_str,
     COALESCE(
       result.evaluations[SAFE_OFFSET(0)].uri,
       result.ejp_validated_preprint_url,
