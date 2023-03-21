@@ -45,6 +45,13 @@ ADDITIONAL_PREPRINT_DOIS = (
 )
 
 
+def get_elife_version_doi(
+    elife_doi: str,
+    elife_doi_version_str: str
+) -> str:
+    return (elife_doi + '.' + elife_doi_version_str)
+
+
 def get_docmap_assertions_value_for_preprint_manuscript_published_step(
     query_result_item: dict
 ) -> Sequence[dict]:
@@ -108,7 +115,10 @@ def get_docmap_assertions_value_for_preprint_under_review_step(
     }, {
         'item': {
             'type': 'preprint',
-            'doi': query_result_item['elife_doi'] + '.' + query_result_item['elife_doi_version_str'],
+            'doi': get_elife_version_doi(
+                elife_doi=query_result_item['elife_doi'],
+                elife_doi_version_str=query_result_item['elife_doi_version_str']
+            ),
             'versionIdentifier': query_result_item['elife_doi_version_str']
         },
         'status': 'draft'
@@ -124,7 +134,10 @@ def get_docmap_actions_value_for_preprint_under_review_step(
             'identifier': query_result_item['manuscript_id'],
             'versionIdentifier': query_result_item['elife_doi_version_str'],
             'type': 'preprint',
-            'doi': query_result_item['elife_doi'] + '.' + query_result_item['elife_doi_version_str']
+            'doi': get_elife_version_doi(
+                elife_doi=query_result_item['elife_doi'],
+                elife_doi_version_str=query_result_item['elife_doi_version_str']
+            )
         }]
     }]
 
@@ -264,10 +277,9 @@ def get_single_actions_value_for_preprint_peer_reviewed_step(
     outputs_type: str
 ) -> dict:
     preprint_doi = query_result_item['preprint_doi']
-    elife_version_doi = (
-        query_result_item['elife_doi']
-        + '.'
-        + query_result_item['elife_doi_version_str']
+    elife_version_doi = get_elife_version_doi(
+        elife_doi=query_result_item['elife_doi'],
+        elife_doi_version_str=query_result_item['elife_doi_version_str']
     )
     elife_evaluation_doi = elife_version_doi + '.' + evaluation_suffix
     return {
