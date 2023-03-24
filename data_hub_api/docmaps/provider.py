@@ -46,12 +46,36 @@ ADDITIONAL_PREPRINT_DOIS = (
 
 
 def get_elife_version_doi(
-    elife_doi: str = None,
-    elife_doi_version_str: str = None
-) -> str:
+    elife_doi_version_str: str,
+    elife_doi: Optional[str] = None
+) -> Optional[str]:
     if not elife_doi:
         return None
     return elife_doi + '.' + elife_doi_version_str
+
+
+def get_elife_evaluation_doi(
+    elife_doi_version_str: str,
+    elife_doi: Optional[str] = None,
+    evaluation_suffix: Optional[str] = None
+) -> Optional[str]:
+    elife_version_doi = get_elife_version_doi(
+        elife_doi=elife_doi,
+        elife_doi_version_str=elife_doi_version_str
+    )
+    if not elife_version_doi:
+        return None
+    if not evaluation_suffix:
+        return elife_version_doi
+    return elife_version_doi + '.' + evaluation_suffix
+
+
+def get_elife_doi_url(
+    elife_evaluation_doi: Optional[str] = None
+) -> Optional[str]:
+    if not elife_evaluation_doi:
+        return None
+    return f'{DOI_ROOT_URL}' + elife_evaluation_doi
 
 
 def get_docmap_assertions_value_for_preprint_manuscript_published_step(
@@ -279,14 +303,11 @@ def get_single_actions_value_for_preprint_peer_reviewed_step(
     outputs_type: str
 ) -> dict:
     preprint_doi = query_result_item['preprint_doi']
-    elife_version_doi = get_elife_version_doi(
+    elife_evaluation_doi = get_elife_evaluation_doi(
+        elife_doi_version_str=query_result_item['elife_doi_version_str'],
         elife_doi=query_result_item['elife_doi'],
-        elife_doi_version_str=query_result_item['elife_doi_version_str']
+        evaluation_suffix=evaluation_suffix
     )
-    if evaluation_suffix:
-        elife_evaluation_doi = elife_version_doi + '.' + evaluation_suffix
-    else:
-        elife_evaluation_doi = elife_version_doi
     return {
         'participants': get_participants_for_preprint_peer_reviewed_step(
             query_result_item=query_result_item,
@@ -297,7 +318,7 @@ def get_single_actions_value_for_preprint_peer_reviewed_step(
                 'type': outputs_type,
                 'published': annotation_created_timestamp,
                 'doi': elife_evaluation_doi,
-                'url': f'{DOI_ROOT_URL}' + elife_evaluation_doi,
+                'url': get_elife_doi_url(elife_evaluation_doi=elife_evaluation_doi),
                 'content': [
                     {
                         'type': 'web-page',

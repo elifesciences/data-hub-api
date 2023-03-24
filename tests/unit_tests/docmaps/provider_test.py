@@ -22,6 +22,8 @@ from data_hub_api.docmaps.provider import (
     DOCMAPS_JSONLD_SCHEMA_URL,
     DOCMAP_ID_PREFIX,
     generate_docmap_steps,
+    get_elife_doi_url,
+    get_elife_evaluation_doi,
     get_elife_version_doi,
     get_outputs_type_form_tags
 )
@@ -106,13 +108,66 @@ class TestGetElifeVersionDoi:
     def test_should_return_doi_with_version_when_the_version_defined(self):
         elife_doi = 'elife_doi_1'
         elife_doi_version_str = 'elife_doi_version_str_1'
-        actual_result = get_elife_version_doi(elife_doi, elife_doi_version_str)
+        actual_result = get_elife_version_doi(
+            elife_doi=elife_doi,
+            elife_doi_version_str=elife_doi_version_str
+        )
         assert actual_result == 'elife_doi_1.elife_doi_version_str_1'
 
     def test_should_return_doi_without_version_when_the_doi_not_defined(self):
         elife_doi = ''
         elife_doi_version_str = 'elife_doi_version_str_1'
-        actual_result = get_elife_version_doi(elife_doi, elife_doi_version_str)
+        actual_result = get_elife_version_doi(
+            elife_doi=elife_doi,
+            elife_doi_version_str=elife_doi_version_str
+        )
+        assert not actual_result
+
+
+class TestGetElifeEvaluationDoi:
+    def test_should_return_evaluation_doi_with_suffix_if_defined(self):
+        elife_doi = 'elife_doi_1'
+        elife_doi_version_str = 'elife_doi_version_str_1'
+        evaluation_suffix = 'evaluation_suffix_1'
+        actual_result = get_elife_evaluation_doi(
+            elife_doi=elife_doi,
+            elife_doi_version_str=elife_doi_version_str,
+            evaluation_suffix=evaluation_suffix
+        )
+        assert actual_result == 'elife_doi_1.elife_doi_version_str_1.evaluation_suffix_1'
+
+    def test_should_return_evaluation_doi_without_suffix_if_not_defined(self):
+        elife_doi = 'elife_doi_1'
+        elife_doi_version_str = 'elife_doi_version_str_1'
+        evaluation_suffix = ''
+        actual_result = get_elife_evaluation_doi(
+            elife_doi=elife_doi,
+            elife_doi_version_str=elife_doi_version_str,
+            evaluation_suffix=evaluation_suffix
+        )
+        assert actual_result == 'elife_doi_1.elife_doi_version_str_1'
+
+    def test_should_return_none_if_elife_doi_not_defined(self):
+        elife_doi = ''
+        elife_doi_version_str = 'elife_doi_version_str_1'
+        evaluation_suffix = ''
+        actual_result = get_elife_evaluation_doi(
+            elife_doi=elife_doi,
+            elife_doi_version_str=elife_doi_version_str,
+            evaluation_suffix=evaluation_suffix
+        )
+        assert not actual_result
+
+
+class TestGetElifeDoiUrl:
+    def test_should_return_url_with_elife_doi(self):
+        elife_evaluation_doi = 'elife_evaluation_doi_1'
+        actual_result = get_elife_doi_url(elife_evaluation_doi=elife_evaluation_doi)
+        assert actual_result == f'{DOI_ROOT_URL}elife_evaluation_doi_1'
+
+    def test_should_return_none_if_elife_evaluation_doi_not_defined(self):
+        elife_evaluation_doi = ''
+        actual_result = get_elife_doi_url(elife_evaluation_doi=elife_evaluation_doi)
         assert not actual_result
 
 
