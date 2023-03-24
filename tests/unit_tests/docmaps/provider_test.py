@@ -22,6 +22,7 @@ from data_hub_api.docmaps.provider import (
     DOCMAPS_JSONLD_SCHEMA_URL,
     DOCMAP_ID_PREFIX,
     generate_docmap_steps,
+    get_elife_version_doi,
     get_outputs_type_form_tags
 )
 
@@ -99,6 +100,20 @@ def get_hypothesis_ids_from_urls(hypothesis_urls: Iterable[str]) -> Iterable[str
         for hypothesis_url in hypothesis_urls
         if hypothesis_url.startswith(HYPOTHESIS_URL)
     ]
+
+
+class TestGetElifeVersionDoi:
+    def test_should_return_doi_with_version_when_the_version_defined(self):
+        elife_doi = 'elife_doi_1'
+        elife_doi_version_str = 'elife_doi_version_str_1'
+        actual_result = get_elife_version_doi(elife_doi, elife_doi_version_str)
+        assert actual_result == 'elife_doi_1.elife_doi_version_str_1'
+
+    def test_should_return_doi_without_version_when_the_doi_not_defined(self):
+        elife_doi = ''
+        elife_doi_version_str = 'elife_doi_version_str_1'
+        actual_result = get_elife_version_doi(elife_doi, elife_doi_version_str)
+        assert not actual_result
 
 
 class TestGetOutputsTypeFromTags:

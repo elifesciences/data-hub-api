@@ -46,9 +46,11 @@ ADDITIONAL_PREPRINT_DOIS = (
 
 
 def get_elife_version_doi(
-    elife_doi: str,
-    elife_doi_version_str: str
+    elife_doi: str = None,
+    elife_doi_version_str: str = None
 ) -> str:
+    if not elife_doi:
+        return None
     return elife_doi + '.' + elife_doi_version_str
 
 
@@ -281,7 +283,10 @@ def get_single_actions_value_for_preprint_peer_reviewed_step(
         elife_doi=query_result_item['elife_doi'],
         elife_doi_version_str=query_result_item['elife_doi_version_str']
     )
-    elife_evaluation_doi = elife_version_doi + '.' + evaluation_suffix
+    if evaluation_suffix:
+        elife_evaluation_doi = elife_version_doi + '.' + evaluation_suffix
+    else:
+        elife_evaluation_doi = elife_version_doi
     return {
         'participants': get_participants_for_preprint_peer_reviewed_step(
             query_result_item=query_result_item,
