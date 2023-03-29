@@ -182,10 +182,25 @@ t_result_with_preprint_published_at_date_and_tdm_path AS (
   LEFT JOIN t_latest_tdm_path_by_doi_and_version AS tdm
     ON tdm.tdm_doi = result.preprint_doi
     AND CAST(tdm.tdm_ms_version AS STRING) = result.preprint_version
+),
+
+t_latest_manuscript_license AS (
+  SELECT 
+    * EXCEPT(rn)
+  FROM (
+    SELECT
+      *, 
+      ROW_NUMBER() OVER(
+        PARTITION BY long_manuscript_identifier
+        ORDER BY imported_timestamp DESC
+      ) AS rn
+    FROM `elife-data-pipeline.prod.manuscript_license`
+  )
+  WHERE rn = 1
 )
 
 SELECT
-  *,
+  result.*,
   PARSE_JSON(ARRAY_TO_STRING(
     [
       '{',
@@ -201,4 +216,8 @@ SELECT
     ],
     '\n'
   )) AS publisher_json,
-FROM t_result_with_preprint_published_at_date_and_tdm_path
+  license.license_definition,
+  license.license_timestamp,
+FROM t_result_with_preprint_published_at_date_and_tdm_path AS result
+LEFT JOIN t_latest_manuscript_license AS license
+ON result.long_manuscript_identifier = license.long_manuscript_identifier
