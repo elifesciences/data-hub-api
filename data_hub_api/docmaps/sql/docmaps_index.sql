@@ -216,7 +216,7 @@ SELECT
     ],
     '\n'
   )) AS publisher_json,
-  license.license_definition,
+  license.license_definition AS license,
   license.license_timestamp,
 FROM t_result_with_preprint_published_at_date_and_tdm_path AS result
 LEFT JOIN t_latest_manuscript_license AS license
