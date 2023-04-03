@@ -51,6 +51,7 @@ DOCMAPS_QUERY_RESULT_ITEM_1: dict = {
     'evaluations': [],
     'elife_doi': 'elife_doi_1',
     'elife_doi_version_str': 'elife_doi_version_str_1',
+    'license': 'license_1',
     'editor_details': [],
     'senior_editor_details': [],
     'tdm_path': 'tdm_path_1'
@@ -359,7 +360,7 @@ class TestGetDocmapsItemForQueryResultItem:
             }
         ]
 
-    def test_should_populate_actions_outputs_with_doi_and_url_under_review_step(self):
+    def test_should_populate_actions_outputs_with_doi_and_url_under_review_step_with_license(self):
         docmaps_item = get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
         under_review_step = docmaps_item['steps']['_:b1']
         assert under_review_step['actions'] == [{
@@ -368,7 +369,8 @@ class TestGetDocmapsItemForQueryResultItem:
                 'identifier': 'manuscript_id_1',
                 'versionIdentifier': 'elife_doi_version_str_1',
                 'type': 'preprint',
-                'doi': 'elife_doi_1' + '.' + 'elife_doi_version_str_1'
+                'doi': 'elife_doi_1' + '.' + 'elife_doi_version_str_1',
+                'license': 'license_1'
             }]
         }]
 
@@ -510,6 +512,7 @@ class TestGetDocmapsItemForQueryResultItem:
             'type': DOCMAP_OUTPUT_TYPE_FOR_REVIEW_ARTICLE,
             'published': 'annotation_created_timestamp_1',
             'doi': 'elife_doi_1'+'.'+'elife_doi_version_str_1'+'.'+'evaluation_suffix_1',
+            'license': 'license_1',
             'url': (
                 f'{DOI_ROOT_URL}'
                 + 'elife_doi_1' + '.'
@@ -541,6 +544,7 @@ class TestGetDocmapsItemForQueryResultItem:
             'type': DOCMAP_OUTPUT_TYPE_FOR_EVALUATION_SUMMARY,
             'published': 'annotation_created_timestamp_2',
             'doi': 'elife_doi_1'+'.'+'elife_doi_version_str_1'+'.'+'evaluation_suffix_2',
+            'license': 'license_1',
             'url': (
                 f'{DOI_ROOT_URL}'
                 + 'elife_doi_1' + '.'
@@ -572,6 +576,7 @@ class TestGetDocmapsItemForQueryResultItem:
             'type': DOCMAP_OUTPUT_TYPE_FOR_REPLY,
             'published': 'annotation_created_timestamp_3',
             'doi': 'elife_doi_1'+'.'+'elife_doi_version_str_1'+'.'+'evaluation_suffix_3',
+            'license': 'license_1',
             'url': (
                 f'{DOI_ROOT_URL}'
                 + 'elife_doi_1' + '.'
