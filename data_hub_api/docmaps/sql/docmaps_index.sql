@@ -186,7 +186,11 @@ t_result_with_preprint_published_at_date_and_tdm_path AS (
 
 t_latest_manuscript_license AS (
   SELECT 
-    * EXCEPT(rn)
+    * EXCEPT(rn),
+    CASE WHEN license_id = 1 THEN 'http://creativecommons.org/licenses/by/4.0/'
+    WHEN license_id = 2 THEN 'https://creativecommons.org/publicdomain/zero/1.0/'
+    ELSE NULL 
+    END AS license_url
   FROM (
     SELECT
       *, 
@@ -216,7 +220,7 @@ SELECT
     ],
     '\n'
   )) AS publisher_json,
-  license.license_definition AS license,
+  license.license_url AS license,
   license.license_timestamp,
 FROM t_result_with_preprint_published_at_date_and_tdm_path AS result
 LEFT JOIN t_latest_manuscript_license AS license
