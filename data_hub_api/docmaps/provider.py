@@ -163,7 +163,8 @@ def get_docmap_actions_value_for_preprint_under_review_step(
             'doi': get_elife_version_doi(
                 elife_doi=query_result_item['elife_doi'],
                 elife_doi_version_str=query_result_item['elife_doi_version_str']
-            )
+            ),
+            'license': query_result_item['license'],
         }]
     }]
 
@@ -318,6 +319,7 @@ def get_single_actions_value_for_preprint_peer_reviewed_step(
                 'type': outputs_type,
                 'published': annotation_created_timestamp,
                 'doi': elife_evaluation_doi,
+                'license': query_result_item['license'],
                 'url': get_elife_doi_url(elife_evaluation_doi=elife_evaluation_doi),
                 'content': [
                     {
