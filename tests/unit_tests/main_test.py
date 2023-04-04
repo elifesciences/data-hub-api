@@ -11,6 +11,7 @@ from data_hub_api.main import create_app
 
 
 PREPRINT_DOI = '10.1101/doi1'
+MANUSCRIPT_ID = 'manuscript_id_1'
 
 
 @pytest.fixture(name='enhanced_preprints_docmaps_provider_class_mock', autouse=True)
@@ -88,6 +89,40 @@ class TestGetEnhancedPreprintsDocmapsIndex:
             params={'preprint_doi': PREPRINT_DOI}
         )
         enhanced_preprints_docmaps_provider_mock.get_docmaps_by_doi.assert_called_with(PREPRINT_DOI)
+        assert response.status_code == 200
+        assert response.json() == article_docmap_list[0]
+
+    def test_should_return_not_available_message_for_invalid_manuscript_id_by_elife(
+        self,
+        enhanced_preprints_docmaps_provider_mock: MagicMock
+    ):
+        enhanced_preprints_docmaps_provider_mock.get_docmaps_by_manuscript_id.return_value = []
+        client = TestClient(create_app())
+        response = client.get(
+            '/enhanced-preprints/docmaps/v1/by-publisher/elife/get-by-manuscript-id',
+            params={'manuscript_id': MANUSCRIPT_ID}
+        )
+        assert response.status_code == 404
+        assert response.json() == {
+            "detail": "No Docmaps available for requested manuscript from the publisher eLife"
+        }
+
+    def test_should_docmap_from_epp_provider_for_individual_by_publisher_manuscript_id(
+        self,
+        enhanced_preprints_docmaps_provider_mock: MagicMock
+    ):
+        article_docmap_list = [{'id': 'docmap_1'}]
+        enhanced_preprints_docmaps_provider_mock.get_docmaps_by_manuscript_id.return_value = (
+            article_docmap_list
+        )
+        client = TestClient(create_app())
+        response = client.get(
+            '/enhanced-preprints/docmaps/v1/by-publisher/elife/get-by-manuscript-id',
+            params={'manuscript_id': MANUSCRIPT_ID}
+        )
+        enhanced_preprints_docmaps_provider_mock.get_docmaps_by_manuscript_id.assert_called_with(
+            MANUSCRIPT_ID
+        )
         assert response.status_code == 200
         assert response.json() == article_docmap_list[0]
 
