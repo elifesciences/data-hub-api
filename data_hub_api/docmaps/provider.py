@@ -22,7 +22,7 @@ DOCMAPS_JSONLD_SCHEMA_URL = 'https://w3id.org/docmaps/context.jsonld'
 DOCMAP_ID_PREFIX = (
     'https://data-hub-api.elifesciences.org/enhanced-preprints/docmaps/v1/'
     +
-    'by-publisher/elife/get-by-doi?'
+    'by-publisher/elife/get-by-manuscript-id?'
 )
 
 DOI_ROOT_URL = 'https://doi.org/'
@@ -418,7 +418,7 @@ def get_docmap_item_for_query_result_item(query_result_item: dict) -> dict:
     qc_complete_timestamp_str = query_result_item['qc_complete_timestamp'].isoformat()
     publisher_json = query_result_item['publisher_json']
     LOGGER.debug('publisher_json: %r', publisher_json)
-    id_query_param = {'preprint_doi': query_result_item['preprint_doi']}
+    id_query_param = {'manuscript_id': query_result_item['manuscript_id']}
     return {
         '@context': DOCMAPS_JSONLD_SCHEMA_URL,
         'type': 'docmap',
@@ -487,8 +487,24 @@ class DocmapsProvider:
         for bq_result in bq_result_list:
             yield get_docmap_item_for_query_result_item(bq_result)
 
+    def iter_docmaps_by_manuscript_id(self, manuscript_id: Optional[str] = None) -> Iterable[dict]:
+        bq_result_list = self._query_results_cache.get_or_load(
+            load_fn=self._load_query_results_from_bq
+        )
+        if manuscript_id:
+            bq_result_list = [
+                bq_result
+                for bq_result in bq_result_list
+                if bq_result['manuscript_id'] == manuscript_id
+            ]
+        for bq_result in bq_result_list:
+            yield get_docmap_item_for_query_result_item(bq_result)
+
     def get_docmaps_by_doi(self, preprint_doi: str) -> Sequence[dict]:
         return list(self.iter_docmaps(preprint_doi))
+
+    def get_docmaps_by_manuscript_id(self, manuscript_id: str) -> Sequence[dict]:
+        return list(self.iter_docmaps_by_manuscript_id(manuscript_id))
 
     def get_docmaps_index(self) -> dict:
         article_docmaps_list = list(self.iter_docmaps())
