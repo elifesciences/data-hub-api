@@ -1,6 +1,7 @@
 FROM python:3.8 AS base
 
 USER root
+ENV PIP_NO_CACHE_DIR=1
 
 WORKDIR /app/api
 
