@@ -264,9 +264,9 @@ class TestGetDocmapsItemForQueryResultItem:
         docmaps_item = get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
         assert docmaps_item['type'] == 'docmap'
 
-    def test_should_add_prefix_and_url_encode_preprint_doi_to_id(self):
+    def test_should_add_prefix_and_url_encode_manuscript_id_to_id(self):
         docmaps_item = get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
-        id_query_param = {'preprint_doi': DOCMAPS_QUERY_RESULT_ITEM_1['preprint_doi']}
+        id_query_param = {'manuscript_id': DOCMAPS_QUERY_RESULT_ITEM_1['manuscript_id']}
         assert docmaps_item['id'] == (
             DOCMAP_ID_PREFIX + urllib.parse.urlencode(id_query_param)
         )
