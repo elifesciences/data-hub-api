@@ -220,6 +220,7 @@ t_result_with_preprint_details_array AS (
         preprint_detail.elife_doi_version_str,
         preprint_detail.preprint_url_source,
         preprint_detail.preprint_doi,
+        preprint_detail.preprint_version,
         preprint_detail.preprint_doi_source,
         preprint_detail.preprint_doi_url,
         preprint_detail.preprint_published_at_date,
