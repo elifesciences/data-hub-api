@@ -9,7 +9,7 @@ import pytest
 from data_hub_api.utils.cache import InMemorySingleObjectCache
 from data_hub_api.docmaps import provider as provider_module
 from data_hub_api.docmaps.provider import (
-    ADDITIONAL_PREPRINT_DOIS,
+    ADDITIONAL_MANUSCRIPT_IDS,
     DOCMAP_OUTPUT_TYPE_FOR_REPLY,
     DOCMAP_OUTPUT_TYPE_FOR_EVALUATION_SUMMARY,
     DOCMAP_OUTPUT_TYPE_FOR_REVIEW_ARTICLE,
@@ -44,8 +44,8 @@ PREPRINT_LINK_2 = f'{PREPRINT_LINK_2_PREFIX}v{PREPRINT_VERSION_2}'
 ELIFE_DOI_VERSION_STR_1 = 'elife_doi_version_str_1'
 ELIFE_DOI_VERSION_STR_2 = 'elife_doi_version_str_2'
 
-TDM_PATH_1 ='tdm_path_1'
-TDM_PATH_2 ='tdm_path_2'
+TDM_PATH_1 = 'tdm_path_1'
+TDM_PATH_2 = 'tdm_path_2'
 
 PREPRINT_DETAILS_1 = {
     'preprint_url': PREPRINT_LINK_1,
@@ -341,13 +341,12 @@ class TestGetDocmapsItemForQueryResultItem:
         }]
 
     def test_should_set_published_to_none_if_unknown(self):
-        PREPRINT_DETAILS_WITH_NO_PUBLISH_DATE = {
-            **PREPRINT_DETAILS_1,
-            'preprint_published_at_date': None
-        }
         docmaps_item = get_docmap_item_for_query_result_item({
             **DOCMAPS_QUERY_RESULT_ITEM_1,
-            'preprint_details': [PREPRINT_DETAILS_WITH_NO_PUBLISH_DATE]
+            'preprint_details': [{
+                **PREPRINT_DETAILS_1,
+                'preprint_published_at_date': None
+            }]
         })
         manuscript_published_step = docmaps_item['steps']['_:b0']
         assert not manuscript_published_step['actions'][0]['outputs'][0].get('published')
@@ -791,7 +790,7 @@ class TestEnhancedPreprintsDocmapsProvider:
         provider = DocmapsProvider(
             only_include_reviewed_preprint_type=True,
             only_include_evaluated_preprints=False,
-            additionally_include_preprint_dois=[]
+            additionally_include_manuscript_ids=[]
         )
         assert provider.docmaps_index_query.rstrip().endswith(
             'WHERE is_reviewed_preprint_type AND is_or_was_under_review'
@@ -803,10 +802,10 @@ class TestEnhancedPreprintsDocmapsProvider:
         provider = DocmapsProvider(
             only_include_reviewed_preprint_type=True,
             only_include_evaluated_preprints=False,
-            additionally_include_preprint_dois=ADDITIONAL_PREPRINT_DOIS
+            additionally_include_manuscript_ids=ADDITIONAL_MANUSCRIPT_IDS
         )
         assert provider.docmaps_index_query.rstrip().endswith(
-            f'OR preprint_doi IN {ADDITIONAL_PREPRINT_DOIS}'
+            f'OR result.manuscript_id IN {ADDITIONAL_MANUSCRIPT_IDS}'
         )
 
     def test_should_add_has_evaluatons_where_clause_to_query(
