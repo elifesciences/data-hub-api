@@ -35,13 +35,13 @@ DOCMAP_OUTPUT_TYPE_FOR_EVALUATION_SUMMARY = 'evaluation-summary'
 DOCMAP_OUTPUT_TYPE_FOR_REPLY = 'reply'
 DOCMAP_OUTPUT_TYPE_FOR_REVIEW_ARTICLE = 'review-article'
 
-ADDITIONAL_PREPRINT_DOIS = (
-  '10.1101/2022.06.24.497502',
-  '10.1101/2022.07.26.501569',
-  '10.1101/2022.06.30.498369',
-  '10.1101/2022.05.30.22275761',
-  '10.1101/2022.07.21.500925',
-  '10.1101/2021.11.12.468444'
+ADDITIONAL_MANUSCRIPT_IDS = (
+    '80494',
+    '80984',
+    '81727',
+    '81926',
+    '81535',
+    '80729'
 )
 
 
@@ -446,20 +446,20 @@ class DocmapsProvider:
         query_results_cache: Optional[SingleObjectCache[Sequence[dict]]] = None,
         only_include_reviewed_preprint_type: bool = True,
         only_include_evaluated_preprints: bool = False,
-        additionally_include_preprint_dois: Optional[Tuple[str]] = None
+        additionally_include_manuscript_ids: Optional[Tuple[str]] = None
     ) -> None:
         self.gcp_project_name = gcp_project_name
         self.docmaps_index_query = (
             Path(get_sql_path('docmaps_index.sql')).read_text(encoding='utf-8')
         )
         assert not (only_include_reviewed_preprint_type and only_include_evaluated_preprints)
-        assert not (additionally_include_preprint_dois and not only_include_reviewed_preprint_type)
+        assert not (additionally_include_manuscript_ids and not only_include_reviewed_preprint_type)
         if only_include_reviewed_preprint_type:
             self.docmaps_index_query += (
                 '\nWHERE is_reviewed_preprint_type AND is_or_was_under_review'
             )
-        if only_include_reviewed_preprint_type and additionally_include_preprint_dois:
-            self.docmaps_index_query += f'\nOR preprint_doi IN {additionally_include_preprint_dois}'
+        if only_include_reviewed_preprint_type and additionally_include_manuscript_ids:
+            self.docmaps_index_query += f'\nOR result.manuscript_id IN {additionally_include_manuscript_ids}'
         if only_include_evaluated_preprints:
             self.docmaps_index_query += '\nWHERE has_evaluations'
         if query_results_cache is None:
