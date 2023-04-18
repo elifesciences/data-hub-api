@@ -90,6 +90,19 @@ t_result_with_evaluations AS (
   FROM t_result_with_preprint_dois
 ),
 
+t_result_with_sorted_evaluations AS (
+  SELECT
+    result.* EXCEPT(evaluations),
+
+    ARRAY(
+      SELECT AS STRUCT evaluation.*
+      FROM result.evaluations AS evaluation
+      ORDER BY evaluation.annotation_created_timestamp
+    ) AS evaluations
+
+  FROM t_result_with_evaluations AS result
+),
+
 t_latest_biorxiv_medrxiv_api_response_version_by_doi AS (
   SELECT
     doi,
@@ -126,7 +139,7 @@ t_result_with_preprint_url_and_has_evaluations AS (
 
     (ARRAY_LENGTH(result.evaluations) > 0) AS has_evaluations,
 
-  FROM t_result_with_evaluations AS result
+  FROM t_result_with_sorted_evaluations AS result
   LEFT JOIN t_latest_biorxiv_medrxiv_api_response_version_by_doi AS latest_biorxiv_medrxiv_version
     ON latest_biorxiv_medrxiv_version.doi = result.preprint_doi
 ),
