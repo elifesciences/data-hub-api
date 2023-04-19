@@ -30,7 +30,6 @@ from data_hub_api.docmaps.provider import (
 
 
 DOI_1 = '10.1101.test/doi1'
-DOI_2 = '10.1101.test/doi2'
 
 PREPRINT_VERSION_1 = '10'
 PREPRINT_VERSION_2 = '11'
@@ -38,14 +37,10 @@ PREPRINT_VERSION_2 = '11'
 PREPRINT_LINK_PREFIX = 'https://test-preprints/'
 PREPRINT_LINK_1_PREFIX = f'{PREPRINT_LINK_PREFIX}{DOI_1}'
 PREPRINT_LINK_1 = f'{PREPRINT_LINK_1_PREFIX}v{PREPRINT_VERSION_1}'
-PREPRINT_LINK_2_PREFIX = f'{PREPRINT_LINK_PREFIX}{DOI_2}'
-PREPRINT_LINK_2 = f'{PREPRINT_LINK_2_PREFIX}v{PREPRINT_VERSION_2}'
 
 ELIFE_DOI_VERSION_STR_1 = 'elife_doi_version_str_1'
-ELIFE_DOI_VERSION_STR_2 = 'elife_doi_version_str_2'
 
 TDM_PATH_1 = 'tdm_path_1'
-TDM_PATH_2 = 'tdm_path_2'
 
 PREPRINT_DETAILS_1 = {
     'preprint_url': PREPRINT_LINK_1,
@@ -54,15 +49,6 @@ PREPRINT_DETAILS_1 = {
     'preprint_version': PREPRINT_VERSION_1,
     'preprint_published_at_date': date.fromisoformat('2021-01-01'),
     'tdm_path': TDM_PATH_1
-}
-
-PREPRINT_DETAILS_2 = {
-    'preprint_url': PREPRINT_LINK_2,
-    'elife_doi_version_str': ELIFE_DOI_VERSION_STR_2,
-    'preprint_doi': DOI_2,
-    'preprint_version': PREPRINT_VERSION_2,
-    'preprint_published_at_date': date.fromisoformat('2021-01-02'),
-    'tdm_path': TDM_PATH_2
 }
 
 DOCMAPS_QUERY_RESULT_ITEM_1: dict = {
