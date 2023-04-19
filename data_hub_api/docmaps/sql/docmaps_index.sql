@@ -163,7 +163,9 @@ t_result_with_preprint_details AS (
         preprint_doi,
         preprint_doi_source,
         preprint_doi_url
-      ) FROM result.evaluations GROUP BY uri, elife_doi_version_str)
+      )
+      FROM result.evaluations 
+      GROUP BY uri, elife_doi_version_str)
       ELSE ARRAY(SELECT STRUCT(
         preprint_url,
         '1',
