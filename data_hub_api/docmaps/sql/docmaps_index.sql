@@ -213,15 +213,15 @@ t_result_with_preprint_published_at_date_and_tdm_path AS(
     result.manuscript_id,
     preprint_detail.*,
     biorxiv_medrxiv_api_response.date AS preprint_published_at_date,
-    tdm.tdm_path,
+    tdm.tdm_path
   FROM t_result_with_preprint_version AS result
   LEFT JOIN UNNEST(preprint_details) AS preprint_detail
   LEFT JOIN `elife-data-pipeline.prod.mv_latest_biorxiv_medrxiv_api_response` AS biorxiv_medrxiv_api_response
-        ON biorxiv_medrxiv_api_response.doi = preprint_detail.preprint_doi
-        AND CAST(biorxiv_medrxiv_api_response.version AS STRING) = preprint_detail.preprint_version
+    ON biorxiv_medrxiv_api_response.doi = preprint_detail.preprint_doi
+    AND CAST(biorxiv_medrxiv_api_response.version AS STRING) = preprint_detail.preprint_version
   LEFT JOIN t_latest_tdm_path_by_doi_and_version AS tdm
-        ON tdm.tdm_doi = preprint_detail.preprint_doi
-        AND CAST(tdm.tdm_ms_version AS STRING) = preprint_detail.preprint_version
+    ON tdm.tdm_doi = preprint_detail.preprint_doi
+    AND CAST(tdm.tdm_ms_version AS STRING) = preprint_detail.preprint_version
 ),
 
 t_result_with_preprint_details_array AS (
@@ -286,7 +286,7 @@ SELECT
   license.license_url AS license,
   license.license_timestamp,
 FROM t_result_with_preprint_version AS result
-  LEFT JOIN t_result_with_preprint_details_array AS preprint_detail
+LEFT JOIN t_result_with_preprint_details_array AS preprint_detail
   ON result.manuscript_id = preprint_detail.manuscript_id
-  LEFT JOIN t_latest_manuscript_license AS license
+LEFT JOIN t_latest_manuscript_license AS license
   ON result.manuscript_id = license.manuscript_id
