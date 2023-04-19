@@ -60,40 +60,6 @@ class TestGetEnhancedPreprintsDocmapsIndex:
         response = client.get('/enhanced-preprints/docmaps/v1/index')
         assert response.json() == docmaps_index
 
-    # def test_should_return_not_available_message_for_invalid_preprint_doi_by_elife(
-    #     self,
-    #     enhanced_preprints_docmaps_provider_mock: MagicMock
-    # ):
-    #     enhanced_preprints_docmaps_provider_mock.get_docmaps_by_doi.return_value = []
-    #     client = TestClient(create_app())
-    #     response = client.get(
-    #         '/enhanced-preprints/docmaps/v1/by-publisher/elife/get-by-doi',
-    #         params={'preprint_doi': PREPRINT_DOI}
-    #     )
-    #     assert response.status_code == 404
-    #     assert response.json() == {
-    #         "detail": "No Docmaps available for requested DOI from the publisher eLife"
-    #     }
-
-    # def test_should_return_json_with_docmap_from_enhanced_pp_provider_for_individual_by_publisher(
-    #     self,
-    #     enhanced_preprints_docmaps_provider_mock: MagicMock
-    # ):
-    #     article_docmap_list = [{'id': 'docmap_1'}]
-    #     enhanced_preprints_docmaps_provider_mock.get_docmaps_by_doi.return_value = (
-    #         article_docmap_list
-    #     )
-    #     client = TestClient(create_app())
-    #     response = client.get(
-    #         '/enhanced-preprints/docmaps/v1/by-publisher/elife/get-by-doi',
-    #         params={'preprint_doi': PREPRINT_DOI}
-    #     )
-    #     enhanced_preprints_docmaps_provider_mock.get_docmaps_by_doi.assert_called_with(
-    #         PREPRINT_DOI
-    #     )
-    #     assert response.status_code == 200
-    #     assert response.json() == article_docmap_list[0]
-
     def test_should_return_not_available_message_for_invalid_manuscript_id_by_elife(
         self,
         enhanced_preprints_docmaps_provider_mock: MagicMock
