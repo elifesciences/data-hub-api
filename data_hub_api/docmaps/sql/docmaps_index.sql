@@ -241,6 +241,7 @@ t_result_with_preprint_details_array AS (
         preprint_detail.preprint_published_at_date,
         preprint_detail.tdm_path
       )
+      ORDER BY preprint_detail.preprint_url
     ) AS preprint_details
   FROM t_result_with_preprint_version AS result
   LEFT JOIN t_result_with_preprint_published_at_date_and_tdm_path AS preprint_detail
