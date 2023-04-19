@@ -4,7 +4,7 @@ from fastapi import APIRouter, FastAPI, HTTPException
 from fastapi.responses import HTMLResponse
 
 from data_hub_api.utils.cache import InMemorySingleObjectCache
-from data_hub_api.docmaps.provider import ADDITIONAL_PREPRINT_DOIS, DocmapsProvider
+from data_hub_api.docmaps.provider import ADDITIONAL_MANUSCRIPT_IDS, DocmapsProvider
 
 
 LOGGER = logging.getLogger(__name__)
@@ -18,17 +18,6 @@ def create_docmaps_router(
     @router.get("/v1/index")
     def get_enhanced_preprints_docmaps_index():
         return docmaps_provider.get_docmaps_index()
-
-    @router.get("/v1/by-publisher/elife/get-by-doi")
-    def get_enhanced_preprints_docmaps_by_preprint_doi_by_publisher_elife(preprint_doi: str):
-        docmaps = docmaps_provider.get_docmaps_by_doi(preprint_doi)
-        if not docmaps:
-            raise HTTPException(
-                status_code=404,
-                detail="No Docmaps available for requested DOI from the publisher eLife"
-            )
-        assert len(docmaps) == 1
-        return docmaps[0]
 
     @router.get("/v1/by-publisher/elife/get-by-manuscript-id")
     def get_enhanced_preprints_docmaps_by_manuscript_id_by_publisher_elife(manuscript_id: str):
@@ -52,7 +41,7 @@ def create_app():
     enhanced_preprints_docmaps_provider = DocmapsProvider(
         only_include_reviewed_preprint_type=True,
         only_include_evaluated_preprints=False,
-        additionally_include_preprint_dois=ADDITIONAL_PREPRINT_DOIS,
+        additionally_include_manuscript_ids=ADDITIONAL_MANUSCRIPT_IDS,
         query_results_cache=InMemorySingleObjectCache(max_age_in_seconds=max_age_in_seconds)
     )
 

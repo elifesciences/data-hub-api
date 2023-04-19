@@ -9,7 +9,7 @@ import pytest
 from data_hub_api.utils.cache import InMemorySingleObjectCache
 from data_hub_api.docmaps import provider as provider_module
 from data_hub_api.docmaps.provider import (
-    ADDITIONAL_PREPRINT_DOIS,
+    ADDITIONAL_MANUSCRIPT_IDS,
     DOCMAP_OUTPUT_TYPE_FOR_REPLY,
     DOCMAP_OUTPUT_TYPE_FOR_EVALUATION_SUMMARY,
     DOCMAP_OUTPUT_TYPE_FOR_REVIEW_ARTICLE,
@@ -768,22 +768,22 @@ class TestEnhancedPreprintsDocmapsProvider:
         provider = DocmapsProvider(
             only_include_reviewed_preprint_type=True,
             only_include_evaluated_preprints=False,
-            additionally_include_preprint_dois=[]
+            additionally_include_manuscript_ids=[]
         )
         assert provider.docmaps_index_query.rstrip().endswith(
             'WHERE is_reviewed_preprint_type AND is_or_was_under_review'
         )
 
-    def test_should_add_additional_preprint_dois_to_query_filter(
+    def test_should_add_additional_manuscript_ids_to_query_filter(
         self
     ):
         provider = DocmapsProvider(
             only_include_reviewed_preprint_type=True,
             only_include_evaluated_preprints=False,
-            additionally_include_preprint_dois=ADDITIONAL_PREPRINT_DOIS
+            additionally_include_manuscript_ids=ADDITIONAL_MANUSCRIPT_IDS
         )
         assert provider.docmaps_index_query.rstrip().endswith(
-            f'OR preprint_doi IN {ADDITIONAL_PREPRINT_DOIS}'
+            f'OR result.manuscript_id IN {ADDITIONAL_MANUSCRIPT_IDS}'
         )
 
     def test_should_add_has_evaluatons_where_clause_to_query(
