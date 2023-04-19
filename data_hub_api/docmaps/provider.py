@@ -476,19 +476,6 @@ class DocmapsProvider:
         )
         return result
 
-    def iter_docmaps(self, preprint_doi: Optional[str] = None) -> Iterable[dict]:
-        bq_result_list = self._query_results_cache.get_or_load(
-            load_fn=self._load_query_results_from_bq
-        )
-        if preprint_doi:
-            bq_result_list = [
-                bq_result
-                for bq_result in bq_result_list
-                if bq_result['preprint_doi'] == preprint_doi
-            ]
-        for bq_result in bq_result_list:
-            yield get_docmap_item_for_query_result_item(bq_result)
-
     def iter_docmaps_by_manuscript_id(self, manuscript_id: Optional[str] = None) -> Iterable[dict]:
         bq_result_list = self._query_results_cache.get_or_load(
             load_fn=self._load_query_results_from_bq
@@ -502,12 +489,9 @@ class DocmapsProvider:
         for bq_result in bq_result_list:
             yield get_docmap_item_for_query_result_item(bq_result)
 
-    def get_docmaps_by_doi(self, preprint_doi: str) -> Sequence[dict]:
-        return list(self.iter_docmaps(preprint_doi))
-
     def get_docmaps_by_manuscript_id(self, manuscript_id: str) -> Sequence[dict]:
         return list(self.iter_docmaps_by_manuscript_id(manuscript_id))
 
     def get_docmaps_index(self) -> dict:
-        article_docmaps_list = list(self.iter_docmaps())
+        article_docmaps_list = list(self.iter_docmaps_by_manuscript_id())
         return {'docmaps': article_docmaps_list}
