@@ -79,9 +79,9 @@ def get_elife_doi_url(
 
 
 def get_docmap_assertions_value_for_preprint_manuscript_published_step(
-    query_result_item: dict
+    preprint: dict
 ) -> Sequence[dict]:
-    preprint = query_result_item['preprints'][0]
+    # preprint = query_result_item['preprints'][0]
     return [{
         'item': {
             'type': 'preprint',
@@ -92,10 +92,9 @@ def get_docmap_assertions_value_for_preprint_manuscript_published_step(
     }]
 
 
-def get_docmap_actions_value_for_preprint_manuscript_published_step(
-    query_result_item: dict
+def get_docmap_actions_value_for_preprint_manuscript_published_step( #hc
+    preprint: dict
 ) -> Sequence[dict]:
-    preprint = query_result_item['preprints'][0]
     preprint_doi = preprint['preprint_doi']
     preprint_published_at_date = preprint['preprint_published_at_date']
     return [{
@@ -115,15 +114,15 @@ def get_docmap_actions_value_for_preprint_manuscript_published_step(
     }]
 
 
-def get_docmaps_step_for_manuscript_published_status(
-    query_result_item
+def get_docmaps_step_for_manuscript_published_status( # hc
+    preprint
 ) -> dict:
     return {
         'actions': get_docmap_actions_value_for_preprint_manuscript_published_step(
-            query_result_item=query_result_item
+            preprint=preprint
         ),
         'assertions': get_docmap_assertions_value_for_preprint_manuscript_published_step(
-            query_result_item=query_result_item
+            preprint=preprint
         ),
         'inputs': []
     }
@@ -403,10 +402,15 @@ def get_docmaps_step_for_peer_reviewed_status(
 
 
 def iter_docmap_steps_for_query_result_item(query_result_item: dict) -> Iterable[dict]:
-    yield get_docmaps_step_for_manuscript_published_status(query_result_item)
+    preprint = query_result_item['preprints'][0]
+    yield get_docmaps_step_for_manuscript_published_status(preprint)
     yield get_docmaps_step_for_under_review_status(query_result_item)
     if query_result_item['evaluations']:
         yield get_docmaps_step_for_peer_reviewed_status(query_result_item)
+    if len(query_result_item['preprints']) > 1:
+        for preprint in query_result_item['preprints']:
+            if preprint != query_result_item['preprints'][0]:
+                yield get_docmaps_step_for_manuscript_published_status(preprint)
 
 
 def generate_docmap_steps(step_iterable: Iterable[dict]) -> dict:

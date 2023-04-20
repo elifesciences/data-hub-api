@@ -30,6 +30,7 @@ from data_hub_api.docmaps.provider import (
 
 
 DOI_1 = '10.1101.test/doi1'
+DOI_2 = '10.1101.test/doi2'
 
 PREPRINT_VERSION_1 = '10'
 PREPRINT_VERSION_2 = '11'
@@ -38,9 +39,14 @@ PREPRINT_LINK_PREFIX = 'https://test-preprints/'
 PREPRINT_LINK_1_PREFIX = f'{PREPRINT_LINK_PREFIX}{DOI_1}'
 PREPRINT_LINK_1 = f'{PREPRINT_LINK_1_PREFIX}v{PREPRINT_VERSION_1}'
 
+PREPRINT_LINK_2_PREFIX = f'{PREPRINT_LINK_PREFIX}{DOI_2}'
+PREPRINT_LINK_2 = f'{PREPRINT_LINK_2_PREFIX}v{PREPRINT_VERSION_2}'
+
 ELIFE_DOI_VERSION_STR_1 = 'elife_doi_version_str_1'
+ELIFE_DOI_VERSION_STR_2 = 'elife_doi_version_str_2'
 
 TDM_PATH_1 = 'tdm_path_1'
+TDM_PATH_2 = 'tdm_path_2'
 
 PREPRINT_DETAILS_1 = {
     'preprint_url': PREPRINT_LINK_1,
@@ -49,6 +55,15 @@ PREPRINT_DETAILS_1 = {
     'preprint_version': PREPRINT_VERSION_1,
     'preprint_published_at_date': date.fromisoformat('2021-01-01'),
     'tdm_path': TDM_PATH_1
+}
+
+PREPRINT_DETAILS_2 = {
+    'preprint_url': PREPRINT_LINK_2,
+    'elife_doi_version_str': ELIFE_DOI_VERSION_STR_2,
+    'preprint_doi': DOI_2,
+    'preprint_version': PREPRINT_VERSION_2,
+    'preprint_published_at_date': date.fromisoformat('2021-02-01'),
+    'tdm_path': TDM_PATH_2
 }
 
 DOCMAPS_QUERY_RESULT_ITEM_1: dict = {
@@ -81,12 +96,32 @@ DOCMAPS_QUERY_RESULT_EVALUATION_1 = {
     'evaluation_suffix': EVALUATION_SUFFIX_1
 }
 
+DOCMAPS_QUERY_RESULT_EVALUATION_2 = {
+    'hypothesis_id': HYPOTHESIS_ID_2,
+    'annotation_created_timestamp': '',
+    'tags': [],
+    'uri': PREPRINT_LINK_2,
+    'source_version': PREPRINT_VERSION_2,
+    'evaluation_suffix': EVALUATION_SUFFIX_2
+}
 
 DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS = {
     **DOCMAPS_QUERY_RESULT_ITEM_1,
     'evaluations': [DOCMAPS_QUERY_RESULT_EVALUATION_1]
 }
 
+DOCMAPS_QUERY_RESULT_ITEM_WITH_REVISED_PREPRPINT: dict = {
+    'manuscript_id': 'manuscript_id_1',
+    'qc_complete_timestamp': datetime.fromisoformat('2022-01-01T01:02:03+00:00'),
+    'under_review_timestamp': datetime.fromisoformat('2022-02-01T01:02:03+00:00'),
+    'publisher_json': '{"id": "publisher_1"}',
+    'elife_doi': 'elife_doi_1',
+    'license': 'license_1',
+    'editor_details': [],
+    'senior_editor_details': [],
+    'evaluations': [DOCMAPS_QUERY_RESULT_EVALUATION_1, DOCMAPS_QUERY_RESULT_EVALUATION_2],
+    'preprints': [PREPRINT_DETAILS_1, PREPRINT_DETAILS_2],
+}
 
 @pytest.fixture(name='iter_dict_from_bq_query_mock', autouse=True)
 def _iter_dict_from_bq_query_mock() -> Iterable[MagicMock]:
@@ -322,7 +357,7 @@ class TestGetDocmapsItemForQueryResultItem:
                     .isoformat()
                 ),
                 'versionIdentifier': PREPRINT_DETAILS_1['preprint_version'],
-                '_tdmPath': 'tdm_path_1'
+                '_tdmPath': TDM_PATH_1
             }]
         }]
 
@@ -738,6 +773,47 @@ class TestGetDocmapsItemForQueryResultItem:
                 'role': 'senior-editor'
             }
         ]
+
+    def test_should_return_empty_list_for_inputs_manuscript_published_step_for_revised_pp(self):
+        docmaps_item = get_docmap_item_for_query_result_item(
+            DOCMAPS_QUERY_RESULT_ITEM_WITH_REVISED_PREPRPINT
+        )
+        manuscript_published_step = docmaps_item['steps']['_:b3']
+        assert manuscript_published_step['inputs'] == []
+
+    def test_should_populate_assertions_manuscript_published_step_for_revised_pp(self):
+        docmaps_item = get_docmap_item_for_query_result_item(
+            DOCMAPS_QUERY_RESULT_ITEM_WITH_REVISED_PREPRPINT
+        )
+        manuscript_published_step = docmaps_item['steps']['_:b3']
+        assert manuscript_published_step['assertions'] == [{
+            'item': {
+                'type': 'preprint',
+                'doi': DOI_2,
+                'versionIdentifier': PREPRINT_DETAILS_2['preprint_version']
+            },
+            'status': 'manuscript-published'
+        }]
+
+    def test_should_populate_actions_outputs_manuscript_published_step_for_revised_pp(self):
+        docmaps_item = get_docmap_item_for_query_result_item(
+            DOCMAPS_QUERY_RESULT_ITEM_WITH_REVISED_PREPRPINT
+        )
+        manuscript_published_step = docmaps_item['steps']['_:b3']
+        assert manuscript_published_step['actions'] == [{
+            'participants': [],
+            'outputs': [{
+                'type': 'preprint',
+                'doi': DOI_2,
+                'url': PREPRINT_LINK_2,
+                'published': (
+                    PREPRINT_DETAILS_2['preprint_published_at_date']
+                    .isoformat()
+                ),
+                'versionIdentifier': PREPRINT_DETAILS_2['preprint_version'],
+                '_tdmPath': TDM_PATH_2
+            }]
+        }]
 
 
 class TestEnhancedPreprintsDocmapsProvider:
