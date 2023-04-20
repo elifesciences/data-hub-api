@@ -81,12 +81,12 @@ def get_elife_doi_url(
 def get_docmap_assertions_value_for_preprint_manuscript_published_step(
     query_result_item: dict
 ) -> Sequence[dict]:
-    preprint_details = query_result_item['preprint_details'][0]
+    preprint = query_result_item['preprints'][0]
     return [{
         'item': {
             'type': 'preprint',
-            'doi': preprint_details['preprint_doi'],
-            'versionIdentifier': preprint_details['preprint_version']
+            'doi': preprint['preprint_doi'],
+            'versionIdentifier': preprint['preprint_version']
         },
         'status': 'manuscript-published'
     }]
@@ -95,22 +95,22 @@ def get_docmap_assertions_value_for_preprint_manuscript_published_step(
 def get_docmap_actions_value_for_preprint_manuscript_published_step(
     query_result_item: dict
 ) -> Sequence[dict]:
-    preprint_details = query_result_item['preprint_details'][0]
-    preprint_doi = preprint_details['preprint_doi']
-    preprint_published_at_date = preprint_details['preprint_published_at_date']
+    preprint = query_result_item['preprints'][0]
+    preprint_doi = preprint['preprint_doi']
+    preprint_published_at_date = preprint['preprint_published_at_date']
     return [{
         'participants': [],
         'outputs': [{
             'type': 'preprint',
             'doi': preprint_doi,
-            'url': preprint_details['preprint_url'],
+            'url': preprint['preprint_url'],
             'published': (
                 preprint_published_at_date.isoformat()
                 if preprint_published_at_date
                 else None
             ),
-            'versionIdentifier': preprint_details['preprint_version'],
-            '_tdmPath': preprint_details['tdm_path']
+            'versionIdentifier': preprint['preprint_version'],
+            '_tdmPath': preprint['tdm_path']
         }]
     }]
 
@@ -132,12 +132,12 @@ def get_docmaps_step_for_manuscript_published_status(
 def get_docmap_assertions_value_for_preprint_under_review_step(
     query_result_item: dict
 ) -> Sequence[dict]:
-    preprint_details = query_result_item['preprint_details'][0]
+    preprint = query_result_item['preprints'][0]
     return [{
         'item': {
             'type': 'preprint',
-            'doi': preprint_details['preprint_doi'],
-            'versionIdentifier': preprint_details['preprint_version']
+            'doi': preprint['preprint_doi'],
+            'versionIdentifier': preprint['preprint_version']
         },
         'status': 'under-review',
         'happened': query_result_item['qc_complete_timestamp']
@@ -146,9 +146,9 @@ def get_docmap_assertions_value_for_preprint_under_review_step(
             'type': 'preprint',
             'doi': get_elife_version_doi(
                 elife_doi=query_result_item['elife_doi'],
-                elife_doi_version_str=preprint_details['elife_doi_version_str']
+                elife_doi_version_str=preprint['elife_doi_version_str']
             ),
-            'versionIdentifier': preprint_details['elife_doi_version_str']
+            'versionIdentifier': preprint['elife_doi_version_str']
         },
         'status': 'draft'
     }]
@@ -157,16 +157,16 @@ def get_docmap_assertions_value_for_preprint_under_review_step(
 def get_docmap_actions_value_for_preprint_under_review_step(
     query_result_item: dict
 ) -> Sequence[dict]:
-    preprint_details = query_result_item['preprint_details'][0]
+    preprint = query_result_item['preprints'][0]
     return [{
         'participants': [],
         'outputs': [{
             'identifier': query_result_item['manuscript_id'],
-            'versionIdentifier': preprint_details['elife_doi_version_str'],
+            'versionIdentifier': preprint['elife_doi_version_str'],
             'type': 'preprint',
             'doi': get_elife_version_doi(
                 elife_doi=query_result_item['elife_doi'],
-                elife_doi_version_str=preprint_details['elife_doi_version_str']
+                elife_doi_version_str=preprint['elife_doi_version_str']
             ),
             'license': query_result_item['license'],
         }]
@@ -176,12 +176,12 @@ def get_docmap_actions_value_for_preprint_under_review_step(
 def get_docmap_inputs_value_for_review_steps(
     query_result_item: dict
 ) -> Sequence[dict]:
-    preprint_details = query_result_item['preprint_details'][0]
+    preprint = query_result_item['preprints'][0]
     return [{
         'type': 'preprint',
-        'doi': preprint_details['preprint_doi'],
-        'url': preprint_details['preprint_url'],
-        'versionIdentifier': preprint_details['preprint_version']
+        'doi': preprint['preprint_doi'],
+        'url': preprint['preprint_url'],
+        'versionIdentifier': preprint['preprint_version']
     }]
 
 
@@ -204,12 +204,12 @@ def get_docmaps_step_for_under_review_status(
 def get_docmap_assertions_value_for_preprint_peer_reviewed_step(
     query_result_item: dict
 ) -> Sequence[dict]:
-    preprint_details = query_result_item['preprint_details'][0]
+    preprint = query_result_item['preprints'][0]
     return [{
         'item': {
             'type': 'preprint',
-            'doi': preprint_details['preprint_doi'],
-            'versionIdentifier': preprint_details['preprint_version']
+            'doi': preprint['preprint_doi'],
+            'versionIdentifier': preprint['preprint_version']
         },
         'status': 'peer-reviewed'
     }]
@@ -309,10 +309,10 @@ def get_single_actions_value_for_preprint_peer_reviewed_step(
     annotation_created_timestamp: str,
     outputs_type: str
 ) -> dict:
-    preprint_details = query_result_item['preprint_details'][0]
-    preprint_doi = preprint_details['preprint_doi']
+    preprint = query_result_item['preprints'][0]
+    preprint_doi = preprint['preprint_doi']
     elife_evaluation_doi = get_elife_evaluation_doi(
-        elife_doi_version_str=preprint_details['elife_doi_version_str'],
+        elife_doi_version_str=preprint['elife_doi_version_str'],
         elife_doi=query_result_item['elife_doi'],
         evaluation_suffix=evaluation_suffix
     )
@@ -356,9 +356,9 @@ def get_single_actions_value_for_preprint_peer_reviewed_step(
 def iter_single_actions_value_from_query_result_for_peer_reviewed_step(
     query_result_item: dict
 ) -> Iterable[dict]:
-    preprint_details = query_result_item['preprint_details'][0]
+    preprint = query_result_item['preprints'][0]
     evaluations = query_result_item['evaluations']
-    preprint_url = preprint_details['preprint_url']
+    preprint_url = preprint['preprint_url']
     for evaluation in evaluations:
         hypothesis_id = evaluation['hypothesis_id']
         annotation_created_timestamp = evaluation['annotation_created_timestamp']

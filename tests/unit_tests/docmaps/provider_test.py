@@ -61,7 +61,7 @@ DOCMAPS_QUERY_RESULT_ITEM_1: dict = {
     'editor_details': [],
     'senior_editor_details': [],
     'evaluations': [],
-    'preprint_details': [PREPRINT_DETAILS_1],
+    'preprints': [PREPRINT_DETAILS_1],
 }
 
 HYPOTHESIS_ID_1 = 'hypothesis_1'
@@ -329,7 +329,7 @@ class TestGetDocmapsItemForQueryResultItem:
     def test_should_set_published_to_none_if_unknown(self):
         docmaps_item = get_docmap_item_for_query_result_item({
             **DOCMAPS_QUERY_RESULT_ITEM_1,
-            'preprint_details': [{
+            'preprints': [{
                 **PREPRINT_DETAILS_1,
                 'preprint_published_at_date': None
             }]

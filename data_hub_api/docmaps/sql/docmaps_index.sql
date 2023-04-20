@@ -144,7 +144,7 @@ t_result_with_preprint_url_and_has_evaluations AS (
     ON latest_biorxiv_medrxiv_version.doi = result.preprint_doi
 ),
 
-t_result_with_preprint_details AS (
+t_result_with_preprints AS (
   SELECT 
     result.* EXCEPT(
       preprint_url,
@@ -174,22 +174,22 @@ t_result_with_preprint_details AS (
         preprint_doi_source,
         preprint_doi_url
       ))
-    END AS preprint_details,
+    END AS preprints,
 
   FROM t_result_with_preprint_url_and_has_evaluations AS result
 ),
 
 t_result_with_preprint_version AS (
   SELECT
-    * EXCEPT(preprint_details),
+    * EXCEPT(preprints),
     -- extract version from final preprint url to ensure url and version are consistent
     ARRAY(
       SELECT AS STRUCT 
-      preprint_detail.*,
-      REGEXP_EXTRACT(preprint_detail.preprint_url, r'10\.\d{3,}.*v([1-9])') AS preprint_version
-      FROM result.preprint_details AS preprint_detail
-    ) AS preprint_details
-  FROM t_result_with_preprint_details AS result
+      preprint.*,
+      REGEXP_EXTRACT(preprint.preprint_url, r'10\.\d{3,}.*v([1-9])') AS preprint_version
+      FROM result.preprints AS preprint
+    ) AS preprints
+  FROM t_result_with_preprints AS result
 ),
 
 t_latest_tdm_path_by_doi_and_version AS (
@@ -213,39 +213,39 @@ t_latest_tdm_path_by_doi_and_version AS (
 t_result_with_preprint_published_at_date_and_tdm_path AS(
   SELECT 
     result.manuscript_id,
-    preprint_detail.*,
+    preprint.*,
     biorxiv_medrxiv_api_response.date AS preprint_published_at_date,
     tdm.tdm_path
   FROM t_result_with_preprint_version AS result
-  LEFT JOIN UNNEST(preprint_details) AS preprint_detail
+  LEFT JOIN UNNEST(preprints) AS preprint
   LEFT JOIN `elife-data-pipeline.prod.mv_latest_biorxiv_medrxiv_api_response` AS biorxiv_medrxiv_api_response
-    ON biorxiv_medrxiv_api_response.doi = preprint_detail.preprint_doi
-    AND CAST(biorxiv_medrxiv_api_response.version AS STRING) = preprint_detail.preprint_version
+    ON biorxiv_medrxiv_api_response.doi = preprint.preprint_doi
+    AND CAST(biorxiv_medrxiv_api_response.version AS STRING) = preprint.preprint_version
   LEFT JOIN t_latest_tdm_path_by_doi_and_version AS tdm
-    ON tdm.tdm_doi = preprint_detail.preprint_doi
-    AND CAST(tdm.tdm_ms_version AS STRING) = preprint_detail.preprint_version
+    ON tdm.tdm_doi = preprint.preprint_doi
+    AND CAST(tdm.tdm_ms_version AS STRING) = preprint.preprint_version
 ),
 
-t_result_with_preprint_details_array AS (
+t_result_with_preprints_array AS (
   SELECT
     result.manuscript_id,
     ARRAY_AGG(
       STRUCT(
-        preprint_detail.preprint_url,
-        preprint_detail.elife_doi_version_str,
-        preprint_detail.preprint_url_source,
-        preprint_detail.preprint_doi,
-        preprint_detail.preprint_version,
-        preprint_detail.preprint_doi_source,
-        preprint_detail.preprint_doi_url,
-        preprint_detail.preprint_published_at_date,
-        preprint_detail.tdm_path
+        preprint.preprint_url,
+        preprint.elife_doi_version_str,
+        preprint.preprint_url_source,
+        preprint.preprint_doi,
+        preprint.preprint_version,
+        preprint.preprint_doi_source,
+        preprint.preprint_doi_url,
+        preprint.preprint_published_at_date,
+        preprint.tdm_path
       )
-      ORDER BY preprint_detail.preprint_url
-    ) AS preprint_details
+      ORDER BY preprint.preprint_url
+    ) AS preprints
   FROM t_result_with_preprint_version AS result
-  LEFT JOIN t_result_with_preprint_published_at_date_and_tdm_path AS preprint_detail
-  ON result.manuscript_id = preprint_detail.manuscript_id 
+  LEFT JOIN t_result_with_preprint_published_at_date_and_tdm_path AS preprint
+  ON result.manuscript_id = preprint.manuscript_id 
   GROUP BY result.manuscript_id
 ),
 
@@ -269,8 +269,8 @@ t_latest_manuscript_license AS (
 )
 
 SELECT
-  result.* EXCEPT(preprint_details),
-  preprint_detail.preprint_details,
+  result.* EXCEPT(preprints),
+  preprint.preprints,
   PARSE_JSON(ARRAY_TO_STRING(
     [
       '{',
@@ -289,7 +289,7 @@ SELECT
   license.license_url AS license,
   license.license_timestamp,
 FROM t_result_with_preprint_version AS result
-LEFT JOIN t_result_with_preprint_details_array AS preprint_detail
-  ON result.manuscript_id = preprint_detail.manuscript_id
+LEFT JOIN t_result_with_preprints_array AS preprint
+  ON result.manuscript_id = preprint.manuscript_id
 LEFT JOIN t_latest_manuscript_license AS license
   ON result.manuscript_id = license.manuscript_id
