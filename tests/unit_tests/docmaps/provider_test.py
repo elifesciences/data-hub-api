@@ -30,7 +30,6 @@ from data_hub_api.docmaps.provider import (
 
 
 DOI_1 = '10.1101.test/doi1'
-DOI_2 = '10.1101.test/doi2'
 
 PREPRINT_VERSION_1 = '10'
 PREPRINT_VERSION_2 = '11'
@@ -38,9 +37,9 @@ PREPRINT_VERSION_2 = '11'
 PREPRINT_LINK_PREFIX = 'https://test-preprints/'
 PREPRINT_LINK_1_PREFIX = f'{PREPRINT_LINK_PREFIX}{DOI_1}'
 PREPRINT_LINK_1 = f'{PREPRINT_LINK_1_PREFIX}v{PREPRINT_VERSION_1}'
+PREPRINT_LINK_2 = f'{PREPRINT_LINK_1_PREFIX}v{PREPRINT_VERSION_2}'
 
-PREPRINT_LINK_2_PREFIX = f'{PREPRINT_LINK_PREFIX}{DOI_2}'
-PREPRINT_LINK_2 = f'{PREPRINT_LINK_2_PREFIX}v{PREPRINT_VERSION_2}'
+ELIFE_DOI_1 = 'elife_doi_1'
 
 ELIFE_DOI_VERSION_STR_1 = 'elife_doi_version_str_1'
 ELIFE_DOI_VERSION_STR_2 = 'elife_doi_version_str_2'
@@ -60,7 +59,7 @@ PREPRINT_DETAILS_1 = {
 PREPRINT_DETAILS_2 = {
     'preprint_url': PREPRINT_LINK_2,
     'elife_doi_version_str': ELIFE_DOI_VERSION_STR_2,
-    'preprint_doi': DOI_2,
+    'preprint_doi': DOI_1,
     'preprint_version': PREPRINT_VERSION_2,
     'preprint_published_at_date': date.fromisoformat('2021-02-01'),
     'tdm_path': TDM_PATH_2
@@ -71,7 +70,7 @@ DOCMAPS_QUERY_RESULT_ITEM_1: dict = {
     'qc_complete_timestamp': datetime.fromisoformat('2022-01-01T01:02:03+00:00'),
     'under_review_timestamp': datetime.fromisoformat('2022-02-01T01:02:03+00:00'),
     'publisher_json': '{"id": "publisher_1"}',
-    'elife_doi': 'elife_doi_1',
+    'elife_doi': ELIFE_DOI_1,
     'license': 'license_1',
     'editor_details': [],
     'senior_editor_details': [],
@@ -115,7 +114,7 @@ DOCMAPS_QUERY_RESULT_ITEM_WITH_REVISED_PREPRPINT: dict = {
     'qc_complete_timestamp': datetime.fromisoformat('2022-01-01T01:02:03+00:00'),
     'under_review_timestamp': datetime.fromisoformat('2022-02-01T01:02:03+00:00'),
     'publisher_json': '{"id": "publisher_1"}',
-    'elife_doi': 'elife_doi_1',
+    'elife_doi': ELIFE_DOI_1,
     'license': 'license_1',
     'editor_details': [],
     'senior_editor_details': [],
@@ -789,7 +788,7 @@ class TestGetDocmapsItemForQueryResultItem:
         assert manuscript_published_step['assertions'] == [{
             'item': {
                 'type': 'preprint',
-                'doi': DOI_2,
+                'doi': DOI_1,
                 'versionIdentifier': PREPRINT_DETAILS_2['preprint_version']
             },
             'status': 'manuscript-published'
@@ -804,7 +803,7 @@ class TestGetDocmapsItemForQueryResultItem:
             'participants': [],
             'outputs': [{
                 'type': 'preprint',
-                'doi': DOI_2,
+                'doi': DOI_1,
                 'url': PREPRINT_LINK_2,
                 'published': (
                     PREPRINT_DETAILS_2['preprint_published_at_date']
