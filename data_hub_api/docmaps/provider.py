@@ -409,9 +409,9 @@ def iter_docmap_steps_for_query_result_item(query_result_item: dict) -> Iterable
         yield get_docmaps_step_for_peer_reviewed_status(query_result_item)
 
 
-def generate_docmap_steps(step_itearble: Iterable[dict]) -> dict:
+def generate_docmap_steps(step_iterable: Iterable[dict]) -> dict:
     steps_dict = {}
-    step_list = list(step_itearble)
+    step_list = list(step_iterable)
     for step_index, step in enumerate(step_list):
         LOGGER.debug('step_index: %r', step_index)
         step_ranking_dict = {
