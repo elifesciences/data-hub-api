@@ -124,7 +124,7 @@ t_result_with_preprint_url_and_has_evaluations AS (
   SELECT
     result.*,
     CONCAT('https://doi.org/', result.preprint_doi) AS preprint_doi_url,
-    COALESCE(result.evaluations[SAFE_OFFSET(0)].elife_doi_version_str, '1') AS elife_doi_version_str,
+
     COALESCE(
       result.evaluations[SAFE_OFFSET(0)].uri,
       result.ejp_validated_preprint_url,
@@ -137,19 +137,59 @@ t_result_with_preprint_url_and_has_evaluations AS (
       WHEN latest_biorxiv_medrxiv_version.preprint_url IS NOT NULL THEN 'latest_biorxiv_medrxiv_version'
     END AS preprint_url_source,
 
-    (ARRAY_LENGTH(result.evaluations) > 0) AS has_evaluations
+    (ARRAY_LENGTH(result.evaluations) > 0) AS has_evaluations,
 
   FROM t_result_with_sorted_evaluations AS result
   LEFT JOIN t_latest_biorxiv_medrxiv_api_response_version_by_doi AS latest_biorxiv_medrxiv_version
     ON latest_biorxiv_medrxiv_version.doi = result.preprint_doi
 ),
 
+t_result_with_preprints AS (
+  SELECT 
+    result.* EXCEPT(
+      preprint_url,
+      ejp_validated_preprint_url,
+      preprint_url_source,
+      preprint_doi,
+      preprint_doi_source,
+      preprint_doi_url
+    ),
+
+    CASE WHEN result.preprint_url_source = 'evaluations' 
+      THEN ARRAY(SELECT STRUCT(
+        uri AS preprint_url,
+        elife_doi_version_str,
+        preprint_url_source,
+        preprint_doi,
+        preprint_doi_source,
+        preprint_doi_url
+      )
+      FROM result.evaluations 
+      GROUP BY uri, elife_doi_version_str)
+      ELSE ARRAY(SELECT STRUCT(
+        preprint_url,
+        '1',
+        preprint_url_source,
+        preprint_doi,
+        preprint_doi_source,
+        preprint_doi_url
+      ))
+    END AS preprints,
+
+  FROM t_result_with_preprint_url_and_has_evaluations AS result
+),
+
 t_result_with_preprint_version AS (
   SELECT
-    *,
+    * EXCEPT(preprints),
     -- extract version from final preprint url to ensure url and version are consistent
-    REGEXP_EXTRACT(preprint_url, r'10\.\d{3,}.*v([1-9])') AS preprint_version,
-  FROM t_result_with_preprint_url_and_has_evaluations AS result
+    ARRAY(
+      SELECT AS STRUCT 
+      preprint.*,
+      REGEXP_EXTRACT(preprint.preprint_url, r'10\.\d{3,}.*v([1-9])') AS preprint_version
+      FROM result.preprints AS preprint
+    ) AS preprints
+  FROM t_result_with_preprints AS result
 ),
 
 t_latest_tdm_path_by_doi_and_version AS (
@@ -170,18 +210,43 @@ t_latest_tdm_path_by_doi_and_version AS (
   WHERE rn=1
 ),
 
-t_result_with_preprint_published_at_date_and_tdm_path AS (
-  SELECT
-    result.*,
+t_result_with_preprint_published_at_date_and_tdm_path AS(
+  SELECT 
+    result.manuscript_id,
+    preprint.*,
     biorxiv_medrxiv_api_response.date AS preprint_published_at_date,
     tdm.tdm_path
   FROM t_result_with_preprint_version AS result
+  LEFT JOIN UNNEST(preprints) AS preprint
   LEFT JOIN `elife-data-pipeline.prod.mv_latest_biorxiv_medrxiv_api_response` AS biorxiv_medrxiv_api_response
-    ON biorxiv_medrxiv_api_response.doi = result.preprint_doi
-    AND CAST(biorxiv_medrxiv_api_response.version AS STRING) = result.preprint_version
+    ON biorxiv_medrxiv_api_response.doi = preprint.preprint_doi
+    AND CAST(biorxiv_medrxiv_api_response.version AS STRING) = preprint.preprint_version
   LEFT JOIN t_latest_tdm_path_by_doi_and_version AS tdm
-    ON tdm.tdm_doi = result.preprint_doi
-    AND CAST(tdm.tdm_ms_version AS STRING) = result.preprint_version
+    ON tdm.tdm_doi = preprint.preprint_doi
+    AND CAST(tdm.tdm_ms_version AS STRING) = preprint.preprint_version
+),
+
+t_result_with_preprints_array AS (
+  SELECT
+    result.manuscript_id,
+    ARRAY_AGG(
+      STRUCT(
+        preprint.preprint_url,
+        preprint.elife_doi_version_str,
+        preprint.preprint_url_source,
+        preprint.preprint_doi,
+        preprint.preprint_version,
+        preprint.preprint_doi_source,
+        preprint.preprint_doi_url,
+        preprint.preprint_published_at_date,
+        preprint.tdm_path
+      )
+      ORDER BY preprint.preprint_url
+    ) AS preprints
+  FROM t_result_with_preprint_version AS result
+  LEFT JOIN t_result_with_preprint_published_at_date_and_tdm_path AS preprint
+  ON result.manuscript_id = preprint.manuscript_id 
+  GROUP BY result.manuscript_id
 ),
 
 t_latest_manuscript_license AS (
@@ -195,7 +260,7 @@ t_latest_manuscript_license AS (
     SELECT
       *, 
       ROW_NUMBER() OVER(
-        PARTITION BY long_manuscript_identifier
+        PARTITION BY manuscript_id
         ORDER BY imported_timestamp DESC
       ) AS rn
     FROM `elife-data-pipeline.prod.manuscript_license`
@@ -204,7 +269,8 @@ t_latest_manuscript_license AS (
 )
 
 SELECT
-  result.*,
+  result.* EXCEPT(preprints),
+  preprint.preprints,
   PARSE_JSON(ARRAY_TO_STRING(
     [
       '{',
@@ -222,6 +288,8 @@ SELECT
   )) AS publisher_json,
   license.license_url AS license,
   license.license_timestamp,
-FROM t_result_with_preprint_published_at_date_and_tdm_path AS result
+FROM t_result_with_preprint_version AS result
+LEFT JOIN t_result_with_preprints_array AS preprint
+  ON result.manuscript_id = preprint.manuscript_id
 LEFT JOIN t_latest_manuscript_license AS license
-ON result.long_manuscript_identifier = license.long_manuscript_identifier
+  ON result.manuscript_id = license.manuscript_id
