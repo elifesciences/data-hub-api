@@ -872,6 +872,36 @@ class TestGetDocmapsItemForQueryResultItem:
             }
         ]
 
+    def test_should_not_add_revised_pp_evaluations_to_inputs_of_revised_pp_step(self):
+        docmaps_item = get_docmap_item_for_query_result_item({
+            **DOCMAPS_QUERY_RESULT_ITEM_WITH_REVISED_PREPRPINT,
+            'evaluations': [{
+                    **DOCMAPS_QUERY_RESULT_EVALUATION_1,
+                    'elife_doi_version_str': ELIFE_DOI_VERSION_STR_1,
+                    'evaluation_suffix': 'sa1',
+                    'tags': ['PeerReview']
+                },
+                {
+                    **DOCMAPS_QUERY_RESULT_EVALUATION_2,
+                    'elife_doi_version_str': ELIFE_DOI_VERSION_STR_2,
+                    'evaluation_suffix': 'sa1',
+                    'tags': ['PeerReview']
+                }]
+        })
+        manuscript_published_step = docmaps_item['steps']['_:b4']
+        assert manuscript_published_step['inputs'] == [
+            {
+                'type': 'preprint',
+                'doi': DOI_1,
+                'url': PREPRINT_LINK_2,
+                'versionIdentifier': PREPRINT_VERSION_2
+            },
+            {
+                'type': DOCMAP_OUTPUT_TYPE_FOR_REVIEW_ARTICLE,
+                'doi': f'{ELIFE_DOI_1}.{ELIFE_DOI_VERSION_STR_1}.sa1'
+            }
+        ]
+
 
 class TestEnhancedPreprintsDocmapsProvider:
     def test_should_create_index_with_non_empty_docmaps(
