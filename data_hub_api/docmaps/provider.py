@@ -220,7 +220,7 @@ def has_tag_containing(tags: list, text: str) -> bool:
     )
 
 
-def get_outputs_type_form_tags(
+def get_evaluation_type_form_tags(
     tags: list
 ) -> Optional[str]:
     has_author_response_tag = has_tag_containing(tags, 'AuthorResponse')
@@ -361,7 +361,7 @@ def iter_single_actions_value_from_query_result_for_peer_reviewed_step(
         hypothesis_id = evaluation['hypothesis_id']
         annotation_created_timestamp = evaluation['annotation_created_timestamp']
         evaluation_suffix = evaluation['evaluation_suffix']
-        outputs_type = get_outputs_type_form_tags(evaluation['tags'])
+        outputs_type = get_evaluation_type_form_tags(evaluation['tags'])
         evaluation_preprint_url = evaluation['uri']
         if evaluation_preprint_url != preprint_url:
             LOGGER.debug(
