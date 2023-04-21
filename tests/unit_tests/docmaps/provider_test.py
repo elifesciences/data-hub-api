@@ -903,6 +903,19 @@ class TestGetDocmapsItemForQueryResultItem:
             }
         ]
 
+    def test_should_populate_assertions_revised_step(self):
+        docmaps_item = get_docmap_item_for_query_result_item(
+            DOCMAPS_QUERY_RESULT_ITEM_WITH_REVISED_PREPRPINT
+        )
+        manuscript_published_step = docmaps_item['steps']['_:b4']
+        assert manuscript_published_step['assertions'] == [{
+            'item': {
+                'type': 'preprint',
+                'doi': f'{ELIFE_DOI_1}.{ELIFE_DOI_VERSION_STR_2}',
+                'versionIdentifier': ELIFE_DOI_VERSION_STR_2
+            },
+            'status': 'revised'
+        }]
 
 class TestEnhancedPreprintsDocmapsProvider:
     def test_should_create_index_with_non_empty_docmaps(

@@ -443,17 +443,34 @@ def iter_single_evaluation_as_input(query_result_item: dict):
             )
 
 
-def get_docmap_inputs_value_for_revised_steps(query_result_item):
+def get_docmap_inputs_value_for_revised_steps(query_result_item: dict):
     preprint = query_result_item['preprints'][1]
     return get_docmap_preprint_input_value(preprint=preprint) + list(
         iter_single_evaluation_as_input(query_result_item=query_result_item)
     )
 
 
-def get_docmaps_step_for_revised_status(query_result_item):
+def get_docmap_assertions_value_for_revised_steps(query_result_item: dict):
+    preprint = query_result_item['preprints'][1]
+    return [{
+        'item': {
+            'type': 'preprint',
+            'doi': get_elife_version_doi(
+                elife_doi=query_result_item['elife_doi'],
+                elife_doi_version_str=preprint['elife_doi_version_str']
+            ),
+            'versionIdentifier': preprint['elife_doi_version_str']
+        },
+        'status': 'revised'
+    }]
+
+
+def get_docmaps_step_for_revised_status(query_result_item: dict):
     return {
         'actions': [],
-        'assertions': [],
+        'assertions': get_docmap_assertions_value_for_revised_steps(
+            query_result_item=query_result_item
+        ),
         'inputs': get_docmap_inputs_value_for_revised_steps(
             query_result_item=query_result_item
         )
