@@ -399,6 +399,49 @@ def get_docmaps_step_for_peer_reviewed_status(
         )
     }
 
+def get_single_evaluation_as_input(
+    query_result_item: dict,
+    preprint: dict,
+    evaluation_suffix: str,
+    evaluation_type: str
+):
+    elife_evaluation_doi = get_elife_evaluation_doi(
+        elife_doi_version_str=preprint['elife_doi_version_str'],
+        elife_doi=query_result_item['elife_doi'],
+        evaluation_suffix=evaluation_suffix
+    )
+    return {
+        'type': evaluation_type,
+        'doi': elife_evaluation_doi
+    }
+
+
+def iter_single_evaluation_as_input(query_result_item: dict):
+    preprint = query_result_item['preprints'][0]
+    evaluations = query_result_item['evaluations']
+    preprint_url = preprint['preprint_url']
+    for evaluation in evaluations:
+        evaluation_suffix = evaluation['evaluation_suffix']
+        evaluation_type = get_evaluation_type_form_tags(evaluation['tags'])
+        evaluation_preprint_url = evaluation['uri']
+        if evaluation_preprint_url != preprint_url:
+            LOGGER.debug(
+                'ignoring evaluation on another version: %r != %r',
+                evaluation_preprint_url, preprint_url
+            )
+            continue
+        if evaluation_type in (
+            DOCMAP_OUTPUT_TYPE_FOR_EVALUATION_SUMMARY,
+            DOCMAP_OUTPUT_TYPE_FOR_REVIEW_ARTICLE,
+            DOCMAP_OUTPUT_TYPE_FOR_REPLY
+        ):
+            yield get_single_evaluation_as_input(
+                query_result_item=query_result_item,
+                preprint=preprint,
+                evaluation_suffix=evaluation_suffix,
+                evaluation_type=evaluation_type
+            )
+
 
 def get_docmap_inputs_value_for_revised_steps(query_result_item):
     preprint = query_result_item['preprints'][1]
@@ -407,7 +450,7 @@ def get_docmap_inputs_value_for_revised_steps(query_result_item):
         'doi': preprint['preprint_doi'],
         'url': preprint['preprint_url'],
         'versionIdentifier': preprint['preprint_version']
-    }] 
+    }] + list(iter_single_evaluation_as_input(query_result_item=query_result_item))
 
 
 def get_docmaps_step_for_revised_status(query_result_item):
