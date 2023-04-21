@@ -464,6 +464,7 @@ def get_docmap_assertions_value_for_revised_steps(query_result_item: dict):
         'status': 'revised'
     }]
 
+
 def get_docmap_actions_value_for_revised_steps(query_result_item: dict):
     preprint = query_result_item['preprints'][1]
     return [{
