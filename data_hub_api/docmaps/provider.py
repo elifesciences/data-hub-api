@@ -81,7 +81,6 @@ def get_elife_doi_url(
 def get_docmap_assertions_value_for_preprint_manuscript_published_step(
     preprint: dict
 ) -> Sequence[dict]:
-    # preprint = query_result_item['preprints'][0]
     return [{
         'item': {
             'type': 'preprint',
@@ -92,7 +91,7 @@ def get_docmap_assertions_value_for_preprint_manuscript_published_step(
     }]
 
 
-def get_docmap_actions_value_for_preprint_manuscript_published_step( #hc
+def get_docmap_actions_value_for_preprint_manuscript_published_step(
     preprint: dict
 ) -> Sequence[dict]:
     preprint_doi = preprint['preprint_doi']
@@ -114,7 +113,7 @@ def get_docmap_actions_value_for_preprint_manuscript_published_step( #hc
     }]
 
 
-def get_docmaps_step_for_manuscript_published_status( # hc
+def get_docmaps_step_for_manuscript_published_status(
     preprint
 ) -> dict:
     return {
