@@ -399,6 +399,7 @@ def get_docmaps_step_for_peer_reviewed_status(
         )
     }
 
+
 def get_single_evaluation_as_input(
     query_result_item: dict,
     preprint: dict,

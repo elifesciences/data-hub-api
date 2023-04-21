@@ -122,6 +122,7 @@ DOCMAPS_QUERY_RESULT_ITEM_WITH_REVISED_PREPRPINT: dict = {
     'preprints': [PREPRINT_DETAILS_1, PREPRINT_DETAILS_2],
 }
 
+
 @pytest.fixture(name='iter_dict_from_bq_query_mock', autouse=True)
 def _iter_dict_from_bq_query_mock() -> Iterable[MagicMock]:
     with patch.object(provider_module, 'iter_dict_from_bq_query') as mock:
