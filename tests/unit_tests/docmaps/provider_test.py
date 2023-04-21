@@ -917,6 +917,7 @@ class TestGetDocmapsItemForQueryResultItem:
             'status': 'revised'
         }]
 
+
 class TestEnhancedPreprintsDocmapsProvider:
     def test_should_create_index_with_non_empty_docmaps(
         self,
