@@ -286,13 +286,13 @@ def get_participants_for_peer_reviewed_evalution_summary_type(
 
 def get_participants_for_preprint_peer_reviewed_step(
     query_result_item: dict,
-    outputs_type: str
+    evaluation_type: str
 ) -> Sequence[dict]:
     editor_details_list = query_result_item['editor_details']
     senior_editor_details_list = query_result_item['senior_editor_details']
-    if outputs_type == DOCMAP_OUTPUT_TYPE_FOR_REVIEW_ARTICLE:
+    if evaluation_type == DOCMAP_OUTPUT_TYPE_FOR_REVIEW_ARTICLE:
         return get_participants_for_peer_reviewed_review_article_type()
-    if outputs_type == DOCMAP_OUTPUT_TYPE_FOR_EVALUATION_SUMMARY:
+    if evaluation_type == DOCMAP_OUTPUT_TYPE_FOR_EVALUATION_SUMMARY:
         return get_participants_for_peer_reviewed_evalution_summary_type(
             editor_details_list=editor_details_list,
             senior_editor_details_list=senior_editor_details_list
@@ -305,7 +305,7 @@ def get_single_actions_value_for_preprint_peer_reviewed_step(
     hypothesis_id: str,
     evaluation_suffix: str,
     annotation_created_timestamp: str,
-    outputs_type: str
+    evaluation_type: str
 ) -> dict:
     preprint = query_result_item['preprints'][0]
     preprint_doi = preprint['preprint_doi']
@@ -317,11 +317,11 @@ def get_single_actions_value_for_preprint_peer_reviewed_step(
     return {
         'participants': get_participants_for_preprint_peer_reviewed_step(
             query_result_item=query_result_item,
-            outputs_type=outputs_type
+            evaluation_type=evaluation_type
         ),
         'outputs': [
             {
-                'type': outputs_type,
+                'type': evaluation_type,
                 'published': annotation_created_timestamp,
                 'doi': elife_evaluation_doi,
                 'license': query_result_item['license'],
@@ -361,7 +361,7 @@ def iter_single_actions_value_from_query_result_for_peer_reviewed_step(
         hypothesis_id = evaluation['hypothesis_id']
         annotation_created_timestamp = evaluation['annotation_created_timestamp']
         evaluation_suffix = evaluation['evaluation_suffix']
-        outputs_type = get_evaluation_type_form_tags(evaluation['tags'])
+        evaluation_type = get_evaluation_type_form_tags(evaluation['tags'])
         evaluation_preprint_url = evaluation['uri']
         if evaluation_preprint_url != preprint_url:
             LOGGER.debug(
@@ -369,7 +369,7 @@ def iter_single_actions_value_from_query_result_for_peer_reviewed_step(
                 evaluation_preprint_url, preprint_url
             )
             continue
-        if outputs_type in (
+        if evaluation_type in (
             DOCMAP_OUTPUT_TYPE_FOR_EVALUATION_SUMMARY,
             DOCMAP_OUTPUT_TYPE_FOR_REVIEW_ARTICLE,
             DOCMAP_OUTPUT_TYPE_FOR_REPLY
@@ -379,7 +379,7 @@ def iter_single_actions_value_from_query_result_for_peer_reviewed_step(
                 hypothesis_id=hypothesis_id,
                 annotation_created_timestamp=annotation_created_timestamp,
                 evaluation_suffix=evaluation_suffix,
-                outputs_type=outputs_type
+                evaluation_type=evaluation_type
             )
 
 
@@ -398,6 +398,7 @@ def get_docmaps_step_for_peer_reviewed_status(
             query_result_item=query_result_item
         )
     }
+
 
 def get_docmap_inputs_value_for_revised_steps(query_result_item):
     preprint = query_result_item['preprints'][1]
