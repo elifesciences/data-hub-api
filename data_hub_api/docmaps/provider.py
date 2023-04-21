@@ -171,10 +171,7 @@ def get_docmap_actions_value_for_preprint_under_review_step(
     }]
 
 
-def get_docmap_inputs_value_for_review_steps(
-    query_result_item: dict
-) -> Sequence[dict]:
-    preprint = query_result_item['preprints'][0]
+def get_docmap_preprint_input_value(preprint: dict):
     return [{
         'type': 'preprint',
         'doi': preprint['preprint_doi'],
@@ -186,6 +183,7 @@ def get_docmap_inputs_value_for_review_steps(
 def get_docmaps_step_for_under_review_status(
     query_result_item
 ):
+    preprint = query_result_item['preprints'][0]
     return {
         'actions': get_docmap_actions_value_for_preprint_under_review_step(
             query_result_item=query_result_item
@@ -193,8 +191,8 @@ def get_docmaps_step_for_under_review_status(
         'assertions': get_docmap_assertions_value_for_preprint_under_review_step(
             query_result_item=query_result_item
         ),
-        'inputs': get_docmap_inputs_value_for_review_steps(
-            query_result_item=query_result_item
+        'inputs': get_docmap_preprint_input_value(
+            preprint=preprint
         )
     }
 
@@ -386,6 +384,7 @@ def iter_single_actions_value_from_query_result_for_peer_reviewed_step(
 def get_docmaps_step_for_peer_reviewed_status(
     query_result_item
 ):
+    preprint = query_result_item['preprints'][0]
     return {
         'actions': list(iter_single_actions_value_from_query_result_for_peer_reviewed_step(
             query_result_item=query_result_item
@@ -394,8 +393,8 @@ def get_docmaps_step_for_peer_reviewed_status(
         'assertions': get_docmap_assertions_value_for_preprint_peer_reviewed_step(
             query_result_item=query_result_item
         ),
-        'inputs': get_docmap_inputs_value_for_review_steps(
-            query_result_item=query_result_item
+        'inputs': get_docmap_preprint_input_value(
+            preprint=preprint
         )
     }
 
@@ -446,12 +445,9 @@ def iter_single_evaluation_as_input(query_result_item: dict):
 
 def get_docmap_inputs_value_for_revised_steps(query_result_item):
     preprint = query_result_item['preprints'][1]
-    return [{
-        'type': 'preprint',
-        'doi': preprint['preprint_doi'],
-        'url': preprint['preprint_url'],
-        'versionIdentifier': preprint['preprint_version']
-    }] + list(iter_single_evaluation_as_input(query_result_item=query_result_item))
+    return get_docmap_preprint_input_value(preprint=preprint) + list(
+        iter_single_evaluation_as_input(query_result_item=query_result_item)
+    )
 
 
 def get_docmaps_step_for_revised_status(query_result_item):
