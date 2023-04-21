@@ -171,7 +171,7 @@ def get_docmap_actions_value_for_preprint_under_review_step(
     }]
 
 
-def get_docmap_preprint_input_value(preprint: dict):
+def get_docmap_preprint_values(preprint: dict):
     return [{
         'type': 'preprint',
         'doi': preprint['preprint_doi'],
@@ -191,7 +191,7 @@ def get_docmaps_step_for_under_review_status(
         'assertions': get_docmap_assertions_value_for_preprint_under_review_step(
             query_result_item=query_result_item
         ),
-        'inputs': get_docmap_preprint_input_value(
+        'inputs': get_docmap_preprint_values(
             preprint=preprint
         )
     }
@@ -393,7 +393,7 @@ def get_docmaps_step_for_peer_reviewed_status(
         'assertions': get_docmap_assertions_value_for_preprint_peer_reviewed_step(
             query_result_item=query_result_item
         ),
-        'inputs': get_docmap_preprint_input_value(
+        'inputs': get_docmap_preprint_values(
             preprint=preprint
         )
     }
@@ -445,7 +445,7 @@ def iter_single_evaluation_as_input(query_result_item: dict):
 
 def get_docmap_inputs_value_for_revised_steps(query_result_item: dict):
     preprint = query_result_item['preprints'][1]
-    return get_docmap_preprint_input_value(preprint=preprint) + list(
+    return get_docmap_preprint_values(preprint=preprint) + list(
         iter_single_evaluation_as_input(query_result_item=query_result_item)
     )
 
@@ -464,10 +464,19 @@ def get_docmap_assertions_value_for_revised_steps(query_result_item: dict):
         'status': 'revised'
     }]
 
+def get_docmap_actions_value_for_revised_steps(query_result_item: dict):
+    preprint = query_result_item['preprints'][1]
+    return [{
+        'participants': [],
+        'outputs': get_docmap_preprint_values(preprint=preprint)
+    }]
+
 
 def get_docmaps_step_for_revised_status(query_result_item: dict):
     return {
-        'actions': [],
+        'actions': get_docmap_actions_value_for_revised_steps(
+            query_result_item=query_result_item
+        ),
         'assertions': get_docmap_assertions_value_for_revised_steps(
             query_result_item=query_result_item
         ),
