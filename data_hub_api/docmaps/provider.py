@@ -399,6 +399,25 @@ def get_docmaps_step_for_peer_reviewed_status(
         )
     }
 
+def get_docmap_inputs_value_for_revised_steps(query_result_item):
+    preprint = query_result_item['preprints'][1]
+    return [{
+        'type': 'preprint',
+        'doi': preprint['preprint_doi'],
+        'url': preprint['preprint_url'],
+        'versionIdentifier': preprint['preprint_version']
+    }] 
+
+
+def get_docmaps_step_for_revised_status(query_result_item):
+    return {
+        'actions': [],
+        'assertions': [],
+        'inputs': get_docmap_inputs_value_for_revised_steps(
+            query_result_item=query_result_item
+        )
+    }
+
 
 def iter_docmap_steps_for_query_result_item(query_result_item: dict) -> Iterable[dict]:
     preprint = query_result_item['preprints'][0]
@@ -410,6 +429,7 @@ def iter_docmap_steps_for_query_result_item(query_result_item: dict) -> Iterable
         for preprint in query_result_item['preprints']:
             if preprint != query_result_item['preprints'][0]:
                 yield get_docmaps_step_for_manuscript_published_status(preprint)
+                yield get_docmaps_step_for_revised_status(query_result_item)
 
 
 def generate_docmap_steps(step_iterable: Iterable[dict]) -> dict:

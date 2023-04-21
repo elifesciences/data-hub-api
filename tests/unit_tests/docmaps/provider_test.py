@@ -814,6 +814,20 @@ class TestGetDocmapsItemForQueryResultItem:
             }]
         }]
 
+    def test_should_populate_inputs_revised_step(self):
+        docmaps_item = get_docmap_item_for_query_result_item(
+            DOCMAPS_QUERY_RESULT_ITEM_WITH_REVISED_PREPRPINT
+        )
+        manuscript_published_step = docmaps_item['steps']['_:b4']
+        assert manuscript_published_step['inputs'] == [
+            {
+                'type': 'preprint',
+                'doi': DOI_1,
+                'url': PREPRINT_LINK_2,
+                'versionIdentifier': PREPRINT_VERSION_2
+            }
+        ]
+
 
 class TestEnhancedPreprintsDocmapsProvider:
     def test_should_create_index_with_non_empty_docmaps(
