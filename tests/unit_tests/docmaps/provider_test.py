@@ -918,11 +918,35 @@ class TestGetDocmapsItemForQueryResultItem:
         }]
 
     def test_should_populate_actions_revised_step(self):
-        docmaps_item = get_docmap_item_for_query_result_item(
-            DOCMAPS_QUERY_RESULT_ITEM_WITH_REVISED_PREPRPINT
-        )
+        docmaps_item = get_docmap_item_for_query_result_item({
+            **DOCMAPS_QUERY_RESULT_ITEM_WITH_REVISED_PREPRPINT,
+            'evaluations': [{
+                    **DOCMAPS_QUERY_RESULT_EVALUATION_1,
+                    'elife_doi_version_str': ELIFE_DOI_VERSION_STR_1,
+                    'evaluation_suffix': 'sa1',
+                    'hypothesis_id': 'hypothesis_id_1',
+                    'annotation_created_timestamp': 'annotation_created_timestamp_1',
+                    'tags': ['PeerReview']
+                },
+                {
+                    **DOCMAPS_QUERY_RESULT_EVALUATION_2,
+                    'elife_doi_version_str': ELIFE_DOI_VERSION_STR_2,
+                    'evaluation_suffix': 'sa1',
+                    'hypothesis_id': 'hypothesis_id_2',
+                    'annotation_created_timestamp': 'annotation_created_timestamp_2',
+                    'tags': ['PeerReview']
+                },
+                {
+                    **DOCMAPS_QUERY_RESULT_EVALUATION_2,
+                    'elife_doi_version_str': ELIFE_DOI_VERSION_STR_2,
+                    'evaluation_suffix': 'sa2',
+                    'hypothesis_id': 'hypothesis_id_3',
+                    'annotation_created_timestamp': 'annotation_created_timestamp_3',
+                    'tags': ['evaluationSummary']
+                }]
+        })
         manuscript_published_step = docmaps_item['steps']['_:b4']
-        assert manuscript_published_step['actions'] == [{
+        assert manuscript_published_step['actions'][0] == {
             'participants': [],
             'outputs': [{
                 'type': 'preprint',
@@ -930,7 +954,72 @@ class TestGetDocmapsItemForQueryResultItem:
                 'url': PREPRINT_LINK_2,
                 'versionIdentifier': PREPRINT_VERSION_2
             }]
-        }]
+        }
+        assert manuscript_published_step['actions'][1]['outputs'] == [{
+            'type': DOCMAP_OUTPUT_TYPE_FOR_REVIEW_ARTICLE,
+            'published': 'annotation_created_timestamp_2',
+            'doi': 'elife_doi_1'+'.'+ELIFE_DOI_VERSION_STR_2+'.'+'sa1',
+            'license': 'license_1',
+            'url': (
+                f'{DOI_ROOT_URL}'
+                + 'elife_doi_1' + '.'
+                + ELIFE_DOI_VERSION_STR_2 + '.'
+                + 'sa1'
+            ),
+            'content': [
+                {
+                    'type': 'web-page',
+                    'url': f'{HYPOTHESIS_URL}hypothesis_id_2'
+                },
+                {
+                    'type': 'web-page',
+                    'url': (
+                        f'{SCIETY_ARTICLES_ACTIVITY_URL}'
+                        f'{DOI_1}#hypothesis:hypothesis_id_2'
+                    )
+                },
+                {
+                    'type': 'web-page',
+                    'url': (
+                        f'{SCIETY_ARTICLES_EVALUATIONS_URL}'
+                        'hypothesis_id_2/content'
+                    )
+                }
+            ]
+        }
+        # ,{
+        #     'type': DOCMAP_OUTPUT_TYPE_FOR_EVALUATION_SUMMARY,
+        #     'published': 'annotation_created_timestamp_3',
+        #     'doi': 'elife_doi_1'+'.'+ELIFE_DOI_VERSION_STR_2+'.'+'sa2',
+        #     'license': 'license_1',
+        #     'url': (
+        #         f'{DOI_ROOT_URL}'
+        #         + 'elife_doi_1' + '.'
+        #         + ELIFE_DOI_VERSION_STR_2 + '.'
+        #         + 'sa2'
+        #     ),
+        #     'content': [
+        #         {
+        #             'type': 'web-page',
+        #             'url': f'{HYPOTHESIS_URL}hypothesis_id_3'
+        #         },
+        #         {
+        #             'type': 'web-page',
+        #             'url': (
+        #                 f'{SCIETY_ARTICLES_ACTIVITY_URL}'
+        #                 f'{DOI_1}#hypothesis:hypothesis_id_3'
+        #             )
+        #         },
+        #         {
+        #             'type': 'web-page',
+        #             'url': (
+        #                 f'{SCIETY_ARTICLES_EVALUATIONS_URL}'
+        #                 'hypothesis_id_3/content'
+        #             )
+        #         }
+        #     ]
+        # }
+        ]
 
 
 class TestEnhancedPreprintsDocmapsProvider:

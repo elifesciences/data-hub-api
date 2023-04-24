@@ -298,14 +298,14 @@ def get_participants_for_preprint_peer_reviewed_step(
     return []
 
 
-def get_single_actions_value_for_preprint_peer_reviewed_step(
+def get_single_evaluations_output_value(
     query_result_item: dict,
+    preprint: dict,
     hypothesis_id: str,
     evaluation_suffix: str,
     annotation_created_timestamp: str,
     evaluation_type: str
 ) -> dict:
-    preprint = query_result_item['preprints'][0]
     preprint_doi = preprint['preprint_doi']
     elife_evaluation_doi = get_elife_evaluation_doi(
         elife_doi_version_str=preprint['elife_doi_version_str'],
@@ -372,8 +372,9 @@ def iter_single_actions_value_from_query_result_for_peer_reviewed_step(
             DOCMAP_OUTPUT_TYPE_FOR_REVIEW_ARTICLE,
             DOCMAP_OUTPUT_TYPE_FOR_REPLY
         ):
-            yield get_single_actions_value_for_preprint_peer_reviewed_step(
+            yield get_single_evaluations_output_value(
                 query_result_item=query_result_item,
+                preprint=preprint,
                 hypothesis_id=hypothesis_id,
                 annotation_created_timestamp=annotation_created_timestamp,
                 evaluation_suffix=evaluation_suffix,
@@ -465,12 +466,45 @@ def get_docmap_assertions_value_for_revised_steps(query_result_item: dict):
     }]
 
 
+def iter_single_evaluations_value(
+    query_result_item: dict
+) -> Iterable[dict]:
+    preprint = query_result_item['preprints'][1]
+    evaluations = query_result_item['evaluations']
+    preprint_url = preprint['preprint_url']
+    for evaluation in evaluations:
+        hypothesis_id = evaluation['hypothesis_id']
+        annotation_created_timestamp = evaluation['annotation_created_timestamp']
+        evaluation_suffix = evaluation['evaluation_suffix']
+        evaluation_type = get_evaluation_type_form_tags(evaluation['tags'])
+        evaluation_preprint_url = evaluation['uri']
+        if evaluation_preprint_url != preprint_url:
+            LOGGER.debug(
+                'ignoring evaluation on another version: %r != %r',
+                evaluation_preprint_url, preprint_url
+            )
+            continue
+        if evaluation_type in (
+            DOCMAP_OUTPUT_TYPE_FOR_EVALUATION_SUMMARY,
+            DOCMAP_OUTPUT_TYPE_FOR_REVIEW_ARTICLE,
+            DOCMAP_OUTPUT_TYPE_FOR_REPLY
+        ):
+            yield get_single_evaluations_output_value(
+                query_result_item=query_result_item,
+                preprint=preprint,
+                hypothesis_id=hypothesis_id,
+                annotation_created_timestamp=annotation_created_timestamp,
+                evaluation_suffix=evaluation_suffix,
+                evaluation_type=evaluation_type
+            )
+
+
 def get_docmap_actions_value_for_revised_steps(query_result_item: dict):
     preprint = query_result_item['preprints'][1]
     return [{
         'participants': [],
         'outputs': get_docmap_preprint_values(preprint=preprint)
-    }]
+    }] + list(iter_single_evaluations_value(query_result_item=query_result_item))
 
 
 def get_docmaps_step_for_revised_status(query_result_item: dict):
