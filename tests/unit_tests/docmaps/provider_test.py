@@ -29,6 +29,8 @@ from data_hub_api.docmaps.provider import (
 )
 
 
+MANUSCRIPT_ID_1 = 'manuscript_id_1'
+
 DOI_1 = '10.1101.test/doi1'
 
 PREPRINT_VERSION_1 = '10'
@@ -946,14 +948,12 @@ class TestGetDocmapsItemForQueryResultItem:
                 }]
         })
         manuscript_published_step = docmaps_item['steps']['_:b4']
-        assert manuscript_published_step['actions'][0] == {
-            'participants': [],
-            'outputs': [{
-                'type': 'preprint',
-                'doi': DOI_1,
-                'url': PREPRINT_LINK_2,
-                'versionIdentifier': PREPRINT_VERSION_2
-            }]
+        assert manuscript_published_step['actions'][0]['outputs'][0] == {
+            'type': 'preprint',
+            'identifier': 'manuscript_id_1',
+            'doi': f'{ELIFE_DOI_1}.{ELIFE_DOI_VERSION_STR_2}',
+            'versionIdentifier': ELIFE_DOI_VERSION_STR_2,
+            'license': 'license_1'
         }
         assert manuscript_published_step['actions'][1]['outputs'] == [{
             'type': DOCMAP_OUTPUT_TYPE_FOR_REVIEW_ARTICLE,
@@ -986,40 +986,39 @@ class TestGetDocmapsItemForQueryResultItem:
                     )
                 }
             ]
-        }
-        # ,{
-        #     'type': DOCMAP_OUTPUT_TYPE_FOR_EVALUATION_SUMMARY,
-        #     'published': 'annotation_created_timestamp_3',
-        #     'doi': 'elife_doi_1'+'.'+ELIFE_DOI_VERSION_STR_2+'.'+'sa2',
-        #     'license': 'license_1',
-        #     'url': (
-        #         f'{DOI_ROOT_URL}'
-        #         + 'elife_doi_1' + '.'
-        #         + ELIFE_DOI_VERSION_STR_2 + '.'
-        #         + 'sa2'
-        #     ),
-        #     'content': [
-        #         {
-        #             'type': 'web-page',
-        #             'url': f'{HYPOTHESIS_URL}hypothesis_id_3'
-        #         },
-        #         {
-        #             'type': 'web-page',
-        #             'url': (
-        #                 f'{SCIETY_ARTICLES_ACTIVITY_URL}'
-        #                 f'{DOI_1}#hypothesis:hypothesis_id_3'
-        #             )
-        #         },
-        #         {
-        #             'type': 'web-page',
-        #             'url': (
-        #                 f'{SCIETY_ARTICLES_EVALUATIONS_URL}'
-        #                 'hypothesis_id_3/content'
-        #             )
-        #         }
-        #     ]
-        # }
-        ]
+        }]
+        assert manuscript_published_step['actions'][2]['outputs'] == [{
+            'type': DOCMAP_OUTPUT_TYPE_FOR_EVALUATION_SUMMARY,
+            'published': 'annotation_created_timestamp_3',
+            'doi': 'elife_doi_1'+'.'+ELIFE_DOI_VERSION_STR_2+'.'+'sa2',
+            'license': 'license_1',
+            'url': (
+                f'{DOI_ROOT_URL}'
+                + 'elife_doi_1' + '.'
+                + ELIFE_DOI_VERSION_STR_2 + '.'
+                + 'sa2'
+            ),
+            'content': [
+                {
+                    'type': 'web-page',
+                    'url': f'{HYPOTHESIS_URL}hypothesis_id_3'
+                },
+                {
+                    'type': 'web-page',
+                    'url': (
+                        f'{SCIETY_ARTICLES_ACTIVITY_URL}'
+                        f'{DOI_1}#hypothesis:hypothesis_id_3'
+                    )
+                },
+                {
+                    'type': 'web-page',
+                    'url': (
+                        f'{SCIETY_ARTICLES_EVALUATIONS_URL}'
+                        'hypothesis_id_3/content'
+                    )
+                }
+            ]
+        }]
 
 
 class TestEnhancedPreprintsDocmapsProvider:
