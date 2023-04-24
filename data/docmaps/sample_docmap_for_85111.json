@@ -54,7 +54,8 @@
               "identifier": "85111",
               "versionIdentifier": "1",
               "type": "preprint",
-              "doi": "10.7554/eLife.85111.1"
+              "doi": "10.7554/eLife.85111.1",
+              "license": "http://creativecommons.org/licenses/by/4.0/"
             }
           ]
         }
@@ -98,6 +99,7 @@
               "type": "reply",
               "published": "2023-01-23T14:34:42.571948+00:00",
               "doi": "10.7554/eLife.85111.1.sa1",
+              "license": "http://creativecommons.org/licenses/by/4.0/",
               "url": "https://doi.org/10.7554/eLife.85111.1.sa1",
               "content": [
                 {
@@ -131,6 +133,7 @@
               "type": "review-article",
               "published": "2023-01-23T14:34:43.676466+00:00",
               "doi": "10.7554/eLife.85111.1.sa2",
+              "license": "http://creativecommons.org/licenses/by/4.0/",
               "url": "https://doi.org/10.7554/eLife.85111.1.sa2",
               "content": [
                 {
@@ -164,6 +167,7 @@
               "type": "review-article",
               "published": "2023-01-23T14:34:44.369019+00:00",
               "doi": "10.7554/eLife.85111.1.sa3",
+              "license": "http://creativecommons.org/licenses/by/4.0/",
               "url": "https://doi.org/10.7554/eLife.85111.1.sa3",
               "content": [
                 {
@@ -206,6 +210,7 @@
               "type": "evaluation-summary",
               "published": "2023-01-23T14:34:45.299882+00:00",
               "doi": "10.7554/eLife.85111.1.sa4",
+              "license": "http://creativecommons.org/licenses/by/4.0/",
               "url": "https://doi.org/10.7554/eLife.85111.1.sa4",
               "content": [
                 {
@@ -282,10 +287,11 @@
           "participants": [],
           "outputs": [
             {
-              "type": "preprint",
               "identifier": "85111",
               "versionIdentifier": "2",
-              "doi": "10.7554/eLife.85111.2"
+              "type": "preprint",
+              "doi": "10.7554/eLife.85111.2",
+              "license": "http://creativecommons.org/licenses/by/4.0/"
             }
           ]
         },
@@ -304,6 +310,7 @@
               "type": "review-article",
               "published": "2023-04-14T13:42:24.130023+00:00",
               "doi": "10.7554/eLife.85111.2.sa1",
+              "license": "http://creativecommons.org/licenses/by/4.0/",
               "url": "https://doi.org/10.7554/eLife.85111.2.sa1",
               "content": [
                 {
@@ -337,6 +344,7 @@
               "type": "review-article",
               "published": "2023-04-14T13:42:24.975810+00:00",
               "doi": "10.7554/eLife.85111.2.sa2",
+              "license": "http://creativecommons.org/licenses/by/4.0/",
               "url": "https://doi.org/10.7554/eLife.85111.2.sa2",
               "content": [
                 {
@@ -379,6 +387,7 @@
               "type": "evaluation-summary",
               "published": "2023-04-14T13:42:25.781585+00:00",
               "doi": "10.7554/eLife.85111.2.sa3",
+              "license": "http://creativecommons.org/licenses/by/4.0/",
               "url": "https://doi.org/10.7554/eLife.85111.2.sa3",
               "content": [
                 {
@@ -392,6 +401,32 @@
                 {
                   "type": "web-page",
                   "url": "https://sciety.org/evaluations/hypothesis:MPYp6NrKEe2anmsrxlBg-w/content"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "participants": [],
+          "outputs": [
+            {
+              "type": "reply",
+              "published": "2023-04-20T09:20:28.046788+00:00",
+              "doi": "10.7554/eLife.85111.2.sa4",
+              "license": "http://creativecommons.org/licenses/by/4.0/",
+              "url": "https://doi.org/10.7554/eLife.85111.2.sa4",
+              "content": [
+                {
+                  "type": "web-page",
+                  "url": "https://hypothes.is/a/lxpxhN9cEe2uucduJPd1xg"
+                },
+                {
+                  "type": "web-page",
+                  "url": "https://sciety.org/articles/activity/10.1101/2022.11.08.515698#hypothesis:lxpxhN9cEe2uucduJPd1xg"
+                },
+                {
+                  "type": "web-page",
+                  "url": "https://sciety.org/evaluations/hypothesis:lxpxhN9cEe2uucduJPd1xg/content"
                 }
               ]
             }
