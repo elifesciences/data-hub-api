@@ -508,10 +508,10 @@ def get_docmap_actions_value_for_revised_steps(
     query_result_item: dict,
     preprint: dict
 ):
-    return get_docmap_actions_value_for_preprint_under_review_and_revised_step(
+    return list(get_docmap_actions_value_for_preprint_under_review_and_revised_step(
             query_result_item=query_result_item,
             preprint=preprint
-        ) + list(iter_single_evaluations_value(
+        )) + list(iter_single_evaluations_value(
             query_result_item=query_result_item,
             preprint=preprint
         ))
