@@ -380,6 +380,7 @@ def iter_single_actions_value_of_evaluations_output(
         annotation_created_timestamp = evaluation['annotation_created_timestamp']
         evaluation_suffix = evaluation['evaluation_suffix']
         docmap_evaluation_type = get_docmap_evaluation_type_form_tags(evaluation['tags'])
+        assert docmap_evaluation_type
         yield get_single_actions_value_of_evaluations_output(
             query_result_item=query_result_item,
             preprint=preprint,
@@ -435,6 +436,7 @@ def iter_single_evaluation_as_input(
     for evaluation in iter_single_evaluation_for_related_preprint_url(evaluations, preprint_url):
         evaluation_suffix = evaluation['evaluation_suffix']
         docmap_evaluation_type = get_docmap_evaluation_type_form_tags(evaluation['tags'])
+        assert docmap_evaluation_type
         yield get_single_evaluation_as_input(
             query_result_item=query_result_item,
             preprint=preprint,
