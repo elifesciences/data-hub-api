@@ -563,7 +563,7 @@ def get_docmap_item_for_query_result_item(query_result_item: dict) -> dict:
 
 
 class DocmapsProvider:
-    def __init__(  # pylint: disable=too-many-arguments
+    def __init__(
         self,
         gcp_project_name: str = 'elife-data-pipeline',
         query_results_cache: Optional[SingleObjectCache[Sequence[dict]]] = None,
