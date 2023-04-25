@@ -31,9 +31,9 @@ HYPOTHESIS_URL = 'https://hypothes.is/a/'
 SCIETY_ARTICLES_ACTIVITY_URL = 'https://sciety.org/articles/activity/'
 SCIETY_ARTICLES_EVALUATIONS_URL = 'https://sciety.org/evaluations/hypothesis:'
 
-DOCMAP_OUTPUT_TYPE_FOR_EVALUATION_SUMMARY = 'evaluation-summary'
-DOCMAP_OUTPUT_TYPE_FOR_REPLY = 'reply'
-DOCMAP_OUTPUT_TYPE_FOR_REVIEW_ARTICLE = 'review-article'
+DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY = 'evaluation-summary'
+DOCMAP_EVALUATION_TYPE_FOR_REPLY = 'reply'
+DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE = 'review-article'
 
 ADDITIONAL_MANUSCRIPT_IDS = (
     '80494',
@@ -219,7 +219,7 @@ def has_tag_containing(tags: list, text: str) -> bool:
     )
 
 
-def get_evaluation_type_form_tags(
+def get_docmap_evaluation_type_form_tags(
     tags: list
 ) -> Optional[str]:
     has_author_response_tag = has_tag_containing(tags, 'AuthorResponse')
@@ -227,11 +227,11 @@ def get_evaluation_type_form_tags(
     has_review_tag = has_tag_containing(tags, 'Review')
     assert not (has_author_response_tag and has_summary_tag)
     if has_author_response_tag:
-        return DOCMAP_OUTPUT_TYPE_FOR_REPLY
+        return DOCMAP_EVALUATION_TYPE_FOR_REPLY
     if has_summary_tag:
-        return DOCMAP_OUTPUT_TYPE_FOR_EVALUATION_SUMMARY
+        return DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY
     if has_review_tag:
-        return DOCMAP_OUTPUT_TYPE_FOR_REVIEW_ARTICLE
+        return DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE
     return None
 
 
@@ -285,13 +285,13 @@ def get_participants_for_peer_reviewed_evalution_summary_type(
 
 def get_participants_for_preprint_peer_reviewed_step(
     query_result_item: dict,
-    evaluation_type: str
+    docmap_evaluation_type: str
 ) -> Sequence[dict]:
     editor_details_list = query_result_item['editor_details']
     senior_editor_details_list = query_result_item['senior_editor_details']
-    if evaluation_type == DOCMAP_OUTPUT_TYPE_FOR_REVIEW_ARTICLE:
+    if docmap_evaluation_type == DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE:
         return get_participants_for_peer_reviewed_review_article_type()
-    if evaluation_type == DOCMAP_OUTPUT_TYPE_FOR_EVALUATION_SUMMARY:
+    if docmap_evaluation_type == DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY:
         return get_participants_for_peer_reviewed_evalution_summary_type(
             editor_details_list=editor_details_list,
             senior_editor_details_list=senior_editor_details_list
@@ -305,7 +305,7 @@ def get_single_evaluations_output_value(
     hypothesis_id: str,
     evaluation_suffix: str,
     annotation_created_timestamp: str,
-    evaluation_type: str
+    docmap_evaluation_type: str
 ) -> dict:
     preprint_doi = preprint['preprint_doi']
     elife_evaluation_doi = get_elife_evaluation_doi(
@@ -316,11 +316,11 @@ def get_single_evaluations_output_value(
     return {
         'participants': get_participants_for_preprint_peer_reviewed_step(
             query_result_item=query_result_item,
-            evaluation_type=evaluation_type
+            docmap_evaluation_type=docmap_evaluation_type
         ),
         'outputs': [
             {
-                'type': evaluation_type,
+                'type': docmap_evaluation_type,
                 'published': annotation_created_timestamp,
                 'doi': elife_evaluation_doi,
                 'license': query_result_item['license'],
@@ -360,7 +360,7 @@ def iter_single_actions_value_from_query_result_for_peer_reviewed_step(
         hypothesis_id = evaluation['hypothesis_id']
         annotation_created_timestamp = evaluation['annotation_created_timestamp']
         evaluation_suffix = evaluation['evaluation_suffix']
-        evaluation_type = get_evaluation_type_form_tags(evaluation['tags'])
+        docmap_evaluation_type = get_docmap_evaluation_type_form_tags(evaluation['tags'])
         evaluation_preprint_url = evaluation['uri']
         if evaluation_preprint_url != preprint_url:
             LOGGER.debug(
@@ -368,10 +368,10 @@ def iter_single_actions_value_from_query_result_for_peer_reviewed_step(
                 evaluation_preprint_url, preprint_url
             )
             continue
-        if evaluation_type in (
-            DOCMAP_OUTPUT_TYPE_FOR_EVALUATION_SUMMARY,
-            DOCMAP_OUTPUT_TYPE_FOR_REVIEW_ARTICLE,
-            DOCMAP_OUTPUT_TYPE_FOR_REPLY
+        if docmap_evaluation_type in (
+            DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY,
+            DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE,
+            DOCMAP_EVALUATION_TYPE_FOR_REPLY
         ):
             yield get_single_evaluations_output_value(
                 query_result_item=query_result_item,
@@ -379,7 +379,7 @@ def iter_single_actions_value_from_query_result_for_peer_reviewed_step(
                 hypothesis_id=hypothesis_id,
                 annotation_created_timestamp=annotation_created_timestamp,
                 evaluation_suffix=evaluation_suffix,
-                evaluation_type=evaluation_type
+                docmap_evaluation_type=docmap_evaluation_type
             )
 
 
@@ -405,7 +405,7 @@ def get_single_evaluation_as_input(
     query_result_item: dict,
     preprint: dict,
     evaluation_suffix: str,
-    evaluation_type: str
+    docmap_evaluation_type: str
 ):
     elife_evaluation_doi = get_elife_evaluation_doi(
         elife_doi_version_str=preprint['elife_doi_version_str'],
@@ -413,7 +413,7 @@ def get_single_evaluation_as_input(
         evaluation_suffix=evaluation_suffix
     )
     return {
-        'type': evaluation_type,
+        'type': docmap_evaluation_type,
         'doi': elife_evaluation_doi
     }
 
@@ -424,7 +424,7 @@ def iter_single_evaluation_as_input(query_result_item: dict):
     preprint_url = preprint['preprint_url']
     for evaluation in evaluations:
         evaluation_suffix = evaluation['evaluation_suffix']
-        evaluation_type = get_evaluation_type_form_tags(evaluation['tags'])
+        docmap_evaluation_type = get_docmap_evaluation_type_form_tags(evaluation['tags'])
         evaluation_preprint_url = evaluation['uri']
         if evaluation_preprint_url != preprint_url:
             LOGGER.debug(
@@ -432,16 +432,16 @@ def iter_single_evaluation_as_input(query_result_item: dict):
                 evaluation_preprint_url, preprint_url
             )
             continue
-        if evaluation_type in (
-            DOCMAP_OUTPUT_TYPE_FOR_EVALUATION_SUMMARY,
-            DOCMAP_OUTPUT_TYPE_FOR_REVIEW_ARTICLE,
-            DOCMAP_OUTPUT_TYPE_FOR_REPLY
+        if docmap_evaluation_type in (
+            DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY,
+            DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE,
+            DOCMAP_EVALUATION_TYPE_FOR_REPLY
         ):
             yield get_single_evaluation_as_input(
                 query_result_item=query_result_item,
                 preprint=preprint,
                 evaluation_suffix=evaluation_suffix,
-                evaluation_type=evaluation_type
+                docmap_evaluation_type=docmap_evaluation_type
             )
 
 
@@ -481,7 +481,7 @@ def iter_single_evaluations_value(
         hypothesis_id = evaluation['hypothesis_id']
         annotation_created_timestamp = evaluation['annotation_created_timestamp']
         evaluation_suffix = evaluation['evaluation_suffix']
-        evaluation_type = get_evaluation_type_form_tags(evaluation['tags'])
+        docmap_evaluation_type = get_docmap_evaluation_type_form_tags(evaluation['tags'])
         evaluation_preprint_url = evaluation['uri']
         if evaluation_preprint_url != preprint_url:
             LOGGER.debug(
@@ -489,10 +489,10 @@ def iter_single_evaluations_value(
                 evaluation_preprint_url, preprint_url
             )
             continue
-        if evaluation_type in (
-            DOCMAP_OUTPUT_TYPE_FOR_EVALUATION_SUMMARY,
-            DOCMAP_OUTPUT_TYPE_FOR_REVIEW_ARTICLE,
-            DOCMAP_OUTPUT_TYPE_FOR_REPLY
+        if docmap_evaluation_type in (
+            DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY,
+            DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE,
+            DOCMAP_EVALUATION_TYPE_FOR_REPLY
         ):
             yield get_single_evaluations_output_value(
                 query_result_item=query_result_item,
@@ -500,7 +500,7 @@ def iter_single_evaluations_value(
                 hypothesis_id=hypothesis_id,
                 annotation_created_timestamp=annotation_created_timestamp,
                 evaluation_suffix=evaluation_suffix,
-                evaluation_type=evaluation_type
+                docmap_evaluation_type=docmap_evaluation_type
             )
 
 

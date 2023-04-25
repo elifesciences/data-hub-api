@@ -10,9 +10,9 @@ from data_hub_api.utils.cache import InMemorySingleObjectCache
 from data_hub_api.docmaps import provider as provider_module
 from data_hub_api.docmaps.provider import (
     ADDITIONAL_MANUSCRIPT_IDS,
-    DOCMAP_OUTPUT_TYPE_FOR_REPLY,
-    DOCMAP_OUTPUT_TYPE_FOR_EVALUATION_SUMMARY,
-    DOCMAP_OUTPUT_TYPE_FOR_REVIEW_ARTICLE,
+    DOCMAP_EVALUATION_TYPE_FOR_REPLY,
+    DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY,
+    DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE,
     DOI_ROOT_URL,
     HYPOTHESIS_URL,
     SCIETY_ARTICLES_ACTIVITY_URL,
@@ -25,7 +25,7 @@ from data_hub_api.docmaps.provider import (
     get_elife_doi_url,
     get_elife_evaluation_doi,
     get_elife_version_doi,
-    get_evaluation_type_form_tags
+    get_docmap_evaluation_type_form_tags
 )
 
 
@@ -219,43 +219,43 @@ class TestGetElifeDoiUrl:
 class TestGetEvaluationsTypeFromTags:
     def test_should_return_evaluation_summary_when_summary_exist_in_tags_list(self):
         tag_list_with_summary = ['PeerReview', 'evaluationSummary']
-        actual_result = get_evaluation_type_form_tags(tag_list_with_summary)
-        assert actual_result == DOCMAP_OUTPUT_TYPE_FOR_EVALUATION_SUMMARY
+        actual_result = get_docmap_evaluation_type_form_tags(tag_list_with_summary)
+        assert actual_result == DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY
 
     def test_should_return_review_article_when_review_keyword_exists_in_tags_list(self):
         tag_list_with_summary = ['PeerReview']
-        actual_result = get_evaluation_type_form_tags(tag_list_with_summary)
-        assert actual_result == DOCMAP_OUTPUT_TYPE_FOR_REVIEW_ARTICLE
+        actual_result = get_docmap_evaluation_type_form_tags(tag_list_with_summary)
+        assert actual_result == DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE
 
     def test_should_return_review_article_for_review_keyword_even_there_is_undefined_tag(self):
         tag_list_with_summary = ['PeerReview', 'undefinedTag']
-        actual_result = get_evaluation_type_form_tags(tag_list_with_summary)
-        assert actual_result == DOCMAP_OUTPUT_TYPE_FOR_REVIEW_ARTICLE
+        actual_result = get_docmap_evaluation_type_form_tags(tag_list_with_summary)
+        assert actual_result == DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE
 
     def test_should_return_reply_when_author_response_keyword_exists_in_tags_list(self):
         tag_list_with_summary = ['AuthorResponse']
-        actual_result = get_evaluation_type_form_tags(tag_list_with_summary)
-        assert actual_result == DOCMAP_OUTPUT_TYPE_FOR_REPLY
+        actual_result = get_docmap_evaluation_type_form_tags(tag_list_with_summary)
+        assert actual_result == DOCMAP_EVALUATION_TYPE_FOR_REPLY
 
     def test_should_return_reply_when_author_response_even_there_is_review_tag(self):
         tag_list_with_summary = ['PeerReview', 'AuthorResponse']
-        actual_result = get_evaluation_type_form_tags(tag_list_with_summary)
-        assert actual_result == DOCMAP_OUTPUT_TYPE_FOR_REPLY
+        actual_result = get_docmap_evaluation_type_form_tags(tag_list_with_summary)
+        assert actual_result == DOCMAP_EVALUATION_TYPE_FOR_REPLY
 
     def test_should_return_none_when_empty_tags_list(self):
         tag_list_with_summary = []
-        actual_result = get_evaluation_type_form_tags(tag_list_with_summary)
+        actual_result = get_docmap_evaluation_type_form_tags(tag_list_with_summary)
         assert not actual_result
 
     def test_should_return_none_when_there_is_not_any_defined_tag_in_tags_list(self):
         tag_list_with_summary = ['undefinedTag']
-        actual_result = get_evaluation_type_form_tags(tag_list_with_summary)
+        actual_result = get_docmap_evaluation_type_form_tags(tag_list_with_summary)
         assert not actual_result
 
     def test_should_raise_error_when_summary_and_author_response_in_tag_list_at_same_time(self):
         tag_list_with_summary = ['PeerReview', 'evaluationSummary', 'AuthorResponse']
         with pytest.raises(AssertionError):
-            get_evaluation_type_form_tags(tag_list_with_summary)
+            get_docmap_evaluation_type_form_tags(tag_list_with_summary)
 
 
 class TestGenerateDocmapSteps:
@@ -554,7 +554,7 @@ class TestGetDocmapsItemForQueryResultItem:
         peer_reviewed_actions = peer_reviewed_step['actions']
         assert len(peer_reviewed_actions) == 3
         assert peer_reviewed_actions[0]['outputs'][0] == {
-            'type': DOCMAP_OUTPUT_TYPE_FOR_REVIEW_ARTICLE,
+            'type': DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE,
             'published': 'annotation_created_timestamp_1',
             'doi': 'elife_doi_1'+'.'+'elife_doi_version_str_1'+'.'+'evaluation_suffix_1',
             'license': 'license_1',
@@ -586,7 +586,7 @@ class TestGetDocmapsItemForQueryResultItem:
             ]
         }
         assert peer_reviewed_actions[1]['outputs'][0] == {
-            'type': DOCMAP_OUTPUT_TYPE_FOR_EVALUATION_SUMMARY,
+            'type': DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY,
             'published': 'annotation_created_timestamp_2',
             'doi': 'elife_doi_1'+'.'+'elife_doi_version_str_1'+'.'+'evaluation_suffix_2',
             'license': 'license_1',
@@ -618,7 +618,7 @@ class TestGetDocmapsItemForQueryResultItem:
             ]
         }
         assert peer_reviewed_actions[2]['outputs'][0] == {
-            'type': DOCMAP_OUTPUT_TYPE_FOR_REPLY,
+            'type': DOCMAP_EVALUATION_TYPE_FOR_REPLY,
             'published': 'annotation_created_timestamp_3',
             'doi': 'elife_doi_1'+'.'+'elife_doi_version_str_1'+'.'+'evaluation_suffix_3',
             'license': 'license_1',
@@ -680,9 +680,9 @@ class TestGetDocmapsItemForQueryResultItem:
         outputs_for_index_0 = peer_reviewed_actions[0]['outputs'][0]
         outputs_for_index_1 = peer_reviewed_actions[1]['outputs'][0]
         outputs_for_index_2 = peer_reviewed_actions[2]['outputs'][0]
-        assert outputs_for_index_0['type'] == DOCMAP_OUTPUT_TYPE_FOR_REVIEW_ARTICLE
-        assert outputs_for_index_1['type'] == DOCMAP_OUTPUT_TYPE_FOR_EVALUATION_SUMMARY
-        assert outputs_for_index_2['type'] == DOCMAP_OUTPUT_TYPE_FOR_REPLY
+        assert outputs_for_index_0['type'] == DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE
+        assert outputs_for_index_1['type'] == DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY
+        assert outputs_for_index_2['type'] == DOCMAP_EVALUATION_TYPE_FOR_REPLY
 
     def test_should_populate_participants_in_peer_reviewed_step_for_review_article_type(self):
         query_result_with_evaluation = dict(
@@ -836,7 +836,7 @@ class TestGetDocmapsItemForQueryResultItem:
                 'versionIdentifier': PREPRINT_VERSION_2
             },
             {
-                'type': DOCMAP_OUTPUT_TYPE_FOR_REVIEW_ARTICLE,
+                'type': DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE,
                 'doi': f'{ELIFE_DOI_1}.{ELIFE_DOI_VERSION_STR_1}.sa1'
             }
         ]
@@ -866,11 +866,11 @@ class TestGetDocmapsItemForQueryResultItem:
                 'versionIdentifier': PREPRINT_VERSION_2
             },
             {
-                'type': DOCMAP_OUTPUT_TYPE_FOR_REVIEW_ARTICLE,
+                'type': DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE,
                 'doi': f'{ELIFE_DOI_1}.{ELIFE_DOI_VERSION_STR_1}.sa1'
             },
             {
-                'type': DOCMAP_OUTPUT_TYPE_FOR_EVALUATION_SUMMARY,
+                'type': DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY,
                 'doi': f'{ELIFE_DOI_1}.{ELIFE_DOI_VERSION_STR_1}.sa2'
             }
         ]
@@ -900,7 +900,7 @@ class TestGetDocmapsItemForQueryResultItem:
                 'versionIdentifier': PREPRINT_VERSION_2
             },
             {
-                'type': DOCMAP_OUTPUT_TYPE_FOR_REVIEW_ARTICLE,
+                'type': DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE,
                 'doi': f'{ELIFE_DOI_1}.{ELIFE_DOI_VERSION_STR_1}.sa1'
             }
         ]
@@ -956,7 +956,7 @@ class TestGetDocmapsItemForQueryResultItem:
             'license': 'license_1'
         }
         assert manuscript_published_step['actions'][1]['outputs'] == [{
-            'type': DOCMAP_OUTPUT_TYPE_FOR_REVIEW_ARTICLE,
+            'type': DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE,
             'published': 'annotation_created_timestamp_2',
             'doi': 'elife_doi_1'+'.'+ELIFE_DOI_VERSION_STR_2+'.'+'sa1',
             'license': 'license_1',
@@ -988,7 +988,7 @@ class TestGetDocmapsItemForQueryResultItem:
             ]
         }]
         assert manuscript_published_step['actions'][2]['outputs'] == [{
-            'type': DOCMAP_OUTPUT_TYPE_FOR_EVALUATION_SUMMARY,
+            'type': DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY,
             'published': 'annotation_created_timestamp_3',
             'doi': 'elife_doi_1'+'.'+ELIFE_DOI_VERSION_STR_2+'.'+'sa2',
             'license': 'license_1',
