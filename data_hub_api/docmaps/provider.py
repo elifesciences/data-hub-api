@@ -299,7 +299,7 @@ def get_participants_for_preprint_peer_reviewed_step(
     return []
 
 
-def get_single_evaluations_output_value(
+def get_single_actions_value_of_evaluations_output(
     query_result_item: dict,
     preprint: dict,
     hypothesis_id: str,
@@ -373,7 +373,7 @@ def iter_single_actions_value_from_query_result_for_peer_reviewed_step(
             DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE,
             DOCMAP_EVALUATION_TYPE_FOR_REPLY
         ):
-            yield get_single_evaluations_output_value(
+            yield get_single_actions_value_of_evaluations_output(
                 query_result_item=query_result_item,
                 preprint=preprint,
                 hypothesis_id=hypothesis_id,
@@ -494,7 +494,7 @@ def iter_single_evaluations_value(
             DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE,
             DOCMAP_EVALUATION_TYPE_FOR_REPLY
         ):
-            yield get_single_evaluations_output_value(
+            yield get_single_actions_value_of_evaluations_output(
                 query_result_item=query_result_item,
                 preprint=preprint,
                 hypothesis_id=hypothesis_id,
