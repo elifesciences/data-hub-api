@@ -351,7 +351,10 @@ def get_single_actions_value_of_evaluations_output(
     }
 
 
-def iter_single_evaluation_for_related_preprint_url(evaluations: list, preprint_url: str):
+def iter_evaluation_and_type_for_related_preprint_url(
+    evaluations: list,
+    preprint_url: str
+) -> Iterable[Tuple[dict, str]]:
     for evaluation in evaluations:
         docmap_evaluation_type = get_docmap_evaluation_type_form_tags(evaluation['tags'])
         evaluation_preprint_url = evaluation['uri']
@@ -366,7 +369,7 @@ def iter_single_evaluation_for_related_preprint_url(evaluations: list, preprint_
             DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE,
             DOCMAP_EVALUATION_TYPE_FOR_REPLY
         ):
-            yield evaluation
+            yield evaluation, docmap_evaluation_type
 
 
 def iter_single_actions_value_of_evaluations_output(
@@ -375,12 +378,13 @@ def iter_single_actions_value_of_evaluations_output(
 ) -> Iterable[dict]:
     evaluations = query_result_item['evaluations']
     preprint_url = preprint['preprint_url']
-    for evaluation in iter_single_evaluation_for_related_preprint_url(evaluations, preprint_url):
+    for evaluation, docmap_evaluation_type in iter_evaluation_and_type_for_related_preprint_url(
+        evaluations,
+        preprint_url
+    ):
         hypothesis_id = evaluation['hypothesis_id']
         annotation_created_timestamp = evaluation['annotation_created_timestamp']
         evaluation_suffix = evaluation['evaluation_suffix']
-        docmap_evaluation_type = get_docmap_evaluation_type_form_tags(evaluation['tags'])
-        assert docmap_evaluation_type
         yield get_single_actions_value_of_evaluations_output(
             query_result_item=query_result_item,
             preprint=preprint,
@@ -433,10 +437,11 @@ def iter_single_evaluation_as_input(
 ):
     evaluations = query_result_item['evaluations']
     preprint_url = preprint['preprint_url']
-    for evaluation in iter_single_evaluation_for_related_preprint_url(evaluations, preprint_url):
+    for evaluation, docmap_evaluation_type in iter_evaluation_and_type_for_related_preprint_url(
+        evaluations,
+        preprint_url
+    ):
         evaluation_suffix = evaluation['evaluation_suffix']
-        docmap_evaluation_type = get_docmap_evaluation_type_form_tags(evaluation['tags'])
-        assert docmap_evaluation_type
         yield get_single_evaluation_as_input(
             query_result_item=query_result_item,
             preprint=preprint,
