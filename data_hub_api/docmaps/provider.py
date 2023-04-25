@@ -350,16 +350,8 @@ def get_single_actions_value_of_evaluations_output(
     }
 
 
-def iter_single_actions_value_from_query_result_for_peer_reviewed_step(
-    query_result_item: dict
-) -> Iterable[dict]:
-    preprint = query_result_item['preprints'][0]
-    evaluations = query_result_item['evaluations']
-    preprint_url = preprint['preprint_url']
+def iter_single_evaluation_for_related_preprint_url(evaluations: list, preprint_url: str):
     for evaluation in evaluations:
-        hypothesis_id = evaluation['hypothesis_id']
-        annotation_created_timestamp = evaluation['annotation_created_timestamp']
-        evaluation_suffix = evaluation['evaluation_suffix']
         docmap_evaluation_type = get_docmap_evaluation_type_form_tags(evaluation['tags'])
         evaluation_preprint_url = evaluation['uri']
         if evaluation_preprint_url != preprint_url:
@@ -373,14 +365,28 @@ def iter_single_actions_value_from_query_result_for_peer_reviewed_step(
             DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE,
             DOCMAP_EVALUATION_TYPE_FOR_REPLY
         ):
-            yield get_single_actions_value_of_evaluations_output(
-                query_result_item=query_result_item,
-                preprint=preprint,
-                hypothesis_id=hypothesis_id,
-                annotation_created_timestamp=annotation_created_timestamp,
-                evaluation_suffix=evaluation_suffix,
-                docmap_evaluation_type=docmap_evaluation_type
-            )
+            yield evaluation
+
+
+def iter_single_actions_value_from_query_result_for_peer_reviewed_step(
+    query_result_item: dict
+) -> Iterable[dict]:
+    preprint = query_result_item['preprints'][0]
+    evaluations = query_result_item['evaluations']
+    preprint_url = preprint['preprint_url']
+    for evaluation in iter_single_evaluation_for_related_preprint_url(evaluations, preprint_url):
+        hypothesis_id = evaluation['hypothesis_id']
+        annotation_created_timestamp = evaluation['annotation_created_timestamp']
+        evaluation_suffix = evaluation['evaluation_suffix']
+        docmap_evaluation_type = get_docmap_evaluation_type_form_tags(evaluation['tags'])
+        yield get_single_actions_value_of_evaluations_output(
+            query_result_item=query_result_item,
+            preprint=preprint,
+            hypothesis_id=hypothesis_id,
+            annotation_created_timestamp=annotation_created_timestamp,
+            evaluation_suffix=evaluation_suffix,
+            docmap_evaluation_type=docmap_evaluation_type
+        )
 
 
 def get_docmaps_step_for_peer_reviewed_status(
@@ -422,27 +428,15 @@ def iter_single_evaluation_as_input(query_result_item: dict):
     preprint = query_result_item['preprints'][0]
     evaluations = query_result_item['evaluations']
     preprint_url = preprint['preprint_url']
-    for evaluation in evaluations:
+    for evaluation in iter_single_evaluation_for_related_preprint_url(evaluations, preprint_url):
         evaluation_suffix = evaluation['evaluation_suffix']
         docmap_evaluation_type = get_docmap_evaluation_type_form_tags(evaluation['tags'])
-        evaluation_preprint_url = evaluation['uri']
-        if evaluation_preprint_url != preprint_url:
-            LOGGER.debug(
-                'ignoring evaluation on another version: %r != %r',
-                evaluation_preprint_url, preprint_url
-            )
-            continue
-        if docmap_evaluation_type in (
-            DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY,
-            DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE,
-            DOCMAP_EVALUATION_TYPE_FOR_REPLY
-        ):
-            yield get_single_evaluation_as_input(
-                query_result_item=query_result_item,
-                preprint=preprint,
-                evaluation_suffix=evaluation_suffix,
-                docmap_evaluation_type=docmap_evaluation_type
-            )
+        yield get_single_evaluation_as_input(
+            query_result_item=query_result_item,
+            preprint=preprint,
+            evaluation_suffix=evaluation_suffix,
+            docmap_evaluation_type=docmap_evaluation_type
+        )
 
 
 def get_docmap_inputs_value_for_revised_steps(
@@ -477,31 +471,19 @@ def iter_single_evaluations_value(
 ) -> Iterable[dict]:
     evaluations = query_result_item['evaluations']
     preprint_url = preprint['preprint_url']
-    for evaluation in evaluations:
+    for evaluation in iter_single_evaluation_for_related_preprint_url(evaluations, preprint_url):
         hypothesis_id = evaluation['hypothesis_id']
         annotation_created_timestamp = evaluation['annotation_created_timestamp']
         evaluation_suffix = evaluation['evaluation_suffix']
         docmap_evaluation_type = get_docmap_evaluation_type_form_tags(evaluation['tags'])
-        evaluation_preprint_url = evaluation['uri']
-        if evaluation_preprint_url != preprint_url:
-            LOGGER.debug(
-                'ignoring evaluation on another version: %r != %r',
-                evaluation_preprint_url, preprint_url
-            )
-            continue
-        if docmap_evaluation_type in (
-            DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY,
-            DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE,
-            DOCMAP_EVALUATION_TYPE_FOR_REPLY
-        ):
-            yield get_single_actions_value_of_evaluations_output(
-                query_result_item=query_result_item,
-                preprint=preprint,
-                hypothesis_id=hypothesis_id,
-                annotation_created_timestamp=annotation_created_timestamp,
-                evaluation_suffix=evaluation_suffix,
-                docmap_evaluation_type=docmap_evaluation_type
-            )
+        yield get_single_actions_value_of_evaluations_output(
+            query_result_item=query_result_item,
+            preprint=preprint,
+            hypothesis_id=hypothesis_id,
+            annotation_created_timestamp=annotation_created_timestamp,
+            evaluation_suffix=evaluation_suffix,
+            docmap_evaluation_type=docmap_evaluation_type
+        )
 
 
 def get_docmap_actions_value_for_revised_steps(
