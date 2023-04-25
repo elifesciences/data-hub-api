@@ -199,9 +199,10 @@ def get_docmaps_step_for_under_review_status(
 
 
 def get_docmap_assertions_value_for_preprint_peer_reviewed_step(
-    query_result_item: dict
+    query_result_item: dict,
+    preprint: dict
 ) -> Sequence[dict]:
-    preprint = query_result_item['preprints'][0]
+    # preprint = query_result_item['preprints'][0]
     return [{
         'item': {
             'type': 'preprint',
@@ -369,9 +370,10 @@ def iter_single_evaluation_for_related_preprint_url(evaluations: list, preprint_
 
 
 def iter_single_actions_value_from_query_result_for_peer_reviewed_step(
-    query_result_item: dict
+    query_result_item: dict,
+    preprint: dict
 ) -> Iterable[dict]:
-    preprint = query_result_item['preprints'][0]
+    # preprint = query_result_item['preprints'][0]
     evaluations = query_result_item['evaluations']
     preprint_url = preprint['preprint_url']
     for evaluation in iter_single_evaluation_for_related_preprint_url(evaluations, preprint_url):
@@ -395,11 +397,13 @@ def get_docmaps_step_for_peer_reviewed_status(
 ):
     return {
         'actions': list(iter_single_actions_value_from_query_result_for_peer_reviewed_step(
-            query_result_item=query_result_item
+            query_result_item=query_result_item,
+            preprint=preprint
             )
         ),
         'assertions': get_docmap_assertions_value_for_preprint_peer_reviewed_step(
-            query_result_item=query_result_item
+            query_result_item=query_result_item,
+            preprint=preprint
         ),
         'inputs': get_docmap_input_preprint_values(
             preprint=preprint
