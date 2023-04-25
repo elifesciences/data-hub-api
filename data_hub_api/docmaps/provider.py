@@ -128,9 +128,9 @@ def get_docmaps_step_for_manuscript_published_status(
 
 
 def get_docmap_assertions_value_for_preprint_under_review_step(
-    query_result_item: dict
+    query_result_item: dict,
+    preprint: dict
 ) -> Sequence[dict]:
-    preprint = query_result_item['preprints'][0]
     return [{
         'item': {
             'type': 'preprint',
@@ -181,16 +181,17 @@ def get_docmap_input_preprint_values(preprint: dict):
 
 
 def get_docmaps_step_for_under_review_status(
-    query_result_item
+    query_result_item: dict,
+    preprint: dict
 ):
-    preprint = query_result_item['preprints'][0]
     return {
         'actions': get_docmap_actions_value_for_preprint_under_review_and_revised_step(
             query_result_item=query_result_item,
             preprint=preprint
         ),
         'assertions': get_docmap_assertions_value_for_preprint_under_review_step(
-            query_result_item=query_result_item
+            query_result_item=query_result_item,
+            preprint=preprint
         ),
         'inputs': get_docmap_input_preprint_values(
             preprint=preprint
@@ -202,7 +203,6 @@ def get_docmap_assertions_value_for_preprint_peer_reviewed_step(
     query_result_item: dict,
     preprint: dict
 ) -> Sequence[dict]:
-    # preprint = query_result_item['preprints'][0]
     return [{
         'item': {
             'type': 'preprint',
@@ -373,7 +373,6 @@ def iter_single_actions_value_from_query_result_for_peer_reviewed_step(
     query_result_item: dict,
     preprint: dict
 ) -> Iterable[dict]:
-    # preprint = query_result_item['preprints'][0]
     evaluations = query_result_item['evaluations']
     preprint_url = preprint['preprint_url']
     for evaluation in iter_single_evaluation_for_related_preprint_url(evaluations, preprint_url):
@@ -526,7 +525,7 @@ def get_docmaps_step_for_revised_status(
 def iter_docmap_steps_for_query_result_item(query_result_item: dict) -> Iterable[dict]:
     preprint = query_result_item['preprints'][0]
     yield get_docmaps_step_for_manuscript_published_status(preprint)
-    yield get_docmaps_step_for_under_review_status(query_result_item)
+    yield get_docmaps_step_for_under_review_status(query_result_item, preprint)
     if query_result_item['evaluations']:
         yield get_docmaps_step_for_peer_reviewed_status(query_result_item, preprint)
     if len(query_result_item['preprints']) > 1:
