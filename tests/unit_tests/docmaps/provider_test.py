@@ -35,19 +35,23 @@ DOI_1 = '10.1101.test/doi1'
 
 PREPRINT_VERSION_1 = '10'
 PREPRINT_VERSION_2 = '11'
+PREPRINT_VERSION_3 = '12'
 
 PREPRINT_LINK_PREFIX = 'https://test-preprints/'
 PREPRINT_LINK_1_PREFIX = f'{PREPRINT_LINK_PREFIX}{DOI_1}'
 PREPRINT_LINK_1 = f'{PREPRINT_LINK_1_PREFIX}v{PREPRINT_VERSION_1}'
 PREPRINT_LINK_2 = f'{PREPRINT_LINK_1_PREFIX}v{PREPRINT_VERSION_2}'
+PREPRINT_LINK_3 = f'{PREPRINT_LINK_1_PREFIX}v{PREPRINT_VERSION_3}'
 
 ELIFE_DOI_1 = 'elife_doi_1'
 
 ELIFE_DOI_VERSION_STR_1 = 'elife_doi_version_str_1'
 ELIFE_DOI_VERSION_STR_2 = 'elife_doi_version_str_2'
+ELIFE_DOI_VERSION_STR_3 = 'elife_doi_version_str_3'
 
 TDM_PATH_1 = 'tdm_path_1'
 TDM_PATH_2 = 'tdm_path_2'
+TDM_PATH_3 = 'tdm_path_3'
 
 PREPRINT_DETAILS_1 = {
     'preprint_url': PREPRINT_LINK_1,
@@ -65,6 +69,15 @@ PREPRINT_DETAILS_2 = {
     'preprint_version': PREPRINT_VERSION_2,
     'preprint_published_at_date': date.fromisoformat('2021-02-01'),
     'tdm_path': TDM_PATH_2
+}
+
+PREPRINT_DETAILS_3 = {
+    'preprint_url': PREPRINT_LINK_3,
+    'elife_doi_version_str': ELIFE_DOI_VERSION_STR_3,
+    'preprint_doi': DOI_1,
+    'preprint_version': PREPRINT_VERSION_3,
+    'preprint_published_at_date': date.fromisoformat('2021-03-01'),
+    'tdm_path': TDM_PATH_3
 }
 
 DOCMAPS_QUERY_RESULT_ITEM_1: dict = {
@@ -1018,6 +1031,32 @@ class TestGetDocmapsItemForQueryResultItem:
                     )
                 }
             ]
+        }]
+
+    def test_should_add_second_manuscript_published_and_revised_step_for_third_preprint_version(
+        self
+    ):
+        docmaps_item = get_docmap_item_for_query_result_item({
+            **DOCMAPS_QUERY_RESULT_ITEM_WITH_REVISED_PREPRPINT,
+            'preprints': [PREPRINT_DETAILS_1, PREPRINT_DETAILS_2, PREPRINT_DETAILS_3]
+        })
+        second_manuscript_published_step = docmaps_item['steps']['_:b5']
+        second_revised_step = docmaps_item['steps']['_:b6']
+        assert second_revised_step['assertions'] == [{
+            'item': {
+                'type': 'preprint',
+                'doi': f'{ELIFE_DOI_1}.{ELIFE_DOI_VERSION_STR_3}',
+                'versionIdentifier': ELIFE_DOI_VERSION_STR_3
+            },
+            'status': 'revised'
+        }]
+        assert second_manuscript_published_step['assertions'] == [{
+            'item': {
+                'type': 'preprint',
+                'doi': DOI_1,
+                'versionIdentifier': PREPRINT_DETAILS_3['preprint_version']
+            },
+            'status': 'manuscript-published'
         }]
 
 
