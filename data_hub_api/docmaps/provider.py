@@ -171,7 +171,7 @@ def get_docmap_actions_value_for_preprint_under_review_and_revised_step(
     }]
 
 
-def get_docmap_preprint_values(preprint: dict):
+def get_docmap_input_preprint_values(preprint: dict):
     return [{
         'type': 'preprint',
         'doi': preprint['preprint_doi'],
@@ -192,7 +192,7 @@ def get_docmaps_step_for_under_review_status(
         'assertions': get_docmap_assertions_value_for_preprint_under_review_step(
             query_result_item=query_result_item
         ),
-        'inputs': get_docmap_preprint_values(
+        'inputs': get_docmap_input_preprint_values(
             preprint=preprint
         )
     }
@@ -395,7 +395,7 @@ def get_docmaps_step_for_peer_reviewed_status(
         'assertions': get_docmap_assertions_value_for_preprint_peer_reviewed_step(
             query_result_item=query_result_item
         ),
-        'inputs': get_docmap_preprint_values(
+        'inputs': get_docmap_input_preprint_values(
             preprint=preprint
         )
     }
@@ -449,7 +449,7 @@ def get_docmap_inputs_value_for_revised_steps(
     query_result_item: dict,
     preprint: dict
 ):
-    return get_docmap_preprint_values(preprint=preprint) + list(
+    return get_docmap_input_preprint_values(preprint=preprint) + list(
         iter_single_evaluation_as_input(query_result_item=query_result_item)
     )
 
