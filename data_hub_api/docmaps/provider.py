@@ -523,11 +523,11 @@ def iter_docmap_steps_for_query_result_item(query_result_item: dict) -> Iterable
         yield get_docmaps_step_for_peer_reviewed_status(query_result_item, preprint)
     if len(query_result_item['preprints']) > 1:
         for preprint in query_result_item['preprints']:
-            previous_preprint = get_previous_element_of_given_element_in_given_list(
-                given_list=query_result_item['preprints'],
-                given_element=preprint
-            )
             if preprint != query_result_item['preprints'][0]:
+                previous_preprint = get_previous_element_of_given_element_in_given_list(
+                    given_list=query_result_item['preprints'],
+                    given_element=preprint
+                )
                 yield get_docmaps_step_for_manuscript_published_status(preprint)
                 yield get_docmaps_step_for_revised_status(
                     query_result_item,
