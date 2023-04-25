@@ -1,4 +1,4 @@
-from typing import Optional, Sequence, TypeVar
+from typing import Sequence, TypeVar
 
 
 T = TypeVar('T')
