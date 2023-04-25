@@ -10,9 +10,9 @@ from data_hub_api.utils.cache import InMemorySingleObjectCache
 from data_hub_api.docmaps import provider as provider_module
 from data_hub_api.docmaps.provider import (
     ADDITIONAL_MANUSCRIPT_IDS,
-    DOCMAP_OUTPUT_TYPE_FOR_REPLY,
-    DOCMAP_OUTPUT_TYPE_FOR_EVALUATION_SUMMARY,
-    DOCMAP_OUTPUT_TYPE_FOR_REVIEW_ARTICLE,
+    DOCMAP_EVALUATION_TYPE_FOR_REPLY,
+    DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY,
+    DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE,
     DOI_ROOT_URL,
     HYPOTHESIS_URL,
     SCIETY_ARTICLES_ACTIVITY_URL,
@@ -25,22 +25,33 @@ from data_hub_api.docmaps.provider import (
     get_elife_doi_url,
     get_elife_evaluation_doi,
     get_elife_version_doi,
-    get_outputs_type_form_tags
+    get_docmap_evaluation_type_form_tags
 )
 
+
+MANUSCRIPT_ID_1 = 'manuscript_id_1'
 
 DOI_1 = '10.1101.test/doi1'
 
 PREPRINT_VERSION_1 = '10'
 PREPRINT_VERSION_2 = '11'
+PREPRINT_VERSION_3 = '12'
 
 PREPRINT_LINK_PREFIX = 'https://test-preprints/'
 PREPRINT_LINK_1_PREFIX = f'{PREPRINT_LINK_PREFIX}{DOI_1}'
 PREPRINT_LINK_1 = f'{PREPRINT_LINK_1_PREFIX}v{PREPRINT_VERSION_1}'
+PREPRINT_LINK_2 = f'{PREPRINT_LINK_1_PREFIX}v{PREPRINT_VERSION_2}'
+PREPRINT_LINK_3 = f'{PREPRINT_LINK_1_PREFIX}v{PREPRINT_VERSION_3}'
+
+ELIFE_DOI_1 = 'elife_doi_1'
 
 ELIFE_DOI_VERSION_STR_1 = 'elife_doi_version_str_1'
+ELIFE_DOI_VERSION_STR_2 = 'elife_doi_version_str_2'
+ELIFE_DOI_VERSION_STR_3 = 'elife_doi_version_str_3'
 
 TDM_PATH_1 = 'tdm_path_1'
+TDM_PATH_2 = 'tdm_path_2'
+TDM_PATH_3 = 'tdm_path_3'
 
 PREPRINT_DETAILS_1 = {
     'preprint_url': PREPRINT_LINK_1,
@@ -51,12 +62,30 @@ PREPRINT_DETAILS_1 = {
     'tdm_path': TDM_PATH_1
 }
 
+PREPRINT_DETAILS_2 = {
+    'preprint_url': PREPRINT_LINK_2,
+    'elife_doi_version_str': ELIFE_DOI_VERSION_STR_2,
+    'preprint_doi': DOI_1,
+    'preprint_version': PREPRINT_VERSION_2,
+    'preprint_published_at_date': date.fromisoformat('2021-02-01'),
+    'tdm_path': TDM_PATH_2
+}
+
+PREPRINT_DETAILS_3 = {
+    'preprint_url': PREPRINT_LINK_3,
+    'elife_doi_version_str': ELIFE_DOI_VERSION_STR_3,
+    'preprint_doi': DOI_1,
+    'preprint_version': PREPRINT_VERSION_3,
+    'preprint_published_at_date': date.fromisoformat('2021-03-01'),
+    'tdm_path': TDM_PATH_3
+}
+
 DOCMAPS_QUERY_RESULT_ITEM_1: dict = {
     'manuscript_id': 'manuscript_id_1',
     'qc_complete_timestamp': datetime.fromisoformat('2022-01-01T01:02:03+00:00'),
     'under_review_timestamp': datetime.fromisoformat('2022-02-01T01:02:03+00:00'),
     'publisher_json': '{"id": "publisher_1"}',
-    'elife_doi': 'elife_doi_1',
+    'elife_doi': ELIFE_DOI_1,
     'license': 'license_1',
     'editor_details': [],
     'senior_editor_details': [],
@@ -81,10 +110,31 @@ DOCMAPS_QUERY_RESULT_EVALUATION_1 = {
     'evaluation_suffix': EVALUATION_SUFFIX_1
 }
 
+DOCMAPS_QUERY_RESULT_EVALUATION_2 = {
+    'hypothesis_id': HYPOTHESIS_ID_2,
+    'annotation_created_timestamp': '',
+    'tags': [],
+    'uri': PREPRINT_LINK_2,
+    'source_version': PREPRINT_VERSION_2,
+    'evaluation_suffix': EVALUATION_SUFFIX_2
+}
 
 DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS = {
     **DOCMAPS_QUERY_RESULT_ITEM_1,
     'evaluations': [DOCMAPS_QUERY_RESULT_EVALUATION_1]
+}
+
+DOCMAPS_QUERY_RESULT_ITEM_WITH_REVISED_PREPRPINT: dict = {
+    'manuscript_id': 'manuscript_id_1',
+    'qc_complete_timestamp': datetime.fromisoformat('2022-01-01T01:02:03+00:00'),
+    'under_review_timestamp': datetime.fromisoformat('2022-02-01T01:02:03+00:00'),
+    'publisher_json': '{"id": "publisher_1"}',
+    'elife_doi': ELIFE_DOI_1,
+    'license': 'license_1',
+    'editor_details': [],
+    'senior_editor_details': [],
+    'evaluations': [DOCMAPS_QUERY_RESULT_EVALUATION_1, DOCMAPS_QUERY_RESULT_EVALUATION_2],
+    'preprints': [PREPRINT_DETAILS_1, PREPRINT_DETAILS_2],
 }
 
 
@@ -179,46 +229,46 @@ class TestGetElifeDoiUrl:
         assert not actual_result
 
 
-class TestGetOutputsTypeFromTags:
+class TestGetEvaluationsTypeFromTags:
     def test_should_return_evaluation_summary_when_summary_exist_in_tags_list(self):
         tag_list_with_summary = ['PeerReview', 'evaluationSummary']
-        actual_result = get_outputs_type_form_tags(tag_list_with_summary)
-        assert actual_result == DOCMAP_OUTPUT_TYPE_FOR_EVALUATION_SUMMARY
+        actual_result = get_docmap_evaluation_type_form_tags(tag_list_with_summary)
+        assert actual_result == DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY
 
     def test_should_return_review_article_when_review_keyword_exists_in_tags_list(self):
         tag_list_with_summary = ['PeerReview']
-        actual_result = get_outputs_type_form_tags(tag_list_with_summary)
-        assert actual_result == DOCMAP_OUTPUT_TYPE_FOR_REVIEW_ARTICLE
+        actual_result = get_docmap_evaluation_type_form_tags(tag_list_with_summary)
+        assert actual_result == DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE
 
     def test_should_return_review_article_for_review_keyword_even_there_is_undefined_tag(self):
         tag_list_with_summary = ['PeerReview', 'undefinedTag']
-        actual_result = get_outputs_type_form_tags(tag_list_with_summary)
-        assert actual_result == DOCMAP_OUTPUT_TYPE_FOR_REVIEW_ARTICLE
+        actual_result = get_docmap_evaluation_type_form_tags(tag_list_with_summary)
+        assert actual_result == DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE
 
     def test_should_return_reply_when_author_response_keyword_exists_in_tags_list(self):
         tag_list_with_summary = ['AuthorResponse']
-        actual_result = get_outputs_type_form_tags(tag_list_with_summary)
-        assert actual_result == DOCMAP_OUTPUT_TYPE_FOR_REPLY
+        actual_result = get_docmap_evaluation_type_form_tags(tag_list_with_summary)
+        assert actual_result == DOCMAP_EVALUATION_TYPE_FOR_REPLY
 
     def test_should_return_reply_when_author_response_even_there_is_review_tag(self):
         tag_list_with_summary = ['PeerReview', 'AuthorResponse']
-        actual_result = get_outputs_type_form_tags(tag_list_with_summary)
-        assert actual_result == DOCMAP_OUTPUT_TYPE_FOR_REPLY
+        actual_result = get_docmap_evaluation_type_form_tags(tag_list_with_summary)
+        assert actual_result == DOCMAP_EVALUATION_TYPE_FOR_REPLY
 
     def test_should_return_none_when_empty_tags_list(self):
         tag_list_with_summary = []
-        actual_result = get_outputs_type_form_tags(tag_list_with_summary)
+        actual_result = get_docmap_evaluation_type_form_tags(tag_list_with_summary)
         assert not actual_result
 
     def test_should_return_none_when_there_is_not_any_defined_tag_in_tags_list(self):
         tag_list_with_summary = ['undefinedTag']
-        actual_result = get_outputs_type_form_tags(tag_list_with_summary)
+        actual_result = get_docmap_evaluation_type_form_tags(tag_list_with_summary)
         assert not actual_result
 
     def test_should_raise_error_when_summary_and_author_response_in_tag_list_at_same_time(self):
         tag_list_with_summary = ['PeerReview', 'evaluationSummary', 'AuthorResponse']
         with pytest.raises(AssertionError):
-            get_outputs_type_form_tags(tag_list_with_summary)
+            get_docmap_evaluation_type_form_tags(tag_list_with_summary)
 
 
 class TestGenerateDocmapSteps:
@@ -322,7 +372,7 @@ class TestGetDocmapsItemForQueryResultItem:
                     .isoformat()
                 ),
                 'versionIdentifier': PREPRINT_DETAILS_1['preprint_version'],
-                '_tdmPath': 'tdm_path_1'
+                '_tdmPath': TDM_PATH_1
             }]
         }]
 
@@ -517,7 +567,7 @@ class TestGetDocmapsItemForQueryResultItem:
         peer_reviewed_actions = peer_reviewed_step['actions']
         assert len(peer_reviewed_actions) == 3
         assert peer_reviewed_actions[0]['outputs'][0] == {
-            'type': DOCMAP_OUTPUT_TYPE_FOR_REVIEW_ARTICLE,
+            'type': DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE,
             'published': 'annotation_created_timestamp_1',
             'doi': 'elife_doi_1'+'.'+'elife_doi_version_str_1'+'.'+'evaluation_suffix_1',
             'license': 'license_1',
@@ -549,7 +599,7 @@ class TestGetDocmapsItemForQueryResultItem:
             ]
         }
         assert peer_reviewed_actions[1]['outputs'][0] == {
-            'type': DOCMAP_OUTPUT_TYPE_FOR_EVALUATION_SUMMARY,
+            'type': DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY,
             'published': 'annotation_created_timestamp_2',
             'doi': 'elife_doi_1'+'.'+'elife_doi_version_str_1'+'.'+'evaluation_suffix_2',
             'license': 'license_1',
@@ -581,7 +631,7 @@ class TestGetDocmapsItemForQueryResultItem:
             ]
         }
         assert peer_reviewed_actions[2]['outputs'][0] == {
-            'type': DOCMAP_OUTPUT_TYPE_FOR_REPLY,
+            'type': DOCMAP_EVALUATION_TYPE_FOR_REPLY,
             'published': 'annotation_created_timestamp_3',
             'doi': 'elife_doi_1'+'.'+'elife_doi_version_str_1'+'.'+'evaluation_suffix_3',
             'license': 'license_1',
@@ -643,9 +693,9 @@ class TestGetDocmapsItemForQueryResultItem:
         outputs_for_index_0 = peer_reviewed_actions[0]['outputs'][0]
         outputs_for_index_1 = peer_reviewed_actions[1]['outputs'][0]
         outputs_for_index_2 = peer_reviewed_actions[2]['outputs'][0]
-        assert outputs_for_index_0['type'] == DOCMAP_OUTPUT_TYPE_FOR_REVIEW_ARTICLE
-        assert outputs_for_index_1['type'] == DOCMAP_OUTPUT_TYPE_FOR_EVALUATION_SUMMARY
-        assert outputs_for_index_2['type'] == DOCMAP_OUTPUT_TYPE_FOR_REPLY
+        assert outputs_for_index_0['type'] == DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE
+        assert outputs_for_index_1['type'] == DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY
+        assert outputs_for_index_2['type'] == DOCMAP_EVALUATION_TYPE_FOR_REPLY
 
     def test_should_populate_participants_in_peer_reviewed_step_for_review_article_type(self):
         query_result_with_evaluation = dict(
@@ -738,6 +788,276 @@ class TestGetDocmapsItemForQueryResultItem:
                 'role': 'senior-editor'
             }
         ]
+
+    def test_should_return_empty_list_for_inputs_manuscript_published_step_for_revised_pp(self):
+        docmaps_item = get_docmap_item_for_query_result_item(
+            DOCMAPS_QUERY_RESULT_ITEM_WITH_REVISED_PREPRPINT
+        )
+        manuscript_published_step = docmaps_item['steps']['_:b3']
+        assert manuscript_published_step['inputs'] == []
+
+    def test_should_populate_assertions_manuscript_published_step_for_revised_pp(self):
+        docmaps_item = get_docmap_item_for_query_result_item(
+            DOCMAPS_QUERY_RESULT_ITEM_WITH_REVISED_PREPRPINT
+        )
+        manuscript_published_step = docmaps_item['steps']['_:b3']
+        assert manuscript_published_step['assertions'] == [{
+            'item': {
+                'type': 'preprint',
+                'doi': DOI_1,
+                'versionIdentifier': PREPRINT_DETAILS_2['preprint_version']
+            },
+            'status': 'manuscript-published'
+        }]
+
+    def test_should_populate_actions_outputs_manuscript_published_step_for_revised_pp(self):
+        docmaps_item = get_docmap_item_for_query_result_item(
+            DOCMAPS_QUERY_RESULT_ITEM_WITH_REVISED_PREPRPINT
+        )
+        manuscript_published_step = docmaps_item['steps']['_:b3']
+        assert manuscript_published_step['actions'] == [{
+            'participants': [],
+            'outputs': [{
+                'type': 'preprint',
+                'doi': DOI_1,
+                'url': PREPRINT_LINK_2,
+                'published': (
+                    PREPRINT_DETAILS_2['preprint_published_at_date']
+                    .isoformat()
+                ),
+                'versionIdentifier': PREPRINT_DETAILS_2['preprint_version'],
+                '_tdmPath': TDM_PATH_2
+            }]
+        }]
+
+    def test_should_populate_inputs_revised_step_with_one_evaluation(self):
+        docmaps_item = get_docmap_item_for_query_result_item({
+            **DOCMAPS_QUERY_RESULT_ITEM_WITH_REVISED_PREPRPINT,
+            'evaluations': [{
+                    **DOCMAPS_QUERY_RESULT_EVALUATION_1,
+                    'elife_doi_version_str': ELIFE_DOI_VERSION_STR_1,
+                    'evaluation_suffix': 'sa1',
+                    'tags': ['PeerReview']
+                }]
+        })
+        revised_step = docmaps_item['steps']['_:b4']
+        assert revised_step['inputs'] == [
+            {
+                'type': 'preprint',
+                'doi': DOI_1,
+                'url': PREPRINT_LINK_2,
+                'versionIdentifier': PREPRINT_VERSION_2
+            },
+            {
+                'type': DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE,
+                'doi': f'{ELIFE_DOI_1}.{ELIFE_DOI_VERSION_STR_1}.sa1'
+            }
+        ]
+
+    def test_should_populate_inputs_revised_step_with_more_then_one_evaluation(self):
+        docmaps_item = get_docmap_item_for_query_result_item({
+            **DOCMAPS_QUERY_RESULT_ITEM_WITH_REVISED_PREPRPINT,
+            'evaluations': [{
+                    **DOCMAPS_QUERY_RESULT_EVALUATION_1,
+                    'elife_doi_version_str': ELIFE_DOI_VERSION_STR_1,
+                    'evaluation_suffix': 'sa1',
+                    'tags': ['PeerReview']
+                },
+                {
+                    **DOCMAPS_QUERY_RESULT_EVALUATION_1,
+                    'elife_doi_version_str': ELIFE_DOI_VERSION_STR_1,
+                    'evaluation_suffix': 'sa2',
+                    'tags': ['evaluationSummary']
+                }]
+        })
+        revised_step = docmaps_item['steps']['_:b4']
+        assert revised_step['inputs'] == [
+            {
+                'type': 'preprint',
+                'doi': DOI_1,
+                'url': PREPRINT_LINK_2,
+                'versionIdentifier': PREPRINT_VERSION_2
+            },
+            {
+                'type': DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE,
+                'doi': f'{ELIFE_DOI_1}.{ELIFE_DOI_VERSION_STR_1}.sa1'
+            },
+            {
+                'type': DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY,
+                'doi': f'{ELIFE_DOI_1}.{ELIFE_DOI_VERSION_STR_1}.sa2'
+            }
+        ]
+
+    def test_should_not_add_revised_pp_evaluations_to_inputs_of_revised_pp_step(self):
+        docmaps_item = get_docmap_item_for_query_result_item({
+            **DOCMAPS_QUERY_RESULT_ITEM_WITH_REVISED_PREPRPINT,
+            'evaluations': [{
+                    **DOCMAPS_QUERY_RESULT_EVALUATION_1,
+                    'elife_doi_version_str': ELIFE_DOI_VERSION_STR_1,
+                    'evaluation_suffix': 'sa1',
+                    'tags': ['PeerReview']
+                },
+                {
+                    **DOCMAPS_QUERY_RESULT_EVALUATION_2,
+                    'elife_doi_version_str': ELIFE_DOI_VERSION_STR_2,
+                    'evaluation_suffix': 'sa1',
+                    'tags': ['PeerReview']
+                }]
+        })
+        revised_step = docmaps_item['steps']['_:b4']
+        assert revised_step['inputs'] == [
+            {
+                'type': 'preprint',
+                'doi': DOI_1,
+                'url': PREPRINT_LINK_2,
+                'versionIdentifier': PREPRINT_VERSION_2
+            },
+            {
+                'type': DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE,
+                'doi': f'{ELIFE_DOI_1}.{ELIFE_DOI_VERSION_STR_1}.sa1'
+            }
+        ]
+
+    def test_should_populate_assertions_revised_step(self):
+        docmaps_item = get_docmap_item_for_query_result_item(
+            DOCMAPS_QUERY_RESULT_ITEM_WITH_REVISED_PREPRPINT
+        )
+        revised_step = docmaps_item['steps']['_:b4']
+        assert revised_step['assertions'] == [{
+            'item': {
+                'type': 'preprint',
+                'doi': f'{ELIFE_DOI_1}.{ELIFE_DOI_VERSION_STR_2}',
+                'versionIdentifier': ELIFE_DOI_VERSION_STR_2
+            },
+            'status': 'revised'
+        }]
+
+    def test_should_populate_actions_revised_step(self):
+        docmaps_item = get_docmap_item_for_query_result_item({
+            **DOCMAPS_QUERY_RESULT_ITEM_WITH_REVISED_PREPRPINT,
+            'evaluations': [{
+                    **DOCMAPS_QUERY_RESULT_EVALUATION_1,
+                    'elife_doi_version_str': ELIFE_DOI_VERSION_STR_1,
+                    'evaluation_suffix': 'sa1',
+                    'hypothesis_id': 'hypothesis_id_1',
+                    'annotation_created_timestamp': 'annotation_created_timestamp_1',
+                    'tags': ['PeerReview']
+                },
+                {
+                    **DOCMAPS_QUERY_RESULT_EVALUATION_2,
+                    'elife_doi_version_str': ELIFE_DOI_VERSION_STR_2,
+                    'evaluation_suffix': 'sa1',
+                    'hypothesis_id': 'hypothesis_id_2',
+                    'annotation_created_timestamp': 'annotation_created_timestamp_2',
+                    'tags': ['PeerReview']
+                },
+                {
+                    **DOCMAPS_QUERY_RESULT_EVALUATION_2,
+                    'elife_doi_version_str': ELIFE_DOI_VERSION_STR_2,
+                    'evaluation_suffix': 'sa2',
+                    'hypothesis_id': 'hypothesis_id_3',
+                    'annotation_created_timestamp': 'annotation_created_timestamp_3',
+                    'tags': ['evaluationSummary']
+                }]
+        })
+        revised_step = docmaps_item['steps']['_:b4']
+        assert revised_step['actions'][0]['outputs'][0] == {
+            'type': 'preprint',
+            'identifier': 'manuscript_id_1',
+            'doi': f'{ELIFE_DOI_1}.{ELIFE_DOI_VERSION_STR_2}',
+            'versionIdentifier': ELIFE_DOI_VERSION_STR_2,
+            'license': 'license_1'
+        }
+        assert revised_step['actions'][1]['outputs'] == [{
+            'type': DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE,
+            'published': 'annotation_created_timestamp_2',
+            'doi': 'elife_doi_1'+'.'+ELIFE_DOI_VERSION_STR_2+'.'+'sa1',
+            'license': 'license_1',
+            'url': (
+                f'{DOI_ROOT_URL}'
+                + 'elife_doi_1' + '.'
+                + ELIFE_DOI_VERSION_STR_2 + '.'
+                + 'sa1'
+            ),
+            'content': [
+                {
+                    'type': 'web-page',
+                    'url': f'{HYPOTHESIS_URL}hypothesis_id_2'
+                },
+                {
+                    'type': 'web-page',
+                    'url': (
+                        f'{SCIETY_ARTICLES_ACTIVITY_URL}'
+                        f'{DOI_1}#hypothesis:hypothesis_id_2'
+                    )
+                },
+                {
+                    'type': 'web-page',
+                    'url': (
+                        f'{SCIETY_ARTICLES_EVALUATIONS_URL}'
+                        'hypothesis_id_2/content'
+                    )
+                }
+            ]
+        }]
+        assert revised_step['actions'][2]['outputs'] == [{
+            'type': DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY,
+            'published': 'annotation_created_timestamp_3',
+            'doi': 'elife_doi_1'+'.'+ELIFE_DOI_VERSION_STR_2+'.'+'sa2',
+            'license': 'license_1',
+            'url': (
+                f'{DOI_ROOT_URL}'
+                + 'elife_doi_1' + '.'
+                + ELIFE_DOI_VERSION_STR_2 + '.'
+                + 'sa2'
+            ),
+            'content': [
+                {
+                    'type': 'web-page',
+                    'url': f'{HYPOTHESIS_URL}hypothesis_id_3'
+                },
+                {
+                    'type': 'web-page',
+                    'url': (
+                        f'{SCIETY_ARTICLES_ACTIVITY_URL}'
+                        f'{DOI_1}#hypothesis:hypothesis_id_3'
+                    )
+                },
+                {
+                    'type': 'web-page',
+                    'url': (
+                        f'{SCIETY_ARTICLES_EVALUATIONS_URL}'
+                        'hypothesis_id_3/content'
+                    )
+                }
+            ]
+        }]
+
+    def test_should_add_second_manuscript_published_and_revised_step_for_third_preprint_version(
+        self
+    ):
+        docmaps_item = get_docmap_item_for_query_result_item({
+            **DOCMAPS_QUERY_RESULT_ITEM_WITH_REVISED_PREPRPINT,
+            'preprints': [PREPRINT_DETAILS_1, PREPRINT_DETAILS_2, PREPRINT_DETAILS_3]
+        })
+        second_manuscript_published_step = docmaps_item['steps']['_:b5']
+        second_revised_step = docmaps_item['steps']['_:b6']
+        assert second_revised_step['assertions'] == [{
+            'item': {
+                'type': 'preprint',
+                'doi': f'{ELIFE_DOI_1}.{ELIFE_DOI_VERSION_STR_3}',
+                'versionIdentifier': ELIFE_DOI_VERSION_STR_3
+            },
+            'status': 'revised'
+        }]
+        assert second_manuscript_published_step['assertions'] == [{
+            'item': {
+                'type': 'preprint',
+                'doi': DOI_1,
+                'versionIdentifier': PREPRINT_DETAILS_3['preprint_version']
+            },
+            'status': 'manuscript-published'
+        }]
 
 
 class TestEnhancedPreprintsDocmapsProvider:

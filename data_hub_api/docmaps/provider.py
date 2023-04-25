@@ -31,9 +31,9 @@ HYPOTHESIS_URL = 'https://hypothes.is/a/'
 SCIETY_ARTICLES_ACTIVITY_URL = 'https://sciety.org/articles/activity/'
 SCIETY_ARTICLES_EVALUATIONS_URL = 'https://sciety.org/evaluations/hypothesis:'
 
-DOCMAP_OUTPUT_TYPE_FOR_EVALUATION_SUMMARY = 'evaluation-summary'
-DOCMAP_OUTPUT_TYPE_FOR_REPLY = 'reply'
-DOCMAP_OUTPUT_TYPE_FOR_REVIEW_ARTICLE = 'review-article'
+DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY = 'evaluation-summary'
+DOCMAP_EVALUATION_TYPE_FOR_REPLY = 'reply'
+DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE = 'review-article'
 
 ADDITIONAL_MANUSCRIPT_IDS = (
     '80494',
@@ -79,9 +79,8 @@ def get_elife_doi_url(
 
 
 def get_docmap_assertions_value_for_preprint_manuscript_published_step(
-    query_result_item: dict
+    preprint: dict
 ) -> Sequence[dict]:
-    preprint = query_result_item['preprints'][0]
     return [{
         'item': {
             'type': 'preprint',
@@ -93,9 +92,8 @@ def get_docmap_assertions_value_for_preprint_manuscript_published_step(
 
 
 def get_docmap_actions_value_for_preprint_manuscript_published_step(
-    query_result_item: dict
+    preprint: dict
 ) -> Sequence[dict]:
-    preprint = query_result_item['preprints'][0]
     preprint_doi = preprint['preprint_doi']
     preprint_published_at_date = preprint['preprint_published_at_date']
     return [{
@@ -116,23 +114,23 @@ def get_docmap_actions_value_for_preprint_manuscript_published_step(
 
 
 def get_docmaps_step_for_manuscript_published_status(
-    query_result_item
+    preprint
 ) -> dict:
     return {
         'actions': get_docmap_actions_value_for_preprint_manuscript_published_step(
-            query_result_item=query_result_item
+            preprint=preprint
         ),
         'assertions': get_docmap_assertions_value_for_preprint_manuscript_published_step(
-            query_result_item=query_result_item
+            preprint=preprint
         ),
         'inputs': []
     }
 
 
 def get_docmap_assertions_value_for_preprint_under_review_step(
-    query_result_item: dict
+    query_result_item: dict,
+    preprint: dict
 ) -> Sequence[dict]:
-    preprint = query_result_item['preprints'][0]
     return [{
         'item': {
             'type': 'preprint',
@@ -154,10 +152,10 @@ def get_docmap_assertions_value_for_preprint_under_review_step(
     }]
 
 
-def get_docmap_actions_value_for_preprint_under_review_step(
-    query_result_item: dict
+def get_docmap_actions_value_for_preprint_under_review_and_revised_step(
+    query_result_item: dict,
+    preprint: dict
 ) -> Sequence[dict]:
-    preprint = query_result_item['preprints'][0]
     return [{
         'participants': [],
         'outputs': [{
@@ -173,10 +171,7 @@ def get_docmap_actions_value_for_preprint_under_review_step(
     }]
 
 
-def get_docmap_inputs_value_for_review_steps(
-    query_result_item: dict
-) -> Sequence[dict]:
-    preprint = query_result_item['preprints'][0]
+def get_docmap_input_preprint_values(preprint: dict):
     return [{
         'type': 'preprint',
         'doi': preprint['preprint_doi'],
@@ -186,25 +181,27 @@ def get_docmap_inputs_value_for_review_steps(
 
 
 def get_docmaps_step_for_under_review_status(
-    query_result_item
+    query_result_item: dict,
+    preprint: dict
 ):
     return {
-        'actions': get_docmap_actions_value_for_preprint_under_review_step(
-            query_result_item=query_result_item
+        'actions': get_docmap_actions_value_for_preprint_under_review_and_revised_step(
+            query_result_item=query_result_item,
+            preprint=preprint
         ),
         'assertions': get_docmap_assertions_value_for_preprint_under_review_step(
-            query_result_item=query_result_item
+            query_result_item=query_result_item,
+            preprint=preprint
         ),
-        'inputs': get_docmap_inputs_value_for_review_steps(
-            query_result_item=query_result_item
+        'inputs': get_docmap_input_preprint_values(
+            preprint=preprint
         )
     }
 
 
 def get_docmap_assertions_value_for_preprint_peer_reviewed_step(
-    query_result_item: dict
+    preprint: dict
 ) -> Sequence[dict]:
-    preprint = query_result_item['preprints'][0]
     return [{
         'item': {
             'type': 'preprint',
@@ -222,7 +219,7 @@ def has_tag_containing(tags: list, text: str) -> bool:
     )
 
 
-def get_outputs_type_form_tags(
+def get_docmap_evaluation_type_form_tags(
     tags: list
 ) -> Optional[str]:
     has_author_response_tag = has_tag_containing(tags, 'AuthorResponse')
@@ -230,11 +227,11 @@ def get_outputs_type_form_tags(
     has_review_tag = has_tag_containing(tags, 'Review')
     assert not (has_author_response_tag and has_summary_tag)
     if has_author_response_tag:
-        return DOCMAP_OUTPUT_TYPE_FOR_REPLY
+        return DOCMAP_EVALUATION_TYPE_FOR_REPLY
     if has_summary_tag:
-        return DOCMAP_OUTPUT_TYPE_FOR_EVALUATION_SUMMARY
+        return DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY
     if has_review_tag:
-        return DOCMAP_OUTPUT_TYPE_FOR_REVIEW_ARTICLE
+        return DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE
     return None
 
 
@@ -288,13 +285,13 @@ def get_participants_for_peer_reviewed_evalution_summary_type(
 
 def get_participants_for_preprint_peer_reviewed_step(
     query_result_item: dict,
-    outputs_type: str
+    docmap_evaluation_type: str
 ) -> Sequence[dict]:
     editor_details_list = query_result_item['editor_details']
     senior_editor_details_list = query_result_item['senior_editor_details']
-    if outputs_type == DOCMAP_OUTPUT_TYPE_FOR_REVIEW_ARTICLE:
+    if docmap_evaluation_type == DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE:
         return get_participants_for_peer_reviewed_review_article_type()
-    if outputs_type == DOCMAP_OUTPUT_TYPE_FOR_EVALUATION_SUMMARY:
+    if docmap_evaluation_type == DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY:
         return get_participants_for_peer_reviewed_evalution_summary_type(
             editor_details_list=editor_details_list,
             senior_editor_details_list=senior_editor_details_list
@@ -302,14 +299,14 @@ def get_participants_for_preprint_peer_reviewed_step(
     return []
 
 
-def get_single_actions_value_for_preprint_peer_reviewed_step(
+def get_single_actions_value_of_evaluations_output(
     query_result_item: dict,
+    preprint: dict,
     hypothesis_id: str,
     evaluation_suffix: str,
     annotation_created_timestamp: str,
-    outputs_type: str
+    docmap_evaluation_type: str
 ) -> dict:
-    preprint = query_result_item['preprints'][0]
     preprint_doi = preprint['preprint_doi']
     elife_evaluation_doi = get_elife_evaluation_doi(
         elife_doi_version_str=preprint['elife_doi_version_str'],
@@ -319,11 +316,11 @@ def get_single_actions_value_for_preprint_peer_reviewed_step(
     return {
         'participants': get_participants_for_preprint_peer_reviewed_step(
             query_result_item=query_result_item,
-            outputs_type=outputs_type
+            docmap_evaluation_type=docmap_evaluation_type
         ),
         'outputs': [
             {
-                'type': outputs_type,
+                'type': docmap_evaluation_type,
                 'published': annotation_created_timestamp,
                 'doi': elife_evaluation_doi,
                 'license': query_result_item['license'],
@@ -353,17 +350,12 @@ def get_single_actions_value_for_preprint_peer_reviewed_step(
     }
 
 
-def iter_single_actions_value_from_query_result_for_peer_reviewed_step(
-    query_result_item: dict
-) -> Iterable[dict]:
-    preprint = query_result_item['preprints'][0]
-    evaluations = query_result_item['evaluations']
-    preprint_url = preprint['preprint_url']
+def iter_evaluation_and_type_for_related_preprint_url(
+    evaluations: list,
+    preprint_url: str
+) -> Iterable[Tuple[dict, str]]:
     for evaluation in evaluations:
-        hypothesis_id = evaluation['hypothesis_id']
-        annotation_created_timestamp = evaluation['annotation_created_timestamp']
-        evaluation_suffix = evaluation['evaluation_suffix']
-        outputs_type = get_outputs_type_form_tags(evaluation['tags'])
+        docmap_evaluation_type = get_docmap_evaluation_type_form_tags(evaluation['tags'])
         evaluation_preprint_url = evaluation['uri']
         if evaluation_preprint_url != preprint_url:
             LOGGER.debug(
@@ -371,47 +363,178 @@ def iter_single_actions_value_from_query_result_for_peer_reviewed_step(
                 evaluation_preprint_url, preprint_url
             )
             continue
-        if outputs_type in (
-            DOCMAP_OUTPUT_TYPE_FOR_EVALUATION_SUMMARY,
-            DOCMAP_OUTPUT_TYPE_FOR_REVIEW_ARTICLE,
-            DOCMAP_OUTPUT_TYPE_FOR_REPLY
+        if docmap_evaluation_type in (
+            DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY,
+            DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE,
+            DOCMAP_EVALUATION_TYPE_FOR_REPLY
         ):
-            yield get_single_actions_value_for_preprint_peer_reviewed_step(
-                query_result_item=query_result_item,
-                hypothesis_id=hypothesis_id,
-                annotation_created_timestamp=annotation_created_timestamp,
-                evaluation_suffix=evaluation_suffix,
-                outputs_type=outputs_type
-            )
+            yield evaluation, docmap_evaluation_type
+
+
+def iter_single_actions_value_of_evaluations_output(
+    query_result_item: dict,
+    preprint: dict
+) -> Iterable[dict]:
+    evaluations = query_result_item['evaluations']
+    preprint_url = preprint['preprint_url']
+    for evaluation, docmap_evaluation_type in iter_evaluation_and_type_for_related_preprint_url(
+        evaluations,
+        preprint_url
+    ):
+        hypothesis_id = evaluation['hypothesis_id']
+        annotation_created_timestamp = evaluation['annotation_created_timestamp']
+        evaluation_suffix = evaluation['evaluation_suffix']
+        yield get_single_actions_value_of_evaluations_output(
+            query_result_item=query_result_item,
+            preprint=preprint,
+            hypothesis_id=hypothesis_id,
+            annotation_created_timestamp=annotation_created_timestamp,
+            evaluation_suffix=evaluation_suffix,
+            docmap_evaluation_type=docmap_evaluation_type
+        )
 
 
 def get_docmaps_step_for_peer_reviewed_status(
-    query_result_item
+    query_result_item: dict,
+    preprint: dict
 ):
     return {
-        'actions': list(iter_single_actions_value_from_query_result_for_peer_reviewed_step(
-            query_result_item=query_result_item
+        'actions': list(iter_single_actions_value_of_evaluations_output(
+            query_result_item=query_result_item,
+            preprint=preprint
             )
         ),
         'assertions': get_docmap_assertions_value_for_preprint_peer_reviewed_step(
-            query_result_item=query_result_item
+            preprint=preprint
         ),
-        'inputs': get_docmap_inputs_value_for_review_steps(
-            query_result_item=query_result_item
+        'inputs': get_docmap_input_preprint_values(
+            preprint=preprint
+        )
+    }
+
+
+def get_single_evaluation_as_input(
+    query_result_item: dict,
+    preprint: dict,
+    evaluation_suffix: str,
+    docmap_evaluation_type: str
+):
+    elife_evaluation_doi = get_elife_evaluation_doi(
+        elife_doi_version_str=preprint['elife_doi_version_str'],
+        elife_doi=query_result_item['elife_doi'],
+        evaluation_suffix=evaluation_suffix
+    )
+    return {
+        'type': docmap_evaluation_type,
+        'doi': elife_evaluation_doi
+    }
+
+
+def iter_single_evaluation_as_input(
+    query_result_item: dict,
+    preprint: dict
+):
+    evaluations = query_result_item['evaluations']
+    preprint_url = preprint['preprint_url']
+    for evaluation, docmap_evaluation_type in iter_evaluation_and_type_for_related_preprint_url(
+        evaluations,
+        preprint_url
+    ):
+        evaluation_suffix = evaluation['evaluation_suffix']
+        yield get_single_evaluation_as_input(
+            query_result_item=query_result_item,
+            preprint=preprint,
+            evaluation_suffix=evaluation_suffix,
+            docmap_evaluation_type=docmap_evaluation_type
+        )
+
+
+def get_docmap_inputs_value_for_revised_steps(
+    query_result_item: dict,
+    preprint: dict,
+    previous_preprint: dict
+):
+    return get_docmap_input_preprint_values(preprint=preprint) + list(
+        iter_single_evaluation_as_input(
+            query_result_item=query_result_item,
+            preprint=previous_preprint
+        )
+    )
+
+
+def get_docmap_assertions_value_for_revised_steps(
+    query_result_item: dict,
+    preprint: dict
+):
+    return [{
+        'item': {
+            'type': 'preprint',
+            'doi': get_elife_version_doi(
+                elife_doi=query_result_item['elife_doi'],
+                elife_doi_version_str=preprint['elife_doi_version_str']
+            ),
+            'versionIdentifier': preprint['elife_doi_version_str']
+        },
+        'status': 'revised'
+    }]
+
+
+def get_docmap_actions_value_for_revised_steps(
+    query_result_item: dict,
+    preprint: dict
+):
+    return list(get_docmap_actions_value_for_preprint_under_review_and_revised_step(
+            query_result_item=query_result_item,
+            preprint=preprint
+        )) + list(iter_single_actions_value_of_evaluations_output(
+            query_result_item=query_result_item,
+            preprint=preprint
+        ))
+
+
+def get_docmaps_step_for_revised_status(
+    query_result_item: dict,
+    preprint: dict,
+    previous_preprint: dict
+):
+    return {
+        'actions': get_docmap_actions_value_for_revised_steps(
+            query_result_item=query_result_item,
+            preprint=preprint
+        ),
+        'assertions': get_docmap_assertions_value_for_revised_steps(
+            query_result_item=query_result_item,
+            preprint=preprint
+        ),
+        'inputs': get_docmap_inputs_value_for_revised_steps(
+            query_result_item=query_result_item,
+            preprint=preprint,
+            previous_preprint=previous_preprint
         )
     }
 
 
 def iter_docmap_steps_for_query_result_item(query_result_item: dict) -> Iterable[dict]:
-    yield get_docmaps_step_for_manuscript_published_status(query_result_item)
-    yield get_docmaps_step_for_under_review_status(query_result_item)
+    preprint = query_result_item['preprints'][0]
+    yield get_docmaps_step_for_manuscript_published_status(preprint)
+    yield get_docmaps_step_for_under_review_status(query_result_item, preprint)
     if query_result_item['evaluations']:
-        yield get_docmaps_step_for_peer_reviewed_status(query_result_item)
+        yield get_docmaps_step_for_peer_reviewed_status(query_result_item, preprint)
+    if len(query_result_item['preprints']) > 1:
+        for index, preprint in enumerate(query_result_item['preprints']):
+            if index > 0:
+                previous_preprint = query_result_item['preprints'][index-1]
+                yield get_docmaps_step_for_manuscript_published_status(preprint)
+                yield get_docmaps_step_for_revised_status(
+                    query_result_item,
+                    preprint,
+                    previous_preprint
+                )
 
 
-def generate_docmap_steps(step_itearble: Iterable[dict]) -> dict:
+def generate_docmap_steps(step_iterable: Iterable[dict]) -> dict:
     steps_dict = {}
-    step_list = list(step_itearble)
+    step_list = list(step_iterable)
     for step_index, step in enumerate(step_list):
         LOGGER.debug('step_index: %r', step_index)
         step_ranking_dict = {
@@ -440,7 +563,7 @@ def get_docmap_item_for_query_result_item(query_result_item: dict) -> dict:
 
 
 class DocmapsProvider:
-    def __init__(  # pylint: disable=too-many-arguments
+    def __init__(
         self,
         gcp_project_name: str = 'elife-data-pipeline',
         query_results_cache: Optional[SingleObjectCache[Sequence[dict]]] = None,
