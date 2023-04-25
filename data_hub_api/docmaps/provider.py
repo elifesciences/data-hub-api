@@ -13,7 +13,7 @@ from data_hub_api.utils.bigquery import (
 from data_hub_api.utils.cache import SingleObjectCache, DummySingleObjectCache
 from data_hub_api.docmaps.sql import get_sql_path
 from data_hub_api.utils.json import remove_key_with_none_value_only
-from data_hub_api.utils.util import get_previous_element_of_given_element_in_list
+from data_hub_api.utils.util import get_previous_element_of_given_element_in_given_list
 
 
 LOGGER = logging.getLogger(__name__)
@@ -516,13 +516,17 @@ def iter_docmap_steps_for_query_result_item(query_result_item: dict) -> Iterable
         yield get_docmaps_step_for_peer_reviewed_status(query_result_item, preprint)
     if len(query_result_item['preprints']) > 1:
         for preprint in query_result_item['preprints']:
-            previous_preprint = get_previous_element_of_given_element_in_list(
+            previous_preprint = get_previous_element_of_given_element_in_given_list(
                 given_list=query_result_item['preprints'],
                 given_element=preprint
             )
             if preprint != query_result_item['preprints'][0]:
                 yield get_docmaps_step_for_manuscript_published_status(preprint)
-                yield get_docmaps_step_for_revised_status(query_result_item, preprint, previous_preprint)
+                yield get_docmaps_step_for_revised_status(
+                    query_result_item,
+                    preprint,
+                    previous_preprint
+                )
 
 
 def generate_docmap_steps(step_iterable: Iterable[dict]) -> dict:
