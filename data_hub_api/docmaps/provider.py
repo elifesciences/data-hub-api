@@ -369,7 +369,7 @@ def iter_single_evaluation_for_related_preprint_url(evaluations: list, preprint_
             yield evaluation
 
 
-def iter_single_actions_value_from_query_result_for_peer_reviewed_step(
+def iter_single_actions_value_of_evaluations_output(
     query_result_item: dict,
     preprint: dict
 ) -> Iterable[dict]:
@@ -395,7 +395,7 @@ def get_docmaps_step_for_peer_reviewed_status(
     preprint: dict
 ):
     return {
-        'actions': list(iter_single_actions_value_from_query_result_for_peer_reviewed_step(
+        'actions': list(iter_single_actions_value_of_evaluations_output(
             query_result_item=query_result_item,
             preprint=preprint
             )
@@ -468,27 +468,6 @@ def get_docmap_assertions_value_for_revised_steps(
     }]
 
 
-def iter_single_evaluations_value(
-    query_result_item: dict,
-    preprint: dict
-) -> Iterable[dict]:
-    evaluations = query_result_item['evaluations']
-    preprint_url = preprint['preprint_url']
-    for evaluation in iter_single_evaluation_for_related_preprint_url(evaluations, preprint_url):
-        hypothesis_id = evaluation['hypothesis_id']
-        annotation_created_timestamp = evaluation['annotation_created_timestamp']
-        evaluation_suffix = evaluation['evaluation_suffix']
-        docmap_evaluation_type = get_docmap_evaluation_type_form_tags(evaluation['tags'])
-        yield get_single_actions_value_of_evaluations_output(
-            query_result_item=query_result_item,
-            preprint=preprint,
-            hypothesis_id=hypothesis_id,
-            annotation_created_timestamp=annotation_created_timestamp,
-            evaluation_suffix=evaluation_suffix,
-            docmap_evaluation_type=docmap_evaluation_type
-        )
-
-
 def get_docmap_actions_value_for_revised_steps(
     query_result_item: dict,
     preprint: dict
@@ -496,7 +475,7 @@ def get_docmap_actions_value_for_revised_steps(
     return list(get_docmap_actions_value_for_preprint_under_review_and_revised_step(
             query_result_item=query_result_item,
             preprint=preprint
-        )) + list(iter_single_evaluations_value(
+        )) + list(iter_single_actions_value_of_evaluations_output(
             query_result_item=query_result_item,
             preprint=preprint
         ))
