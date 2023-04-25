@@ -200,7 +200,6 @@ def get_docmaps_step_for_under_review_status(
 
 
 def get_docmap_assertions_value_for_preprint_peer_reviewed_step(
-    query_result_item: dict,
     preprint: dict
 ) -> Sequence[dict]:
     return [{
@@ -401,7 +400,6 @@ def get_docmaps_step_for_peer_reviewed_status(
             )
         ),
         'assertions': get_docmap_assertions_value_for_preprint_peer_reviewed_step(
-            query_result_item=query_result_item,
             preprint=preprint
         ),
         'inputs': get_docmap_input_preprint_values(
