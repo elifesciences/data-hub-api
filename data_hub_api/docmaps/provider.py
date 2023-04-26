@@ -138,7 +138,11 @@ def get_docmap_assertions_value_for_preprint_under_review_step(
             'versionIdentifier': preprint['preprint_version']
         },
         'status': 'under-review',
-        'happened': query_result_item['under_review_timestamp']
+        'happened': (
+            query_result_item['under_review_timestamp']
+            or
+            query_result_item['qc_complete_timestamp']
+        )
     }, {
         'item': {
             'type': 'preprint',
