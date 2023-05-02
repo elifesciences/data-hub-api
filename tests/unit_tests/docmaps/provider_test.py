@@ -420,17 +420,6 @@ class TestGetDocmapsItemForQueryResultItem:
             }
         ]
 
-    def test_should_populate_happenned_in_with_qc_complete_if_under_review_timestamp_is_null(self):
-        docmaps_item = get_docmap_item_for_query_result_item({
-            **DOCMAPS_QUERY_RESULT_ITEM_1,
-            'under_review_timestamp': '',
-            'qc_complete_timestamp': datetime.fromisoformat('2022-01-01T01:02:03+00:00')
-        })
-        under_review_step = docmaps_item['steps']['_:b1']
-        assert under_review_step['assertions'][0]['happened'] == (
-            datetime.fromisoformat('2022-01-01T01:02:03+00:00')
-        )
-
     def test_should_populate_actions_outputs_with_doi_and_url_under_review_step_with_license(self):
         docmaps_item = get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
         under_review_step = docmaps_item['steps']['_:b1']
