@@ -408,7 +408,7 @@ class TestGetDocmapsItemForQueryResultItem:
                     'versionIdentifier': PREPRINT_DETAILS_1['preprint_version']
                 },
                 'status': 'under-review',
-                'happened': datetime.fromisoformat('2022-01-01T01:02:03+00:00')
+                'happened': datetime.fromisoformat('2022-02-01T01:02:03+00:00')
             },
             {
                 'item': {
