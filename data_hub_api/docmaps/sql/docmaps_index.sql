@@ -1,8 +1,18 @@
 WITH t_hypothesis_annotation_with_doi AS (
   SELECT
     * EXCEPT (id, created),
-    REGEXP_EXTRACT(annotation.uri, r'(10\.\d{3,}[^v]*)v?') AS source_doi,
-    REGEXP_EXTRACT(annotation.uri, r'10\.\d{3,}.*v([1-9])') AS source_doi_version,
+    CASE WHEN annotation.uri LIKE '%10.1101/%'
+      THEN REGEXP_EXTRACT(annotation.uri, r'(10\.\d{3,}[^v]*)v?')
+      WHEN annotation.uri LIKE '%rs-%'
+      THEN CONCAT('10.21203/rs.3.', REGEXP_EXTRACT(annotation.uri, r'\/(\w+-\d+\/\w+)'))
+      ELSE NULL
+    END AS source_doi,
+    CASE WHEN annotation.uri LIKE '%10.1101/%'
+      THEN REGEXP_EXTRACT(annotation.uri, r'10\.\d{3,}.*v([1-9])')
+      WHEN annotation.uri LIKE '%rs-%'
+      THEN REGEXP_EXTRACT(annotation.uri, r'v(\d+)$') 
+      ELSE NULL
+    END AS source_doi_version,
     annotation.id AS hypothesis_id,
     annotation.created AS annotation_created_timestamp,
   FROM `elife-data-pipeline.de_proto.v_hypothesis_annotation` AS annotation
@@ -186,7 +196,12 @@ t_result_with_preprint_version AS (
     ARRAY(
       SELECT AS STRUCT 
       preprint.*,
-      REGEXP_EXTRACT(preprint.preprint_url, r'10\.\d{3,}.*v([1-9])') AS preprint_version
+      CASE WHEN preprint.preprint_url LIKE '%10.1101/%'
+        THEN REGEXP_EXTRACT(preprint.preprint_url, r'10\.\d{3,}.*v([1-9])')
+        WHEN preprint.preprint_url LIKE '%rs-%'
+        THEN REGEXP_EXTRACT(preprint.preprint_url, r'v(\d+)$') 
+        ELSE NULL
+      END AS preprint_version,
       FROM result.preprints AS preprint
     ) AS preprints
   FROM t_result_with_preprints AS result
