@@ -5,8 +5,10 @@ WITH t_hypothesis_annotation_with_doi AS (
       WHEN annotation.uri LIKE '%10.1101/%'
         THEN REGEXP_EXTRACT(annotation.uri, r'(10\.\d{3,}[^v]*)v?')
       WHEN annotation.uri LIKE '%researchsquare.com/article/rs-%'
+        -- 'https://www.researchsquare.com/article/rs-2848731/v1' --> 'rs-2848731/v1'
         THEN CONCAT('10.21203/rs.3.', REGEXP_EXTRACT(annotation.uri, r'\/(\w+-\d+\/\w+)'))
       WHEN annotation.uri LIKE '%arxiv.org/abs/%'
+        -- 'https://arxiv.org/abs/2305.01403v1' -->  '2305.01403'
         THEN CONCAT('10.48550/arXiv.', REGEXP_EXTRACT(annotation.uri, r'\/(\d+\.\d+)'))
       ELSE NULL
     END AS source_doi,
