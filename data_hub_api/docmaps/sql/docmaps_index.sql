@@ -1,18 +1,20 @@
 WITH t_hypothesis_annotation_with_doi AS (
   SELECT
     * EXCEPT (id, created),
-    CASE WHEN annotation.uri LIKE '%10.1101/%'
-      THEN REGEXP_EXTRACT(annotation.uri, r'(10\.\d{3,}[^v]*)v?')
-      WHEN annotation.uri LIKE '%rs-%'
-      THEN CONCAT('10.21203/rs.3.', REGEXP_EXTRACT(annotation.uri, r'\/(\w+-\d+\/\w+)'))
-      WHEN annotation.uri LIKE '%arxiv%'
-      THEN CONCAT('10.48550/arXiv.', REGEXP_EXTRACT(annotation.uri, r'\/(\d+\.\d+)'))
+    CASE 
+      WHEN annotation.uri LIKE '%10.1101/%'
+        THEN REGEXP_EXTRACT(annotation.uri, r'(10\.\d{3,}[^v]*)v?')
+      WHEN annotation.uri LIKE '%researchsquare.com/article/rs-%'
+        THEN CONCAT('10.21203/rs.3.', REGEXP_EXTRACT(annotation.uri, r'\/(\w+-\d+\/\w+)'))
+      WHEN annotation.uri LIKE '%arxiv.org/abs/%'
+        THEN CONCAT('10.48550/arXiv.', REGEXP_EXTRACT(annotation.uri, r'\/(\d+\.\d+)'))
       ELSE NULL
     END AS source_doi,
-    CASE WHEN annotation.uri LIKE '%10.1101/%'
-      THEN REGEXP_EXTRACT(annotation.uri, r'10\.\d{3,}.*v([1-9])')
-      WHEN annotation.uri LIKE '%rs-%' OR annotation.uri LIKE '%arxiv%'
-      THEN REGEXP_EXTRACT(annotation.uri, r'v(\d+)$') 
+    CASE 
+      WHEN annotation.uri LIKE '%10.1101/%'
+        THEN REGEXP_EXTRACT(annotation.uri, r'10\.\d{3,}.*v([1-9])')
+      WHEN annotation.uri LIKE '%researchsquare.com/article/rs-%' OR annotation.uri LIKE '%arxiv.org/abs/%'
+        THEN REGEXP_EXTRACT(annotation.uri, r'v(\d+)$') 
       ELSE NULL
     END AS source_doi_version,
     annotation.id AS hypothesis_id,
@@ -198,10 +200,11 @@ t_result_with_preprint_version AS (
     ARRAY(
       SELECT AS STRUCT 
       preprint.*,
-      CASE WHEN preprint.preprint_url LIKE '%10.1101/%'
-        THEN REGEXP_EXTRACT(preprint.preprint_url, r'10\.\d{3,}.*v([1-9])')
-        WHEN preprint.preprint_url LIKE '%rs-%' OR preprint.preprint_url LIKE '%arxiv%'
-        THEN REGEXP_EXTRACT(preprint.preprint_url, r'v(\d+)$') 
+      CASE 
+        WHEN preprint.preprint_url LIKE '%10.1101/%'
+          THEN REGEXP_EXTRACT(preprint.preprint_url, r'10\.\d{3,}.*v([1-9])')
+        WHEN preprint.preprint_url LIKE '%researchsquare.com/article/rs-%' OR preprint.preprint_url LIKE '%arxiv.org/abs/%'
+          THEN REGEXP_EXTRACT(preprint.preprint_url, r'v(\d+)$') 
         ELSE NULL
       END AS preprint_version,
       FROM result.preprints AS preprint
