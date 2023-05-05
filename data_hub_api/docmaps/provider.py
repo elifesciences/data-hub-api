@@ -7,10 +7,10 @@ import urllib
 
 import objsize
 from data_hub_api.docmaps.docmap_typing import (
-    DocmapActions,
-    DocmapAssertions,
-    DocmapInputs,
-    DocmapParticipants,
+    DocmapAction,
+    DocmapAssertion,
+    DocmapInput,
+    DocmapParticipant,
     DocmapStep,
     DocmapSteps,
     Docmap
@@ -89,7 +89,7 @@ def get_elife_doi_url(
 
 def get_docmap_assertions_value_for_preprint_manuscript_published_step(
     preprint: dict
-) -> Sequence[DocmapAssertions]:
+) -> Sequence[DocmapAssertion]:
     return [{
         'item': {
             'type': 'preprint',
@@ -102,7 +102,7 @@ def get_docmap_assertions_value_for_preprint_manuscript_published_step(
 
 def get_docmap_actions_value_for_preprint_manuscript_published_step(
     preprint: dict
-) -> Sequence[DocmapActions]:
+) -> Sequence[DocmapAction]:
     preprint_doi = preprint['preprint_doi']
     preprint_published_at_date = preprint['preprint_published_at_date']
     return [{
@@ -139,7 +139,7 @@ def get_docmaps_step_for_manuscript_published_status(
 def get_docmap_assertions_value_for_preprint_under_review_step(
     query_result_item: dict,
     preprint: dict
-) -> Sequence[DocmapAssertions]:
+) -> Sequence[DocmapAssertion]:
     return [{
         'item': {
             'type': 'preprint',
@@ -164,7 +164,7 @@ def get_docmap_assertions_value_for_preprint_under_review_step(
 def get_docmap_actions_value_for_preprint_under_review_and_revised_step(
     query_result_item: dict,
     preprint: dict
-) -> Sequence[DocmapActions]:
+) -> Sequence[DocmapAction]:
     return [{
         'participants': [],
         'outputs': [{
@@ -180,7 +180,7 @@ def get_docmap_actions_value_for_preprint_under_review_and_revised_step(
     }]
 
 
-def get_docmap_input_preprint_values(preprint: dict) -> Sequence[DocmapInputs]:
+def get_docmap_input_preprint_values(preprint: dict) -> Sequence[DocmapInput]:
     return [{
         'type': 'preprint',
         'doi': preprint['preprint_doi'],
@@ -210,7 +210,7 @@ def get_docmaps_step_for_under_review_status(
 
 def get_docmap_assertions_value_for_preprint_peer_reviewed_step(
     preprint: dict
-) -> Sequence[DocmapAssertions]:
+) -> Sequence[DocmapAssertion]:
     return [{
         'item': {
             'type': 'preprint',
@@ -267,7 +267,7 @@ def get_related_organization_detail(
 def get_participants_for_peer_reviewed_evalution_summary_type(
     editor_details_list,
     senior_editor_details_list
-) -> Sequence[DocmapParticipants]:
+) -> Sequence[DocmapParticipant]:
     participants = []
     for editor_detail in editor_details_list:
         single_editor_dict = {
@@ -289,13 +289,13 @@ def get_participants_for_peer_reviewed_evalution_summary_type(
             'role': 'senior-editor'
         }
         participants.append(single_senior_editor_dict)
-    return cast(Sequence[DocmapParticipants], participants)
+    return cast(Sequence[DocmapParticipant], participants)
 
 
 def get_participants_for_preprint_peer_reviewed_step(
     query_result_item: dict,
     docmap_evaluation_type: str
-) -> Sequence[DocmapParticipants]:
+) -> Sequence[DocmapParticipant]:
     editor_details_list = query_result_item['editor_details']
     senior_editor_details_list = query_result_item['senior_editor_details']
     if docmap_evaluation_type == DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE:
@@ -315,7 +315,7 @@ def get_single_actions_value_of_evaluations_output(
     evaluation_suffix: str,
     annotation_created_timestamp: str,
     docmap_evaluation_type: str
-) -> DocmapActions:
+) -> DocmapAction:
     preprint_doi = preprint['preprint_doi']
     elife_evaluation_doi = get_elife_evaluation_doi(
         elife_doi_version_str=preprint['elife_doi_version_str'],
@@ -383,7 +383,7 @@ def iter_evaluation_and_type_for_related_preprint_url(
 def iter_single_actions_value_of_evaluations_output(
     query_result_item: dict,
     preprint: dict
-) -> Iterable[DocmapActions]:
+) -> Iterable[DocmapAction]:
     evaluations = query_result_item['evaluations']
     preprint_url = preprint['preprint_url']
     for evaluation, docmap_evaluation_type in iter_evaluation_and_type_for_related_preprint_url(
@@ -462,7 +462,7 @@ def get_docmap_inputs_value_for_revised_steps(
     query_result_item: dict,
     preprint: dict,
     previous_preprint: dict
-) -> Sequence[DocmapInputs]:
+) -> Sequence[DocmapInput]:
     return list(get_docmap_input_preprint_values(preprint=preprint)) + list(
         iter_single_evaluation_as_input(
             query_result_item=query_result_item,
@@ -474,7 +474,7 @@ def get_docmap_inputs_value_for_revised_steps(
 def get_docmap_assertions_value_for_revised_steps(
     query_result_item: dict,
     preprint: dict
-) -> Sequence[DocmapAssertions]:
+) -> Sequence[DocmapAssertion]:
     return [{
         'item': {
             'type': 'preprint',
@@ -491,7 +491,7 @@ def get_docmap_assertions_value_for_revised_steps(
 def get_docmap_actions_value_for_revised_steps(
     query_result_item: dict,
     preprint: dict
-) -> Sequence[DocmapActions]:
+) -> Sequence[DocmapAction]:
     return list(get_docmap_actions_value_for_preprint_under_review_and_revised_step(
             query_result_item=query_result_item,
             preprint=preprint

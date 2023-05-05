@@ -2,8 +2,8 @@ from typing import Mapping, Optional, Sequence, TypedDict
 from typing_extensions import NotRequired
 
 
-DocmapOutputs = TypedDict(
-    'DocmapOutputs',
+DocmapOutput = TypedDict(
+    'DocmapOutput',
     {
         'type': str,
         'doi': Optional[str],
@@ -18,8 +18,8 @@ DocmapOutputs = TypedDict(
     total=False
 )
 
-DocmapParticipants = TypedDict(
-    'DocmapParticipants',
+DocmapParticipant = TypedDict(
+    'DocmapParticipant',
     {
         'actor': dict,
         'role': str
@@ -27,8 +27,8 @@ DocmapParticipants = TypedDict(
     total=False
 )
 
-DocmapInputs = TypedDict(
-    'DocmapInputs',
+DocmapInput = TypedDict(
+    'DocmapInput',
     {
         'type': str,
         'doi': str,
@@ -38,8 +38,8 @@ DocmapInputs = TypedDict(
     total=False
 )
 
-DocmapAssertions = TypedDict(
-    'DocmapAssertions',
+DocmapAssertion = TypedDict(
+    'DocmapAssertion',
     {
         'item': dict,
         'status': str,
@@ -48,20 +48,20 @@ DocmapAssertions = TypedDict(
     total=False
 )
 
-DocmapActions = TypedDict(
-    'DocmapActions',
+DocmapAction = TypedDict(
+    'DocmapAction',
     {
-        'participants': Sequence[DocmapParticipants],
-        'outputs': Sequence[DocmapOutputs]
+        'participants': Sequence[DocmapParticipant],
+        'outputs': Sequence[DocmapOutput]
     }
 )
 
 DocmapStep = TypedDict(
     'DocmapStep',
     {
-        'actions': Sequence[DocmapActions],
-        'assertions': Sequence[DocmapAssertions],
-        'inputs': Sequence[DocmapInputs],
+        'actions': Sequence[DocmapAction],
+        'assertions': Sequence[DocmapAssertion],
+        'inputs': Sequence[DocmapInput],
         'next-step': NotRequired[str],
         'previous-step': NotRequired[str]
     },
