@@ -1,6 +1,22 @@
-from typing import Mapping, Sequence, TypedDict
+from typing import Mapping, Optional, Sequence, TypedDict
 from typing_extensions import NotRequired
 
+
+DocmapOutputs = TypedDict(
+    'DocmapOutputs',
+    {
+        'type': str,
+        'doi': Optional[str],
+        'published': NotRequired[str],
+        'license': NotRequired[str],
+        'url': NotRequired[Optional[str]],
+        'versionIdentifier': NotRequired[str],
+        'identifier': NotRequired[str],
+        '_tdmPath': NotRequired[str],
+        'content': NotRequired[Sequence[dict]]
+    },
+    total=False
+)
 
 DocmapParticipants = TypedDict(
     'DocmapParticipants',
@@ -36,7 +52,7 @@ DocmapActions = TypedDict(
     'DocmapActions',
     {
         'participants': Sequence[DocmapParticipants],
-        'outputs': Sequence[dict]
+        'outputs': Sequence[DocmapOutputs]
     }
 )
 
