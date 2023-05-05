@@ -1,21 +1,40 @@
-from typing import Mapping, Optional, Sequence, TypedDict
+from typing import Mapping, Optional, Sequence, TypedDict, Union
 from typing_extensions import NotRequired
 
 
-DocmapOutput = TypedDict(
-    'DocmapOutput',
+DocmapEvaluationOutput = TypedDict(
+    'DocmapEvaluationOutput',
     {
         'type': str,
         'doi': Optional[str],
-        'published': NotRequired[str],
-        'license': NotRequired[str],
-        'url': NotRequired[Optional[str]],
-        'versionIdentifier': NotRequired[str],
-        'identifier': NotRequired[str],
-        '_tdmPath': NotRequired[str],
-        'content': NotRequired[Sequence[dict]]
-    },
-    total=False
+        'published': str,
+        'license': str,
+        'url': Optional[str],
+        'content': Sequence[dict]
+    }
+)
+
+DocmapElifeManuscriptOutput = TypedDict(
+    'DocmapElifeManuscriptOutput',
+    {
+        'type': str,
+        'doi': Optional[str],
+        'identifier': str,
+        'versionIdentifier': str,
+        'license': str
+    }
+)
+
+DocmapPreprintOutput = TypedDict(
+    'DocmapPreprintOutput',
+    {
+        'type': str,
+        'doi': Optional[str],
+        'published': str,
+        'url': Optional[str],
+        'versionIdentifier': str,
+        '_tdmPath': str
+    }
 )
 
 DocmapParticipant = TypedDict(
@@ -52,7 +71,9 @@ DocmapAction = TypedDict(
     'DocmapAction',
     {
         'participants': Sequence[DocmapParticipant],
-        'outputs': Sequence[DocmapOutput]
+        'outputs': Sequence[
+            Union[DocmapPreprintOutput, DocmapElifeManuscriptOutput, DocmapEvaluationOutput]
+        ]
     }
 )
 
