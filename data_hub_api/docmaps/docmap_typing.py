@@ -2,6 +2,17 @@ from typing import Mapping, Sequence, TypedDict
 from typing_extensions import NotRequired
 
 
+DocmapInputs = TypedDict(
+    'DocmapInputs',
+    {
+        'type': str,
+        'doi': str,
+        'url': str,
+        'versionIdentifier': str
+    },
+    total=False
+)
+
 DocmapAssertions = TypedDict(
     'DocmapAssertions',
     {

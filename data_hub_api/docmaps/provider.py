@@ -9,6 +9,7 @@ import objsize
 from data_hub_api.docmaps.docmap_typing import (
     DocmapActions,
     DocmapAssertions,
+    DocmapInputs,
     DocmapStep,
     DocmapSteps,
     Docmap
@@ -178,7 +179,7 @@ def get_docmap_actions_value_for_preprint_under_review_and_revised_step(
     }]
 
 
-def get_docmap_input_preprint_values(preprint: dict):
+def get_docmap_input_preprint_values(preprint: dict) -> Sequence[DocmapInputs]:
     return [{
         'type': 'preprint',
         'doi': preprint['preprint_doi'],
@@ -460,8 +461,8 @@ def get_docmap_inputs_value_for_revised_steps(
     query_result_item: dict,
     preprint: dict,
     previous_preprint: dict
-):
-    return get_docmap_input_preprint_values(preprint=preprint) + list(
+) -> Sequence[DocmapInputs]:
+    return list(get_docmap_input_preprint_values(preprint=preprint)) + list(
         iter_single_evaluation_as_input(
             query_result_item=query_result_item,
             preprint=previous_preprint
