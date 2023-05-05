@@ -2,6 +2,16 @@ from typing import Mapping, Sequence, TypedDict
 from typing_extensions import NotRequired
 
 
+DocmapAssertions = TypedDict(
+    'DocmapAssertions',
+    {
+        'item': dict,
+        'status': str,
+        'happened': str
+    },
+    total=False
+)
+
 DocmapActions = TypedDict(
     'DocmapActions',
     {
@@ -14,8 +24,8 @@ DocmapStep = TypedDict(
     'DocmapStep',
     {
         'actions': Sequence[DocmapActions],
-        'assertions': Sequence[dict],
-        'inputs': Sequence[dict],
+        'assertions': Sequence[DocmapAssertions],
+        'inputs': Sequence[DocmapInputs],
         'next-step': NotRequired[str],
         'previous-step': NotRequired[str]
     },

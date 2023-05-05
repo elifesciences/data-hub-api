@@ -6,7 +6,13 @@ from typing import Dict, Iterable, Optional, Sequence, Tuple, cast
 import urllib
 
 import objsize
-from data_hub_api.docmaps.docmap_typing import DocmapActions, DocmapStep, DocmapSteps, Docmap
+from data_hub_api.docmaps.docmap_typing import (
+    DocmapActions,
+    DocmapAssertions,
+    DocmapStep,
+    DocmapSteps,
+    Docmap
+)
 
 from data_hub_api.utils.bigquery import (
     iter_dict_from_bq_query
@@ -81,7 +87,7 @@ def get_elife_doi_url(
 
 def get_docmap_assertions_value_for_preprint_manuscript_published_step(
     preprint: dict
-) -> Sequence[dict]:
+) -> Sequence[DocmapAssertions]:
     return [{
         'item': {
             'type': 'preprint',
@@ -131,7 +137,7 @@ def get_docmaps_step_for_manuscript_published_status(
 def get_docmap_assertions_value_for_preprint_under_review_step(
     query_result_item: dict,
     preprint: dict
-) -> Sequence[dict]:
+) -> Sequence[DocmapAssertions]:
     return [{
         'item': {
             'type': 'preprint',
@@ -202,7 +208,7 @@ def get_docmaps_step_for_under_review_status(
 
 def get_docmap_assertions_value_for_preprint_peer_reviewed_step(
     preprint: dict
-) -> Sequence[dict]:
+) -> Sequence[DocmapAssertions]:
     return [{
         'item': {
             'type': 'preprint',
@@ -466,7 +472,7 @@ def get_docmap_inputs_value_for_revised_steps(
 def get_docmap_assertions_value_for_revised_steps(
     query_result_item: dict,
     preprint: dict
-):
+) -> Sequence[DocmapAssertions]:
     return [{
         'item': {
             'type': 'preprint',
