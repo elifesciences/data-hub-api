@@ -6,7 +6,7 @@ from typing import Iterable, Optional, Sequence, Tuple
 import urllib
 
 import objsize
-from data_hub_api.docmaps.docmap_typing import DocmapTypedDict
+from data_hub_api.docmaps.docmap_typing import DocmapSteps, Docmap
 
 from data_hub_api.utils.bigquery import (
     iter_dict_from_bq_query
@@ -533,7 +533,7 @@ def iter_docmap_steps_for_query_result_item(query_result_item: dict) -> Iterable
                 )
 
 
-def generate_docmap_steps(step_iterable: Iterable[dict]) -> dict:
+def generate_docmap_steps(step_iterable: Iterable[dict]) -> DocmapSteps:
     steps_dict = {}
     step_list = list(step_iterable)
     for step_index, step in enumerate(step_list):
@@ -546,7 +546,7 @@ def generate_docmap_steps(step_iterable: Iterable[dict]) -> dict:
     return remove_key_with_none_value_only(steps_dict)
 
 
-def get_docmap_item_for_query_result_item(query_result_item: dict) -> DocmapTypedDict:
+def get_docmap_item_for_query_result_item(query_result_item: dict) -> Docmap:
     qc_complete_timestamp_str = query_result_item['qc_complete_timestamp'].isoformat()
     publisher_json = query_result_item['publisher_json']
     LOGGER.debug('publisher_json: %r', publisher_json)
@@ -611,7 +611,7 @@ class DocmapsProvider:
     def iter_docmaps_by_manuscript_id(
         self,
         manuscript_id: Optional[str] = None
-    ) -> Iterable[DocmapTypedDict]:
+    ) -> Iterable[Docmap]:
         bq_result_list = self._query_results_cache.get_or_load(
             load_fn=self._load_query_results_from_bq
         )
@@ -624,7 +624,7 @@ class DocmapsProvider:
         for bq_result in bq_result_list:
             yield get_docmap_item_for_query_result_item(bq_result)
 
-    def get_docmaps_by_manuscript_id(self, manuscript_id: str) -> Sequence[DocmapTypedDict]:
+    def get_docmaps_by_manuscript_id(self, manuscript_id: str) -> Sequence[Docmap]:
         return list(self.iter_docmaps_by_manuscript_id(manuscript_id))
 
     def get_docmaps_index(self) -> dict:

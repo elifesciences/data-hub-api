@@ -1,8 +1,10 @@
-from typing import TypedDict
+from typing import Mapping, TypedDict
 
 
-DocmapTypedDict = TypedDict(
-    'DocmapTypedDict',
+DocmapSteps = Mapping[str, dict]
+
+Docmap = TypedDict(
+    'Docmap',
     {
         '@context': str,
         'type': str,
@@ -11,7 +13,7 @@ DocmapTypedDict = TypedDict(
         'updated': str,
         'publisher': dict,
         'first-step': str,
-        'steps': dict
+        'steps': DocmapSteps
     },
     total=False
 )
