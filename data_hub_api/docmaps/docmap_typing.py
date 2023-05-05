@@ -2,6 +2,14 @@ from typing import Mapping, Optional, Sequence, TypedDict, Union
 from typing_extensions import NotRequired
 
 
+DocmapContent = TypedDict(
+    'DocmapContent',
+    {
+        'type': str,
+        'url': str
+    }
+)
+
 DocmapEvaluationOutput = TypedDict(
     'DocmapEvaluationOutput',
     {
@@ -10,7 +18,7 @@ DocmapEvaluationOutput = TypedDict(
         'published': str,
         'license': str,
         'url': Optional[str],
-        'content': Sequence[dict]
+        'content': Sequence[DocmapContent]
     }
 )
 
