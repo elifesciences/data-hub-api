@@ -54,15 +54,22 @@ DocmapParticipant = TypedDict(
     total=False
 )
 
-DocmapInput = TypedDict(
-    'DocmapInput',
+DocmapPreprintInput = TypedDict(
+    'DocmapPreprintInput',
     {
         'type': str,
         'doi': str,
-        'url': NotRequired[str],
-        'versionIdentifier': NotRequired[str]
-    },
-    total=False
+        'url': str,
+        'versionIdentifier': str
+    }
+)
+
+DocmapEvaluationInput = TypedDict(
+    'DocmapEvaluationInput',
+    {
+        'type': str,
+        'doi': str
+    }
 )
 
 DocmapAssertion = TypedDict(
@@ -90,7 +97,7 @@ DocmapStep = TypedDict(
     {
         'actions': Sequence[DocmapAction],
         'assertions': Sequence[DocmapAssertion],
-        'inputs': Sequence[DocmapInput],
+        'inputs': Sequence[Union[DocmapPreprintInput, DocmapEvaluationInput]],
         'next-step': NotRequired[str],
         'previous-step': NotRequired[str]
     },

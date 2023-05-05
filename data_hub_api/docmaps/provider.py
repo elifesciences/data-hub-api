@@ -2,7 +2,7 @@ import logging
 import json
 from pathlib import Path
 from time import monotonic
-from typing import Dict, Iterable, Optional, Sequence, Tuple, cast
+from typing import Dict, Iterable, Optional, Sequence, Tuple, Union, cast
 import urllib
 
 import objsize
@@ -10,9 +10,10 @@ from data_hub_api.docmaps.docmap_typing import (
     DocmapAction,
     DocmapAssertion,
     DocmapElifeManuscriptOutput,
+    DocmapEvaluationInput,
     DocmapEvaluationOutput,
-    DocmapInput,
     DocmapParticipant,
+    DocmapPreprintInput,
     DocmapPreprintOutput,
     DocmapStep,
     DocmapSteps,
@@ -199,7 +200,7 @@ def get_docmap_actions_value_for_preprint_under_review_and_revised_step(
     }]
 
 
-def get_docmap_input_preprint_values(preprint: dict) -> Sequence[DocmapInput]:
+def get_docmap_input_preprint_values(preprint: dict) -> Sequence[DocmapPreprintInput]:
     return [{
         'type': 'preprint',
         'doi': preprint['preprint_doi'],
@@ -499,7 +500,7 @@ def get_docmap_inputs_value_for_revised_steps(
     query_result_item: dict,
     preprint: dict,
     previous_preprint: dict
-) -> Sequence[DocmapInput]:
+) -> Sequence[Union[DocmapPreprintInput, DocmapEvaluationInput]]:
     return list(get_docmap_input_preprint_values(preprint=preprint)) + list(
         iter_single_evaluation_as_input(
             query_result_item=query_result_item,
