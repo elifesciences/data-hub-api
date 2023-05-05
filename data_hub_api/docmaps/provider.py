@@ -6,7 +6,7 @@ from typing import Dict, Iterable, Optional, Sequence, Tuple, cast
 import urllib
 
 import objsize
-from data_hub_api.docmaps.docmap_typing import DocmapStep, DocmapSteps, Docmap
+from data_hub_api.docmaps.docmap_typing import DocmapActions, DocmapStep, DocmapSteps, Docmap
 
 from data_hub_api.utils.bigquery import (
     iter_dict_from_bq_query
@@ -94,7 +94,7 @@ def get_docmap_assertions_value_for_preprint_manuscript_published_step(
 
 def get_docmap_actions_value_for_preprint_manuscript_published_step(
     preprint: dict
-) -> Sequence[dict]:
+) -> Sequence[DocmapActions]:
     preprint_doi = preprint['preprint_doi']
     preprint_published_at_date = preprint['preprint_published_at_date']
     return [{
@@ -156,7 +156,7 @@ def get_docmap_assertions_value_for_preprint_under_review_step(
 def get_docmap_actions_value_for_preprint_under_review_and_revised_step(
     query_result_item: dict,
     preprint: dict
-) -> Sequence[dict]:
+) -> Sequence[DocmapActions]:
     return [{
         'participants': [],
         'outputs': [{
@@ -307,7 +307,7 @@ def get_single_actions_value_of_evaluations_output(
     evaluation_suffix: str,
     annotation_created_timestamp: str,
     docmap_evaluation_type: str
-) -> dict:
+) -> DocmapActions:
     preprint_doi = preprint['preprint_doi']
     elife_evaluation_doi = get_elife_evaluation_doi(
         elife_doi_version_str=preprint['elife_doi_version_str'],
@@ -375,7 +375,7 @@ def iter_evaluation_and_type_for_related_preprint_url(
 def iter_single_actions_value_of_evaluations_output(
     query_result_item: dict,
     preprint: dict
-) -> Iterable[dict]:
+) -> Iterable[DocmapActions]:
     evaluations = query_result_item['evaluations']
     preprint_url = preprint['preprint_url']
     for evaluation, docmap_evaluation_type in iter_evaluation_and_type_for_related_preprint_url(
@@ -483,7 +483,7 @@ def get_docmap_assertions_value_for_revised_steps(
 def get_docmap_actions_value_for_revised_steps(
     query_result_item: dict,
     preprint: dict
-):
+) -> Sequence[DocmapActions]:
     return list(get_docmap_actions_value_for_preprint_under_review_and_revised_step(
             query_result_item=query_result_item,
             preprint=preprint
