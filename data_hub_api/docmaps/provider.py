@@ -10,6 +10,7 @@ from data_hub_api.docmaps.docmap_typing import (
     DocmapActions,
     DocmapAssertions,
     DocmapInputs,
+    DocmapParticipants,
     DocmapStep,
     DocmapSteps,
     Docmap
@@ -266,7 +267,7 @@ def get_related_organization_detail(
 def get_participants_for_peer_reviewed_evalution_summary_type(
     editor_details_list,
     senior_editor_details_list
-) -> Sequence[dict]:
+) -> Sequence[DocmapParticipants]:
     participants = []
     for editor_detail in editor_details_list:
         single_editor_dict = {
@@ -288,13 +289,13 @@ def get_participants_for_peer_reviewed_evalution_summary_type(
             'role': 'senior-editor'
         }
         participants.append(single_senior_editor_dict)
-    return participants
+    return cast(Sequence[DocmapParticipants], participants)
 
 
 def get_participants_for_preprint_peer_reviewed_step(
     query_result_item: dict,
     docmap_evaluation_type: str
-) -> Sequence[dict]:
+) -> Sequence[DocmapParticipants]:
     editor_details_list = query_result_item['editor_details']
     senior_editor_details_list = query_result_item['senior_editor_details']
     if docmap_evaluation_type == DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE:

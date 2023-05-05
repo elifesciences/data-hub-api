@@ -2,13 +2,22 @@ from typing import Mapping, Sequence, TypedDict
 from typing_extensions import NotRequired
 
 
+DocmapParticipants = TypedDict(
+    'DocmapParticipants',
+    {
+        'actor': dict,
+        'role': str
+    },
+    total=False
+)
+
 DocmapInputs = TypedDict(
     'DocmapInputs',
     {
         'type': str,
         'doi': str,
-        'url': str,
-        'versionIdentifier': str
+        'url': NotRequired[str],
+        'versionIdentifier': NotRequired[str]
     },
     total=False
 )
@@ -18,7 +27,7 @@ DocmapAssertions = TypedDict(
     {
         'item': dict,
         'status': str,
-        'happened': str
+        'happened': NotRequired[str]
     },
     total=False
 )
@@ -26,7 +35,7 @@ DocmapAssertions = TypedDict(
 DocmapActions = TypedDict(
     'DocmapActions',
     {
-        'participants': Sequence[dict],
+        'participants': Sequence[DocmapParticipants],
         'outputs': Sequence[dict]
     }
 )
