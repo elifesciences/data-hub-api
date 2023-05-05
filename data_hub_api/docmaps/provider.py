@@ -9,8 +9,10 @@ import objsize
 from data_hub_api.docmaps.docmap_typing import (
     DocmapAction,
     DocmapAssertion,
+    DocmapElifeManuscriptOutput,
     DocmapInput,
     DocmapParticipant,
+    DocmapPreprintOutput,
     DocmapStep,
     DocmapSteps,
     Docmap
@@ -100,25 +102,29 @@ def get_docmap_assertions_value_for_preprint_manuscript_published_step(
     }]
 
 
+def get_docmap_preprint_outputs(preprint: dict) -> DocmapPreprintOutput:
+    preprint_doi = preprint['preprint_doi']
+    preprint_published_at_date = preprint['preprint_published_at_date']
+    return {
+        'type': 'preprint',
+        'doi': preprint_doi,
+        'url': preprint['preprint_url'],
+        'published': (
+            preprint_published_at_date.isoformat()
+            if preprint_published_at_date
+            else None
+        ),
+        'versionIdentifier': preprint['preprint_version'],
+        '_tdmPath': preprint['tdm_path']
+    }
+
+
 def get_docmap_actions_value_for_preprint_manuscript_published_step(
     preprint: dict
 ) -> Sequence[DocmapAction]:
-    preprint_doi = preprint['preprint_doi']
-    preprint_published_at_date = preprint['preprint_published_at_date']
     return [{
         'participants': [],
-        'outputs': [{
-            'type': 'preprint',
-            'doi': preprint_doi,
-            'url': preprint['preprint_url'],
-            'published': (
-                preprint_published_at_date.isoformat()
-                if preprint_published_at_date
-                else None
-            ),
-            'versionIdentifier': preprint['preprint_version'],
-            '_tdmPath': preprint['tdm_path']
-        }]
+        'outputs': [get_docmap_preprint_outputs(preprint=preprint)]
     }]
 
 
@@ -161,22 +167,34 @@ def get_docmap_assertions_value_for_preprint_under_review_step(
     }]
 
 
+def get_docmap_elife_manuscript_output(
+    query_result_item: dict,
+    preprint: dict
+) -> DocmapElifeManuscriptOutput:
+    return {
+        'identifier': query_result_item['manuscript_id'],
+        'versionIdentifier': preprint['elife_doi_version_str'],
+        'type': 'preprint',
+        'doi': get_elife_version_doi(
+            elife_doi=query_result_item['elife_doi'],
+            elife_doi_version_str=preprint['elife_doi_version_str']
+        ),
+        'license': query_result_item['license']
+    }
+
+
 def get_docmap_actions_value_for_preprint_under_review_and_revised_step(
     query_result_item: dict,
     preprint: dict
 ) -> Sequence[DocmapAction]:
     return [{
         'participants': [],
-        'outputs': [{
-            'identifier': query_result_item['manuscript_id'],
-            'versionIdentifier': preprint['elife_doi_version_str'],
-            'type': 'preprint',
-            'doi': get_elife_version_doi(
-                elife_doi=query_result_item['elife_doi'],
-                elife_doi_version_str=preprint['elife_doi_version_str']
-            ),
-            'license': query_result_item['license'],
-        }]
+        'outputs': [
+            get_docmap_elife_manuscript_output(
+                query_result_item=query_result_item,
+                preprint=preprint
+            )
+        ]
     }]
 
 
