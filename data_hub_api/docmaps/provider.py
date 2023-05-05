@@ -10,6 +10,7 @@ from data_hub_api.docmaps.docmap_typing import (
     DocmapAction,
     DocmapAssertion,
     DocmapElifeManuscriptOutput,
+    DocmapEvaluationOutput,
     DocmapInput,
     DocmapParticipant,
     DocmapPreprintOutput,
@@ -326,6 +327,49 @@ def get_participants_for_preprint_peer_reviewed_step(
     return []
 
 
+def get_docmap_evaluation_output(
+    query_result_item: dict,
+    preprint: dict,
+    hypothesis_id: str,
+    evaluation_suffix: str,
+    annotation_created_timestamp: str,
+    docmap_evaluation_type: str
+) -> DocmapEvaluationOutput:
+    preprint_doi = preprint['preprint_doi']
+    elife_evaluation_doi = get_elife_evaluation_doi(
+        elife_doi_version_str=preprint['elife_doi_version_str'],
+        elife_doi=query_result_item['elife_doi'],
+        evaluation_suffix=evaluation_suffix
+    )
+    return {
+        'type': docmap_evaluation_type,
+        'published': annotation_created_timestamp,
+        'doi': elife_evaluation_doi,
+        'license': query_result_item['license'],
+        'url': get_elife_doi_url(elife_evaluation_doi=elife_evaluation_doi),
+        'content': [
+            {
+                'type': 'web-page',
+                'url': f'{HYPOTHESIS_URL}{hypothesis_id}'
+            },
+            {
+                'type': 'web-page',
+                'url': (
+                    f'{SCIETY_ARTICLES_ACTIVITY_URL}'
+                    f'{preprint_doi}#hypothesis:{hypothesis_id}'
+                )
+            },
+            {
+                'type': 'web-page',
+                'url': (
+                    f'{SCIETY_ARTICLES_EVALUATIONS_URL}'
+                    f'{hypothesis_id}/content'
+                )
+            }
+        ]
+    }
+
+
 def get_single_actions_value_of_evaluations_output(
     query_result_item: dict,
     preprint: dict,
@@ -334,45 +378,20 @@ def get_single_actions_value_of_evaluations_output(
     annotation_created_timestamp: str,
     docmap_evaluation_type: str
 ) -> DocmapAction:
-    preprint_doi = preprint['preprint_doi']
-    elife_evaluation_doi = get_elife_evaluation_doi(
-        elife_doi_version_str=preprint['elife_doi_version_str'],
-        elife_doi=query_result_item['elife_doi'],
-        evaluation_suffix=evaluation_suffix
-    )
     return {
         'participants': get_participants_for_preprint_peer_reviewed_step(
             query_result_item=query_result_item,
             docmap_evaluation_type=docmap_evaluation_type
         ),
         'outputs': [
-            {
-                'type': docmap_evaluation_type,
-                'published': annotation_created_timestamp,
-                'doi': elife_evaluation_doi,
-                'license': query_result_item['license'],
-                'url': get_elife_doi_url(elife_evaluation_doi=elife_evaluation_doi),
-                'content': [
-                    {
-                        'type': 'web-page',
-                        'url': f'{HYPOTHESIS_URL}{hypothesis_id}'
-                    },
-                    {
-                        'type': 'web-page',
-                        'url': (
-                            f'{SCIETY_ARTICLES_ACTIVITY_URL}'
-                            f'{preprint_doi}#hypothesis:{hypothesis_id}'
-                        )
-                    },
-                    {
-                        'type': 'web-page',
-                        'url': (
-                            f'{SCIETY_ARTICLES_EVALUATIONS_URL}'
-                            f'{hypothesis_id}/content'
-                        )
-                    }
-                ]
-            }
+            get_docmap_evaluation_output(
+                query_result_item=query_result_item,
+                preprint=preprint,
+                hypothesis_id=hypothesis_id,
+                annotation_created_timestamp=annotation_created_timestamp,
+                evaluation_suffix=evaluation_suffix,
+                docmap_evaluation_type=docmap_evaluation_type
+            )
         ]
     }
 
