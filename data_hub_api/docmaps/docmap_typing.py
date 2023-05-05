@@ -1,7 +1,20 @@
-from typing import Mapping, TypedDict
+from typing import Mapping, Sequence, TypedDict
+from typing_extensions import NotRequired
 
 
-DocmapSteps = Mapping[str, dict]
+DocmapStep = TypedDict(
+    'DocmapStep',
+    {
+        'actions': Sequence[dict],
+        'assertions': Sequence[dict],
+        'inputs': Sequence[dict],
+        'next-step': NotRequired[str],
+        'previous-step': NotRequired[str]
+    },
+    total=False
+)
+
+DocmapSteps = Mapping[str, DocmapStep]
 
 Docmap = TypedDict(
     'Docmap',

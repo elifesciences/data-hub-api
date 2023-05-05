@@ -2,11 +2,11 @@ import logging
 import json
 from pathlib import Path
 from time import monotonic
-from typing import Iterable, Optional, Sequence, Tuple
+from typing import Dict, Iterable, Optional, Sequence, Tuple, cast
 import urllib
 
 import objsize
-from data_hub_api.docmaps.docmap_typing import DocmapSteps, Docmap
+from data_hub_api.docmaps.docmap_typing import DocmapStep, DocmapSteps, Docmap
 
 from data_hub_api.utils.bigquery import (
     iter_dict_from_bq_query
@@ -116,7 +116,7 @@ def get_docmap_actions_value_for_preprint_manuscript_published_step(
 
 def get_docmaps_step_for_manuscript_published_status(
     preprint
-) -> dict:
+) -> DocmapStep:
     return {
         'actions': get_docmap_actions_value_for_preprint_manuscript_published_step(
             preprint=preprint
@@ -515,7 +515,7 @@ def get_docmaps_step_for_revised_status(
     }
 
 
-def iter_docmap_steps_for_query_result_item(query_result_item: dict) -> Iterable[dict]:
+def iter_docmap_steps_for_query_result_item(query_result_item: dict) -> Iterable[DocmapStep]:
     preprint = query_result_item['preprints'][0]
     yield get_docmaps_step_for_manuscript_published_status(preprint)
     yield get_docmaps_step_for_under_review_status(query_result_item, preprint)
@@ -533,8 +533,8 @@ def iter_docmap_steps_for_query_result_item(query_result_item: dict) -> Iterable
                 )
 
 
-def generate_docmap_steps(step_iterable: Iterable[dict]) -> DocmapSteps:
-    steps_dict = {}
+def generate_docmap_steps(step_iterable: Iterable[DocmapStep]) -> DocmapSteps:
+    steps_dict: Dict[str, DocmapStep] = {}
     step_list = list(step_iterable)
     for step_index, step in enumerate(step_list):
         LOGGER.debug('step_index: %r', step_index)
@@ -542,7 +542,7 @@ def generate_docmap_steps(step_iterable: Iterable[dict]) -> DocmapSteps:
             'next-step': ('_:b' + str(step_index + 1) if step_index + 1 < len(step_list) else None),
             'previous-step': '_:b' + str(step_index - 1) if step_index > 0 else None
         }
-        steps_dict['_:b'+str(step_index)] = dict(step, **step_ranking_dict)
+        steps_dict['_:b'+str(step_index)] = cast(DocmapStep, dict(step, **step_ranking_dict))
     return remove_key_with_none_value_only(steps_dict)
 
 
