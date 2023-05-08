@@ -432,7 +432,9 @@ class TestGetDocmapsItemForQueryResultItem:
             }
         )
         peer_reviewed_step = docmaps_item['steps']['_:b2']
-        assert peer_reviewed_step['inputs'] == [get_docmap_preprint_input(preprint=PREPRINT_DETAILS_1)]
+        assert peer_reviewed_step['inputs'] == [
+            get_docmap_preprint_input(preprint=PREPRINT_DETAILS_1)
+        ]
 
     def test_should_filter_evaluations_by_preprint_link(self):
         expected_hypothesis_ids_of_first_version = {HYPOTHESIS_ID_1, HYPOTHESIS_ID_2}
@@ -469,7 +471,9 @@ class TestGetDocmapsItemForQueryResultItem:
             )
         })
         peer_reviewed_step = docmaps_item['steps']['_:b2']
-        assert peer_reviewed_step['inputs'] == [get_docmap_preprint_input(preprint=PREPRINT_DETAILS_1)]
+        assert peer_reviewed_step['inputs'] == [
+            get_docmap_preprint_input(preprint=PREPRINT_DETAILS_1)
+        ]
         actual_hypothesis_ids = set(get_hypothesis_ids_from_urls(
             get_hypothesis_urls_from_step_dict(peer_reviewed_step)
         ))
