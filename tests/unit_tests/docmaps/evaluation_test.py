@@ -8,6 +8,7 @@ from data_hub_api.docmaps.codecs.evaluation import (
     SCIETY_ARTICLES_EVALUATIONS_URL,
     get_docmap_evaluation_input,
     get_docmap_evaluation_output,
+    get_docmap_evaluation_output_content,
     get_docmap_evaluation_output_content_url,
     get_elife_evaluation_doi,
     get_elife_evaluation_doi_url
@@ -160,6 +161,16 @@ class TestGetDocmapEvaluationOutputContentUrl:
                 hypothesis_id=hypothesis_id,
                 preprint_doi=None
             )
+
+
+class TestGetDocmapEvaluationOutputContent:
+    def test_should_populate_evaluation_output_content(self):
+        hypothesis_id = 'hypothesis_id_1'
+        result = get_docmap_evaluation_output_content(HYPOTHESIS_URL, hypothesis_id)
+        assert result == {
+            'type': 'web-page',
+            'url': 'https://hypothes.is/a/hypothesis_id_1'
+        }
 
 
 class TestGetDocmapEvaluationOutput:

@@ -2,6 +2,7 @@ from typing import Optional
 
 from data_hub_api.docmaps.codecs.elife_manuscript import get_elife_manuscript_version_doi
 from data_hub_api.docmaps.docmap_typing import (
+    DocmapContent,
     DocmapEvaluationInput,
     DocmapEvaluationOutput
 )
@@ -70,6 +71,21 @@ def get_docmap_evaluation_output_content_url(
     return base_url + hypothesis_id + '/content'
 
 
+def get_docmap_evaluation_output_content(
+    base_url: str,
+    hypothesis_id: str,
+    preprint_doi: Optional[str] = None
+) -> DocmapContent:
+    return {
+        'type': 'web-page',
+        'url': get_docmap_evaluation_output_content_url(
+            base_url=base_url,
+            hypothesis_id=hypothesis_id,
+            preprint_doi=preprint_doi
+        )
+    }
+
+
 def get_docmap_evaluation_output(
     query_result_item: dict,
     preprint: dict,
@@ -91,27 +107,18 @@ def get_docmap_evaluation_output(
         'license': query_result_item['license'],
         'url': get_elife_evaluation_doi_url(elife_evaluation_doi=elife_evaluation_doi),
         'content': [
-            {
-                'type': 'web-page',
-                'url': get_docmap_evaluation_output_content_url(
-                    base_url=HYPOTHESIS_URL,
-                    hypothesis_id=hypothesis_id
-                )
-            },
-            {
-                'type': 'web-page',
-                'url': get_docmap_evaluation_output_content_url(
-                    base_url=SCIETY_ARTICLES_ACTIVITY_URL,
-                    hypothesis_id=hypothesis_id,
-                    preprint_doi=preprint_doi
-                )
-            },
-            {
-                'type': 'web-page',
-                'url': get_docmap_evaluation_output_content_url(
-                    base_url=SCIETY_ARTICLES_EVALUATIONS_URL,
-                    hypothesis_id=hypothesis_id
-                )
-            }
+            get_docmap_evaluation_output_content(
+                base_url=HYPOTHESIS_URL,
+                hypothesis_id=hypothesis_id
+            ),
+            get_docmap_evaluation_output_content(
+                base_url=SCIETY_ARTICLES_ACTIVITY_URL,
+                hypothesis_id=hypothesis_id,
+                preprint_doi=preprint_doi
+            ),
+            get_docmap_evaluation_output_content(
+                base_url=SCIETY_ARTICLES_EVALUATIONS_URL,
+                hypothesis_id=hypothesis_id
+            )
         ]
     }
