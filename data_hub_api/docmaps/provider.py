@@ -12,7 +12,7 @@ from data_hub_api.docmaps.codecs.elife_manuscript import (
     get_docmap_elife_manuscript_output
 )
 from data_hub_api.docmaps.codecs.evaluation import (
-    get_elife_evaluation_doi_url,
+    get_docmap_evaluation_output,
     get_elife_evaluation_doi
 )
 from data_hub_api.docmaps.codecs.preprint import (
@@ -25,7 +25,6 @@ from data_hub_api.docmaps.docmap_typing import (
     DocmapAction,
     DocmapAssertion,
     DocmapEvaluationInput,
-    DocmapEvaluationOutput,
     DocmapParticipant,
     DocmapPreprintInput,
     DocmapStep,
@@ -50,11 +49,6 @@ DOCMAP_ID_PREFIX = (
     +
     'by-publisher/elife/get-by-manuscript-id?'
 )
-
-ELIFE_REVIEWED_PREPRINTS_URL = 'https://elifesciences.org/reviewed-preprints/'
-HYPOTHESIS_URL = 'https://hypothes.is/a/'
-SCIETY_ARTICLES_ACTIVITY_URL = 'https://sciety.org/articles/activity/'
-SCIETY_ARTICLES_EVALUATIONS_URL = 'https://sciety.org/evaluations/hypothesis:'
 
 DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY = 'evaluation-summary'
 DOCMAP_EVALUATION_TYPE_FOR_REPLY = 'reply'
@@ -245,49 +239,6 @@ def get_participants_for_preprint_peer_reviewed_step(
             senior_editor_details_list=senior_editor_details_list
         )
     return []
-
-
-def get_docmap_evaluation_output(
-    query_result_item: dict,
-    preprint: dict,
-    hypothesis_id: str,
-    evaluation_suffix: str,
-    annotation_created_timestamp: str,
-    docmap_evaluation_type: str
-) -> DocmapEvaluationOutput:
-    preprint_doi = preprint['preprint_doi']
-    elife_evaluation_doi = get_elife_evaluation_doi(
-        elife_doi_version_str=preprint['elife_doi_version_str'],
-        elife_doi=query_result_item['elife_doi'],
-        evaluation_suffix=evaluation_suffix
-    )
-    return {
-        'type': docmap_evaluation_type,
-        'published': annotation_created_timestamp,
-        'doi': elife_evaluation_doi,
-        'license': query_result_item['license'],
-        'url': get_elife_evaluation_doi_url(elife_evaluation_doi=elife_evaluation_doi),
-        'content': [
-            {
-                'type': 'web-page',
-                'url': f'{HYPOTHESIS_URL}{hypothesis_id}'
-            },
-            {
-                'type': 'web-page',
-                'url': (
-                    f'{SCIETY_ARTICLES_ACTIVITY_URL}'
-                    f'{preprint_doi}#hypothesis:{hypothesis_id}'
-                )
-            },
-            {
-                'type': 'web-page',
-                'url': (
-                    f'{SCIETY_ARTICLES_EVALUATIONS_URL}'
-                    f'{hypothesis_id}/content'
-                )
-            }
-        ]
-    }
 
 
 def get_single_actions_value_of_evaluations_output(

@@ -6,7 +6,7 @@ disable=
     too-many-lines
 
 [SIMILARITIES]
-min-similarity-lines=5
+min-similarity-lines=7
 ignore-comments=yes
 ignore-docstrings=yes
 ignore-imports=yes
