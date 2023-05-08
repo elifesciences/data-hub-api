@@ -6,6 +6,10 @@ from typing import Dict, Iterable, Optional, Sequence, Tuple, Union, cast
 import urllib
 
 import objsize
+from data_hub_api.docmaps.codecs.elife_manuscript import (
+    get_docmap_elife_manuscript_doi_assertion_item,
+    get_elife_manuscript_version_doi
+)
 from data_hub_api.docmaps.codecs.preprint import (
     get_docmap_preprint_assertion_item,
     get_docmap_preprint_input,
@@ -63,21 +67,12 @@ ADDITIONAL_MANUSCRIPT_IDS = (
 )
 
 
-def get_elife_version_doi(
-    elife_doi_version_str: str,
-    elife_doi: Optional[str] = None
-) -> Optional[str]:
-    if not elife_doi:
-        return None
-    return elife_doi + '.' + elife_doi_version_str
-
-
 def get_elife_evaluation_doi(
     elife_doi_version_str: str,
     elife_doi: Optional[str] = None,
     evaluation_suffix: Optional[str] = None
 ) -> Optional[str]:
-    elife_version_doi = get_elife_version_doi(
+    elife_version_doi = get_elife_manuscript_version_doi(
         elife_doi=elife_doi,
         elife_doi_version_str=elife_doi_version_str
     )
@@ -137,14 +132,10 @@ def get_docmap_assertions_value_for_preprint_under_review_step(
         'status': 'under-review',
         'happened': query_result_item['under_review_timestamp']
     }, {
-        'item': {
-            'type': 'preprint',
-            'doi': get_elife_version_doi(
-                elife_doi=query_result_item['elife_doi'],
-                elife_doi_version_str=preprint['elife_doi_version_str']
-            ),
-            'versionIdentifier': preprint['elife_doi_version_str']
-        },
+        'item': get_docmap_elife_manuscript_doi_assertion_item(
+            query_result_item=query_result_item,
+            preprint=preprint
+        ),
         'status': 'draft'
     }]
 
@@ -157,7 +148,7 @@ def get_docmap_elife_manuscript_output(
         'identifier': query_result_item['manuscript_id'],
         'versionIdentifier': preprint['elife_doi_version_str'],
         'type': 'preprint',
-        'doi': get_elife_version_doi(
+        'doi': get_elife_manuscript_version_doi(
             elife_doi=query_result_item['elife_doi'],
             elife_doi_version_str=preprint['elife_doi_version_str']
         ),
@@ -477,14 +468,10 @@ def get_docmap_assertions_value_for_revised_steps(
     preprint: dict
 ) -> Sequence[DocmapAssertion]:
     return [{
-        'item': {
-            'type': 'preprint',
-            'doi': get_elife_version_doi(
-                elife_doi=query_result_item['elife_doi'],
-                elife_doi_version_str=preprint['elife_doi_version_str']
-            ),
-            'versionIdentifier': preprint['elife_doi_version_str']
-        },
+        'item': get_docmap_elife_manuscript_doi_assertion_item(
+            query_result_item=query_result_item,
+            preprint=preprint
+        ),
         'status': 'revised'
     }]
 

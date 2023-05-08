@@ -5,6 +5,9 @@ from typing import Iterable
 import urllib
 
 import pytest
+from data_hub_api.docmaps.codecs.elife_manuscript import (
+    get_docmap_elife_manuscript_doi_assertion_item
+)
 from data_hub_api.docmaps.codecs.preprint import (
     get_docmap_preprint_assertion_item,
     get_docmap_preprint_input,
@@ -29,7 +32,7 @@ from data_hub_api.docmaps.provider import (
     generate_docmap_steps,
     get_elife_doi_url,
     get_elife_evaluation_doi,
-    get_elife_version_doi,
+    get_elife_manuscript_version_doi,
     get_docmap_evaluation_type_form_tags
 )
 
@@ -171,7 +174,7 @@ class TestGetElifeVersionDoi:
     def test_should_return_doi_with_version_when_the_version_defined(self):
         elife_doi = 'elife_doi_1'
         elife_doi_version_str = 'elife_doi_version_str_1'
-        actual_result = get_elife_version_doi(
+        actual_result = get_elife_manuscript_version_doi(
             elife_doi=elife_doi,
             elife_doi_version_str=elife_doi_version_str
         )
@@ -180,7 +183,7 @@ class TestGetElifeVersionDoi:
     def test_should_return_doi_without_version_when_the_doi_not_defined(self):
         elife_doi = ''
         elife_doi_version_str = 'elife_doi_version_str_1'
-        actual_result = get_elife_version_doi(
+        actual_result = get_elife_manuscript_version_doi(
             elife_doi=elife_doi,
             elife_doi_version_str=elife_doi_version_str
         )
@@ -395,11 +398,10 @@ class TestGetDocmapsItemForQueryResultItem:
                 'happened': datetime.fromisoformat('2022-02-01T01:02:03+00:00')
             },
             {
-                'item': {
-                    'type': 'preprint',
-                    'doi': 'elife_doi_1' + '.' + 'elife_doi_version_str_1',
-                    'versionIdentifier': 'elife_doi_version_str_1'
-                },
+                'item': get_docmap_elife_manuscript_doi_assertion_item(
+                    query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1,
+                    preprint=PREPRINT_DETAILS_1
+                ),
                 'status': 'draft'
             }
         ]
@@ -869,11 +871,10 @@ class TestGetDocmapsItemForQueryResultItem:
         )
         revised_step = docmaps_item['steps']['_:b4']
         assert revised_step['assertions'] == [{
-            'item': {
-                'type': 'preprint',
-                'doi': f'{ELIFE_DOI_1}.{ELIFE_DOI_VERSION_STR_2}',
-                'versionIdentifier': ELIFE_DOI_VERSION_STR_2
-            },
+            'item': get_docmap_elife_manuscript_doi_assertion_item(
+                query_result_item=DOCMAPS_QUERY_RESULT_ITEM_WITH_REVISED_PREPRPINT,
+                preprint=PREPRINT_DETAILS_2
+            ),
             'status': 'revised'
         }]
 
@@ -988,11 +989,10 @@ class TestGetDocmapsItemForQueryResultItem:
         second_manuscript_published_step = docmaps_item['steps']['_:b5']
         second_revised_step = docmaps_item['steps']['_:b6']
         assert second_revised_step['assertions'] == [{
-            'item': {
-                'type': 'preprint',
-                'doi': f'{ELIFE_DOI_1}.{ELIFE_DOI_VERSION_STR_3}',
-                'versionIdentifier': ELIFE_DOI_VERSION_STR_3
-            },
+            'item': get_docmap_elife_manuscript_doi_assertion_item(
+                query_result_item=DOCMAPS_QUERY_RESULT_ITEM_WITH_REVISED_PREPRPINT,
+                preprint=PREPRINT_DETAILS_3
+            ),
             'status': 'revised'
         }]
         assert second_manuscript_published_step['assertions'] == [{
