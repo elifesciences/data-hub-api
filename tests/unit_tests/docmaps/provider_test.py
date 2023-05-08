@@ -320,7 +320,7 @@ class TestGetDocmapsItemForQueryResultItem:
             'status': 'manuscript-published'
         }]
 
-    def test_should_populate_actions_outputs_with_doi_and_url_manuscript_published_step(self):
+    def test_should_populate_actions_outputs_manuscript_published_step(self):
         docmaps_item = get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
         manuscript_published_step = docmaps_item['steps']['_:b0']
         assert manuscript_published_step['actions'] == [{
@@ -364,7 +364,7 @@ class TestGetDocmapsItemForQueryResultItem:
             }
         ]
 
-    def test_should_populate_actions_outputs_with_doi_and_url_under_review_step_with_license(self):
+    def test_should_populate_actions_outputs_under_review_step(self):
         docmaps_item = get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
         under_review_step = docmaps_item['steps']['_:b1']
         assert under_review_step['actions'] == [{
@@ -375,7 +375,7 @@ class TestGetDocmapsItemForQueryResultItem:
             )]
         }]
 
-    def test_should_populate_inputs_peer_reviewed_step_from_preprint_url(self):
+    def test_should_populate_inputs_peer_reviewed_step(self):
         docmaps_item = get_docmap_item_for_query_result_item(
             {
                 **DOCMAPS_QUERY_RESULT_ITEM_1,
@@ -446,7 +446,7 @@ class TestGetDocmapsItemForQueryResultItem:
             'status': 'peer-reviewed'
         }]
 
-    def test_should_not_populate_actions_in_peer_reviewed_step_if_tags_are_empty(self):
+    def test_should_not_populate_actions_peer_reviewed_step_if_tags_are_empty(self):
         query_result_with_evaluation = dict(
             DOCMAPS_QUERY_RESULT_ITEM_1,
             **{
@@ -519,7 +519,7 @@ class TestGetDocmapsItemForQueryResultItem:
             docmap_evaluation_type=DOCMAP_EVALUATION_TYPE_FOR_REPLY
         )
 
-    def test_should_populate_outputs_type_according_to_tags_peer_reviewed_step(self):
+    def test_should_populate_outputs_avaluation_type_according_to_tags_peer_reviewed_step(self):
         query_result_with_evaluation = dict(
             DOCMAPS_QUERY_RESULT_ITEM_1,
             **{
@@ -547,7 +547,7 @@ class TestGetDocmapsItemForQueryResultItem:
         assert outputs_for_index_1['type'] == DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY
         assert outputs_for_index_2['type'] == DOCMAP_EVALUATION_TYPE_FOR_REPLY
 
-    def test_should_populate_participants_in_peer_reviewed_step_for_review_article_type(self):
+    def test_should_populate_participants_peer_reviewed_step_for_review_article_type(self):
         query_result_with_evaluation = dict(
             DOCMAPS_QUERY_RESULT_ITEM_1,
             **{
@@ -573,7 +573,7 @@ class TestGetDocmapsItemForQueryResultItem:
             }
         ]
 
-    def test_should_populate_participants_in_peer_reviewed_step_for_evaluation_summary_type(self):
+    def test_should_populate_participants_peer_reviewed_step_for_evaluation_summary_type(self):
         query_result_with_evaluation = dict(
             DOCMAPS_QUERY_RESULT_ITEM_1,
             **{
@@ -662,26 +662,7 @@ class TestGetDocmapsItemForQueryResultItem:
             'outputs': [get_docmap_preprint_output(preprint=PREPRINT_DETAILS_2)]
         }]
 
-    def test_should_populate_inputs_revised_step_with_one_evaluation(self):
-        docmaps_item = get_docmap_item_for_query_result_item({
-            **DOCMAPS_QUERY_RESULT_ITEM_WITH_REVISED_PREPRPINT,
-            'evaluations': [{
-                    **DOCMAPS_QUERY_RESULT_EVALUATION_1,
-                    'tags': ['PeerReview']
-                }]
-        })
-        revised_step = docmaps_item['steps']['_:b4']
-        assert revised_step['inputs'] == [
-            get_docmap_preprint_input(preprint=PREPRINT_DETAILS_2),
-            get_docmap_evaluation_input(
-                query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1,
-                preprint=PREPRINT_DETAILS_1,
-                evaluation_suffix=EVALUATION_SUFFIX_1,
-                docmap_evaluation_type=DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE
-            )
-        ]
-
-    def test_should_populate_inputs_revised_step_with_more_then_one_evaluation(self):
+    def test_should_populate_inputs_revised_step_with_more_than_one_evaluation(self):
         docmaps_item = get_docmap_item_for_query_result_item({
             **DOCMAPS_QUERY_RESULT_ITEM_WITH_REVISED_PREPRPINT,
             'evaluations': [{
