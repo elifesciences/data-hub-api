@@ -1,6 +1,7 @@
 from datetime import datetime
 from data_hub_api.docmaps.codecs.elife_manuscript import (
     get_docmap_elife_manuscript_doi_assertion_item,
+    get_docmap_elife_manuscript_output,
     get_elife_manuscript_version_doi
 )
 
@@ -42,8 +43,8 @@ class TestGetElifeVersionDoi:
         assert result == 'elife_doi_1.elife_doi_version_str_1'
 
 
-class TestGetDocmapPreprintAssertionItem:
-    def test_should_populate_docmaps_preprint_input(self):
+class TestGetDocmapElifeManuscriptDoiAssertionItem:
+    def test_should_populate_docmaps_elife_manuscript_doi_assertion_item(self):
         result = get_docmap_elife_manuscript_doi_assertion_item(
             query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1,
             preprint=PREPRINT_DETAILS_1
@@ -55,4 +56,22 @@ class TestGetDocmapPreprintAssertionItem:
                 elife_doi=DOCMAPS_QUERY_RESULT_ITEM_1['elife_doi']
             ),
             'versionIdentifier': PREPRINT_DETAILS_1['elife_doi_version_str']
+        }
+
+
+class TestGetDocmapElifeManuscriptOutput:
+    def test_should_populate_docmaps_elife_manuscript_output(self):
+        result = get_docmap_elife_manuscript_output(
+            query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1,
+            preprint=PREPRINT_DETAILS_1
+        )
+        assert result == {
+            'type': 'preprint',
+            'identifier': DOCMAPS_QUERY_RESULT_ITEM_1['manuscript_id'],
+            'doi': get_elife_manuscript_version_doi(
+                elife_doi_version_str=PREPRINT_DETAILS_1['elife_doi_version_str'],
+                elife_doi=DOCMAPS_QUERY_RESULT_ITEM_1['elife_doi']
+            ),
+            'versionIdentifier': PREPRINT_DETAILS_1['elife_doi_version_str'],
+            'license': DOCMAPS_QUERY_RESULT_ITEM_1['license']
         }

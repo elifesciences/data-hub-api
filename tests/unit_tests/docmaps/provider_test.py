@@ -6,7 +6,8 @@ import urllib
 
 import pytest
 from data_hub_api.docmaps.codecs.elife_manuscript import (
-    get_docmap_elife_manuscript_doi_assertion_item
+    get_docmap_elife_manuscript_doi_assertion_item,
+    get_docmap_elife_manuscript_output
 )
 from data_hub_api.docmaps.codecs.preprint import (
     get_docmap_preprint_assertion_item,
@@ -411,13 +412,10 @@ class TestGetDocmapsItemForQueryResultItem:
         under_review_step = docmaps_item['steps']['_:b1']
         assert under_review_step['actions'] == [{
             'participants': [],
-            'outputs': [{
-                'identifier': 'manuscript_id_1',
-                'versionIdentifier': 'elife_doi_version_str_1',
-                'type': 'preprint',
-                'doi': 'elife_doi_1' + '.' + 'elife_doi_version_str_1',
-                'license': 'license_1'
-            }]
+            'outputs': [get_docmap_elife_manuscript_output(
+                query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1,
+                preprint=PREPRINT_DETAILS_1
+            )]
         }]
 
     def test_should_populate_inputs_peer_reviewed_step_from_preprint_url(self):
@@ -907,13 +905,10 @@ class TestGetDocmapsItemForQueryResultItem:
                 }]
         })
         revised_step = docmaps_item['steps']['_:b4']
-        assert revised_step['actions'][0]['outputs'][0] == {
-            'type': 'preprint',
-            'identifier': 'manuscript_id_1',
-            'doi': f'{ELIFE_DOI_1}.{ELIFE_DOI_VERSION_STR_2}',
-            'versionIdentifier': ELIFE_DOI_VERSION_STR_2,
-            'license': 'license_1'
-        }
+        assert revised_step['actions'][0]['outputs'][0] == get_docmap_elife_manuscript_output(
+            query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1,
+            preprint=PREPRINT_DETAILS_2
+        )
         assert revised_step['actions'][1]['outputs'] == [{
             'type': DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE,
             'published': 'annotation_created_timestamp_2',

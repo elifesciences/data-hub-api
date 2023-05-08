@@ -8,6 +8,7 @@ import urllib
 import objsize
 from data_hub_api.docmaps.codecs.elife_manuscript import (
     get_docmap_elife_manuscript_doi_assertion_item,
+    get_docmap_elife_manuscript_output,
     get_elife_manuscript_version_doi
 )
 from data_hub_api.docmaps.codecs.preprint import (
@@ -19,7 +20,6 @@ from data_hub_api.docmaps.codecs.preprint import (
 from data_hub_api.docmaps.docmap_typing import (
     DocmapAction,
     DocmapAssertion,
-    DocmapElifeManuscriptOutput,
     DocmapEvaluationInput,
     DocmapEvaluationOutput,
     DocmapParticipant,
@@ -138,22 +138,6 @@ def get_docmap_assertions_value_for_preprint_under_review_step(
         ),
         'status': 'draft'
     }]
-
-
-def get_docmap_elife_manuscript_output(
-    query_result_item: dict,
-    preprint: dict
-) -> DocmapElifeManuscriptOutput:
-    return {
-        'identifier': query_result_item['manuscript_id'],
-        'versionIdentifier': preprint['elife_doi_version_str'],
-        'type': 'preprint',
-        'doi': get_elife_manuscript_version_doi(
-            elife_doi=query_result_item['elife_doi'],
-            elife_doi_version_str=preprint['elife_doi_version_str']
-        ),
-        'license': query_result_item['license']
-    }
 
 
 def get_docmap_actions_value_for_preprint_under_review_and_revised_step(
