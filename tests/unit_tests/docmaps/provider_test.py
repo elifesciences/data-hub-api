@@ -12,9 +12,7 @@ from data_hub_api.docmaps.codecs.elife_manuscript import (
 )
 from data_hub_api.docmaps.codecs.evaluation import (
     DOI_ROOT_URL,
-    DOCMAP_EVALUATION_TYPE_FOR_REPLY,
-    DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY,
-    DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE,
+    get_elife_evaluation_doi_url
 )
 
 from data_hub_api.docmaps.codecs.preprint import (
@@ -27,6 +25,9 @@ from data_hub_api.utils.cache import InMemorySingleObjectCache
 from data_hub_api.docmaps import provider as provider_module
 from data_hub_api.docmaps.provider import (
     ADDITIONAL_MANUSCRIPT_IDS,
+    DOCMAP_EVALUATION_TYPE_FOR_REPLY,
+    DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY,
+    DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE,
     HYPOTHESIS_URL,
     SCIETY_ARTICLES_ACTIVITY_URL,
     SCIETY_ARTICLES_EVALUATIONS_URL,
@@ -34,7 +35,8 @@ from data_hub_api.docmaps.provider import (
     DocmapsProvider,
     DOCMAPS_JSONLD_SCHEMA_URL,
     DOCMAP_ID_PREFIX,
-    generate_docmap_steps
+    generate_docmap_steps,
+    get_docmap_evaluation_type_form_tags
 )
 
 
@@ -189,6 +191,48 @@ class TestGetElifeVersionDoi:
             elife_doi_version_str=elife_doi_version_str
         )
         assert not actual_result
+
+
+class TestGetEvaluationsTypeFromTags:
+    def test_should_return_evaluation_summary_when_summary_exist_in_tags_list(self):
+        tag_list_with_summary = ['PeerReview', 'evaluationSummary']
+        actual_result = get_docmap_evaluation_type_form_tags(tag_list_with_summary)
+        assert actual_result == DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY
+
+    def test_should_return_review_article_when_review_keyword_exists_in_tags_list(self):
+        tag_list_with_summary = ['PeerReview']
+        actual_result = get_docmap_evaluation_type_form_tags(tag_list_with_summary)
+        assert actual_result == DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE
+
+    def test_should_return_review_article_for_review_keyword_even_there_is_undefined_tag(self):
+        tag_list_with_summary = ['PeerReview', 'undefinedTag']
+        actual_result = get_docmap_evaluation_type_form_tags(tag_list_with_summary)
+        assert actual_result == DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE
+
+    def test_should_return_reply_when_author_response_keyword_exists_in_tags_list(self):
+        tag_list_with_summary = ['AuthorResponse']
+        actual_result = get_docmap_evaluation_type_form_tags(tag_list_with_summary)
+        assert actual_result == DOCMAP_EVALUATION_TYPE_FOR_REPLY
+
+    def test_should_return_reply_when_author_response_even_there_is_review_tag(self):
+        tag_list_with_summary = ['PeerReview', 'AuthorResponse']
+        actual_result = get_docmap_evaluation_type_form_tags(tag_list_with_summary)
+        assert actual_result == DOCMAP_EVALUATION_TYPE_FOR_REPLY
+
+    def test_should_return_none_when_empty_tags_list(self):
+        tag_list_with_summary = []
+        actual_result = get_docmap_evaluation_type_form_tags(tag_list_with_summary)
+        assert not actual_result
+
+    def test_should_return_none_when_there_is_not_any_defined_tag_in_tags_list(self):
+        tag_list_with_summary = ['undefinedTag']
+        actual_result = get_docmap_evaluation_type_form_tags(tag_list_with_summary)
+        assert not actual_result
+
+    def test_should_raise_error_when_summary_and_author_response_in_tag_list_at_same_time(self):
+        tag_list_with_summary = ['PeerReview', 'evaluationSummary', 'AuthorResponse']
+        with pytest.raises(AssertionError):
+            get_docmap_evaluation_type_form_tags(tag_list_with_summary)
 
 
 class TestGenerateDocmapSteps:
