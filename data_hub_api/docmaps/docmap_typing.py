@@ -72,10 +72,19 @@ DocmapEvaluationInput = TypedDict(
     }
 )
 
+DocmapAssertionItem = TypedDict(
+    'DocmapAssertionItem',
+    {
+        'type': str,
+        'doi': str,
+        'versionIdentifier': str
+    }
+)
+
 DocmapAssertion = TypedDict(
     'DocmapAssertion',
     {
-        'item': dict,
+        'item': DocmapAssertionItem,
         'status': str,
         'happened': NotRequired[str]
     },
