@@ -54,6 +54,22 @@ def get_docmap_evaluation_input(
     }
 
 
+def get_docmap_evaluation_output_content_url(
+    base_url: str,
+    hypothesis_id: str,
+    preprint_doi: Optional[str] = None
+) -> str:
+    assert base_url in [
+        HYPOTHESIS_URL, SCIETY_ARTICLES_ACTIVITY_URL, SCIETY_ARTICLES_EVALUATIONS_URL
+    ]
+    if base_url == HYPOTHESIS_URL:
+        return base_url + hypothesis_id
+    if base_url == SCIETY_ARTICLES_ACTIVITY_URL:
+        assert preprint_doi
+        return base_url + preprint_doi + '#hypothesis:' + hypothesis_id
+    return base_url + hypothesis_id + '/content'
+
+
 def get_docmap_evaluation_output(
     query_result_item: dict,
     preprint: dict,
@@ -77,20 +93,24 @@ def get_docmap_evaluation_output(
         'content': [
             {
                 'type': 'web-page',
-                'url': f'{HYPOTHESIS_URL}{hypothesis_id}'
-            },
-            {
-                'type': 'web-page',
-                'url': (
-                    f'{SCIETY_ARTICLES_ACTIVITY_URL}'
-                    f'{preprint_doi}#hypothesis:{hypothesis_id}'
+                'url': get_docmap_evaluation_output_content_url(
+                    base_url=HYPOTHESIS_URL,
+                    hypothesis_id=hypothesis_id
                 )
             },
             {
                 'type': 'web-page',
-                'url': (
-                    f'{SCIETY_ARTICLES_EVALUATIONS_URL}'
-                    f'{hypothesis_id}/content'
+                'url': get_docmap_evaluation_output_content_url(
+                    base_url=SCIETY_ARTICLES_ACTIVITY_URL,
+                    hypothesis_id=hypothesis_id,
+                    preprint_doi=preprint_doi
+                )
+            },
+            {
+                'type': 'web-page',
+                'url': get_docmap_evaluation_output_content_url(
+                    base_url=SCIETY_ARTICLES_EVALUATIONS_URL,
+                    hypothesis_id=hypothesis_id
                 )
             }
         ]
