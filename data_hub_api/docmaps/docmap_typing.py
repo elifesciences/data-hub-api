@@ -68,7 +68,7 @@ DocmapEvaluationInput = TypedDict(
     'DocmapEvaluationInput',
     {
         'type': str,
-        'doi': str
+        'doi': Optional[str]
     }
 )
 

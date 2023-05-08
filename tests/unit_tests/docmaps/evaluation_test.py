@@ -40,6 +40,7 @@ DOCMAPS_QUERY_RESULT_ITEM_1: dict = {
     'evaluations': [],
     'preprints': [PREPRINT_DETAILS_1],
 }
+
 HYPOTHESIS_ID_1 = 'hypothesis_id_1'
 EVALUATION_SUFFIX_1 = 'evaluation_suffix_1'
 ANNOTATION_CREATED_TIMESTAMP_1 = 'annotation_created_timestamp_1'

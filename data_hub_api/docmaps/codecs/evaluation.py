@@ -1,7 +1,10 @@
 from typing import Optional
 
 from data_hub_api.docmaps.codecs.elife_manuscript import get_elife_manuscript_version_doi
-from data_hub_api.docmaps.docmap_typing import DocmapEvaluationOutput
+from data_hub_api.docmaps.docmap_typing import (
+    DocmapEvaluationInput,
+    DocmapEvaluationOutput
+)
 
 DOI_ROOT_URL = 'https://doi.org/'
 
@@ -39,7 +42,7 @@ def get_docmap_evaluation_input(
     preprint: dict,
     evaluation_suffix: str,
     docmap_evaluation_type: str
-):
+) -> DocmapEvaluationInput:
     elife_evaluation_doi = get_elife_evaluation_doi(
         elife_doi_version_str=preprint['elife_doi_version_str'],
         elife_doi=query_result_item['elife_doi'],
