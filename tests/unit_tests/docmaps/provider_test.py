@@ -355,11 +355,7 @@ class TestGetDocmapsItemForQueryResultItem:
         docmaps_item = get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
         manuscript_published_step = docmaps_item['steps']['_:b0']
         assert manuscript_published_step['assertions'] == [{
-            'item': {
-                'type': 'preprint',
-                'doi': DOI_1,
-                'versionIdentifier': PREPRINT_DETAILS_1['preprint_version']
-            },
+            'item': get_docmap_preprint_assertion_item(preprint=PREPRINT_DETAILS_1),
             'status': 'manuscript-published'
         }]
 
@@ -436,12 +432,7 @@ class TestGetDocmapsItemForQueryResultItem:
             }
         )
         peer_reviewed_step = docmaps_item['steps']['_:b2']
-        assert peer_reviewed_step['inputs'] == [{
-            'type': 'preprint',
-            'doi': DOI_1,
-            'url': PREPRINT_LINK_1,
-            'versionIdentifier': PREPRINT_VERSION_1
-        }]
+        assert peer_reviewed_step['inputs'] == [get_docmap_preprint_input(preprint=PREPRINT_DETAILS_1)]
 
     def test_should_filter_evaluations_by_preprint_link(self):
         expected_hypothesis_ids_of_first_version = {HYPOTHESIS_ID_1, HYPOTHESIS_ID_2}
@@ -478,12 +469,7 @@ class TestGetDocmapsItemForQueryResultItem:
             )
         })
         peer_reviewed_step = docmaps_item['steps']['_:b2']
-        assert peer_reviewed_step['inputs'] == [{
-            'type': 'preprint',
-            'doi': DOI_1,
-            'url': f'{PREPRINT_LINK_PREFIX}{DOI_1}v{PREPRINT_VERSION_1}',
-            'versionIdentifier': PREPRINT_VERSION_1
-        }]
+        assert peer_reviewed_step['inputs'] == [get_docmap_preprint_input(preprint=PREPRINT_DETAILS_1)]
         actual_hypothesis_ids = set(get_hypothesis_ids_from_urls(
             get_hypothesis_urls_from_step_dict(peer_reviewed_step)
         ))
@@ -797,17 +783,7 @@ class TestGetDocmapsItemForQueryResultItem:
         manuscript_published_step = docmaps_item['steps']['_:b3']
         assert manuscript_published_step['actions'] == [{
             'participants': [],
-            'outputs': [{
-                'type': 'preprint',
-                'doi': DOI_1,
-                'url': PREPRINT_LINK_2,
-                'published': (
-                    PREPRINT_DETAILS_2['preprint_published_at_date']
-                    .isoformat()
-                ),
-                'versionIdentifier': PREPRINT_DETAILS_2['preprint_version'],
-                '_tdmPath': TDM_PATH_2
-            }]
+            'outputs': [get_docmap_preprint_output(preprint=PREPRINT_DETAILS_2)]
         }]
 
     def test_should_populate_inputs_revised_step_with_one_evaluation(self):
@@ -822,12 +798,7 @@ class TestGetDocmapsItemForQueryResultItem:
         })
         revised_step = docmaps_item['steps']['_:b4']
         assert revised_step['inputs'] == [
-            {
-                'type': 'preprint',
-                'doi': DOI_1,
-                'url': PREPRINT_LINK_2,
-                'versionIdentifier': PREPRINT_VERSION_2
-            },
+            get_docmap_preprint_input(preprint=PREPRINT_DETAILS_2),
             {
                 'type': DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE,
                 'doi': f'{ELIFE_DOI_1}.{ELIFE_DOI_VERSION_STR_1}.sa1'
@@ -852,12 +823,7 @@ class TestGetDocmapsItemForQueryResultItem:
         })
         revised_step = docmaps_item['steps']['_:b4']
         assert revised_step['inputs'] == [
-            {
-                'type': 'preprint',
-                'doi': DOI_1,
-                'url': PREPRINT_LINK_2,
-                'versionIdentifier': PREPRINT_VERSION_2
-            },
+            get_docmap_preprint_input(preprint=PREPRINT_DETAILS_2),
             {
                 'type': DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE,
                 'doi': f'{ELIFE_DOI_1}.{ELIFE_DOI_VERSION_STR_1}.sa1'
@@ -886,12 +852,7 @@ class TestGetDocmapsItemForQueryResultItem:
         })
         revised_step = docmaps_item['steps']['_:b4']
         assert revised_step['inputs'] == [
-            {
-                'type': 'preprint',
-                'doi': DOI_1,
-                'url': PREPRINT_LINK_2,
-                'versionIdentifier': PREPRINT_VERSION_2
-            },
+            get_docmap_preprint_input(preprint=PREPRINT_DETAILS_2),
             {
                 'type': DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE,
                 'doi': f'{ELIFE_DOI_1}.{ELIFE_DOI_VERSION_STR_1}.sa1'
