@@ -1,5 +1,8 @@
 
-from data_hub_api.docmaps.docmap_typing import DocmapPreprintOutput
+from data_hub_api.docmaps.docmap_typing import (
+    DocmapPreprintInput,
+    DocmapPreprintOutput
+)
 
 
 def get_docmap_preprint_output(preprint: dict) -> DocmapPreprintOutput:
@@ -16,4 +19,13 @@ def get_docmap_preprint_output(preprint: dict) -> DocmapPreprintOutput:
         ),
         'versionIdentifier': preprint['preprint_version'],
         '_tdmPath': preprint['tdm_path']
+    }
+
+
+def get_docmap_preprint_input(preprint: dict) -> DocmapPreprintInput:
+    return {
+        'type': 'preprint',
+        'doi': preprint['preprint_doi'],
+        'url': preprint['preprint_url'],
+        'versionIdentifier': preprint['preprint_version']
     }

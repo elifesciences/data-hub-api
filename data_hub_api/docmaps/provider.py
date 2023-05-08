@@ -6,7 +6,11 @@ from typing import Dict, Iterable, Optional, Sequence, Tuple, Union, cast
 import urllib
 
 import objsize
-from data_hub_api.docmaps.codecs.preprint import get_docmap_preprint_output
+from data_hub_api.docmaps.codecs.preprint import (
+    get_docmap_preprint_input,
+    get_docmap_preprint_output
+)
+
 from data_hub_api.docmaps.docmap_typing import (
     DocmapAction,
     DocmapAssertion,
@@ -183,15 +187,6 @@ def get_docmap_actions_value_for_preprint_under_review_and_revised_step(
     }]
 
 
-def get_docmap_input_preprint_values(preprint: dict) -> Sequence[DocmapPreprintInput]:
-    return [{
-        'type': 'preprint',
-        'doi': preprint['preprint_doi'],
-        'url': preprint['preprint_url'],
-        'versionIdentifier': preprint['preprint_version']
-    }]
-
-
 def get_docmaps_step_for_under_review_status(
     query_result_item: dict,
     preprint: dict
@@ -205,9 +200,7 @@ def get_docmaps_step_for_under_review_status(
             query_result_item=query_result_item,
             preprint=preprint
         ),
-        'inputs': get_docmap_input_preprint_values(
-            preprint=preprint
-        )
+        'inputs': [get_docmap_preprint_input(preprint=preprint)]
     }
 
 
@@ -437,9 +430,7 @@ def get_docmaps_step_for_peer_reviewed_status(
         'assertions': get_docmap_assertions_value_for_preprint_peer_reviewed_step(
             preprint=preprint
         ),
-        'inputs': get_docmap_input_preprint_values(
-            preprint=preprint
-        )
+        'inputs': [get_docmap_preprint_input(preprint=preprint)]
     }
 
 
@@ -484,7 +475,7 @@ def get_docmap_inputs_value_for_revised_steps(
     preprint: dict,
     previous_preprint: dict
 ) -> Sequence[Union[DocmapPreprintInput, DocmapEvaluationInput]]:
-    return list(get_docmap_input_preprint_values(preprint=preprint)) + list(
+    return list([get_docmap_preprint_input(preprint=preprint)]) + list(
         iter_single_evaluation_as_input(
             query_result_item=query_result_item,
             preprint=previous_preprint

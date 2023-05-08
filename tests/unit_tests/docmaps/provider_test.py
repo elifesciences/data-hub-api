@@ -5,7 +5,10 @@ from typing import Iterable
 import urllib
 
 import pytest
-from data_hub_api.docmaps.codecs.preprint import get_docmap_preprint_output
+from data_hub_api.docmaps.codecs.preprint import (
+    get_docmap_preprint_input,
+    get_docmap_preprint_output
+)
 
 from data_hub_api.utils.cache import InMemorySingleObjectCache
 from data_hub_api.docmaps import provider as provider_module
@@ -381,12 +384,9 @@ class TestGetDocmapsItemForQueryResultItem:
     def test_should_populate_inputs_under_review_step(self):
         docmaps_item = get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
         under_review_step = docmaps_item['steps']['_:b1']
-        assert under_review_step['inputs'] == [{
-            'type': 'preprint',
-            'doi': DOI_1,
-            'url': PREPRINT_DETAILS_1['preprint_url'],
-            'versionIdentifier': PREPRINT_DETAILS_1['preprint_version']
-        }]
+        assert under_review_step['inputs'] == [
+            get_docmap_preprint_input(preprint=PREPRINT_DETAILS_1)
+        ]
 
     def test_should_populate_assertions_under_review_step(self):
         docmaps_item = get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
