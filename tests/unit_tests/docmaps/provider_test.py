@@ -5,6 +5,7 @@ from typing import Iterable
 import urllib
 
 import pytest
+from data_hub_api.docmaps.codecs.preprint import get_docmap_preprint_output
 
 from data_hub_api.utils.cache import InMemorySingleObjectCache
 from data_hub_api.docmaps import provider as provider_module
@@ -363,17 +364,7 @@ class TestGetDocmapsItemForQueryResultItem:
         manuscript_published_step = docmaps_item['steps']['_:b0']
         assert manuscript_published_step['actions'] == [{
             'participants': [],
-            'outputs': [{
-                'type': 'preprint',
-                'doi': DOI_1,
-                'url': PREPRINT_LINK_1,
-                'published': (
-                    PREPRINT_DETAILS_1['preprint_published_at_date']
-                    .isoformat()
-                ),
-                'versionIdentifier': PREPRINT_DETAILS_1['preprint_version'],
-                '_tdmPath': TDM_PATH_1
-            }]
+            'outputs': [get_docmap_preprint_output(preprint=PREPRINT_DETAILS_1)]
         }]
 
     def test_should_set_published_to_none_if_unknown(self):

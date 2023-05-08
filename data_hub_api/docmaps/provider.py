@@ -6,6 +6,7 @@ from typing import Dict, Iterable, Optional, Sequence, Tuple, Union, cast
 import urllib
 
 import objsize
+from data_hub_api.docmaps.codecs.preprint import get_docmap_preprint_output
 from data_hub_api.docmaps.docmap_typing import (
     DocmapAction,
     DocmapAssertion,
@@ -14,7 +15,6 @@ from data_hub_api.docmaps.docmap_typing import (
     DocmapEvaluationOutput,
     DocmapParticipant,
     DocmapPreprintInput,
-    DocmapPreprintOutput,
     DocmapStep,
     DocmapSteps,
     Docmap
@@ -104,29 +104,12 @@ def get_docmap_assertions_value_for_preprint_manuscript_published_step(
     }]
 
 
-def get_docmap_preprint_outputs(preprint: dict) -> DocmapPreprintOutput:
-    preprint_doi = preprint['preprint_doi']
-    preprint_published_at_date = preprint['preprint_published_at_date']
-    return {
-        'type': 'preprint',
-        'doi': preprint_doi,
-        'url': preprint['preprint_url'],
-        'published': (
-            preprint_published_at_date.isoformat()
-            if preprint_published_at_date
-            else None
-        ),
-        'versionIdentifier': preprint['preprint_version'],
-        '_tdmPath': preprint['tdm_path']
-    }
-
-
 def get_docmap_actions_value_for_preprint_manuscript_published_step(
     preprint: dict
 ) -> Sequence[DocmapAction]:
     return [{
         'participants': [],
-        'outputs': [get_docmap_preprint_outputs(preprint=preprint)]
+        'outputs': [get_docmap_preprint_output(preprint=preprint)]
     }]
 
 
