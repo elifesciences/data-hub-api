@@ -64,7 +64,7 @@ ADDITIONAL_MANUSCRIPT_IDS = (
 )
 
 
-def get_docmap_assertions_value_for_preprint_manuscript_published_step(
+def get_docmap_assertions_for_manuscript_published_step(
     preprint: dict
 ) -> Sequence[DocmapAssertion]:
     return [{
@@ -73,7 +73,7 @@ def get_docmap_assertions_value_for_preprint_manuscript_published_step(
     }]
 
 
-def get_docmap_actions_value_for_preprint_manuscript_published_step(
+def get_docmap_actions_for_preprint_manuscript_published_step(
     preprint: dict
 ) -> Sequence[DocmapAction]:
     return [{
@@ -86,17 +86,17 @@ def get_docmaps_step_for_manuscript_published_status(
     preprint
 ) -> DocmapStep:
     return {
-        'actions': get_docmap_actions_value_for_preprint_manuscript_published_step(
+        'actions': get_docmap_actions_for_preprint_manuscript_published_step(
             preprint=preprint
         ),
-        'assertions': get_docmap_assertions_value_for_preprint_manuscript_published_step(
+        'assertions': get_docmap_assertions_for_manuscript_published_step(
             preprint=preprint
         ),
         'inputs': []
     }
 
 
-def get_docmap_assertions_value_for_preprint_under_review_step(
+def get_docmap_assertions_for_under_review_step(
     query_result_item: dict,
     preprint: dict
 ) -> Sequence[DocmapAssertion]:
@@ -113,7 +113,7 @@ def get_docmap_assertions_value_for_preprint_under_review_step(
     }]
 
 
-def get_docmap_actions_value_for_preprint_under_review_and_revised_step(
+def get_docmap_actions_for_under_review_and_revised_step(
     query_result_item: dict,
     preprint: dict
 ) -> Sequence[DocmapAction]:
@@ -133,11 +133,11 @@ def get_docmaps_step_for_under_review_status(
     preprint: dict
 ):
     return {
-        'actions': get_docmap_actions_value_for_preprint_under_review_and_revised_step(
+        'actions': get_docmap_actions_for_under_review_and_revised_step(
             query_result_item=query_result_item,
             preprint=preprint
         ),
-        'assertions': get_docmap_assertions_value_for_preprint_under_review_step(
+        'assertions': get_docmap_assertions_for_under_review_step(
             query_result_item=query_result_item,
             preprint=preprint
         ),
@@ -145,7 +145,7 @@ def get_docmaps_step_for_under_review_status(
     }
 
 
-def get_docmap_assertions_value_for_preprint_peer_reviewed_step(
+def get_docmap_assertions_for_preprint_peer_reviewed_step(
     preprint: dict
 ) -> Sequence[DocmapAssertion]:
     return [{
@@ -241,7 +241,7 @@ def get_participants_for_preprint_peer_reviewed_step(
     return []
 
 
-def get_single_actions_value_of_evaluations_output(
+def get_docmap_actions_for_evaluations(
     query_result_item: dict,
     preprint: dict,
     hypothesis_id: str,
@@ -288,7 +288,7 @@ def iter_evaluation_and_type_for_related_preprint_url(
             yield evaluation, docmap_evaluation_type
 
 
-def iter_single_actions_value_of_evaluations_output(
+def iter_docmap_actions_for_evaluations(
     query_result_item: dict,
     preprint: dict
 ) -> Iterable[DocmapAction]:
@@ -301,7 +301,7 @@ def iter_single_actions_value_of_evaluations_output(
         hypothesis_id = evaluation['hypothesis_id']
         annotation_created_timestamp = evaluation['annotation_created_timestamp']
         evaluation_suffix = evaluation['evaluation_suffix']
-        yield get_single_actions_value_of_evaluations_output(
+        yield get_docmap_actions_for_evaluations(
             query_result_item=query_result_item,
             preprint=preprint,
             hypothesis_id=hypothesis_id,
@@ -316,19 +316,19 @@ def get_docmaps_step_for_peer_reviewed_status(
     preprint: dict
 ):
     return {
-        'actions': list(iter_single_actions_value_of_evaluations_output(
+        'actions': list(iter_docmap_actions_for_evaluations(
             query_result_item=query_result_item,
             preprint=preprint
             )
         ),
-        'assertions': get_docmap_assertions_value_for_preprint_peer_reviewed_step(
+        'assertions': get_docmap_assertions_for_preprint_peer_reviewed_step(
             preprint=preprint
         ),
         'inputs': [get_docmap_preprint_input(preprint=preprint)]
     }
 
 
-def iter_single_evaluation_as_input(
+def iter_docmap_evaluation_input(
     query_result_item: dict,
     preprint: dict
 ):
@@ -347,20 +347,20 @@ def iter_single_evaluation_as_input(
         )
 
 
-def get_docmap_inputs_value_for_revised_steps(
+def get_docmap_inputs_for_revised_steps(
     query_result_item: dict,
     preprint: dict,
     previous_preprint: dict
 ) -> Sequence[Union[DocmapPreprintInput, DocmapEvaluationInput]]:
     return list([get_docmap_preprint_input(preprint=preprint)]) + list(
-        iter_single_evaluation_as_input(
+        iter_docmap_evaluation_input(
             query_result_item=query_result_item,
             preprint=previous_preprint
         )
     )
 
 
-def get_docmap_assertions_value_for_revised_steps(
+def get_docmap_assertions_for_revised_steps(
     query_result_item: dict,
     preprint: dict
 ) -> Sequence[DocmapAssertion]:
@@ -373,14 +373,14 @@ def get_docmap_assertions_value_for_revised_steps(
     }]
 
 
-def get_docmap_actions_value_for_revised_steps(
+def get_docmap_actions_for_revised_steps(
     query_result_item: dict,
     preprint: dict
 ) -> Sequence[DocmapAction]:
-    return list(get_docmap_actions_value_for_preprint_under_review_and_revised_step(
+    return list(get_docmap_actions_for_under_review_and_revised_step(
             query_result_item=query_result_item,
             preprint=preprint
-        )) + list(iter_single_actions_value_of_evaluations_output(
+        )) + list(iter_docmap_actions_for_evaluations(
             query_result_item=query_result_item,
             preprint=preprint
         ))
@@ -392,15 +392,15 @@ def get_docmaps_step_for_revised_status(
     previous_preprint: dict
 ):
     return {
-        'actions': get_docmap_actions_value_for_revised_steps(
+        'actions': get_docmap_actions_for_revised_steps(
             query_result_item=query_result_item,
             preprint=preprint
         ),
-        'assertions': get_docmap_assertions_value_for_revised_steps(
+        'assertions': get_docmap_assertions_for_revised_steps(
             query_result_item=query_result_item,
             preprint=preprint
         ),
-        'inputs': get_docmap_inputs_value_for_revised_steps(
+        'inputs': get_docmap_inputs_for_revised_steps(
             query_result_item=query_result_item,
             preprint=preprint,
             previous_preprint=previous_preprint
