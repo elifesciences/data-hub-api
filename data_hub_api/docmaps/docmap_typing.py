@@ -76,7 +76,7 @@ DocmapAssertionItem = TypedDict(
     'DocmapAssertionItem',
     {
         'type': str,
-        'doi': str,
+        'doi': Optional[str],
         'versionIdentifier': str
     }
 )
