@@ -2,6 +2,7 @@
 
 from datetime import date
 from data_hub_api.docmaps.codecs.preprint import (
+    get_docmap_preprint_assertion_item,
     get_docmap_preprint_input,
     get_docmap_preprint_output
 )
@@ -53,5 +54,15 @@ class TestGetDocmapPreprintInput:
             'type': 'preprint',
             'doi': 'doi_1',
             'url': 'preprint_url_1',
+            'versionIdentifier': 'preprint_version_1'
+        }
+
+
+class TestGetDocmapPreprintAssertionItem:
+    def test_should_populate_docmaps_preprint_input(self):
+        result = get_docmap_preprint_assertion_item(preprint=PREPRINT_DETAILS_1)
+        assert result == {
+            'type': 'preprint',
+            'doi': 'doi_1',
             'versionIdentifier': 'preprint_version_1'
         }

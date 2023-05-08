@@ -6,6 +6,7 @@ import urllib
 
 import pytest
 from data_hub_api.docmaps.codecs.preprint import (
+    get_docmap_preprint_assertion_item,
     get_docmap_preprint_input,
     get_docmap_preprint_output
 )
@@ -393,11 +394,7 @@ class TestGetDocmapsItemForQueryResultItem:
         under_review_step = docmaps_item['steps']['_:b1']
         assert under_review_step['assertions'] == [
             {
-                'item': {
-                    'type': 'preprint',
-                    'doi': DOI_1,
-                    'versionIdentifier': PREPRINT_DETAILS_1['preprint_version']
-                },
+                'item': get_docmap_preprint_assertion_item(preprint=PREPRINT_DETAILS_1),
                 'status': 'under-review',
                 'happened': datetime.fromisoformat('2022-02-01T01:02:03+00:00')
             },
@@ -498,11 +495,7 @@ class TestGetDocmapsItemForQueryResultItem:
         )
         peer_reviewed_step = docmaps_item['steps']['_:b2']
         assert peer_reviewed_step['assertions'] == [{
-            'item': {
-                'type': 'preprint',
-                'doi': DOI_1,
-                'versionIdentifier': PREPRINT_DETAILS_1['preprint_version']
-            },
+            'item': get_docmap_preprint_assertion_item(preprint=PREPRINT_DETAILS_1),
             'status': 'peer-reviewed'
         }]
 
@@ -793,11 +786,7 @@ class TestGetDocmapsItemForQueryResultItem:
         )
         manuscript_published_step = docmaps_item['steps']['_:b3']
         assert manuscript_published_step['assertions'] == [{
-            'item': {
-                'type': 'preprint',
-                'doi': DOI_1,
-                'versionIdentifier': PREPRINT_DETAILS_2['preprint_version']
-            },
+            'item': get_docmap_preprint_assertion_item(preprint=PREPRINT_DETAILS_2),
             'status': 'manuscript-published'
         }]
 
@@ -1042,11 +1031,7 @@ class TestGetDocmapsItemForQueryResultItem:
             'status': 'revised'
         }]
         assert second_manuscript_published_step['assertions'] == [{
-            'item': {
-                'type': 'preprint',
-                'doi': DOI_1,
-                'versionIdentifier': PREPRINT_DETAILS_3['preprint_version']
-            },
+            'item': get_docmap_preprint_assertion_item(preprint=PREPRINT_DETAILS_3),
             'status': 'manuscript-published'
         }]
 

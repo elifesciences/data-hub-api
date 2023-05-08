@@ -7,6 +7,7 @@ import urllib
 
 import objsize
 from data_hub_api.docmaps.codecs.preprint import (
+    get_docmap_preprint_assertion_item,
     get_docmap_preprint_input,
     get_docmap_preprint_output
 )
@@ -99,11 +100,7 @@ def get_docmap_assertions_value_for_preprint_manuscript_published_step(
     preprint: dict
 ) -> Sequence[DocmapAssertion]:
     return [{
-        'item': {
-            'type': 'preprint',
-            'doi': preprint['preprint_doi'],
-            'versionIdentifier': preprint['preprint_version']
-        },
+        'item': get_docmap_preprint_assertion_item(preprint=preprint),
         'status': 'manuscript-published'
     }]
 
@@ -136,11 +133,7 @@ def get_docmap_assertions_value_for_preprint_under_review_step(
     preprint: dict
 ) -> Sequence[DocmapAssertion]:
     return [{
-        'item': {
-            'type': 'preprint',
-            'doi': preprint['preprint_doi'],
-            'versionIdentifier': preprint['preprint_version']
-        },
+        'item': get_docmap_preprint_assertion_item(preprint=preprint),
         'status': 'under-review',
         'happened': query_result_item['under_review_timestamp']
     }, {
@@ -208,11 +201,7 @@ def get_docmap_assertions_value_for_preprint_peer_reviewed_step(
     preprint: dict
 ) -> Sequence[DocmapAssertion]:
     return [{
-        'item': {
-            'type': 'preprint',
-            'doi': preprint['preprint_doi'],
-            'versionIdentifier': preprint['preprint_version']
-        },
+        'item': get_docmap_preprint_assertion_item(preprint=preprint),
         'status': 'peer-reviewed'
     }]
 

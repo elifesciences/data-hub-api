@@ -1,5 +1,6 @@
 
 from data_hub_api.docmaps.docmap_typing import (
+    DocmapAssertionItem,
     DocmapPreprintInput,
     DocmapPreprintOutput
 )
@@ -27,5 +28,13 @@ def get_docmap_preprint_input(preprint: dict) -> DocmapPreprintInput:
         'type': 'preprint',
         'doi': preprint['preprint_doi'],
         'url': preprint['preprint_url'],
+        'versionIdentifier': preprint['preprint_version']
+    }
+
+
+def get_docmap_preprint_assertion_item(preprint: dict) -> DocmapAssertionItem:
+    return {
+        'type': 'preprint',
+        'doi': preprint['preprint_doi'],
         'versionIdentifier': preprint['preprint_version']
     }
