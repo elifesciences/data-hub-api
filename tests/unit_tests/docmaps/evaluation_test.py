@@ -1,4 +1,8 @@
-from data_hub_api.docmaps.codecs.evaluation import get_elife_evaluation_doi
+from data_hub_api.docmaps.codecs.evaluation import (
+    DOI_ROOT_URL,
+    get_elife_evaluation_doi,
+    get_elife_evaluation_doi_url
+)
 
 
 class TestGetElifeEvaluationDoi:
@@ -34,3 +38,16 @@ class TestGetElifeEvaluationDoi:
             evaluation_suffix=evaluation_suffix
         )
         assert not actual_result
+
+
+class TestGetElifeEvaluationDoiUrl:
+    def test_should_return_none_if_elife_doi_is_none(self):
+        assert not get_elife_evaluation_doi_url(
+            elife_evaluation_doi=None,
+        )
+
+    def test_should_return_elife_evaluation_doi_url_when_defined(self):
+        result = get_elife_evaluation_doi_url(
+            elife_evaluation_doi='elife_evaluation_doi_1',
+        )
+        assert result == f'{DOI_ROOT_URL}elife_evaluation_doi_1'

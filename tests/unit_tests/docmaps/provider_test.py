@@ -10,6 +10,7 @@ from data_hub_api.docmaps.codecs.elife_manuscript import (
     get_docmap_elife_manuscript_output,
     get_elife_manuscript_version_doi
 )
+from data_hub_api.docmaps.codecs.evaluation import DOI_ROOT_URL
 
 from data_hub_api.docmaps.codecs.preprint import (
     get_docmap_preprint_assertion_item,
@@ -24,7 +25,6 @@ from data_hub_api.docmaps.provider import (
     DOCMAP_EVALUATION_TYPE_FOR_REPLY,
     DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY,
     DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE,
-    DOI_ROOT_URL,
     HYPOTHESIS_URL,
     SCIETY_ARTICLES_ACTIVITY_URL,
     SCIETY_ARTICLES_EVALUATIONS_URL,
@@ -33,7 +33,7 @@ from data_hub_api.docmaps.provider import (
     DOCMAPS_JSONLD_SCHEMA_URL,
     DOCMAP_ID_PREFIX,
     generate_docmap_steps,
-    get_elife_doi_url,
+    get_elife_evaluation_doi_url,
     get_docmap_evaluation_type_form_tags
 )
 
@@ -194,12 +194,12 @@ class TestGetElifeVersionDoi:
 class TestGetElifeDoiUrl:
     def test_should_return_url_with_elife_doi(self):
         elife_evaluation_doi = 'elife_evaluation_doi_1'
-        actual_result = get_elife_doi_url(elife_evaluation_doi=elife_evaluation_doi)
+        actual_result = get_elife_evaluation_doi_url(elife_evaluation_doi=elife_evaluation_doi)
         assert actual_result == f'{DOI_ROOT_URL}elife_evaluation_doi_1'
 
     def test_should_return_none_if_elife_evaluation_doi_not_defined(self):
         elife_evaluation_doi = ''
-        actual_result = get_elife_doi_url(elife_evaluation_doi=elife_evaluation_doi)
+        actual_result = get_elife_evaluation_doi_url(elife_evaluation_doi=elife_evaluation_doi)
         assert not actual_result
 
 

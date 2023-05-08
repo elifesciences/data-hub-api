@@ -6,11 +6,15 @@ from typing import Dict, Iterable, Optional, Sequence, Tuple, Union, cast
 import urllib
 
 import objsize
+
 from data_hub_api.docmaps.codecs.elife_manuscript import (
     get_docmap_elife_manuscript_doi_assertion_item,
     get_docmap_elife_manuscript_output
 )
-from data_hub_api.docmaps.codecs.evaluation import get_elife_evaluation_doi
+from data_hub_api.docmaps.codecs.evaluation import (
+    get_elife_evaluation_doi_url,
+    get_elife_evaluation_doi
+)
 from data_hub_api.docmaps.codecs.preprint import (
     get_docmap_preprint_assertion_item,
     get_docmap_preprint_input,
@@ -47,7 +51,6 @@ DOCMAP_ID_PREFIX = (
     'by-publisher/elife/get-by-manuscript-id?'
 )
 
-DOI_ROOT_URL = 'https://doi.org/'
 ELIFE_REVIEWED_PREPRINTS_URL = 'https://elifesciences.org/reviewed-preprints/'
 HYPOTHESIS_URL = 'https://hypothes.is/a/'
 SCIETY_ARTICLES_ACTIVITY_URL = 'https://sciety.org/articles/activity/'
@@ -65,14 +68,6 @@ ADDITIONAL_MANUSCRIPT_IDS = (
     '81535',
     '80729'
 )
-
-
-def get_elife_doi_url(
-    elife_evaluation_doi: Optional[str] = None
-) -> Optional[str]:
-    if not elife_evaluation_doi:
-        return None
-    return f'{DOI_ROOT_URL}' + elife_evaluation_doi
 
 
 def get_docmap_assertions_value_for_preprint_manuscript_published_step(
@@ -271,7 +266,7 @@ def get_docmap_evaluation_output(
         'published': annotation_created_timestamp,
         'doi': elife_evaluation_doi,
         'license': query_result_item['license'],
-        'url': get_elife_doi_url(elife_evaluation_doi=elife_evaluation_doi),
+        'url': get_elife_evaluation_doi_url(elife_evaluation_doi=elife_evaluation_doi),
         'content': [
             {
                 'type': 'web-page',
