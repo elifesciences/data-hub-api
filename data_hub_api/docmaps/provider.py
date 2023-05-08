@@ -12,6 +12,10 @@ from data_hub_api.docmaps.codecs.elife_manuscript import (
     get_docmap_elife_manuscript_output
 )
 from data_hub_api.docmaps.codecs.evaluation import (
+    DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY,
+    DOCMAP_EVALUATION_TYPE_FOR_REPLY,
+    DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE,
+    get_docmap_evaluation_type_form_tags,
     get_elife_evaluation_doi_url,
     get_elife_evaluation_doi
 )
@@ -55,10 +59,6 @@ ELIFE_REVIEWED_PREPRINTS_URL = 'https://elifesciences.org/reviewed-preprints/'
 HYPOTHESIS_URL = 'https://hypothes.is/a/'
 SCIETY_ARTICLES_ACTIVITY_URL = 'https://sciety.org/articles/activity/'
 SCIETY_ARTICLES_EVALUATIONS_URL = 'https://sciety.org/evaluations/hypothesis:'
-
-DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY = 'evaluation-summary'
-DOCMAP_EVALUATION_TYPE_FOR_REPLY = 'reply'
-DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE = 'review-article'
 
 ADDITIONAL_MANUSCRIPT_IDS = (
     '80494',
@@ -158,29 +158,6 @@ def get_docmap_assertions_value_for_preprint_peer_reviewed_step(
         'item': get_docmap_preprint_assertion_item(preprint=preprint),
         'status': 'peer-reviewed'
     }]
-
-
-def has_tag_containing(tags: list, text: str) -> bool:
-    return any(
-        text in tag
-        for tag in tags
-    )
-
-
-def get_docmap_evaluation_type_form_tags(
-    tags: list
-) -> Optional[str]:
-    has_author_response_tag = has_tag_containing(tags, 'AuthorResponse')
-    has_summary_tag = has_tag_containing(tags, 'Summary')
-    has_review_tag = has_tag_containing(tags, 'Review')
-    assert not (has_author_response_tag and has_summary_tag)
-    if has_author_response_tag:
-        return DOCMAP_EVALUATION_TYPE_FOR_REPLY
-    if has_summary_tag:
-        return DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY
-    if has_review_tag:
-        return DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE
-    return None
 
 
 def get_participants_for_peer_reviewed_review_article_type() -> list:
