@@ -7,8 +7,10 @@ import urllib
 import pytest
 from data_hub_api.docmaps.codecs.elife_manuscript import (
     get_docmap_elife_manuscript_doi_assertion_item,
-    get_docmap_elife_manuscript_output
+    get_docmap_elife_manuscript_output,
+    get_elife_manuscript_version_doi
 )
+
 from data_hub_api.docmaps.codecs.preprint import (
     get_docmap_preprint_assertion_item,
     get_docmap_preprint_input,
@@ -32,8 +34,6 @@ from data_hub_api.docmaps.provider import (
     DOCMAP_ID_PREFIX,
     generate_docmap_steps,
     get_elife_doi_url,
-    get_elife_evaluation_doi,
-    get_elife_manuscript_version_doi,
     get_docmap_evaluation_type_form_tags
 )
 
@@ -187,41 +187,6 @@ class TestGetElifeVersionDoi:
         actual_result = get_elife_manuscript_version_doi(
             elife_doi=elife_doi,
             elife_doi_version_str=elife_doi_version_str
-        )
-        assert not actual_result
-
-
-class TestGetElifeEvaluationDoi:
-    def test_should_return_evaluation_doi_with_suffix_if_defined(self):
-        elife_doi = 'elife_doi_1'
-        elife_doi_version_str = 'elife_doi_version_str_1'
-        evaluation_suffix = 'evaluation_suffix_1'
-        actual_result = get_elife_evaluation_doi(
-            elife_doi=elife_doi,
-            elife_doi_version_str=elife_doi_version_str,
-            evaluation_suffix=evaluation_suffix
-        )
-        assert actual_result == 'elife_doi_1.elife_doi_version_str_1.evaluation_suffix_1'
-
-    def test_should_return_evaluation_doi_without_suffix_if_not_defined(self):
-        elife_doi = 'elife_doi_1'
-        elife_doi_version_str = 'elife_doi_version_str_1'
-        evaluation_suffix = ''
-        actual_result = get_elife_evaluation_doi(
-            elife_doi=elife_doi,
-            elife_doi_version_str=elife_doi_version_str,
-            evaluation_suffix=evaluation_suffix
-        )
-        assert actual_result == 'elife_doi_1.elife_doi_version_str_1'
-
-    def test_should_return_none_if_elife_doi_not_defined(self):
-        elife_doi = ''
-        elife_doi_version_str = 'elife_doi_version_str_1'
-        evaluation_suffix = ''
-        actual_result = get_elife_evaluation_doi(
-            elife_doi=elife_doi,
-            elife_doi_version_str=elife_doi_version_str,
-            evaluation_suffix=evaluation_suffix
         )
         assert not actual_result
 

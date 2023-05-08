@@ -8,9 +8,9 @@ import urllib
 import objsize
 from data_hub_api.docmaps.codecs.elife_manuscript import (
     get_docmap_elife_manuscript_doi_assertion_item,
-    get_docmap_elife_manuscript_output,
-    get_elife_manuscript_version_doi
+    get_docmap_elife_manuscript_output
 )
+from data_hub_api.docmaps.codecs.evaluation import get_elife_evaluation_doi
 from data_hub_api.docmaps.codecs.preprint import (
     get_docmap_preprint_assertion_item,
     get_docmap_preprint_input,
@@ -65,22 +65,6 @@ ADDITIONAL_MANUSCRIPT_IDS = (
     '81535',
     '80729'
 )
-
-
-def get_elife_evaluation_doi(
-    elife_doi_version_str: str,
-    elife_doi: Optional[str] = None,
-    evaluation_suffix: Optional[str] = None
-) -> Optional[str]:
-    elife_version_doi = get_elife_manuscript_version_doi(
-        elife_doi=elife_doi,
-        elife_doi_version_str=elife_doi_version_str
-    )
-    if not elife_version_doi:
-        return None
-    if not evaluation_suffix:
-        return elife_version_doi
-    return elife_version_doi + '.' + evaluation_suffix
 
 
 def get_elife_doi_url(
