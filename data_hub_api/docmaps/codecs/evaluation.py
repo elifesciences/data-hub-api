@@ -34,6 +34,23 @@ def get_elife_evaluation_doi_url(
     return f'{DOI_ROOT_URL}' + elife_evaluation_doi
 
 
+def get_docmap_evaluation_input(
+    query_result_item: dict,
+    preprint: dict,
+    evaluation_suffix: str,
+    docmap_evaluation_type: str
+):
+    elife_evaluation_doi = get_elife_evaluation_doi(
+        elife_doi_version_str=preprint['elife_doi_version_str'],
+        elife_doi=query_result_item['elife_doi'],
+        evaluation_suffix=evaluation_suffix
+    )
+    return {
+        'type': docmap_evaluation_type,
+        'doi': elife_evaluation_doi
+    }
+
+
 def get_docmap_evaluation_output(
     query_result_item: dict,
     preprint: dict,

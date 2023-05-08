@@ -12,6 +12,7 @@ from data_hub_api.docmaps.codecs.elife_manuscript import (
 )
 from data_hub_api.docmaps.codecs.evaluation import (
     HYPOTHESIS_URL,
+    get_docmap_evaluation_input,
     get_docmap_evaluation_output,
 )
 
@@ -666,18 +667,18 @@ class TestGetDocmapsItemForQueryResultItem:
             **DOCMAPS_QUERY_RESULT_ITEM_WITH_REVISED_PREPRPINT,
             'evaluations': [{
                     **DOCMAPS_QUERY_RESULT_EVALUATION_1,
-                    'elife_doi_version_str': ELIFE_DOI_VERSION_STR_1,
-                    'evaluation_suffix': 'sa1',
                     'tags': ['PeerReview']
                 }]
         })
         revised_step = docmaps_item['steps']['_:b4']
         assert revised_step['inputs'] == [
             get_docmap_preprint_input(preprint=PREPRINT_DETAILS_2),
-            {
-                'type': DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE,
-                'doi': f'{ELIFE_DOI_1}.{ELIFE_DOI_VERSION_STR_1}.sa1'
-            }
+            get_docmap_evaluation_input(
+                query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1,
+                preprint=PREPRINT_DETAILS_1,
+                evaluation_suffix=EVALUATION_SUFFIX_1,
+                docmap_evaluation_type=DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE
+            )
         ]
 
     def test_should_populate_inputs_revised_step_with_more_then_one_evaluation(self):
@@ -685,53 +686,49 @@ class TestGetDocmapsItemForQueryResultItem:
             **DOCMAPS_QUERY_RESULT_ITEM_WITH_REVISED_PREPRPINT,
             'evaluations': [{
                     **DOCMAPS_QUERY_RESULT_EVALUATION_1,
-                    'elife_doi_version_str': ELIFE_DOI_VERSION_STR_1,
-                    'evaluation_suffix': 'sa1',
                     'tags': ['PeerReview']
                 },
                 {
                     **DOCMAPS_QUERY_RESULT_EVALUATION_1,
-                    'elife_doi_version_str': ELIFE_DOI_VERSION_STR_1,
-                    'evaluation_suffix': 'sa2',
+                    'evaluation_suffix': EVALUATION_SUFFIX_2,
                     'tags': ['evaluationSummary']
                 }]
         })
         revised_step = docmaps_item['steps']['_:b4']
         assert revised_step['inputs'] == [
             get_docmap_preprint_input(preprint=PREPRINT_DETAILS_2),
-            {
-                'type': DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE,
-                'doi': f'{ELIFE_DOI_1}.{ELIFE_DOI_VERSION_STR_1}.sa1'
-            },
-            {
-                'type': DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY,
-                'doi': f'{ELIFE_DOI_1}.{ELIFE_DOI_VERSION_STR_1}.sa2'
-            }
+            get_docmap_evaluation_input(
+                query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1,
+                preprint=PREPRINT_DETAILS_1,
+                evaluation_suffix=EVALUATION_SUFFIX_1,
+                docmap_evaluation_type=DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE
+            ),
+            get_docmap_evaluation_input(
+                query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1,
+                preprint=PREPRINT_DETAILS_1,
+                evaluation_suffix=EVALUATION_SUFFIX_2,
+                docmap_evaluation_type=DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY
+            )
         ]
 
     def test_should_not_add_revised_pp_evaluations_to_inputs_of_revised_pp_step(self):
         docmaps_item = get_docmap_item_for_query_result_item({
             **DOCMAPS_QUERY_RESULT_ITEM_WITH_REVISED_PREPRPINT,
             'evaluations': [{
-                    **DOCMAPS_QUERY_RESULT_EVALUATION_1,
-                    'elife_doi_version_str': ELIFE_DOI_VERSION_STR_1,
-                    'evaluation_suffix': 'sa1',
-                    'tags': ['PeerReview']
-                },
-                {
-                    **DOCMAPS_QUERY_RESULT_EVALUATION_2,
-                    'elife_doi_version_str': ELIFE_DOI_VERSION_STR_2,
-                    'evaluation_suffix': 'sa1',
-                    'tags': ['PeerReview']
-                }]
+                **DOCMAPS_QUERY_RESULT_EVALUATION_1,
+                'tags': ['PeerReview']
+            }],
+            'preprints': [PREPRINT_DETAILS_1, PREPRINT_DETAILS_2]
         })
         revised_step = docmaps_item['steps']['_:b4']
         assert revised_step['inputs'] == [
             get_docmap_preprint_input(preprint=PREPRINT_DETAILS_2),
-            {
-                'type': DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE,
-                'doi': f'{ELIFE_DOI_1}.{ELIFE_DOI_VERSION_STR_1}.sa1'
-            }
+            get_docmap_evaluation_input(
+                query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1,
+                preprint=PREPRINT_DETAILS_1,
+                evaluation_suffix=EVALUATION_SUFFIX_1,
+                docmap_evaluation_type=DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE
+            )
         ]
 
     def test_should_populate_assertions_revised_step(self):

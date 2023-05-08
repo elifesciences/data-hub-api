@@ -13,7 +13,7 @@ from data_hub_api.docmaps.codecs.elife_manuscript import (
 )
 from data_hub_api.docmaps.codecs.evaluation import (
     get_docmap_evaluation_output,
-    get_elife_evaluation_doi
+    get_docmap_evaluation_input
 )
 from data_hub_api.docmaps.codecs.preprint import (
     get_docmap_preprint_assertion_item,
@@ -328,23 +328,6 @@ def get_docmaps_step_for_peer_reviewed_status(
     }
 
 
-def get_single_evaluation_as_input(
-    query_result_item: dict,
-    preprint: dict,
-    evaluation_suffix: str,
-    docmap_evaluation_type: str
-):
-    elife_evaluation_doi = get_elife_evaluation_doi(
-        elife_doi_version_str=preprint['elife_doi_version_str'],
-        elife_doi=query_result_item['elife_doi'],
-        evaluation_suffix=evaluation_suffix
-    )
-    return {
-        'type': docmap_evaluation_type,
-        'doi': elife_evaluation_doi
-    }
-
-
 def iter_single_evaluation_as_input(
     query_result_item: dict,
     preprint: dict
@@ -356,7 +339,7 @@ def iter_single_evaluation_as_input(
         preprint_url
     ):
         evaluation_suffix = evaluation['evaluation_suffix']
-        yield get_single_evaluation_as_input(
+        yield get_docmap_evaluation_input(
             query_result_item=query_result_item,
             preprint=preprint,
             evaluation_suffix=evaluation_suffix,

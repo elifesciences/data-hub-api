@@ -5,6 +5,7 @@ from data_hub_api.docmaps.codecs.evaluation import (
     HYPOTHESIS_URL,
     SCIETY_ARTICLES_ACTIVITY_URL,
     SCIETY_ARTICLES_EVALUATIONS_URL,
+    get_docmap_evaluation_input,
     get_docmap_evaluation_output,
     get_elife_evaluation_doi,
     get_elife_evaluation_doi_url
@@ -103,6 +104,24 @@ class TestGetElifeEvaluationDoiUrl:
             elife_evaluation_doi='elife_evaluation_doi_1',
         )
         assert result == f'{DOI_ROOT_URL}elife_evaluation_doi_1'
+
+
+class TestGetDocmapEvaluationInput:
+    def test_should_populate_evaluation_input(self):
+        result = get_docmap_evaluation_input(
+            query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1,
+            preprint=PREPRINT_DETAILS_1,
+            evaluation_suffix=EVALUATION_SUFFIX_1,
+            docmap_evaluation_type='docmap_evaluation_type_1'
+        )
+        assert result == {
+            'type': 'docmap_evaluation_type_1',
+            'doi': get_elife_evaluation_doi(
+                elife_doi=ELIFE_DOI_1,
+                elife_doi_version_str=ELIFE_DOI_VERSION_STR_1,
+                evaluation_suffix=EVALUATION_SUFFIX_1
+            )
+        }
 
 
 class TestGetDocmapEvaluationOutput:
