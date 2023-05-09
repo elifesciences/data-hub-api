@@ -1,17 +1,26 @@
-from typing import Optional
+import logging
+from typing import Iterable, Optional, Sequence, cast, Tuple
 
 from data_hub_api.docmaps.codecs.elife_manuscript import get_elife_manuscript_version_doi
 from data_hub_api.docmaps.docmap_typing import (
+    DocmapAction,
     DocmapContent,
     DocmapEvaluationInput,
-    DocmapEvaluationOutput
+    DocmapEvaluationOutput,
+    DocmapParticipant
 )
+
+LOGGER = logging.getLogger(__name__)
 
 DOI_ROOT_URL = 'https://doi.org/'
 
 HYPOTHESIS_URL = 'https://hypothes.is/a/'
 SCIETY_ARTICLES_ACTIVITY_URL = 'https://sciety.org/articles/activity/'
 SCIETY_ARTICLES_EVALUATIONS_URL = 'https://sciety.org/evaluations/hypothesis:'
+
+DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY = 'evaluation-summary'
+DOCMAP_EVALUATION_TYPE_FOR_REPLY = 'reply'
+DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE = 'review-article'
 
 
 def get_elife_evaluation_doi(
@@ -122,3 +131,184 @@ def get_docmap_evaluation_output(
             )
         ]
     }
+
+
+def has_tag_containing(tags: list, text: str) -> bool:
+    return any(
+        text in tag
+        for tag in tags
+    )
+
+
+def get_docmap_evaluation_type_form_tags(
+    tags: list
+) -> Optional[str]:
+    has_author_response_tag = has_tag_containing(tags, 'AuthorResponse')
+    has_summary_tag = has_tag_containing(tags, 'Summary')
+    has_review_tag = has_tag_containing(tags, 'Review')
+    assert not (has_author_response_tag and has_summary_tag)
+    if has_author_response_tag:
+        return DOCMAP_EVALUATION_TYPE_FOR_REPLY
+    if has_summary_tag:
+        return DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY
+    if has_review_tag:
+        return DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE
+    return None
+
+
+def get_docmap_evaluation_participants_for_review_article_type() -> Sequence[DocmapParticipant]:
+    return [{
+        'actor': {
+            'name': 'anonymous',
+            'type': 'person'
+        },
+        'role': 'peer-reviewer'
+    }]
+
+
+def get_related_organization_detail(
+    editor_detail: dict
+) -> str:
+    if editor_detail['country']:
+        return editor_detail['institution'] + ', ' + editor_detail['country']
+    return editor_detail['institution']
+
+
+def get_docmap_evaluation_participants_for_evaluation_summary_type(
+    editor_detail: dict,
+    role: str
+) -> DocmapParticipant:
+    assert role in ['editor', 'senior-editor']
+    return {
+        'actor': {
+            'name': editor_detail['name'],
+            'type': 'person',
+            '_relatesToOrganization': get_related_organization_detail(editor_detail)
+        },
+        'role': role
+    }
+
+
+def get_docmap_evaluation_participants_for_evalution_summary_type(
+    editor_details_list: list,
+    senior_editor_details_list: list
+) -> Sequence[DocmapParticipant]:
+    participants = []
+    for editor_detail in editor_details_list:
+        single_editor_dict = get_docmap_evaluation_participants_for_evaluation_summary_type(
+            editor_detail=editor_detail,
+            role='editor'
+        )
+        participants.append(single_editor_dict)
+    for senior_editor_detail in senior_editor_details_list:
+        single_senior_editor_dict = get_docmap_evaluation_participants_for_evaluation_summary_type(
+            editor_detail=senior_editor_detail,
+            role='senior-editor'
+        )
+        participants.append(single_senior_editor_dict)
+    return cast(Sequence[DocmapParticipant], participants)
+
+
+def get_docmap_evaluation_participants(
+    query_result_item: dict,
+    docmap_evaluation_type: str
+) -> Sequence[DocmapParticipant]:
+    editor_details_list = query_result_item['editor_details']
+    senior_editor_details_list = query_result_item['senior_editor_details']
+    if docmap_evaluation_type == DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE:
+        return get_docmap_evaluation_participants_for_review_article_type()
+    if docmap_evaluation_type == DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY:
+        return get_docmap_evaluation_participants_for_evalution_summary_type(
+            editor_details_list=editor_details_list,
+            senior_editor_details_list=senior_editor_details_list
+        )
+    return []
+
+
+def get_docmap_actions_for_evaluations(
+    query_result_item: dict,
+    preprint: dict,
+    hypothesis_id: str,
+    evaluation_suffix: str,
+    annotation_created_timestamp: str,
+    docmap_evaluation_type: str
+) -> DocmapAction:
+    return {
+        'participants': get_docmap_evaluation_participants(
+            query_result_item=query_result_item,
+            docmap_evaluation_type=docmap_evaluation_type
+        ),
+        'outputs': [
+            get_docmap_evaluation_output(
+                query_result_item=query_result_item,
+                preprint=preprint,
+                hypothesis_id=hypothesis_id,
+                annotation_created_timestamp=annotation_created_timestamp,
+                evaluation_suffix=evaluation_suffix,
+                docmap_evaluation_type=docmap_evaluation_type
+            )
+        ]
+    }
+
+
+def iter_evaluation_and_type_for_related_preprint_url(
+    evaluations: list,
+    preprint_url: str
+) -> Iterable[Tuple[dict, str]]:
+    for evaluation in evaluations:
+        docmap_evaluation_type = get_docmap_evaluation_type_form_tags(evaluation['tags'])
+        evaluation_preprint_url = evaluation['uri']
+        if evaluation_preprint_url != preprint_url:
+            LOGGER.debug(
+                'ignoring evaluation on another version: %r != %r',
+                evaluation_preprint_url, preprint_url
+            )
+            continue
+        if docmap_evaluation_type in (
+            DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY,
+            DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE,
+            DOCMAP_EVALUATION_TYPE_FOR_REPLY
+        ):
+            yield evaluation, docmap_evaluation_type
+
+
+def iter_docmap_actions_for_evaluations(
+    query_result_item: dict,
+    preprint: dict
+) -> Iterable[DocmapAction]:
+    evaluations = query_result_item['evaluations']
+    preprint_url = preprint['preprint_url']
+    for evaluation, docmap_evaluation_type in iter_evaluation_and_type_for_related_preprint_url(
+        evaluations,
+        preprint_url
+    ):
+        hypothesis_id = evaluation['hypothesis_id']
+        annotation_created_timestamp = evaluation['annotation_created_timestamp']
+        evaluation_suffix = evaluation['evaluation_suffix']
+        yield get_docmap_actions_for_evaluations(
+            query_result_item=query_result_item,
+            preprint=preprint,
+            hypothesis_id=hypothesis_id,
+            annotation_created_timestamp=annotation_created_timestamp,
+            evaluation_suffix=evaluation_suffix,
+            docmap_evaluation_type=docmap_evaluation_type
+        )
+
+
+def iter_docmap_evaluation_input(
+    query_result_item: dict,
+    preprint: dict
+):
+    evaluations = query_result_item['evaluations']
+    preprint_url = preprint['preprint_url']
+    for evaluation, docmap_evaluation_type in iter_evaluation_and_type_for_related_preprint_url(
+        evaluations,
+        preprint_url
+    ):
+        evaluation_suffix = evaluation['evaluation_suffix']
+        yield get_docmap_evaluation_input(
+            query_result_item=query_result_item,
+            preprint=preprint,
+            evaluation_suffix=evaluation_suffix,
+            docmap_evaluation_type=docmap_evaluation_type
+        )

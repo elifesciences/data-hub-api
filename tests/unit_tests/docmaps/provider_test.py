@@ -11,9 +11,14 @@ from data_hub_api.docmaps.codecs.elife_manuscript import (
     get_elife_manuscript_version_doi
 )
 from data_hub_api.docmaps.codecs.evaluation import (
+    DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY,
+    DOCMAP_EVALUATION_TYPE_FOR_REPLY,
+    DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE,
     HYPOTHESIS_URL,
     get_docmap_evaluation_input,
     get_docmap_evaluation_output,
+    get_docmap_evaluation_participants_for_evalution_summary_type,
+    get_docmap_evaluation_participants_for_review_article_type
 )
 
 from data_hub_api.docmaps.codecs.preprint import (
@@ -26,15 +31,11 @@ from data_hub_api.utils.cache import InMemorySingleObjectCache
 from data_hub_api.docmaps import provider as provider_module
 from data_hub_api.docmaps.provider import (
     ADDITIONAL_MANUSCRIPT_IDS,
-    DOCMAP_EVALUATION_TYPE_FOR_REPLY,
-    DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY,
-    DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE,
     get_docmap_item_for_query_result_item,
     DocmapsProvider,
     DOCMAPS_JSONLD_SCHEMA_URL,
     DOCMAP_ID_PREFIX,
     generate_docmap_steps,
-    get_docmap_evaluation_type_form_tags
 )
 
 
@@ -193,48 +194,6 @@ class TestGetElifeVersionDoi:
             elife_doi_version_str=elife_doi_version_str
         )
         assert not actual_result
-
-
-class TestGetEvaluationsTypeFromTags:
-    def test_should_return_evaluation_summary_when_summary_exist_in_tags_list(self):
-        tag_list_with_summary = ['PeerReview', 'evaluationSummary']
-        actual_result = get_docmap_evaluation_type_form_tags(tag_list_with_summary)
-        assert actual_result == DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY
-
-    def test_should_return_review_article_when_review_keyword_exists_in_tags_list(self):
-        tag_list_with_summary = ['PeerReview']
-        actual_result = get_docmap_evaluation_type_form_tags(tag_list_with_summary)
-        assert actual_result == DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE
-
-    def test_should_return_review_article_for_review_keyword_even_there_is_undefined_tag(self):
-        tag_list_with_summary = ['PeerReview', 'undefinedTag']
-        actual_result = get_docmap_evaluation_type_form_tags(tag_list_with_summary)
-        assert actual_result == DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE
-
-    def test_should_return_reply_when_author_response_keyword_exists_in_tags_list(self):
-        tag_list_with_summary = ['AuthorResponse']
-        actual_result = get_docmap_evaluation_type_form_tags(tag_list_with_summary)
-        assert actual_result == DOCMAP_EVALUATION_TYPE_FOR_REPLY
-
-    def test_should_return_reply_when_author_response_even_there_is_review_tag(self):
-        tag_list_with_summary = ['PeerReview', 'AuthorResponse']
-        actual_result = get_docmap_evaluation_type_form_tags(tag_list_with_summary)
-        assert actual_result == DOCMAP_EVALUATION_TYPE_FOR_REPLY
-
-    def test_should_return_none_when_empty_tags_list(self):
-        tag_list_with_summary = []
-        actual_result = get_docmap_evaluation_type_form_tags(tag_list_with_summary)
-        assert not actual_result
-
-    def test_should_return_none_when_there_is_not_any_defined_tag_in_tags_list(self):
-        tag_list_with_summary = ['undefinedTag']
-        actual_result = get_docmap_evaluation_type_form_tags(tag_list_with_summary)
-        assert not actual_result
-
-    def test_should_raise_error_when_summary_and_author_response_in_tag_list_at_same_time(self):
-        tag_list_with_summary = ['PeerReview', 'evaluationSummary', 'AuthorResponse']
-        with pytest.raises(AssertionError):
-            get_docmap_evaluation_type_form_tags(tag_list_with_summary)
 
 
 class TestGenerateDocmapSteps:
@@ -519,7 +478,7 @@ class TestGetDocmapsItemForQueryResultItem:
             docmap_evaluation_type=DOCMAP_EVALUATION_TYPE_FOR_REPLY
         )
 
-    def test_should_populate_outputs_avaluation_type_according_to_tags_peer_reviewed_step(self):
+    def test_should_populate_outputs_evaluation_type_according_to_tags_peer_reviewed_step(self):
         query_result_with_evaluation = dict(
             DOCMAPS_QUERY_RESULT_ITEM_1,
             **{
@@ -563,15 +522,9 @@ class TestGetDocmapsItemForQueryResultItem:
         peer_reviewed_step = docmaps_item['steps']['_:b2']
         peer_reviewed_actions = peer_reviewed_step['actions']
         participants_for_review_article = peer_reviewed_actions[0]['participants']
-        assert participants_for_review_article == [
-            {
-                'actor': {
-                    'name': 'anonymous',
-                    'type': 'person'
-                },
-                'role': 'peer-reviewer'
-            }
-        ]
+        assert participants_for_review_article == (
+            get_docmap_evaluation_participants_for_review_article_type()
+        )
 
     def test_should_populate_participants_peer_reviewed_step_for_evaluation_summary_type(self):
         query_result_with_evaluation = dict(
@@ -583,23 +536,28 @@ class TestGetDocmapsItemForQueryResultItem:
                 }]
             }
         )
+        editor_detail_1 = {
+            'name': 'editor_name_1',
+            'institution': 'editor_institution_1',
+            'country': 'editor_country_1'
+        }
+        editor_detail_2 = {
+            'name': 'editor_name_2',
+            'institution': 'editor_institution_2',
+            'country': ''
+        }
+        senior_editor_detail_1 = {
+            'name': 'senior_editor_name_1',
+            'institution': 'senior_editor_institution_1',
+            'country': 'senior_editor_country_1'
+        }
+        editor_details = [editor_detail_1, editor_detail_2]
+        senior_editor_details = [senior_editor_detail_1]
         query_result_with_editor_details = dict(
             query_result_with_evaluation,
             **{
-                'editor_details': [{
-                    'name': 'editor_name_1',
-                    'institution': 'editor_institution_1',
-                    'country': 'editor_country_1'
-                }, {
-                    'name': 'editor_name_2',
-                    'institution': 'editor_institution_2',
-                    'country': ''
-                }],
-                'senior_editor_details': [{
-                    'name': 'senior_editor_name_1',
-                    'institution': 'senior_editor_institution_1',
-                    'country': 'senior_editor_country_1'
-                }]
+                'editor_details': editor_details,
+                'senior_editor_details': senior_editor_details
             }
         )
         docmaps_item = get_docmap_item_for_query_result_item(
@@ -608,32 +566,12 @@ class TestGetDocmapsItemForQueryResultItem:
         peer_reviewed_step = docmaps_item['steps']['_:b2']
         peer_reviewed_actions = peer_reviewed_step['actions']
         participants_for_evaluation_summary = peer_reviewed_actions[0]['participants']
-        assert participants_for_evaluation_summary == [
-            {
-                'actor': {
-                    'name': 'editor_name_1',
-                    'type': 'person',
-                    '_relatesToOrganization': 'editor_institution_1, editor_country_1'
-                },
-                'role': 'editor'
-            },
-            {
-                'actor': {
-                    'name': 'editor_name_2',
-                    'type': 'person',
-                    '_relatesToOrganization': 'editor_institution_2'
-                },
-                'role': 'editor'
-            },
-            {
-                'actor': {
-                    'name': 'senior_editor_name_1',
-                    'type': 'person',
-                    '_relatesToOrganization': 'senior_editor_institution_1, senior_editor_country_1'
-                },
-                'role': 'senior-editor'
-            }
-        ]
+        assert participants_for_evaluation_summary == (
+            get_docmap_evaluation_participants_for_evalution_summary_type(
+                editor_details_list=editor_details,
+                senior_editor_details_list=senior_editor_details
+            )
+        )
 
     def test_should_return_empty_list_for_inputs_manuscript_published_step_for_revised_pp(self):
         docmaps_item = get_docmap_item_for_query_result_item(
