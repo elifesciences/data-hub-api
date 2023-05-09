@@ -1,6 +1,3 @@
-
-
-from datetime import date
 from data_hub_api.docmaps.codecs.preprint import (
     get_docmap_preprint_assertion_item,
     get_docmap_preprint_input,

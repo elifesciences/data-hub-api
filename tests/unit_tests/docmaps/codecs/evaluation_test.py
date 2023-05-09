@@ -1,4 +1,3 @@
-from datetime import datetime
 from unittest.mock import patch
 import pytest
 from data_hub_api.docmaps.codecs import evaluation as evaluation_module

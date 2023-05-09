@@ -1,4 +1,3 @@
-from datetime import datetime
 from data_hub_api.docmaps.codecs.elife_manuscript import (
     get_docmap_elife_manuscript_doi_assertion_item,
     get_docmap_elife_manuscript_output,
