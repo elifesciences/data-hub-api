@@ -151,6 +151,18 @@ DOCMAPS_QUERY_RESULT_ITEM_WITH_REVISED_PREPRPINT: dict = {
     'preprints': [PREPRINT_DETAILS_1, PREPRINT_DETAILS_2],
 }
 
+EDITOR_DETAIL_1 = {
+    'name': 'editor_name_1',
+    'institution': 'editor_institution_1',
+    'country': 'editor_country_1'
+}
+
+SENIOR_EDITOR_DETAIL_1 = {
+    'name': 'senior_editor_name_1',
+    'institution': 'senior_editor_institution_1',
+    'country': 'senior_editor_country_1'
+}
+
 
 @pytest.fixture(name='iter_dict_from_bq_query_mock', autouse=True)
 def _iter_dict_from_bq_query_mock() -> Iterable[MagicMock]:
@@ -536,23 +548,8 @@ class TestGetDocmapsItemForQueryResultItem:
                 }]
             }
         )
-        editor_detail_1 = {
-            'name': 'editor_name_1',
-            'institution': 'editor_institution_1',
-            'country': 'editor_country_1'
-        }
-        editor_detail_2 = {
-            'name': 'editor_name_2',
-            'institution': 'editor_institution_2',
-            'country': ''
-        }
-        senior_editor_detail_1 = {
-            'name': 'senior_editor_name_1',
-            'institution': 'senior_editor_institution_1',
-            'country': 'senior_editor_country_1'
-        }
-        editor_details = [editor_detail_1, editor_detail_2]
-        senior_editor_details = [senior_editor_detail_1]
+        editor_details = [EDITOR_DETAIL_1]
+        senior_editor_details = [SENIOR_EDITOR_DETAIL_1]
         query_result_with_editor_details = dict(
             query_result_with_evaluation,
             **{

@@ -70,6 +70,18 @@ DOCMAPS_QUERY_RESULT_EVALUATION_1 = {
     'evaluation_suffix': EVALUATION_SUFFIX_1
 }
 
+EDITOR_DETAIL_1 = {
+    'name': 'editor_name_1',
+    'institution': 'editor_institution_1',
+    'country': 'editor_country_1'
+}
+
+SENIOR_EDITOR_DETAIL_1 = {
+    'name': 'senior_editor_name_1',
+    'institution': 'senior_editor_institution_1',
+    'country': 'senior_editor_country_1'
+}
+
 
 class TestGetElifeEvaluationDoi:
     def test_should_return_evaluation_doi_with_suffix_if_defined(self):
@@ -311,36 +323,17 @@ class TestGetDocmapEvaluationParticipantsForEvaluationSummaryType:
 
 class TestGetDocmapEvaluationParticipantsForEvalutionSummaryType:
     def test_should_populate_evaluation_participants_for_evaluation_summary_type(self):
-        editor_detail_1 = {
-            'name': 'editor_name_1',
-            'institution': 'editor_institution_1',
-            'country': 'editor_country_1'
-        }
-        editor_detail_2 = {
-            'name': 'editor_name_2',
-            'institution': 'editor_institution_2',
-            'country': None
-        }
-        senior_editor_detail_1 = {
-            'name': 'senior_editor_name_1',
-            'institution': 'senior_editor_institution_1',
-            'country': 'senior_editor_country_1'
-        }
         result = get_docmap_evaluation_participants_for_evalution_summary_type(
-            editor_details_list=[editor_detail_1, editor_detail_2],
-            senior_editor_details_list=[senior_editor_detail_1]
+            editor_details_list=[EDITOR_DETAIL_1],
+            senior_editor_details_list=[SENIOR_EDITOR_DETAIL_1]
         )
         assert result == [
             get_docmap_evaluation_participants_for_evaluation_summary_type(
-                editor_detail=editor_detail_1,
+                editor_detail=EDITOR_DETAIL_1,
                 role='editor'
             ),
             get_docmap_evaluation_participants_for_evaluation_summary_type(
-                editor_detail=editor_detail_2,
-                role='editor'
-            ),
-            get_docmap_evaluation_participants_for_evaluation_summary_type(
-                editor_detail=senior_editor_detail_1,
+                editor_detail=SENIOR_EDITOR_DETAIL_1,
                 role='senior-editor'
             )
         ]
