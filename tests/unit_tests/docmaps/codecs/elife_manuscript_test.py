@@ -5,27 +5,10 @@ from data_hub_api.docmaps.codecs.elife_manuscript import (
     get_elife_manuscript_version_doi
 )
 
-PREPRINT_DETAILS_1 = {
-    'preprint_url': 'preprint_url_1',
-    'elife_doi_version_str': 'elife_doi_version_str_1',
-    'preprint_doi': 'doi_1',
-    'preprint_version': 'preprint_version_1',
-    'preprint_published_at_date': datetime.fromisoformat('2021-01-01'),
-    'tdm_path': 'tdm_path_1'
-}
-
-DOCMAPS_QUERY_RESULT_ITEM_1: dict = {
-    'manuscript_id': 'manuscript_id_1',
-    'qc_complete_timestamp': datetime.fromisoformat('2022-01-01T01:02:03+00:00'),
-    'under_review_timestamp': datetime.fromisoformat('2022-02-01T01:02:03+00:00'),
-    'publisher_json': '{"id": "publisher_1"}',
-    'elife_doi': 'elife_doi_1',
-    'license': 'license_1',
-    'editor_details': [],
-    'senior_editor_details': [],
-    'evaluations': [],
-    'preprints': [PREPRINT_DETAILS_1],
-}
+from tests.unit_tests.docmaps.test_data import (
+    DOCMAPS_QUERY_RESULT_ITEM_1,
+    PREPRINT_DETAILS_1
+)
 
 
 class TestGetElifeVersionDoi:
