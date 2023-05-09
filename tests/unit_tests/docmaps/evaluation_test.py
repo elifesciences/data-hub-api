@@ -1,5 +1,4 @@
 from datetime import datetime
-from unittest import mock
 from unittest.mock import patch
 import pytest
 from data_hub_api.docmaps.codecs import evaluation as evaluation_module
@@ -11,7 +10,6 @@ from data_hub_api.docmaps.codecs.evaluation import (
     HYPOTHESIS_URL,
     SCIETY_ARTICLES_ACTIVITY_URL,
     SCIETY_ARTICLES_EVALUATIONS_URL,
-    get_docmap_actions_for_evaluations,
     get_docmap_evaluation_input,
     get_docmap_evaluation_output,
     get_docmap_evaluation_output_content,
@@ -283,6 +281,7 @@ class TestGetRelatedOrganizationDetail:
         result = get_related_organization_detail(editor_detail_dict)
         assert result == 'institution_1, country_1'
 
+
 class TestGetDocmapEvaluationParticipantsForEvaluationSummaryType:
     def test_should_raise_assertion_error_if_the_role_not_editor_or_senior_editor(self):
         editor_detail_dict = {'name': 'name_1', 'institution': 'institution_1', 'country': None}
@@ -334,15 +333,15 @@ class TestGetDocmapEvaluationParticipantsForEvalutionSummaryType:
         assert result == [
             get_docmap_evaluation_participants_for_evaluation_summary_type(
                 editor_detail=editor_detail_1,
-                role= 'editor'
+                role='editor'
             ),
             get_docmap_evaluation_participants_for_evaluation_summary_type(
                 editor_detail=editor_detail_2,
-                role= 'editor'
+                role='editor'
             ),
             get_docmap_evaluation_participants_for_evaluation_summary_type(
                 editor_detail=senior_editor_detail_1,
-                role= 'senior-editor'
+                role='senior-editor'
             )
         ]
 
@@ -369,4 +368,3 @@ class TestGetDocmapEvaluationParticipants:
                 docmap_evaluation_type=DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY
             )
             mock.assert_called_once()
-

@@ -172,7 +172,7 @@ def get_docmap_inputs_for_revised_steps(
     previous_preprint: dict
 ) -> Sequence[Union[DocmapPreprintInput, DocmapEvaluationInput]]:
     return (
-        list([get_docmap_preprint_input(preprint=preprint)]) 
+        list([get_docmap_preprint_input(preprint=preprint)])
         +
         list(iter_docmap_evaluation_input(
             query_result_item=query_result_item,
