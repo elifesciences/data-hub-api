@@ -22,6 +22,10 @@ from data_hub_api.docmaps.codecs.evaluation import (
     get_elife_evaluation_doi_url,
     get_related_organization_detail
 )
+from tests.unit_tests.docmaps.test_data import (
+    EDITOR_DETAIL_1,
+    SENIOR_EDITOR_DETAIL_1
+)
 
 PREPRINT_DOI_1 = 'preprint_doi_1'
 PREPRINT_VERSION_1 = 'preprint_version_1'
@@ -68,18 +72,6 @@ DOCMAPS_QUERY_RESULT_EVALUATION_1 = {
     'uri': PREPRINT_LINK_1,
     'source_version': PREPRINT_VERSION_1,
     'evaluation_suffix': EVALUATION_SUFFIX_1
-}
-
-EDITOR_DETAIL_1 = {
-    'name': 'editor_name_1',
-    'institution': 'editor_institution_1',
-    'country': 'editor_country_1'
-}
-
-SENIOR_EDITOR_DETAIL_1 = {
-    'name': 'senior_editor_name_1',
-    'institution': 'senior_editor_institution_1',
-    'country': 'senior_editor_country_1'
 }
 
 

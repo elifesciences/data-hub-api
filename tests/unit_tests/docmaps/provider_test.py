@@ -37,6 +37,10 @@ from data_hub_api.docmaps.provider import (
     DOCMAP_ID_PREFIX,
     generate_docmap_steps,
 )
+from tests.unit_tests.docmaps.test_data import (
+    EDITOR_DETAIL_1,
+    SENIOR_EDITOR_DETAIL_1
+)
 
 
 MANUSCRIPT_ID_1 = 'manuscript_id_1'
@@ -149,18 +153,6 @@ DOCMAPS_QUERY_RESULT_ITEM_WITH_REVISED_PREPRPINT: dict = {
     'senior_editor_details': [],
     'evaluations': [DOCMAPS_QUERY_RESULT_EVALUATION_1, DOCMAPS_QUERY_RESULT_EVALUATION_2],
     'preprints': [PREPRINT_DETAILS_1, PREPRINT_DETAILS_2],
-}
-
-EDITOR_DETAIL_1 = {
-    'name': 'editor_name_1',
-    'institution': 'editor_institution_1',
-    'country': 'editor_country_1'
-}
-
-SENIOR_EDITOR_DETAIL_1 = {
-    'name': 'senior_editor_name_1',
-    'institution': 'senior_editor_institution_1',
-    'country': 'senior_editor_country_1'
 }
 
 
