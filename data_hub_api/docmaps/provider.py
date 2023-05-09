@@ -177,16 +177,14 @@ def get_docmap_evaluation_type_form_tags(
     return None
 
 
-def get_participants_for_peer_reviewed_review_article_type() -> list:
-    return [
-        {
-            'actor': {
-                'name': 'anonymous',
-                'type': 'person'
-            },
-            'role': 'peer-reviewer'
-        }
-    ]
+def get_docmap_evaluation_participants_for_review_article_type() -> DocmapParticipant:
+    return {
+        'actor': {
+            'name': 'anonymous',
+            'type': 'person'
+        },
+        'role': 'peer-reviewer'
+    }
 
 
 def get_related_organization_detail(
@@ -197,44 +195,50 @@ def get_related_organization_detail(
     return editor_detail['institution']
 
 
-def get_participants_for_peer_reviewed_evalution_summary_type(
+def get_docmap_evaluation_participants_for_evaluation_summary_type(
+    editor_detail: dict,
+    role: str
+) -> DocmapParticipant:
+    return {
+        'actor': {
+            'name': editor_detail['name'],
+            'type': 'person',
+            '_relatesToOrganization': get_related_organization_detail(editor_detail)
+        },
+        'role': role
+    }
+
+
+def get_docmap_evaluation_participants_for_evalution_summary_type(
     editor_details_list,
     senior_editor_details_list
 ) -> Sequence[DocmapParticipant]:
     participants = []
     for editor_detail in editor_details_list:
-        single_editor_dict = {
-            'actor': {
-                'name': editor_detail['name'],
-                'type': 'person',
-                '_relatesToOrganization': get_related_organization_detail(editor_detail)
-            },
-            'role': 'editor'
-        }
+        single_editor_dict = get_docmap_evaluation_participants_for_evaluation_summary_type(
+            editor_detail=editor_detail,
+            role='editor'
+        )
         participants.append(single_editor_dict)
     for senior_editor_detail in senior_editor_details_list:
-        single_senior_editor_dict = {
-            'actor': {
-                'name': senior_editor_detail['name'],
-                'type': 'person',
-                '_relatesToOrganization': get_related_organization_detail(senior_editor_detail)
-            },
-            'role': 'senior-editor'
-        }
+        single_senior_editor_dict = get_docmap_evaluation_participants_for_evaluation_summary_type(
+            editor_detail=senior_editor_detail,
+            role='senior-editor'
+        )
         participants.append(single_senior_editor_dict)
     return cast(Sequence[DocmapParticipant], participants)
 
 
-def get_participants_for_preprint_peer_reviewed_step(
+def get_docmap_evaluation_participants(
     query_result_item: dict,
     docmap_evaluation_type: str
 ) -> Sequence[DocmapParticipant]:
     editor_details_list = query_result_item['editor_details']
     senior_editor_details_list = query_result_item['senior_editor_details']
     if docmap_evaluation_type == DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE:
-        return get_participants_for_peer_reviewed_review_article_type()
+        return [get_docmap_evaluation_participants_for_review_article_type()]
     if docmap_evaluation_type == DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY:
-        return get_participants_for_peer_reviewed_evalution_summary_type(
+        return get_docmap_evaluation_participants_for_evalution_summary_type(
             editor_details_list=editor_details_list,
             senior_editor_details_list=senior_editor_details_list
         )
@@ -250,7 +254,7 @@ def get_docmap_actions_for_evaluations(
     docmap_evaluation_type: str
 ) -> DocmapAction:
     return {
-        'participants': get_participants_for_preprint_peer_reviewed_step(
+        'participants': get_docmap_evaluation_participants(
             query_result_item=query_result_item,
             docmap_evaluation_type=docmap_evaluation_type
         ),
