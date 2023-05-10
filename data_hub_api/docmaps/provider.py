@@ -5,7 +5,7 @@ from typing import Iterable, Optional, Sequence, Tuple, cast
 
 import objsize
 from data_hub_api.docmaps.codecs.docmaps import get_docmap_item_for_query_result_item
-from data_hub_api.docmaps.docmap_input_typing import DocmapInput
+from data_hub_api.docmaps.api_input_typing import ApiInput
 
 from data_hub_api.docmaps.docmap_typing import (
     Docmap
@@ -80,7 +80,7 @@ class DocmapsProvider:
                 if bq_result['manuscript_id'] == manuscript_id
             ]
         for bq_result in bq_result_list:
-            yield get_docmap_item_for_query_result_item(cast(DocmapInput, bq_result))
+            yield get_docmap_item_for_query_result_item(cast(ApiInput, bq_result))
 
     def get_docmaps_by_manuscript_id(self, manuscript_id: str) -> Sequence[Docmap]:
         return list(self.iter_docmaps_by_manuscript_id(manuscript_id))

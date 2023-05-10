@@ -2,7 +2,7 @@ import logging
 from typing import Iterable, Optional, Sequence, cast, Tuple
 
 from data_hub_api.docmaps.codecs.elife_manuscript import get_elife_manuscript_version_doi
-from data_hub_api.docmaps.docmap_input_typing import DocmapEditorDetailInput, DocmapInput
+from data_hub_api.docmaps.api_input_typing import ApiEditorDetailInput, ApiInput
 from data_hub_api.docmaps.docmap_typing import (
     DocmapAction,
     DocmapContent,
@@ -49,7 +49,7 @@ def get_elife_evaluation_doi_url(
 
 
 def get_docmap_evaluation_input(
-    query_result_item: DocmapInput,
+    query_result_item: ApiInput,
     preprint: dict,
     evaluation_suffix: str,
     docmap_evaluation_type: str
@@ -97,7 +97,7 @@ def get_docmap_evaluation_output_content(
 
 
 def get_docmap_evaluation_output(
-    query_result_item: DocmapInput,
+    query_result_item: ApiInput,
     preprint: dict,
     hypothesis_id: str,
     evaluation_suffix: str,
@@ -168,7 +168,7 @@ def get_docmap_evaluation_participants_for_review_article_type() -> Sequence[Doc
 
 
 def get_related_organization_detail(
-    editor_detail: DocmapEditorDetailInput
+    editor_detail: ApiEditorDetailInput
 ) -> str:
     if editor_detail['country']:
         return editor_detail['institution'] + ', ' + editor_detail['country']
@@ -176,7 +176,7 @@ def get_related_organization_detail(
 
 
 def get_docmap_evaluation_participants_for_evaluation_summary_type(
-    editor_detail: DocmapEditorDetailInput,
+    editor_detail: ApiEditorDetailInput,
     role: str
 ) -> DocmapParticipant:
     assert role in ['editor', 'senior-editor']
@@ -191,8 +191,8 @@ def get_docmap_evaluation_participants_for_evaluation_summary_type(
 
 
 def get_docmap_evaluation_participants_for_evalution_summary_type(
-    editor_details_list: Sequence[DocmapEditorDetailInput],
-    senior_editor_details_list: Sequence[DocmapEditorDetailInput]
+    editor_details_list: Sequence[ApiEditorDetailInput],
+    senior_editor_details_list: Sequence[ApiEditorDetailInput]
 ) -> Sequence[DocmapParticipant]:
     participants = []
     for editor_detail in editor_details_list:
@@ -211,7 +211,7 @@ def get_docmap_evaluation_participants_for_evalution_summary_type(
 
 
 def get_docmap_evaluation_participants(
-    query_result_item: DocmapInput,
+    query_result_item: ApiInput,
     docmap_evaluation_type: str
 ) -> Sequence[DocmapParticipant]:
     editor_details_list = query_result_item['editor_details']
@@ -227,7 +227,7 @@ def get_docmap_evaluation_participants(
 
 
 def get_docmap_actions_for_evaluations(
-    query_result_item: DocmapInput,
+    query_result_item: ApiInput,
     preprint: dict,
     hypothesis_id: str,
     evaluation_suffix: str,
@@ -274,7 +274,7 @@ def iter_evaluation_and_type_for_related_preprint_url(
 
 
 def iter_docmap_actions_for_evaluations(
-    query_result_item: DocmapInput,
+    query_result_item: ApiInput,
     preprint: dict
 ) -> Iterable[DocmapAction]:
     evaluations = query_result_item['evaluations']
@@ -297,7 +297,7 @@ def iter_docmap_actions_for_evaluations(
 
 
 def iter_docmap_evaluation_input(
-    query_result_item: DocmapInput,
+    query_result_item: ApiInput,
     preprint: dict
 ):
     evaluations = query_result_item['evaluations']

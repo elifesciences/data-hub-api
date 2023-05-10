@@ -2,8 +2,8 @@ from datetime import datetime
 from typing import Optional, Sequence, TypedDict
 
 
-DocmapEditorDetailInput = TypedDict(
-    'DocmapEditorDetailInput',
+ApiEditorDetailInput = TypedDict(
+    'ApiEditorDetailInput',
     {
         'name': str,
         'institution': str,
@@ -12,8 +12,8 @@ DocmapEditorDetailInput = TypedDict(
     total=False
 )
 
-DocmapInput = TypedDict(
-    'DocmapInput',
+ApiInput = TypedDict(
+    'ApiInput',
     {
         'manuscript_id': str,
         'qc_complete_timestamp': datetime,
@@ -21,8 +21,8 @@ DocmapInput = TypedDict(
         'publisher_json': dict,
         'elife_doi': str,
         'license': str,
-        'editor_details': Sequence[DocmapEditorDetailInput],
-        'senior_editor_details': Sequence[DocmapEditorDetailInput],
+        'editor_details': Sequence[ApiEditorDetailInput],
+        'senior_editor_details': Sequence[ApiEditorDetailInput],
         'evaluations': list,
         'preprints': list
     },
