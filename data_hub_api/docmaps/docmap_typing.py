@@ -15,7 +15,7 @@ DocmapEvaluationOutput = TypedDict(
     {
         'type': str,
         'doi': Optional[str],
-        'published': str,
+        'published': Optional[str],
         'license': str,
         'url': Optional[str],
         'content': Sequence[DocmapContent]
@@ -38,7 +38,7 @@ DocmapPreprintOutput = TypedDict(
     {
         'type': str,
         'doi': Optional[str],
-        'published': str,
+        'published': Optional[str],
         'url': Optional[str],
         'versionIdentifier': str,
         '_tdmPath': str

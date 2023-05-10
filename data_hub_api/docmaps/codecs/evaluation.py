@@ -6,7 +6,8 @@ from data_hub_api.docmaps.codecs.elife_manuscript import get_elife_manuscript_ve
 from data_hub_api.docmaps.api_input_typing import (
     ApiEditorDetailInput,
     ApiEvaluationInput,
-    ApiInput
+    ApiInput,
+    ApiPreprintInput
 )
 from data_hub_api.docmaps.docmap_typing import (
     DocmapAction,
@@ -55,7 +56,7 @@ def get_elife_evaluation_doi_url(
 
 def get_docmap_evaluation_input(
     query_result_item: ApiInput,
-    preprint: dict,
+    preprint: ApiPreprintInput,
     evaluation_suffix: str,
     docmap_evaluation_type: str
 ) -> DocmapEvaluationInput:
@@ -103,7 +104,7 @@ def get_docmap_evaluation_output_content(
 
 def get_docmap_evaluation_output(
     query_result_item: ApiInput,
-    preprint: dict,
+    preprint: ApiPreprintInput,
     hypothesis_id: str,
     evaluation_suffix: str,
     annotation_created_timestamp: datetime,
@@ -233,7 +234,7 @@ def get_docmap_evaluation_participants(
 
 def get_docmap_actions_for_evaluations(
     query_result_item: ApiInput,
-    preprint: dict,
+    preprint: ApiPreprintInput,
     hypothesis_id: str,
     evaluation_suffix: str,
     annotation_created_timestamp: datetime,
@@ -280,7 +281,7 @@ def iter_evaluation_and_type_for_related_preprint_url(
 
 def iter_docmap_actions_for_evaluations(
     query_result_item: ApiInput,
-    preprint: dict
+    preprint: ApiPreprintInput
 ) -> Iterable[DocmapAction]:
     evaluations = query_result_item['evaluations']
     preprint_url = preprint['preprint_url']
@@ -303,7 +304,7 @@ def iter_docmap_actions_for_evaluations(
 
 def iter_docmap_evaluation_input(
     query_result_item: ApiInput,
-    preprint: dict
+    preprint: ApiPreprintInput
 ):
     evaluations = query_result_item['evaluations']
     preprint_url = preprint['preprint_url']

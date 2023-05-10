@@ -1,5 +1,18 @@
-from datetime import datetime
+from datetime import date, datetime
 from typing import Optional, Sequence, TypedDict
+
+ApiPreprintInput = TypedDict(
+    'ApiPreprintInput',
+    {
+        'preprint_url': str,
+        'elife_doi_version_str': str,
+        'preprint_doi': str,
+        'preprint_version': str,
+        'preprint_published_at_date': date,
+        'tdm_path': str
+    },
+    total=False
+)
 
 ApiEvaluationInput = TypedDict(
     'ApiEvaluationInput',
@@ -36,7 +49,7 @@ ApiInput = TypedDict(
         'editor_details': Sequence[ApiEditorDetailInput],
         'senior_editor_details': Sequence[ApiEditorDetailInput],
         'evaluations': Sequence[ApiEvaluationInput],
-        'preprints': list
+        'preprints': Sequence[ApiPreprintInput]
     },
     total=False
 )
