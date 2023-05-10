@@ -1,6 +1,16 @@
 from datetime import datetime
-from typing import TypedDict
+from typing import Optional, Sequence, TypedDict
 
+
+DocmapEditorDetailInput = TypedDict(
+    'DocmapEditorDetailInput',
+    {
+        'name': str,
+        'institution': str,
+        'country': Optional[str],
+    },
+    total=False
+)
 
 DocmapInput = TypedDict(
     'DocmapInput',
@@ -11,8 +21,8 @@ DocmapInput = TypedDict(
         'publisher_json': dict,
         'elife_doi': str,
         'license': str,
-        'editor_details': list,
-        'senior_editor_details': list,
+        'editor_details': Sequence[DocmapEditorDetailInput],
+        'senior_editor_details': Sequence[DocmapEditorDetailInput],
         'evaluations': list,
         'preprints': list
     },

@@ -2,7 +2,7 @@ import logging
 from typing import Iterable, Optional, Sequence, cast, Tuple
 
 from data_hub_api.docmaps.codecs.elife_manuscript import get_elife_manuscript_version_doi
-from data_hub_api.docmaps.docmap_input_typing import DocmapInput
+from data_hub_api.docmaps.docmap_input_typing import DocmapEditorDetailInput, DocmapInput
 from data_hub_api.docmaps.docmap_typing import (
     DocmapAction,
     DocmapContent,
@@ -168,7 +168,7 @@ def get_docmap_evaluation_participants_for_review_article_type() -> Sequence[Doc
 
 
 def get_related_organization_detail(
-    editor_detail: dict
+    editor_detail: DocmapEditorDetailInput
 ) -> str:
     if editor_detail['country']:
         return editor_detail['institution'] + ', ' + editor_detail['country']
@@ -176,7 +176,7 @@ def get_related_organization_detail(
 
 
 def get_docmap_evaluation_participants_for_evaluation_summary_type(
-    editor_detail: dict,
+    editor_detail: DocmapEditorDetailInput,
     role: str
 ) -> DocmapParticipant:
     assert role in ['editor', 'senior-editor']
@@ -191,8 +191,8 @@ def get_docmap_evaluation_participants_for_evaluation_summary_type(
 
 
 def get_docmap_evaluation_participants_for_evalution_summary_type(
-    editor_details_list: list,
-    senior_editor_details_list: list
+    editor_details_list: Sequence[DocmapEditorDetailInput],
+    senior_editor_details_list: Sequence[DocmapEditorDetailInput]
 ) -> Sequence[DocmapParticipant]:
     participants = []
     for editor_detail in editor_details_list:
