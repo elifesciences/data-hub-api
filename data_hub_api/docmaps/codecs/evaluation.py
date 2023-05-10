@@ -1,8 +1,13 @@
+from datetime import datetime
 import logging
 from typing import Iterable, Optional, Sequence, cast, Tuple
 
 from data_hub_api.docmaps.codecs.elife_manuscript import get_elife_manuscript_version_doi
-from data_hub_api.docmaps.api_input_typing import ApiEditorDetailInput, ApiInput
+from data_hub_api.docmaps.api_input_typing import (
+    ApiEditorDetailInput,
+    ApiEvaluationInput,
+    ApiInput
+)
 from data_hub_api.docmaps.docmap_typing import (
     DocmapAction,
     DocmapContent,
@@ -101,7 +106,7 @@ def get_docmap_evaluation_output(
     preprint: dict,
     hypothesis_id: str,
     evaluation_suffix: str,
-    annotation_created_timestamp: str,
+    annotation_created_timestamp: datetime,
     docmap_evaluation_type: str
 ) -> DocmapEvaluationOutput:
     preprint_doi = preprint['preprint_doi']
@@ -112,7 +117,7 @@ def get_docmap_evaluation_output(
     )
     return {
         'type': docmap_evaluation_type,
-        'published': annotation_created_timestamp,
+        'published': str(annotation_created_timestamp),
         'doi': elife_evaluation_doi,
         'license': query_result_item['license'],
         'url': get_elife_evaluation_doi_url(elife_evaluation_doi=elife_evaluation_doi),
@@ -231,7 +236,7 @@ def get_docmap_actions_for_evaluations(
     preprint: dict,
     hypothesis_id: str,
     evaluation_suffix: str,
-    annotation_created_timestamp: str,
+    annotation_created_timestamp: datetime,
     docmap_evaluation_type: str
 ) -> DocmapAction:
     return {
@@ -253,9 +258,9 @@ def get_docmap_actions_for_evaluations(
 
 
 def iter_evaluation_and_type_for_related_preprint_url(
-    evaluations: list,
+    evaluations: Sequence[ApiEvaluationInput],
     preprint_url: str
-) -> Iterable[Tuple[dict, str]]:
+) -> Iterable[Tuple[ApiEvaluationInput, str]]:
     for evaluation in evaluations:
         docmap_evaluation_type = get_docmap_evaluation_type_form_tags(evaluation['tags'])
         evaluation_preprint_url = evaluation['uri']

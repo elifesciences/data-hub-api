@@ -1,6 +1,18 @@
 from datetime import datetime
 from typing import Optional, Sequence, TypedDict
 
+ApiEvaluationInput = TypedDict(
+    'ApiEvaluationInput',
+    {
+        'hypothesis_id': str,
+        'annotation_created_timestamp': datetime,
+        'tags': list,
+        'uri': str,
+        'source_version': str,
+        'evaluation_suffix': str
+    },
+    total=False
+)
 
 ApiEditorDetailInput = TypedDict(
     'ApiEditorDetailInput',
@@ -23,7 +35,7 @@ ApiInput = TypedDict(
         'license': str,
         'editor_details': Sequence[ApiEditorDetailInput],
         'senior_editor_details': Sequence[ApiEditorDetailInput],
-        'evaluations': list,
+        'evaluations': Sequence[ApiEvaluationInput],
         'preprints': list
     },
     total=False
