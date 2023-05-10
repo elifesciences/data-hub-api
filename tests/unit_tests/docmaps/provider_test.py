@@ -1,8 +1,9 @@
 from unittest.mock import patch, MagicMock
-from typing import Iterable
+from typing import Iterable, cast
 
 import pytest
 from data_hub_api.docmaps.codecs.docmaps import ADDITIONAL_MANUSCRIPT_IDS
+from data_hub_api.docmaps.docmap_input_typing import DocmapInput
 
 from data_hub_api.utils.cache import InMemorySingleObjectCache
 from data_hub_api.docmaps import provider as provider_module
@@ -29,7 +30,7 @@ class TestEnhancedPreprintsDocmapsProvider:
         ])
         docmaps_index = DocmapsProvider().get_docmaps_index()
         assert docmaps_index['docmaps'] == [
-            get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
+            get_docmap_item_for_query_result_item(cast(DocmapInput, DOCMAPS_QUERY_RESULT_ITEM_1))
         ]
 
     def test_should_cache_docmaps_query_results(
@@ -46,7 +47,7 @@ class TestEnhancedPreprintsDocmapsProvider:
         docmaps_index = docmaps_provider.get_docmaps_index()
         assert iter_dict_from_bq_query_mock.call_count == 1
         assert docmaps_index['docmaps'] == [
-            get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
+            get_docmap_item_for_query_result_item(cast(DocmapInput, DOCMAPS_QUERY_RESULT_ITEM_1))
         ]
 
     def test_should_add_is_reviewed_preprint_and_is_under_review_type_where_clause_to_query(

@@ -1,4 +1,5 @@
 from typing import Optional
+from data_hub_api.docmaps.docmap_input_typing import DocmapInput
 from data_hub_api.docmaps.docmap_typing import (
     DocmapAssertionItem,
     DocmapElifeManuscriptOutput
@@ -15,7 +16,7 @@ def get_elife_manuscript_version_doi(
 
 
 def get_docmap_elife_manuscript_doi_assertion_item(
-    query_result_item: dict,
+    query_result_item: DocmapInput,
     preprint: dict
 ) -> DocmapAssertionItem:
     return {
@@ -29,7 +30,7 @@ def get_docmap_elife_manuscript_doi_assertion_item(
 
 
 def get_docmap_elife_manuscript_output(
-    query_result_item: dict,
+    query_result_item: DocmapInput,
     preprint: dict
 ) -> DocmapElifeManuscriptOutput:
     return {

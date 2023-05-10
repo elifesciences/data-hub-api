@@ -1,5 +1,4 @@
 import json
-from datetime import datetime
 from typing import Iterable
 import urllib
 
@@ -164,9 +163,9 @@ class TestGetDocmapsItemForQueryResultItem:
 
     def test_should_parse_and_include_publisher_json(self):
         docmaps_item = get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
-        assert docmaps_item['publisher'] == json.loads(
+        assert docmaps_item['publisher'] == json.loads(json.dumps(
             DOCMAPS_QUERY_RESULT_ITEM_1['publisher_json']
-        )
+        ))
 
     def test_should_return_empty_list_for_inputs_manuscript_published_step(self):
         docmaps_item = get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
@@ -214,7 +213,7 @@ class TestGetDocmapsItemForQueryResultItem:
             {
                 'item': get_docmap_preprint_assertion_item(preprint=PREPRINT_DETAILS_1),
                 'status': 'under-review',
-                'happened': datetime.fromisoformat('2022-02-01T01:02:03+00:00')
+                'happened': '2022-02-01 01:02:03+00:00'
             },
             {
                 'item': get_docmap_elife_manuscript_doi_assertion_item(

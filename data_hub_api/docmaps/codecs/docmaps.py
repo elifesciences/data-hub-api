@@ -16,6 +16,7 @@ from data_hub_api.docmaps.codecs.preprint import (
     get_docmap_preprint_input,
     get_docmap_preprint_output
 )
+from data_hub_api.docmaps.docmap_input_typing import DocmapInput
 
 from data_hub_api.docmaps.docmap_typing import (
     DocmapAction,
@@ -83,13 +84,13 @@ def get_docmaps_step_for_manuscript_published_status(
 
 
 def get_docmap_assertions_for_under_review_step(
-    query_result_item: dict,
+    query_result_item: DocmapInput,
     preprint: dict
 ) -> Sequence[DocmapAssertion]:
     return [{
         'item': get_docmap_preprint_assertion_item(preprint=preprint),
         'status': 'under-review',
-        'happened': query_result_item['under_review_timestamp']
+        'happened': str(query_result_item['under_review_timestamp'])
     }, {
         'item': get_docmap_elife_manuscript_doi_assertion_item(
             query_result_item=query_result_item,
@@ -100,7 +101,7 @@ def get_docmap_assertions_for_under_review_step(
 
 
 def get_docmap_actions_for_under_review_and_revised_step(
-    query_result_item: dict,
+    query_result_item: DocmapInput,
     preprint: dict
 ) -> Sequence[DocmapAction]:
     return [{
@@ -115,7 +116,7 @@ def get_docmap_actions_for_under_review_and_revised_step(
 
 
 def get_docmaps_step_for_under_review_status(
-    query_result_item: dict,
+    query_result_item: DocmapInput,
     preprint: dict
 ):
     return {
@@ -141,7 +142,7 @@ def get_docmap_assertions_for_peer_reviewed_step(
 
 
 def get_docmaps_step_for_peer_reviewed_status(
-    query_result_item: dict,
+    query_result_item: DocmapInput,
     preprint: dict
 ):
     return {
@@ -158,7 +159,7 @@ def get_docmaps_step_for_peer_reviewed_status(
 
 
 def get_docmap_inputs_for_revised_steps(
-    query_result_item: dict,
+    query_result_item: DocmapInput,
     preprint: dict,
     previous_preprint: dict
 ) -> Sequence[Union[DocmapPreprintInput, DocmapEvaluationInput]]:
@@ -173,7 +174,7 @@ def get_docmap_inputs_for_revised_steps(
 
 
 def get_docmap_assertions_for_revised_steps(
-    query_result_item: dict,
+    query_result_item: DocmapInput,
     preprint: dict
 ) -> Sequence[DocmapAssertion]:
     return [{
@@ -186,7 +187,7 @@ def get_docmap_assertions_for_revised_steps(
 
 
 def get_docmap_actions_for_revised_steps(
-    query_result_item: dict,
+    query_result_item: DocmapInput,
     preprint: dict
 ) -> Sequence[DocmapAction]:
     return (
@@ -203,7 +204,7 @@ def get_docmap_actions_for_revised_steps(
 
 
 def get_docmaps_step_for_revised_status(
-    query_result_item: dict,
+    query_result_item: DocmapInput,
     preprint: dict,
     previous_preprint: dict
 ):
@@ -224,7 +225,7 @@ def get_docmaps_step_for_revised_status(
     }
 
 
-def iter_docmap_steps_for_query_result_item(query_result_item: dict) -> Iterable[DocmapStep]:
+def iter_docmap_steps_for_query_result_item(query_result_item: DocmapInput) -> Iterable[DocmapStep]:
     preprint = query_result_item['preprints'][0]
     yield get_docmaps_step_for_manuscript_published_status(preprint)
     yield get_docmaps_step_for_under_review_status(query_result_item, preprint)
@@ -255,18 +256,20 @@ def generate_docmap_steps(step_iterable: Iterable[DocmapStep]) -> DocmapSteps:
     return remove_key_with_none_value_only(steps_dict)
 
 
-def get_docmap_item_for_query_result_item(query_result_item: dict) -> Docmap:
+def get_docmap_item_for_query_result_item(query_result_item: DocmapInput) -> Docmap:
     qc_complete_timestamp_str = query_result_item['qc_complete_timestamp'].isoformat()
+    id_query_param = {'manuscript_id': query_result_item['manuscript_id']}
     publisher_json = query_result_item['publisher_json']
     LOGGER.debug('publisher_json: %r', publisher_json)
-    id_query_param = {'manuscript_id': query_result_item['manuscript_id']}
+    publisher_json_str = json.dumps(publisher_json)
+    publisher_data = json.loads(publisher_json_str)
     return {
         '@context': DOCMAPS_JSONLD_SCHEMA_URL,
         'type': 'docmap',
         'id': DOCMAP_ID_PREFIX + urllib.parse.urlencode(id_query_param),
         'created': qc_complete_timestamp_str,
         'updated': qc_complete_timestamp_str,
-        'publisher': json.loads(publisher_json),
+        'publisher': publisher_data,
         'first-step': '_:b0',
         'steps': generate_docmap_steps(iter_docmap_steps_for_query_result_item(query_result_item))
     }
