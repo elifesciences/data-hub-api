@@ -41,15 +41,6 @@ DOCMAP_ID_PREFIX = (
     'by-publisher/elife/get-by-manuscript-id?'
 )
 
-ADDITIONAL_MANUSCRIPT_IDS = (
-    '80494',
-    '80984',
-    '81727',
-    '81926',
-    '81535',
-    '80729'
-)
-
 
 def get_docmap_assertions_for_manuscript_published_step(
     preprint: ApiPreprintInput

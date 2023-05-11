@@ -2,7 +2,7 @@ import logging
 
 from fastapi import APIRouter, FastAPI, HTTPException
 from fastapi.responses import HTMLResponse
-from data_hub_api.docmaps.codecs.docmaps import ADDITIONAL_MANUSCRIPT_IDS
+from data_hub_api.config import ADDITIONAL_MANUSCRIPT_IDS
 
 from data_hub_api.utils.cache import InMemorySingleObjectCache
 from data_hub_api.docmaps.provider import DocmapsProvider
