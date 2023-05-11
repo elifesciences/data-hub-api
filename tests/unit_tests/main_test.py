@@ -6,7 +6,7 @@ import pytest
 from fastapi.testclient import TestClient
 
 from data_hub_api import main as main_module
-from data_hub_api.docmaps.provider import ADDITIONAL_MANUSCRIPT_IDS
+from data_hub_api.config import ADDITIONAL_MANUSCRIPT_IDS
 from data_hub_api.main import create_app
 
 
