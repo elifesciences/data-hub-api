@@ -30,7 +30,7 @@
             "versionIdentifier": "2"
           },
           "status": "under-review",
-          "happened": "2023-02-14 15:44:21+00:00"
+          "happened": "2023-02-14T15:44:21+00:00"
         },
         {
           "item": {
@@ -68,7 +68,7 @@
           "outputs": [
             {
               "type": "review-article",
-              "published": "2023-04-06 11:44:05.502835+00:00",
+              "published": "2023-04-06T11:44:05.502835+00:00",
               "doi": "10.7554/eLife.86628.1.sa1",
               "license": "http://creativecommons.org/licenses/by/4.0/",
               "url": "https://doi.org/10.7554/eLife.86628.1.sa1",
@@ -111,7 +111,7 @@
           "outputs": [
             {
               "type": "evaluation-summary",
-              "published": "2023-04-06 11:44:15.700445+00:00",
+              "published": "2023-04-06T11:44:15.700445+00:00",
               "doi": "10.7554/eLife.86628.1.sa2",
               "license": "http://creativecommons.org/licenses/by/4.0/",
               "url": "https://doi.org/10.7554/eLife.86628.1.sa2",
@@ -161,6 +161,7 @@
           "outputs": [
             {
               "type": "preprint",
+              "published": "TBC",
               "identifier": "86628",
               "doi": "10.7554/eLife.86628.1",
               "versionIdentifier": "1",
@@ -220,7 +221,7 @@
             "versionIdentifier": "3"
           },
           "status": "under-review",
-          "happened": "2023-04-11 13:15:26+00:00"
+          "happened": "2023-04-11T13:15:26+00:00"
         },
         {
           "item": {
@@ -251,7 +252,7 @@
           "outputs": [
             {
               "type": "reply",
-              "published": "2023-05-11 11:34:27.242112+00:00",
+              "published": "2023-05-11T11:34:27.242112+00:00",
               "doi": "10.7554/eLife.86628.2.sa1",
               "license": "http://creativecommons.org/licenses/by/4.0/",
               "url": "https://doi.org/10.7554/eLife.86628.2.sa1",
@@ -285,7 +286,7 @@
           "outputs": [
             {
               "type": "review-article",
-              "published": "2023-05-11 11:34:28.135284+00:00",
+              "published": "2023-05-11T11:34:28.135284+00:00",
               "doi": "10.7554/eLife.86628.2.sa2",
               "license": "http://creativecommons.org/licenses/by/4.0/",
               "url": "https://doi.org/10.7554/eLife.86628.2.sa2",
@@ -328,7 +329,7 @@
           "outputs": [
             {
               "type": "evaluation-summary",
-              "published": "2023-05-11 11:34:28.903631+00:00",
+              "published": "2023-05-11T11:34:28.903631+00:00",
               "doi": "10.7554/eLife.86628.2.sa3",
               "license": "http://creativecommons.org/licenses/by/4.0/",
               "url": "https://doi.org/10.7554/eLife.86628.2.sa3",
@@ -378,6 +379,7 @@
           "outputs": [
             {
               "type": "preprint",
+              "published": "TBC",
               "identifier": "86628",
               "doi": "10.7554/eLife.86628.2",
               "versionIdentifier": "2",
