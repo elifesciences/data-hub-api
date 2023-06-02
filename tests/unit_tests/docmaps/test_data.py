@@ -74,9 +74,9 @@ EVALUATION_SUFFIX_1 = 'evaluation_suffix_1'
 EVALUATION_SUFFIX_2 = 'evaluation_suffix_2'
 EVALUATION_SUFFIX_3 = 'evaluation_suffix_3'
 
-ANNOTATION_CREATED_TIMESTAMP_1 = 'annotation_created_timestamp_1'
-ANNOTATION_CREATED_TIMESTAMP_2 = 'annotation_created_timestamp_2'
-ANNOTATION_CREATED_TIMESTAMP_3 = 'annotation_created_timestamp_3'
+ANNOTATION_CREATED_TIMESTAMP_1 = datetime.fromisoformat('2020-01-01T01:02:03+00:00')
+ANNOTATION_CREATED_TIMESTAMP_2 = datetime.fromisoformat('2021-01-01T01:02:03+00:00')
+ANNOTATION_CREATED_TIMESTAMP_3 = datetime.fromisoformat('2022-01-01T01:02:03+00:00')
 
 DOCMAPS_QUERY_RESULT_EVALUATION_1 = {
     'hypothesis_id': HYPOTHESIS_ID_1,

@@ -164,7 +164,7 @@ class TestGetDocmapEvaluationOutput:
         )
         assert result == {
             'type': 'docmap_evaluation_type_1',
-            'published': ANNOTATION_CREATED_TIMESTAMP_1,
+            'published': ANNOTATION_CREATED_TIMESTAMP_1.isoformat(),
             'doi': elife_evaluation_doi,
             'license': LICENSE_1,
             'url': get_elife_evaluation_doi_url(

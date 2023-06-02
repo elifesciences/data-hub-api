@@ -118,7 +118,7 @@ def get_docmap_evaluation_output(
     )
     return {
         'type': docmap_evaluation_type,
-        'published': str(annotation_created_timestamp),
+        'published': annotation_created_timestamp.isoformat(),
         'doi': elife_evaluation_doi,
         'license': query_result_item['license'],
         'url': get_elife_evaluation_doi_url(elife_evaluation_doi=elife_evaluation_doi),
