@@ -213,7 +213,7 @@ class TestGetDocmapsItemForQueryResultItem:
             {
                 'item': get_docmap_preprint_assertion_item(preprint=PREPRINT_DETAILS_1),
                 'status': 'under-review',
-                'happened': '2022-02-01 01:02:03+00:00'
+                'happened': '2022-02-01T01:02:03+00:00'
             },
             {
                 'item': get_docmap_elife_manuscript_doi_assertion_item(

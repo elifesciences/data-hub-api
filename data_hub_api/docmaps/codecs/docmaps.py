@@ -81,7 +81,11 @@ def get_docmap_assertions_for_under_review_step(
     return [{
         'item': get_docmap_preprint_assertion_item(preprint=preprint),
         'status': 'under-review',
-        'happened': str(query_result_item['under_review_timestamp'])
+        'happened': (
+            query_result_item['under_review_timestamp'].isoformat()
+            if query_result_item['under_review_timestamp']
+            else ""
+        )
     }, {
         'item': get_docmap_elife_manuscript_doi_assertion_item(
             query_result_item=query_result_item,
