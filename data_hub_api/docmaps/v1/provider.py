@@ -4,10 +4,10 @@ from time import monotonic
 from typing import Iterable, Optional, Sequence, Tuple, cast
 
 import objsize
-from data_hub_api.docmaps.codecs.docmaps import get_docmap_item_for_query_result_item
-from data_hub_api.docmaps.api_input_typing import ApiInput
+from data_hub_api.docmaps.v1.codecs.docmaps import get_docmap_item_for_query_result_item
+from data_hub_api.docmaps.v1.api_input_typing import ApiInput
 
-from data_hub_api.docmaps.docmap_typing import (
+from data_hub_api.docmaps.v1.docmap_typing import (
     Docmap
 )
 
@@ -15,7 +15,7 @@ from data_hub_api.utils.bigquery import (
     iter_dict_from_bq_query
 )
 from data_hub_api.utils.cache import SingleObjectCache, DummySingleObjectCache
-from data_hub_api.docmaps.sql import get_sql_path
+from data_hub_api.docmaps.v1.sql import get_sql_path
 
 
 LOGGER = logging.getLogger(__name__)

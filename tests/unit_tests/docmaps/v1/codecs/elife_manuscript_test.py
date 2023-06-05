@@ -1,10 +1,10 @@
-from data_hub_api.docmaps.codecs.elife_manuscript import (
+from data_hub_api.docmaps.v1.codecs.elife_manuscript import (
     get_docmap_elife_manuscript_doi_assertion_item,
     get_docmap_elife_manuscript_output,
     get_elife_manuscript_version_doi
 )
 
-from tests.unit_tests.docmaps.test_data import (
+from tests.unit_tests.docmaps.v1.test_data import (
     DOCMAPS_QUERY_RESULT_ITEM_1,
     PREPRINT_DETAILS_1
 )

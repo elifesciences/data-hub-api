@@ -1,6 +1,6 @@
 
-from data_hub_api.docmaps.api_input_typing import ApiPreprintInput
-from data_hub_api.docmaps.docmap_typing import (
+from data_hub_api.docmaps.v1.api_input_typing import ApiPreprintInput
+from data_hub_api.docmaps.v1.docmap_typing import (
     DocmapAssertionItem,
     DocmapPreprintInput,
     DocmapPreprintOutput
