@@ -5,7 +5,7 @@ from fastapi.responses import HTMLResponse
 from data_hub_api.config import ADDITIONAL_MANUSCRIPT_IDS
 
 from data_hub_api.utils.cache import InMemorySingleObjectCache
-from data_hub_api.docmaps.provider import DocmapsProvider
+from data_hub_api.docmaps.v1.provider import DocmapsProvider
 
 
 LOGGER = logging.getLogger(__name__)

@@ -3,22 +3,22 @@ import json
 from typing import Dict, Iterable, Sequence, Union, cast
 import urllib
 
-from data_hub_api.docmaps.codecs.elife_manuscript import (
+from data_hub_api.docmaps.v1.codecs.elife_manuscript import (
     get_docmap_elife_manuscript_doi_assertion_item,
     get_docmap_elife_manuscript_output
 )
-from data_hub_api.docmaps.codecs.evaluation import (
+from data_hub_api.docmaps.v1.codecs.evaluation import (
     iter_docmap_actions_for_evaluations,
     iter_docmap_evaluation_input,
 )
-from data_hub_api.docmaps.codecs.preprint import (
+from data_hub_api.docmaps.v1.codecs.preprint import (
     get_docmap_preprint_assertion_item,
     get_docmap_preprint_input,
     get_docmap_preprint_output
 )
-from data_hub_api.docmaps.api_input_typing import ApiInput, ApiPreprintInput
+from data_hub_api.docmaps.v1.api_input_typing import ApiInput, ApiPreprintInput
 
-from data_hub_api.docmaps.docmap_typing import (
+from data_hub_api.docmaps.v1.docmap_typing import (
     DocmapAction,
     DocmapAssertion,
     DocmapEvaluationInput,

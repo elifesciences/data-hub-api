@@ -3,15 +3,15 @@ from typing import Iterable, cast
 
 import pytest
 from data_hub_api.config import ADDITIONAL_MANUSCRIPT_IDS
-from data_hub_api.docmaps.api_input_typing import ApiInput
+from data_hub_api.docmaps.v1.api_input_typing import ApiInput
 
 from data_hub_api.utils.cache import InMemorySingleObjectCache
-from data_hub_api.docmaps import provider as provider_module
-from data_hub_api.docmaps.provider import (
+from data_hub_api.docmaps.v1 import provider as provider_module
+from data_hub_api.docmaps.v1.provider import (
     get_docmap_item_for_query_result_item,
     DocmapsProvider
 )
-from tests.unit_tests.docmaps.test_data import DOCMAPS_QUERY_RESULT_ITEM_1
+from tests.unit_tests.docmaps.v1.test_data import DOCMAPS_QUERY_RESULT_ITEM_1
 
 
 @pytest.fixture(name='iter_dict_from_bq_query_mock', autouse=True)

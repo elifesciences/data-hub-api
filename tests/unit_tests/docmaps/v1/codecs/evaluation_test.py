@@ -1,7 +1,7 @@
 from unittest.mock import patch
 import pytest
-from data_hub_api.docmaps.codecs import evaluation as evaluation_module
-from data_hub_api.docmaps.codecs.evaluation import (
+from data_hub_api.docmaps.v1.codecs import evaluation as evaluation_module
+from data_hub_api.docmaps.v1.codecs.evaluation import (
     DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY,
     DOCMAP_EVALUATION_TYPE_FOR_REPLY,
     DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE,
@@ -21,7 +21,7 @@ from data_hub_api.docmaps.codecs.evaluation import (
     get_elife_evaluation_doi_url,
     get_related_organization_detail
 )
-from tests.unit_tests.docmaps.test_data import (
+from tests.unit_tests.docmaps.v1.test_data import (
     ANNOTATION_CREATED_TIMESTAMP_1,
     DOCMAPS_QUERY_RESULT_ITEM_1,
     DOI_1,
