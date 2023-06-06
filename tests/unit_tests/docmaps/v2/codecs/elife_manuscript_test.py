@@ -4,7 +4,7 @@ from data_hub_api.docmaps.v2.codecs.elife_manuscript import (
     get_elife_manuscript_version_doi
 )
 
-from tests.unit_tests.docmaps.v2.test_data_v2 import (
+from tests.unit_tests.docmaps.v2.test_data import (
     DOCMAPS_QUERY_RESULT_ITEM_1,
     PREPRINT_DETAILS_1
 )

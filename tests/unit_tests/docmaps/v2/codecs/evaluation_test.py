@@ -21,7 +21,7 @@ from data_hub_api.docmaps.v2.codecs.evaluation import (
     get_elife_evaluation_doi_url,
     get_related_organization_detail
 )
-from tests.unit_tests.docmaps.v2.test_data_v2 import (
+from tests.unit_tests.docmaps.v2.test_data import (
     ANNOTATION_CREATED_TIMESTAMP_1,
     DOCMAPS_QUERY_RESULT_ITEM_1,
     DOI_1,

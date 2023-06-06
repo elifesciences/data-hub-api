@@ -11,7 +11,7 @@ from data_hub_api.docmaps.v1.provider import (
     get_docmap_item_for_query_result_item,
     DocmapsProvider
 )
-from tests.unit_tests.docmaps.v1.test_data import DOCMAPS_QUERY_RESULT_ITEM_1
+from tests.unit_tests.docmaps.v1.v1_test_data import DOCMAPS_QUERY_RESULT_ITEM_1
 
 
 @pytest.fixture(name='iter_dict_from_bq_query_mock', autouse=True)

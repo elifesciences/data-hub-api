@@ -3,12 +3,12 @@ from typing import Iterable
 import urllib
 
 import pytest
-from data_hub_api.docmaps.v2.codecs.elife_manuscript import (
+from data_hub_api.docmaps.v1.codecs.elife_manuscript import (
     get_docmap_elife_manuscript_doi_assertion_item,
     get_docmap_elife_manuscript_output,
     get_elife_manuscript_version_doi
 )
-from data_hub_api.docmaps.v2.codecs.evaluation import (
+from data_hub_api.docmaps.v1.codecs.evaluation import (
     DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY,
     DOCMAP_EVALUATION_TYPE_FOR_REPLY,
     DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE,
@@ -19,19 +19,19 @@ from data_hub_api.docmaps.v2.codecs.evaluation import (
     get_docmap_evaluation_participants_for_review_article_type
 )
 
-from data_hub_api.docmaps.v2.codecs.preprint import (
+from data_hub_api.docmaps.v1.codecs.preprint import (
     get_docmap_preprint_assertion_item,
     get_docmap_preprint_input,
     get_docmap_preprint_output
 )
 
-from data_hub_api.docmaps.v2.codecs.docmaps import (
+from data_hub_api.docmaps.v1.codecs.docmaps import (
     get_docmap_item_for_query_result_item,
     DOCMAPS_JSONLD_SCHEMA_URL,
     DOCMAP_ID_PREFIX,
     generate_docmap_steps,
 )
-from tests.unit_tests.docmaps.v2.test_data_v2 import (
+from tests.unit_tests.docmaps.v1.v1_test_data import (
     ANNOTATION_CREATED_TIMESTAMP_1,
     ANNOTATION_CREATED_TIMESTAMP_2,
     ANNOTATION_CREATED_TIMESTAMP_3,
