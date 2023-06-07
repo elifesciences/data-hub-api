@@ -16,7 +16,7 @@ MANUSCRIPT_ID = 'manuscript_id_1'
 
 @pytest.fixture(name='enhanced_preprints_docmaps_provider_class_mock', autouse=True)
 def _enhanced_preprints_docmaps_provider_class_mock() -> Iterable[MagicMock]:
-    with patch.object(main_module, 'DocmapsProvider') as mock:
+    with patch.object(main_module, 'DocmapsProviderV1') as mock:
         yield mock
 
 

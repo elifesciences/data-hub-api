@@ -9,7 +9,7 @@ from data_hub_api.utils.cache import InMemorySingleObjectCache
 from data_hub_api.docmaps.v1 import provider as provider_module
 from data_hub_api.docmaps.v1.provider import (
     get_docmap_item_for_query_result_item,
-    DocmapsProvider
+    DocmapsProviderV1
 )
 from tests.unit_tests.docmaps.v1.v1_test_data import DOCMAPS_QUERY_RESULT_ITEM_1
 
@@ -20,7 +20,7 @@ def _iter_dict_from_bq_query_mock() -> Iterable[MagicMock]:
         yield mock
 
 
-class TestEnhancedPreprintsDocmapsProvider:
+class TestEnhancedPreprintsDocmapsProviderV1:
     def test_should_create_index_with_non_empty_docmaps(
         self,
         iter_dict_from_bq_query_mock: MagicMock
@@ -28,7 +28,7 @@ class TestEnhancedPreprintsDocmapsProvider:
         iter_dict_from_bq_query_mock.return_value = iter([
             DOCMAPS_QUERY_RESULT_ITEM_1
         ])
-        docmaps_index = DocmapsProvider().get_docmaps_index()
+        docmaps_index = DocmapsProviderV1().get_docmaps_index()
         assert docmaps_index['docmaps'] == [
             get_docmap_item_for_query_result_item(cast(ApiInput, DOCMAPS_QUERY_RESULT_ITEM_1))
         ]
@@ -40,7 +40,7 @@ class TestEnhancedPreprintsDocmapsProvider:
         iter_dict_from_bq_query_mock.return_value = [
             DOCMAPS_QUERY_RESULT_ITEM_1
         ]
-        docmaps_provider = DocmapsProvider(
+        docmaps_provider = DocmapsProviderV1(
             query_results_cache=InMemorySingleObjectCache(max_age_in_seconds=10)
         )
         docmaps_provider.get_docmaps_index()
@@ -53,7 +53,7 @@ class TestEnhancedPreprintsDocmapsProvider:
     def test_should_add_is_reviewed_preprint_and_is_under_review_type_where_clause_to_query(
         self
     ):
-        provider = DocmapsProvider(
+        provider = DocmapsProviderV1(
             only_include_reviewed_preprint_type=True,
             only_include_evaluated_preprints=False,
             additionally_include_manuscript_ids=[]
@@ -65,7 +65,7 @@ class TestEnhancedPreprintsDocmapsProvider:
     def test_should_add_additional_manuscript_ids_to_query_filter(
         self
     ):
-        provider = DocmapsProvider(
+        provider = DocmapsProviderV1(
             only_include_reviewed_preprint_type=True,
             only_include_evaluated_preprints=False,
             additionally_include_manuscript_ids=ADDITIONAL_MANUSCRIPT_IDS
@@ -77,7 +77,7 @@ class TestEnhancedPreprintsDocmapsProvider:
     def test_should_add_has_evaluatons_where_clause_to_query(
         self
     ):
-        provider = DocmapsProvider(
+        provider = DocmapsProviderV1(
             only_include_reviewed_preprint_type=False,
             only_include_evaluated_preprints=True
         )
@@ -87,7 +87,7 @@ class TestEnhancedPreprintsDocmapsProvider:
         self
     ):
         with pytest.raises(AssertionError):
-            DocmapsProvider(
+            DocmapsProviderV1(
                 only_include_reviewed_preprint_type=True,
                 only_include_evaluated_preprints=True
             )

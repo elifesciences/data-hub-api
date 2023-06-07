@@ -2,14 +2,14 @@ import logging
 
 from fastapi import APIRouter, HTTPException
 
-from data_hub_api.docmaps.v1.provider import DocmapsProvider
+from data_hub_api.docmaps.v1.provider import DocmapsProviderV1
 
 
 LOGGER = logging.getLogger(__name__)
 
 
 def create_docmaps_router(
-    docmaps_provider: DocmapsProvider
+    docmaps_provider: DocmapsProviderV1
 ) -> APIRouter:
     router = APIRouter()
 
