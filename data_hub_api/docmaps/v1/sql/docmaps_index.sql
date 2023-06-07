@@ -92,6 +92,7 @@ t_result_with_preprint_dois AS (
       biorxiv_medrxiv_normalized_title)
   FROM `elife-data-pipeline.prod.v_manuscript_with_matching_preprint_server_doi`
   WHERE preprint_doi IS NOT NULL
+  AND position_in_overall_stage = 1
 ),
 
 t_result_with_evaluations AS (
