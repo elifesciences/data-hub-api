@@ -55,5 +55,6 @@ class TestGetDocmapElifeManuscriptOutput:
                 elife_doi=DOCMAPS_QUERY_RESULT_ITEM_1['elife_doi']
             ),
             'versionIdentifier': PREPRINT_DETAILS_1['elife_doi_version_str'],
+            'published': '',
             'license': DOCMAPS_QUERY_RESULT_ITEM_1['license']
         }

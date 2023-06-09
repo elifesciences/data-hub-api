@@ -440,18 +440,23 @@ class TestGetDocmapsItemForQueryResultItem:
             'status': 'manuscript-published'
         }]
 
+    def test_should_populate_actions_outputs_manuscript_published_step(self):
+        docmaps_item = get_docmap_item_for_query_result_item(
+            DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS
+        )
+        manuscript_published_step = docmaps_item['steps']['_:b2']
+        assert manuscript_published_step['actions'] == [{
+            'participants': [],
+            'outputs': [get_docmap_elife_manuscript_output(
+                query_result_item=DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS,
+                preprint=PREPRINT_DETAILS_1
+            )]
+        }]
+
     # def test_should_return_empty_list_for_inputs_manuscript_published_step(self):
     #     docmaps_item = get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
     #     manuscript_published_step = docmaps_item['steps']['_:b0']
     #     assert manuscript_published_step['inputs'] == []
-
-    # def test_should_populate_actions_outputs_manuscript_published_step(self):
-    #     docmaps_item = get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
-    #     manuscript_published_step = docmaps_item['steps']['_:b0']
-    #     assert manuscript_published_step['actions'] == [{
-    #         'participants': [],
-    #         'outputs': [get_docmap_preprint_output(preprint=PREPRINT_DETAILS_1)]
-    #     }]
 
     # def test_should_set_published_to_none_if_unknown(self):
     #     docmaps_item = get_docmap_item_for_query_result_item({

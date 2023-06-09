@@ -134,12 +134,15 @@ def get_docmap_assertions_for_manuscript_published_step(
     }]
 
 
-def get_docmap_actions_for_preprint_manuscript_published_step(
+def get_docmap_actions_for_manuscript_published_step(
+    query_result_item: ApiInput,
     preprint: ApiPreprintInput
 ) -> Sequence[DocmapAction]:
     return [{
         'participants': [],
-        'outputs': [get_docmap_preprint_output(preprint=preprint)]
+        'outputs': [
+            get_docmap_elife_manuscript_output(query_result_item=query_result_item, preprint=preprint)
+        ]
     }]
 
 
@@ -148,7 +151,8 @@ def get_docmaps_step_for_manuscript_published_status(
     preprint: ApiPreprintInput
 ) -> DocmapStep:
     return {
-        'actions': get_docmap_actions_for_preprint_manuscript_published_step(
+        'actions': get_docmap_actions_for_manuscript_published_step(
+            query_result_item=query_result_item,
             preprint=preprint
         ),
         'assertions': get_docmap_assertions_for_manuscript_published_step(
