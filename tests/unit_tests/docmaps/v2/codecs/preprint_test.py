@@ -1,3 +1,4 @@
+from datetime import date
 from data_hub_api.docmaps.v2.codecs.preprint import (
     get_docmap_preprint_assertion_item,
     get_docmap_preprint_input,
@@ -49,7 +50,9 @@ class TestGetDocmapPreprintInput:
             'type': 'preprint',
             'doi': DOI_1,
             'url': PREPRINT_LINK_1,
-            'versionIdentifier': PREPRINT_VERSION_1
+            'versionIdentifier': PREPRINT_VERSION_1,
+            'published': date.fromisoformat('2021-01-01'),
+            '_tdmPath': TDM_PATH_1
         }
 
 

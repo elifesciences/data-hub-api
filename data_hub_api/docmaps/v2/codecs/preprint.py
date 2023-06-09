@@ -29,7 +29,9 @@ def get_docmap_preprint_input(preprint: ApiPreprintInput) -> DocmapPreprintInput
         'type': 'preprint',
         'doi': preprint['preprint_doi'],
         'url': preprint['preprint_url'],
-        'versionIdentifier': preprint['preprint_version']
+        'versionIdentifier': preprint['preprint_version'],
+        "published": preprint['preprint_published_at_date'],
+        "_tdmPath": preprint['tdm_path'],
     }
 
 
