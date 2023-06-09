@@ -206,34 +206,34 @@ class TestGetDocmapsItemForQueryResultItem:
             get_docmap_preprint_input(preprint=PREPRINT_DETAILS_1)
         ]
 
-    # def test_should_populate_assertions_under_review_step(self):
-    #     docmaps_item = get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
-    #     under_review_step = docmaps_item['steps']['_:b1']
-    #     assert under_review_step['assertions'] == [
-    #         {
-    #             'item': get_docmap_preprint_assertion_item(preprint=PREPRINT_DETAILS_1),
-    #             'status': 'under-review',
-    #             'happened': '2022-02-01T01:02:03+00:00'
-    #         },
-    #         {
-    #             'item': get_docmap_elife_manuscript_doi_assertion_item(
-    #                 query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1,
-    #                 preprint=PREPRINT_DETAILS_1
-    #             ),
-    #             'status': 'draft'
-    #         }
-    #     ]
+    def test_should_populate_assertions_under_review_step(self):
+        docmaps_item = get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
+        under_review_step = docmaps_item['steps']['_:b0']
+        assert under_review_step['assertions'] == [
+            {
+                'item': get_docmap_preprint_assertion_item(preprint=PREPRINT_DETAILS_1),
+                'status': 'under-review',
+                'happened': '2022-02-01T01:02:03+00:00'
+            },
+            {
+                'item': get_docmap_elife_manuscript_doi_assertion_item(
+                    query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1,
+                    preprint=PREPRINT_DETAILS_1
+                ),
+                'status': 'draft'
+            }
+        ]
 
-    # def test_should_populate_actions_outputs_under_review_step(self):
-    #     docmaps_item = get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
-    #     under_review_step = docmaps_item['steps']['_:b1']
-    #     assert under_review_step['actions'] == [{
-    #         'participants': [],
-    #         'outputs': [get_docmap_elife_manuscript_output(
-    #             query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1,
-    #             preprint=PREPRINT_DETAILS_1
-    #         )]
-    #     }]
+    def test_should_populate_actions_outputs_under_review_step(self):
+        docmaps_item = get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
+        under_review_step = docmaps_item['steps']['_:b0']
+        assert under_review_step['actions'] == [{
+            'participants': [],
+            'outputs': [get_docmap_elife_manuscript_output(
+                query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1,
+                preprint=PREPRINT_DETAILS_1
+            )]
+        }]
 
     # def test_should_populate_inputs_peer_reviewed_step(self):
     #     docmaps_item = get_docmap_item_for_query_result_item(
