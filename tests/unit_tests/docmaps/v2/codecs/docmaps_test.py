@@ -203,7 +203,7 @@ class TestGetDocmapsItemForQueryResultItem:
         docmaps_item = get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
         under_review_step = docmaps_item['steps']['_:b0']
         assert under_review_step['inputs'] == [
-            get_docmap_preprint_input(preprint=PREPRINT_DETAILS_1)
+            get_docmap_preprint_input(preprint=PREPRINT_DETAILS_1, detailed=True)
         ]
 
     def test_should_populate_assertions_under_review_step(self):

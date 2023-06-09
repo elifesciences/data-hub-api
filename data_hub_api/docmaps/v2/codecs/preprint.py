@@ -24,7 +24,17 @@ def get_docmap_preprint_output(preprint: ApiPreprintInput) -> DocmapPreprintOutp
     }
 
 
-def get_docmap_preprint_input(preprint: ApiPreprintInput) -> DocmapPreprintInput:
+def get_docmap_preprint_input(
+    preprint: ApiPreprintInput,
+    detailed: bool
+) -> DocmapPreprintInput:
+    if not detailed:
+        return {
+            'type': 'preprint',
+            'doi': preprint['preprint_doi'],
+            'url': preprint['preprint_url'],
+            'versionIdentifier': preprint['preprint_version']
+        }
     return {
         'type': 'preprint',
         'doi': preprint['preprint_doi'],

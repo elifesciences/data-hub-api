@@ -123,7 +123,7 @@ def get_docmaps_step_for_under_review_status(
             query_result_item=query_result_item,
             preprint=preprint
         ),
-        'inputs': [get_docmap_preprint_input(preprint=preprint)]
+        'inputs': [get_docmap_preprint_input(preprint=preprint, detailed=True)]
     }
 
 
@@ -149,7 +149,7 @@ def get_docmaps_step_for_peer_reviewed_status(
         'assertions': get_docmap_assertions_for_peer_reviewed_step(
             preprint=preprint
         ),
-        'inputs': [get_docmap_preprint_input(preprint=preprint)]
+        'inputs': [get_docmap_preprint_input(preprint=preprint, detailed=False)]
     }
 
 
@@ -159,7 +159,7 @@ def get_docmap_inputs_for_revised_steps(
     previous_preprint: ApiPreprintInput
 ) -> Sequence[Union[DocmapPreprintInput, DocmapEvaluationInput]]:
     return (
-        list([get_docmap_preprint_input(preprint=preprint)])
+        list([get_docmap_preprint_input(preprint=preprint, detailed=True)])
         +
         list(iter_docmap_evaluation_input(
             query_result_item=query_result_item,
