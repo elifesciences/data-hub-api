@@ -139,9 +139,10 @@ def get_docmap_actions_for_manuscript_published_step(
 ) -> Sequence[DocmapAction]:
     return [{
         'participants': [],
-        'outputs': [
-            get_docmap_elife_manuscript_output(query_result_item=query_result_item, preprint=preprint)
-        ]
+        'outputs': [get_docmap_elife_manuscript_output(
+            query_result_item=query_result_item,
+            preprint=preprint
+        )]
     }]
 
 

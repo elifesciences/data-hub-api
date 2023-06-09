@@ -2,8 +2,7 @@
 from data_hub_api.docmaps.v2.api_input_typing import ApiPreprintInput
 from data_hub_api.docmaps.v2.docmap_typing import (
     DocmapAssertionItem,
-    DocmapPreprintInput,
-    DocmapPreprintOutput
+    DocmapPreprintInput
 )
 
 

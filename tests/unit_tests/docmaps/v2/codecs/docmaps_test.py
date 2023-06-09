@@ -25,21 +25,19 @@ from data_hub_api.docmaps.v2.codecs.preprint import (
 )
 
 from data_hub_api.docmaps.v2.codecs.docmaps import (
-    get_docmap_inputs_for_manuscript_published_step,
     get_docmap_item_for_query_result_item,
     DOCMAPS_JSONLD_SCHEMA_URL,
     DOCMAP_ID_PREFIX,
     generate_docmap_steps,
 )
+
 from tests.unit_tests.docmaps.v2.test_data import (
     ANNOTATION_CREATED_TIMESTAMP_1,
     ANNOTATION_CREATED_TIMESTAMP_2,
     ANNOTATION_CREATED_TIMESTAMP_3,
     DOCMAPS_QUERY_RESULT_EVALUATION_1,
-    DOCMAPS_QUERY_RESULT_EVALUATION_2,
     DOCMAPS_QUERY_RESULT_ITEM_1,
     DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS,
-    DOCMAPS_QUERY_RESULT_ITEM_WITH_REVISED_PREPRPINT,
     DOI_1,
     EDITOR_DETAIL_1,
     EVALUATION_SUFFIX_1,
@@ -49,8 +47,6 @@ from tests.unit_tests.docmaps.v2.test_data import (
     HYPOTHESIS_ID_2,
     HYPOTHESIS_ID_3,
     PREPRINT_DETAILS_1,
-    PREPRINT_DETAILS_2,
-    PREPRINT_DETAILS_3,
     PREPRINT_LINK_1,
     PREPRINT_LINK_PREFIX,
     PREPRINT_VERSION_1,
@@ -493,4 +489,3 @@ class TestGetDocmapsItemForQueryResultItem:
         })
         manuscript_published_step = docmaps_item['steps']['_:b0']
         assert "" == manuscript_published_step['actions'][0]['outputs'][0].get('published')
-

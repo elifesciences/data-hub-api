@@ -33,18 +33,6 @@ DocmapElifeManuscriptOutput = TypedDict(
     }
 )
 
-DocmapPreprintOutput = TypedDict(
-    'DocmapPreprintOutput',
-    {
-        'type': str,
-        'doi': Optional[str],
-        'published': Optional[str],
-        'url': Optional[str],
-        'versionIdentifier': str,
-        '_tdmPath': str
-    }
-)
-
 DocmapParticipant = TypedDict(
     'DocmapParticipant',
     {
@@ -60,7 +48,9 @@ DocmapPreprintInput = TypedDict(
         'type': str,
         'doi': str,
         'url': str,
-        'versionIdentifier': str
+        'versionIdentifier': str,
+        'published': Optional[str],
+        '_tdmPath': Optional[str]
     }
 )
 
@@ -96,7 +86,7 @@ DocmapAction = TypedDict(
     {
         'participants': Sequence[DocmapParticipant],
         'outputs': Sequence[
-            Union[DocmapPreprintOutput, DocmapElifeManuscriptOutput, DocmapEvaluationOutput]
+            Union[DocmapElifeManuscriptOutput, DocmapEvaluationOutput]
         ]
     }
 )
