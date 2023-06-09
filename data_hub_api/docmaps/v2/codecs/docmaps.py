@@ -13,8 +13,7 @@ from data_hub_api.docmaps.v2.codecs.evaluation import (
 )
 from data_hub_api.docmaps.v2.codecs.preprint import (
     get_docmap_preprint_assertion_item,
-    get_docmap_preprint_input,
-    get_docmap_preprint_output
+    get_docmap_preprint_input
 )
 from data_hub_api.docmaps.v2.api_input_typing import ApiInput, ApiPreprintInput
 
