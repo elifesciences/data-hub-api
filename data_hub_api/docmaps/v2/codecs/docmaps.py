@@ -146,6 +146,20 @@ def get_docmap_actions_for_manuscript_published_step(
     }]
 
 
+def get_docmap_inputs_for_manuscript_published_step(
+    query_result_item: ApiInput,
+    preprint: ApiPreprintInput,
+) -> Sequence[Union[DocmapPreprintInput, DocmapEvaluationInput]]:
+    return (
+        list([get_docmap_preprint_input(preprint=preprint, detailed=False)])
+        +
+        list(iter_docmap_evaluation_input(
+            query_result_item=query_result_item,
+            preprint=preprint
+        ))
+    )
+
+
 def get_docmaps_step_for_manuscript_published_status(
     query_result_item: ApiInput,
     preprint: ApiPreprintInput
@@ -159,7 +173,10 @@ def get_docmaps_step_for_manuscript_published_status(
             query_result_item=query_result_item,
             preprint=preprint
         ),
-        'inputs': []
+        'inputs': get_docmap_inputs_for_manuscript_published_step(
+            query_result_item=query_result_item,
+            preprint=preprint
+        )
     }
 
 

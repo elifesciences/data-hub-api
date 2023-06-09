@@ -26,6 +26,7 @@ from data_hub_api.docmaps.v2.codecs.preprint import (
 )
 
 from data_hub_api.docmaps.v2.codecs.docmaps import (
+    get_docmap_inputs_for_manuscript_published_step,
     get_docmap_item_for_query_result_item,
     DOCMAPS_JSONLD_SCHEMA_URL,
     DOCMAP_ID_PREFIX,
@@ -453,10 +454,35 @@ class TestGetDocmapsItemForQueryResultItem:
             )]
         }]
 
-    # def test_should_return_empty_list_for_inputs_manuscript_published_step(self):
-    #     docmaps_item = get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
-    #     manuscript_published_step = docmaps_item['steps']['_:b0']
-    #     assert manuscript_published_step['inputs'] == []
+    def test_should_populate_inputs_manuscript_published_step_with_preprint_and_evaluations(self):
+        docmaps_item = get_docmap_item_for_query_result_item({
+            **DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS,
+            'evaluations': [{
+                    **DOCMAPS_QUERY_RESULT_EVALUATION_1,
+                    'tags': ['PeerReview']
+                },
+                {
+                    **DOCMAPS_QUERY_RESULT_EVALUATION_1,
+                    'evaluation_suffix': EVALUATION_SUFFIX_2,
+                    'tags': ['evaluationSummary']
+                }]
+        })
+        manuscript_published_step = docmaps_item['steps']['_:b2']
+        assert manuscript_published_step['inputs'] == [
+            get_docmap_preprint_input(preprint=PREPRINT_DETAILS_1, detailed=False),
+            get_docmap_evaluation_input(
+                query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1,
+                preprint=PREPRINT_DETAILS_1,
+                evaluation_suffix=EVALUATION_SUFFIX_1,
+                docmap_evaluation_type=DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE
+            ),
+            get_docmap_evaluation_input(
+                query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1,
+                preprint=PREPRINT_DETAILS_1,
+                evaluation_suffix=EVALUATION_SUFFIX_2,
+                docmap_evaluation_type=DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY
+            )
+        ]
 
     # def test_should_set_published_to_none_if_unknown(self):
     #     docmaps_item = get_docmap_item_for_query_result_item({
