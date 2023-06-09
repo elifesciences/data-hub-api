@@ -22,7 +22,7 @@ def get_docmap_preprint_input(
         'doi': preprint['preprint_doi'],
         'url': preprint['preprint_url'],
         'versionIdentifier': preprint['preprint_version'],
-        "published": preprint['preprint_published_at_date'],
+        "published": preprint['preprint_published_at_date'].isoformat(),
         "_tdmPath": preprint['tdm_path'],
     }
 

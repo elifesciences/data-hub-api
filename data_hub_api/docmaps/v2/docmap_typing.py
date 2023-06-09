@@ -29,6 +29,7 @@ DocmapElifeManuscriptOutput = TypedDict(
         'doi': Optional[str],
         'identifier': str,
         'versionIdentifier': str,
+        'published': Optional[str],
         'license': str
     }
 )
@@ -51,7 +52,8 @@ DocmapPreprintInput = TypedDict(
         'versionIdentifier': str,
         'published': Optional[str],
         '_tdmPath': Optional[str]
-    }
+    },
+    total=False
 )
 
 DocmapEvaluationInput = TypedDict(
