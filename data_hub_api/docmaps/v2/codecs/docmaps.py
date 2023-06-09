@@ -224,8 +224,8 @@ def iter_docmap_steps_for_query_result_item(query_result_item: ApiInput) -> Iter
     preprint = query_result_item['preprints'][0]
     # yield get_docmaps_step_for_manuscript_published_status(preprint)
     yield get_docmaps_step_for_under_review_status(query_result_item, preprint)
-    # if query_result_item['evaluations']:
-    #     yield get_docmaps_step_for_peer_reviewed_status(query_result_item, preprint)
+    if query_result_item['evaluations']:
+        yield get_docmaps_step_for_peer_reviewed_status(query_result_item, preprint)
     # if len(query_result_item['preprints']) > 1:
     #     for index, preprint in enumerate(query_result_item['preprints']):
     #         if index > 0:

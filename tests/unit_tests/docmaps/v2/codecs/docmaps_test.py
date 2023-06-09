@@ -235,23 +235,33 @@ class TestGetDocmapsItemForQueryResultItem:
             )]
         }]
 
-    # def test_should_populate_inputs_peer_reviewed_step(self):
-    #     docmaps_item = get_docmap_item_for_query_result_item(
-    #         {
-    #             **DOCMAPS_QUERY_RESULT_ITEM_1,
-    #             'preprint_url': PREPRINT_LINK_1,
-    #             'preprint_version': PREPRINT_VERSION_1,
-    #             'evaluations': [{
-    #                 **DOCMAPS_QUERY_RESULT_EVALUATION_1,
-    #                 'uri': f'{PREPRINT_LINK_PREFIX}{DOI_1}v{PREPRINT_VERSION_2}',
-    #                 'source_version': PREPRINT_VERSION_2
-    #             }]
-    #         }
-    #     )
-    #     peer_reviewed_step = docmaps_item['steps']['_:b2']
-    #     assert peer_reviewed_step['inputs'] == [
-    #         get_docmap_preprint_input(preprint=PREPRINT_DETAILS_1)
-    #     ]
+    def test_should_populate_assertions_peer_reviewed_step(self):
+        docmaps_item = get_docmap_item_for_query_result_item(
+            DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS
+        )
+        peer_reviewed_step = docmaps_item['steps']['_:b1']
+        assert peer_reviewed_step['assertions'] == [{
+            'item': get_docmap_preprint_assertion_item(preprint=PREPRINT_DETAILS_1),
+            'status': 'peer-reviewed'
+        }]
+
+    def test_should_populate_inputs_peer_reviewed_step(self):
+        docmaps_item = get_docmap_item_for_query_result_item(
+            {
+                **DOCMAPS_QUERY_RESULT_ITEM_1,
+                'preprint_url': PREPRINT_LINK_1,
+                'preprint_version': PREPRINT_VERSION_1,
+                'evaluations': [{
+                    **DOCMAPS_QUERY_RESULT_EVALUATION_1,
+                    'uri': f'{PREPRINT_LINK_PREFIX}{DOI_1}v{PREPRINT_VERSION_2}',
+                    'source_version': PREPRINT_VERSION_2
+                }]
+            }
+        )
+        peer_reviewed_step = docmaps_item['steps']['_:b1']
+        assert peer_reviewed_step['inputs'] == [
+            get_docmap_preprint_input(preprint=PREPRINT_DETAILS_1, detailed=False)
+        ]
 
     # def test_should_filter_evaluations_by_preprint_link(self):
     #     expected_hypothesis_ids_of_first_version = {HYPOTHESIS_ID_1, HYPOTHESIS_ID_2}
@@ -295,16 +305,6 @@ class TestGetDocmapsItemForQueryResultItem:
     #         get_hypothesis_urls_from_step_dict(peer_reviewed_step)
     #     ))
     #     assert actual_hypothesis_ids == expected_hypothesis_ids_of_first_version
-
-    # def test_should_populate_assertions_peer_reviewed_step(self):
-    #     docmaps_item = get_docmap_item_for_query_result_item(
-    #         DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS
-    #     )
-    #     peer_reviewed_step = docmaps_item['steps']['_:b2']
-    #     assert peer_reviewed_step['assertions'] == [{
-    #         'item': get_docmap_preprint_assertion_item(preprint=PREPRINT_DETAILS_1),
-    #         'status': 'peer-reviewed'
-    #     }]
 
     # def test_should_not_populate_actions_peer_reviewed_step_if_tags_are_empty(self):
     #     query_result_with_evaluation = dict(
