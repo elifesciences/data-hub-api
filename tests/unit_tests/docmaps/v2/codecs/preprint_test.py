@@ -20,7 +20,22 @@ class TestGetDocmapPreprintInput:
             'doi': DOI_1,
             'url': PREPRINT_LINK_1,
             'versionIdentifier': PREPRINT_VERSION_1,
-            'published': date.fromisoformat('2021-01-01'),
+            'published': date.fromisoformat('2021-01-01').isoformat(),
+            '_tdmPath': TDM_PATH_1
+        }
+
+    def test_should_return_empty_str_for_published_if_not_defined(self):
+        preprint = {
+            **PREPRINT_DETAILS_1,
+            'preprint_published_at_date': None
+        }
+        result = get_docmap_preprint_input(preprint=preprint, detailed=True)
+        assert result == {
+            'type': 'preprint',
+            'doi': DOI_1,
+            'url': PREPRINT_LINK_1,
+            'versionIdentifier': PREPRINT_VERSION_1,
+            'published': '',
             '_tdmPath': TDM_PATH_1
         }
 
