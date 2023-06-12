@@ -37,6 +37,7 @@ from tests.unit_tests.docmaps.v2.test_data import (
     ANNOTATION_CREATED_TIMESTAMP_3,
     DOCMAPS_QUERY_RESULT_EVALUATION_1,
     DOCMAPS_QUERY_RESULT_ITEM_1,
+    DOCMAPS_QUERY_RESULT_ITEM_2,
     DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS,
     DOI_1,
     EDITOR_DETAIL_1,
@@ -46,8 +47,7 @@ from tests.unit_tests.docmaps.v2.test_data import (
     HYPOTHESIS_ID_1,
     HYPOTHESIS_ID_2,
     HYPOTHESIS_ID_3,
-    PREPRINT_DETAILS_1,
-    PREPRINT_LINK_1,
+    MANUSCRIPT_DETAIL_1,
     PREPRINT_LINK_PREFIX,
     PREPRINT_VERSION_1,
     PREPRINT_VERSION_2,
@@ -150,10 +150,10 @@ class TestGetDocmapsItemForQueryResultItem:
             DOCMAP_ID_PREFIX + urllib.parse.urlencode(id_query_param)
         )
 
-    def test_should_populate_create_and_updated_timestamp_with_qc_complete_timestamp(self):
-        docmaps_item = get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
+    def test_should_populate_create_and_updated_timestamp_with_first_qc_complete_timestamp(self):
+        docmaps_item = get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_2)
         assert docmaps_item['created'] == (
-            DOCMAPS_QUERY_RESULT_ITEM_1['qc_complete_timestamp'].isoformat()
+            MANUSCRIPT_DETAIL_1['qc_complete_timestamp'].isoformat()
         )
         assert docmaps_item['updated'] == docmaps_item['created']
 
@@ -163,39 +163,39 @@ class TestGetDocmapsItemForQueryResultItem:
             DOCMAPS_QUERY_RESULT_ITEM_1['publisher_json']
         ))
 
-    def test_should_populate_inputs_under_review_step(self):
-        docmaps_item = get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
+    def test_should_populate_inputs_for_first_under_review_step(self):
+        docmaps_item = get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_2)
         under_review_step = docmaps_item['steps']['_:b0']
         assert under_review_step['inputs'] == [
-            get_docmap_preprint_input(preprint=PREPRINT_DETAILS_1, detailed=True)
+            get_docmap_preprint_input(manuscript_detail=MANUSCRIPT_DETAIL_1, detailed=True)
         ]
 
-    def test_should_populate_assertions_under_review_step(self):
+    def test_should_populate_assertions_for_first_under_review_step(self):
         docmaps_item = get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
         under_review_step = docmaps_item['steps']['_:b0']
         assert under_review_step['assertions'] == [
             {
-                'item': get_docmap_preprint_assertion_item(preprint=PREPRINT_DETAILS_1),
+                'item': get_docmap_preprint_assertion_item(manuscript_detail=MANUSCRIPT_DETAIL_1),
                 'status': 'under-review',
                 'happened': '2022-02-01T01:02:03+00:00'
             },
             {
                 'item': get_docmap_elife_manuscript_doi_assertion_item(
                     query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1,
-                    preprint=PREPRINT_DETAILS_1
+                    manuscript_detail=MANUSCRIPT_DETAIL_1
                 ),
                 'status': 'draft'
             }
         ]
 
-    def test_should_populate_actions_outputs_under_review_step(self):
+    def test_should_populate_actions_outputs_for_first_under_review_step(self):
         docmaps_item = get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
         under_review_step = docmaps_item['steps']['_:b0']
         assert under_review_step['actions'] == [{
             'participants': [],
             'outputs': [get_docmap_elife_manuscript_output(
                 query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1,
-                preprint=PREPRINT_DETAILS_1
+                manuscript_detail=MANUSCRIPT_DETAIL_1
             )]
         }]
 
@@ -205,26 +205,17 @@ class TestGetDocmapsItemForQueryResultItem:
         )
         peer_reviewed_step = docmaps_item['steps']['_:b1']
         assert peer_reviewed_step['assertions'] == [{
-            'item': get_docmap_preprint_assertion_item(preprint=PREPRINT_DETAILS_1),
+            'item': get_docmap_preprint_assertion_item(manuscript_detail=MANUSCRIPT_DETAIL_1),
             'status': 'peer-reviewed'
         }]
 
     def test_should_populate_inputs_peer_reviewed_step(self):
         docmaps_item = get_docmap_item_for_query_result_item(
-            {
-                **DOCMAPS_QUERY_RESULT_ITEM_1,
-                'preprint_url': PREPRINT_LINK_1,
-                'preprint_version': PREPRINT_VERSION_1,
-                'evaluations': [{
-                    **DOCMAPS_QUERY_RESULT_EVALUATION_1,
-                    'uri': f'{PREPRINT_LINK_PREFIX}{DOI_1}v{PREPRINT_VERSION_2}',
-                    'source_version': PREPRINT_VERSION_2
-                }]
-            }
+            DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS
         )
         peer_reviewed_step = docmaps_item['steps']['_:b1']
         assert peer_reviewed_step['inputs'] == [
-            get_docmap_preprint_input(preprint=PREPRINT_DETAILS_1, detailed=False)
+            get_docmap_preprint_input(manuscript_detail=MANUSCRIPT_DETAIL_1, detailed=False)
         ]
 
     def test_should_filter_evaluations_by_preprint_link(self):
@@ -254,16 +245,17 @@ class TestGetDocmapsItemForQueryResultItem:
         }]
         docmaps_item = get_docmap_item_for_query_result_item({
             **DOCMAPS_QUERY_RESULT_ITEM_1,
-            'preprint_version': PREPRINT_VERSION_1,
-            'preprint_url': PREPRINT_LINK_1,
-            'evaluations': (
-                evaluations_of_first_version
-                + evaluations_of_other_version
-            )
+            'manuscript_detail': [{
+                **MANUSCRIPT_DETAIL_1,
+                'evaluations': (
+                    evaluations_of_first_version
+                    + evaluations_of_other_version
+                )
+            }]
         })
         peer_reviewed_step = docmaps_item['steps']['_:b1']
         assert peer_reviewed_step['inputs'] == [
-            get_docmap_preprint_input(preprint=PREPRINT_DETAILS_1, detailed=False)
+            get_docmap_preprint_input(manuscript_detail=MANUSCRIPT_DETAIL_1, detailed=False)
         ]
         actual_hypothesis_ids = set(get_hypothesis_ids_from_urls(
             get_hypothesis_urls_from_step_dict(peer_reviewed_step)
@@ -271,17 +263,16 @@ class TestGetDocmapsItemForQueryResultItem:
         assert actual_hypothesis_ids == expected_hypothesis_ids_of_first_version
 
     def test_should_not_populate_actions_peer_reviewed_step_if_tags_are_empty(self):
-        query_result_with_evaluation = dict(
-            DOCMAPS_QUERY_RESULT_ITEM_1,
-            **{
+        query_result_with_evaluation = {
+            **DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS,
+            'manuscript_detail': [{
+                **MANUSCRIPT_DETAIL_1,
                 'evaluations': [{
                     **DOCMAPS_QUERY_RESULT_EVALUATION_1,
-                    'hypothesis_id': 'hypothesis_id_3',
-                    'annotation_created_timestamp': 'annotation_created_timestamp_3',
                     'tags': []
                 }]
-            }
-        )
+            }]
+        }
         docmaps_item = get_docmap_item_for_query_result_item(
             query_result_with_evaluation
         )
@@ -291,9 +282,10 @@ class TestGetDocmapsItemForQueryResultItem:
         assert peer_reviewed_actions == []
 
     def test_should_populate_actions_outputs_peer_reviewed_step_for_each_evaluation(self):
-        query_result_with_evaluation = dict(
-            DOCMAPS_QUERY_RESULT_ITEM_1,
-            **{
+        query_result_with_evaluation = {
+            **DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS,
+            'manuscript_detail': [{
+                **MANUSCRIPT_DETAIL_1,
                 'evaluations': [{
                     **DOCMAPS_QUERY_RESULT_EVALUATION_1,
                     'tags': ['PeerReview'],
@@ -310,8 +302,8 @@ class TestGetDocmapsItemForQueryResultItem:
                     'tags': ['PeerReview', 'AuthorResponse'],
                     'evaluation_suffix': EVALUATION_SUFFIX_3
                 }]
-            }
-        )
+            }]
+        }
         docmaps_item = get_docmap_item_for_query_result_item(
             query_result_with_evaluation
         )
@@ -320,7 +312,7 @@ class TestGetDocmapsItemForQueryResultItem:
         assert len(peer_reviewed_actions) == 3
         assert peer_reviewed_actions[0]['outputs'][0] == get_docmap_evaluation_output(
             query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1,
-            preprint=PREPRINT_DETAILS_1,
+            manuscript_detail=MANUSCRIPT_DETAIL_1,
             hypothesis_id=HYPOTHESIS_ID_1,
             evaluation_suffix=EVALUATION_SUFFIX_1,
             annotation_created_timestamp=ANNOTATION_CREATED_TIMESTAMP_1,
@@ -328,7 +320,7 @@ class TestGetDocmapsItemForQueryResultItem:
         )
         assert peer_reviewed_actions[1]['outputs'][0] == get_docmap_evaluation_output(
             query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1,
-            preprint=PREPRINT_DETAILS_1,
+            manuscript_detail=MANUSCRIPT_DETAIL_1,
             hypothesis_id=HYPOTHESIS_ID_2,
             evaluation_suffix=EVALUATION_SUFFIX_2,
             annotation_created_timestamp=ANNOTATION_CREATED_TIMESTAMP_2,
@@ -336,7 +328,7 @@ class TestGetDocmapsItemForQueryResultItem:
         )
         assert peer_reviewed_actions[2]['outputs'][0] == get_docmap_evaluation_output(
             query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1,
-            preprint=PREPRINT_DETAILS_1,
+            manuscript_detail=MANUSCRIPT_DETAIL_1,
             hypothesis_id=HYPOTHESIS_ID_3,
             evaluation_suffix=EVALUATION_SUFFIX_3,
             annotation_created_timestamp=ANNOTATION_CREATED_TIMESTAMP_3,
@@ -344,9 +336,10 @@ class TestGetDocmapsItemForQueryResultItem:
         )
 
     def test_should_populate_outputs_evaluation_type_according_to_tags_peer_reviewed_step(self):
-        query_result_with_evaluation = dict(
-            DOCMAPS_QUERY_RESULT_ITEM_1,
-            **{
+        query_result_with_evaluation = {
+            **DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS,
+            'manuscript_detail': [{
+                **MANUSCRIPT_DETAIL_1,
                 'evaluations': [{
                     **DOCMAPS_QUERY_RESULT_EVALUATION_1,
                     'tags': ['PeerReview']
@@ -357,8 +350,8 @@ class TestGetDocmapsItemForQueryResultItem:
                     **DOCMAPS_QUERY_RESULT_EVALUATION_1,
                     'tags': ['PeerReview', 'AuthorResponse']
                 }]
-            }
-        )
+            }]
+        }
         docmaps_item = get_docmap_item_for_query_result_item(
             query_result_with_evaluation
         )
@@ -372,15 +365,16 @@ class TestGetDocmapsItemForQueryResultItem:
         assert outputs_for_index_2['type'] == DOCMAP_EVALUATION_TYPE_FOR_REPLY
 
     def test_should_populate_participants_peer_reviewed_step_for_review_article_type(self):
-        query_result_with_evaluation = dict(
-            DOCMAPS_QUERY_RESULT_ITEM_1,
-            **{
+        query_result_with_evaluation = {
+            **DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS,
+            'manuscript_detail': [{
+                **MANUSCRIPT_DETAIL_1,
                 'evaluations': [{
                     **DOCMAPS_QUERY_RESULT_EVALUATION_1,
                     'tags': ['PeerReview']
                 }]
-            }
-        )
+            }]
+        }
         docmaps_item = get_docmap_item_for_query_result_item(
             query_result_with_evaluation
         )
@@ -392,26 +386,22 @@ class TestGetDocmapsItemForQueryResultItem:
         )
 
     def test_should_populate_participants_peer_reviewed_step_for_evaluation_summary_type(self):
-        query_result_with_evaluation = dict(
-            DOCMAPS_QUERY_RESULT_ITEM_1,
-            **{
+        editor_details = [EDITOR_DETAIL_1]
+        senior_editor_details = [SENIOR_EDITOR_DETAIL_1]
+        query_result_with_evaluation_and_editor_details = {
+            **DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS,
+            'manuscript_detail': [{
+                **MANUSCRIPT_DETAIL_1,
                 'evaluations': [{
                     **DOCMAPS_QUERY_RESULT_EVALUATION_1,
                     'tags': ['PeerReview', 'evaluationSummary']
-                }]
-            }
-        )
-        editor_details = [EDITOR_DETAIL_1]
-        senior_editor_details = [SENIOR_EDITOR_DETAIL_1]
-        query_result_with_editor_details = dict(
-            query_result_with_evaluation,
-            **{
+                }],
                 'editor_details': editor_details,
                 'senior_editor_details': senior_editor_details
-            }
-        )
+            }]
+        }
         docmaps_item = get_docmap_item_for_query_result_item(
-            query_result_with_editor_details
+            query_result_with_evaluation_and_editor_details
         )
         peer_reviewed_step = docmaps_item['steps']['_:b1']
         peer_reviewed_actions = peer_reviewed_step['actions']
@@ -431,7 +421,7 @@ class TestGetDocmapsItemForQueryResultItem:
         assert manuscript_published_step['assertions'] == [{
             'item': get_docmap_elife_manuscript_doi_assertion_item(
                 query_result_item=DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS,
-                preprint=PREPRINT_DETAILS_1
+                manuscript_detail=MANUSCRIPT_DETAIL_1
             ),
             'status': 'manuscript-published'
         }]
@@ -445,35 +435,37 @@ class TestGetDocmapsItemForQueryResultItem:
             'participants': [],
             'outputs': [get_docmap_elife_manuscript_output(
                 query_result_item=DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS,
-                preprint=PREPRINT_DETAILS_1
+                manuscript_detail=MANUSCRIPT_DETAIL_1
             )]
         }]
 
     def test_should_populate_inputs_manuscript_published_step_with_preprint_and_evaluations(self):
         docmaps_item = get_docmap_item_for_query_result_item({
             **DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS,
-            'evaluations': [{
+            'manuscript_detail': [{
+                **MANUSCRIPT_DETAIL_1,
+                'evaluations': [{
                     **DOCMAPS_QUERY_RESULT_EVALUATION_1,
                     'tags': ['PeerReview']
-                },
-                {
+                }, {
                     **DOCMAPS_QUERY_RESULT_EVALUATION_1,
                     'evaluation_suffix': EVALUATION_SUFFIX_2,
                     'tags': ['evaluationSummary']
                 }]
+            }]
         })
         manuscript_published_step = docmaps_item['steps']['_:b2']
         assert manuscript_published_step['inputs'] == [
-            get_docmap_preprint_input(preprint=PREPRINT_DETAILS_1, detailed=False),
+            get_docmap_preprint_input(manuscript_detail=MANUSCRIPT_DETAIL_1, detailed=False),
             get_docmap_evaluation_input(
                 query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1,
-                preprint=PREPRINT_DETAILS_1,
+                manuscript_detail=MANUSCRIPT_DETAIL_1,
                 evaluation_suffix=EVALUATION_SUFFIX_1,
                 docmap_evaluation_type=DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE
             ),
             get_docmap_evaluation_input(
                 query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1,
-                preprint=PREPRINT_DETAILS_1,
+                manuscript_detail=MANUSCRIPT_DETAIL_1,
                 evaluation_suffix=EVALUATION_SUFFIX_2,
                 docmap_evaluation_type=DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY
             )
@@ -481,9 +473,9 @@ class TestGetDocmapsItemForQueryResultItem:
 
     def test_should_set_published_to_empty_string_if_unknown(self):
         docmaps_item = get_docmap_item_for_query_result_item({
-            **DOCMAPS_QUERY_RESULT_ITEM_1,
-            'preprints': [{
-                **PREPRINT_DETAILS_1,
+            **DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS,
+            'manuscript_detail': [{
+                **MANUSCRIPT_DETAIL_1,
                 'preprint_published_at_date': None
             }]
         })

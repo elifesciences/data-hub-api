@@ -15,7 +15,7 @@ from data_hub_api.docmaps.v2.codecs.preprint import (
     get_docmap_preprint_assertion_item,
     get_docmap_preprint_input
 )
-from data_hub_api.docmaps.v2.api_input_typing import ApiInput, ApiPreprintInput
+from data_hub_api.docmaps.v2.api_input_typing import ApiInput, ApiManuscriptDetailInput
 
 from data_hub_api.docmaps.v2.docmap_typing import (
     DocmapAction,
@@ -43,20 +43,20 @@ DOCMAP_ID_PREFIX = (
 
 def get_docmap_assertions_for_under_review_step(
     query_result_item: ApiInput,
-    preprint: ApiPreprintInput
+    manuscript_detail: ApiManuscriptDetailInput
 ) -> Sequence[DocmapAssertion]:
     return [{
-        'item': get_docmap_preprint_assertion_item(preprint=preprint),
+        'item': get_docmap_preprint_assertion_item(manuscript_detail=manuscript_detail),
         'status': 'under-review',
         'happened': (
-            query_result_item['under_review_timestamp'].isoformat()
-            if query_result_item['under_review_timestamp']
+            manuscript_detail['under_review_timestamp'].isoformat()
+            if manuscript_detail['under_review_timestamp']
             else ""
         )
     }, {
         'item': get_docmap_elife_manuscript_doi_assertion_item(
             query_result_item=query_result_item,
-            preprint=preprint
+            manuscript_detail=manuscript_detail
         ),
         'status': 'draft'
     }]
@@ -64,14 +64,14 @@ def get_docmap_assertions_for_under_review_step(
 
 def get_docmap_actions_for_under_review_step(
     query_result_item: ApiInput,
-    preprint: ApiPreprintInput
+    manuscript_detail: ApiManuscriptDetailInput
 ) -> Sequence[DocmapAction]:
     return [{
         'participants': [],
         'outputs': [
             get_docmap_elife_manuscript_output(
                 query_result_item=query_result_item,
-                preprint=preprint
+                manuscript_detail=manuscript_detail
             )
         ]
     }]
@@ -79,55 +79,55 @@ def get_docmap_actions_for_under_review_step(
 
 def get_docmaps_step_for_under_review_status(
     query_result_item: ApiInput,
-    preprint: ApiPreprintInput
+    manuscript_detail: ApiManuscriptDetailInput
 ):
     return {
         'actions': get_docmap_actions_for_under_review_step(
             query_result_item=query_result_item,
-            preprint=preprint
+            manuscript_detail=manuscript_detail
         ),
         'assertions': get_docmap_assertions_for_under_review_step(
             query_result_item=query_result_item,
-            preprint=preprint
+            manuscript_detail=manuscript_detail
         ),
-        'inputs': [get_docmap_preprint_input(preprint=preprint, detailed=True)]
+        'inputs': [get_docmap_preprint_input(manuscript_detail=manuscript_detail, detailed=True)]
     }
 
 
 def get_docmap_assertions_for_peer_reviewed_step(
-    preprint: ApiPreprintInput
+    manuscript_detail: ApiManuscriptDetailInput
 ) -> Sequence[DocmapAssertion]:
     return [{
-        'item': get_docmap_preprint_assertion_item(preprint=preprint),
+        'item': get_docmap_preprint_assertion_item(manuscript_detail=manuscript_detail),
         'status': 'peer-reviewed'
     }]
 
 
 def get_docmaps_step_for_peer_reviewed_status(
     query_result_item: ApiInput,
-    preprint: ApiPreprintInput
+    manuscript_detail: ApiManuscriptDetailInput
 ):
     return {
         'actions': list(iter_docmap_actions_for_evaluations(
             query_result_item=query_result_item,
-            preprint=preprint
+            manuscript_detail=manuscript_detail
             )
         ),
         'assertions': get_docmap_assertions_for_peer_reviewed_step(
-            preprint=preprint
+            manuscript_detail=manuscript_detail
         ),
-        'inputs': [get_docmap_preprint_input(preprint=preprint, detailed=False)]
+        'inputs': [get_docmap_preprint_input(manuscript_detail=manuscript_detail, detailed=False)]
     }
 
 
 def get_docmap_assertions_for_manuscript_published_step(
     query_result_item: ApiInput,
-    preprint: ApiPreprintInput
+    manuscript_detail: ApiManuscriptDetailInput
 ) -> Sequence[DocmapAssertion]:
     return [{
         'item': get_docmap_elife_manuscript_doi_assertion_item(
             query_result_item=query_result_item,
-            preprint=preprint
+            manuscript_detail=manuscript_detail
         ),
         'status': 'manuscript-published'
     }]
@@ -135,57 +135,64 @@ def get_docmap_assertions_for_manuscript_published_step(
 
 def get_docmap_actions_for_manuscript_published_step(
     query_result_item: ApiInput,
-    preprint: ApiPreprintInput
+    manuscript_detail: ApiManuscriptDetailInput
 ) -> Sequence[DocmapAction]:
     return [{
         'participants': [],
         'outputs': [get_docmap_elife_manuscript_output(
             query_result_item=query_result_item,
-            preprint=preprint
+            manuscript_detail=manuscript_detail
         )]
     }]
 
 
 def get_docmap_inputs_for_manuscript_published_step(
     query_result_item: ApiInput,
-    preprint: ApiPreprintInput,
+    manuscript_detail: ApiManuscriptDetailInput,
 ) -> Sequence[Union[DocmapPreprintInput, DocmapEvaluationInput]]:
     return (
-        list([get_docmap_preprint_input(preprint=preprint, detailed=False)])
+        list([get_docmap_preprint_input(
+            manuscript_detail=manuscript_detail,
+            detailed=False
+        )])
         +
         list(iter_docmap_evaluation_input(
             query_result_item=query_result_item,
-            preprint=preprint
+            manuscript_detail=manuscript_detail
         ))
     )
 
 
 def get_docmaps_step_for_manuscript_published_status(
     query_result_item: ApiInput,
-    preprint: ApiPreprintInput
+    manuscript_detail: ApiManuscriptDetailInput
 ) -> DocmapStep:
     return {
         'actions': get_docmap_actions_for_manuscript_published_step(
             query_result_item=query_result_item,
-            preprint=preprint
+            manuscript_detail=manuscript_detail
         ),
         'assertions': get_docmap_assertions_for_manuscript_published_step(
             query_result_item=query_result_item,
-            preprint=preprint
+            manuscript_detail=manuscript_detail
         ),
         'inputs': get_docmap_inputs_for_manuscript_published_step(
             query_result_item=query_result_item,
-            preprint=preprint
+            manuscript_detail=manuscript_detail
         )
     }
 
 
 def iter_docmap_steps_for_query_result_item(query_result_item: ApiInput) -> Iterable[DocmapStep]:
-    preprint = query_result_item['preprints'][0]
-    yield get_docmaps_step_for_under_review_status(query_result_item, preprint)
-    if query_result_item['evaluations']:
-        yield get_docmaps_step_for_peer_reviewed_status(query_result_item, preprint)
-        yield get_docmaps_step_for_manuscript_published_status(query_result_item, preprint)
+    manuscript_details = query_result_item['manuscript_detail']
+    for manuscript_detail in manuscript_details:
+        yield get_docmaps_step_for_under_review_status(query_result_item, manuscript_detail)
+        if manuscript_detail['evaluations']:
+            yield get_docmaps_step_for_peer_reviewed_status(query_result_item, manuscript_detail)
+            yield get_docmaps_step_for_manuscript_published_status(
+                query_result_item,
+                manuscript_detail
+            )
 
 
 def generate_docmap_steps(step_iterable: Iterable[DocmapStep]) -> DocmapSteps:
@@ -202,7 +209,8 @@ def generate_docmap_steps(step_iterable: Iterable[DocmapStep]) -> DocmapSteps:
 
 
 def get_docmap_item_for_query_result_item(query_result_item: ApiInput) -> Docmap:
-    qc_complete_timestamp_str = query_result_item['qc_complete_timestamp'].isoformat()
+    manuscript_first_version = query_result_item['manuscript_detail'][0]
+    qc_complete_timestamp_str = manuscript_first_version['qc_complete_timestamp'].isoformat()
     id_query_param = {'manuscript_id': query_result_item['manuscript_id']}
     publisher_json = query_result_item['publisher_json']
     LOGGER.debug('publisher_json: %r', publisher_json)

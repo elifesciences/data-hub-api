@@ -2,7 +2,11 @@ from datetime import date, datetime
 
 MANUSCRIPT_ID_1 = 'manuscript_id_1'
 
+LONG_MANUSCRIPT_ID_1 = 'long_manuscript_id_1'
+LONG_MANUSCRIPT_ID_2 = 'long_manuscript_id_2'
+
 DOI_1 = '10.1101.test/doi1'
+DOI_2 = '10.1101.test/doi2'
 
 PREPRINT_VERSION_1 = '10'
 PREPRINT_VERSION_2 = '11'
@@ -24,46 +28,55 @@ TDM_PATH_1 = 'tdm_path_1'
 TDM_PATH_2 = 'tdm_path_2'
 TDM_PATH_3 = 'tdm_path_3'
 
-PREPRINT_DETAILS_1 = {
+
+LICENSE_1 = 'license_1'
+
+MANUSCRIPT_DETAIL_1: dict = {
+    'long_manuscript_identifier': LONG_MANUSCRIPT_ID_1,
+    'qc_complete_timestamp': datetime.fromisoformat('2022-01-01T01:02:03+00:00'),
+    'under_review_timestamp': datetime.fromisoformat('2022-02-01T01:02:03+00:00'),
+    'editor_details': [],
+    'senior_editor_details': [],
     'preprint_url': PREPRINT_LINK_1,
     'elife_doi_version_str': ELIFE_DOI_VERSION_STR_1,
     'preprint_doi': DOI_1,
     'preprint_version': PREPRINT_VERSION_1,
     'preprint_published_at_date': date.fromisoformat('2021-01-01'),
-    'tdm_path': TDM_PATH_1
+    'tdm_path': TDM_PATH_1,
+    'evaluations': []
 }
 
-PREPRINT_DETAILS_2 = {
-    'preprint_url': PREPRINT_LINK_2,
-    'elife_doi_version_str': ELIFE_DOI_VERSION_STR_2,
-    'preprint_doi': DOI_1,
-    'preprint_version': PREPRINT_VERSION_2,
-    'preprint_published_at_date': date.fromisoformat('2021-02-01'),
-    'tdm_path': TDM_PATH_2
-}
-
-PREPRINT_DETAILS_3 = {
-    'preprint_url': PREPRINT_LINK_3,
-    'elife_doi_version_str': ELIFE_DOI_VERSION_STR_3,
-    'preprint_doi': DOI_1,
-    'preprint_version': PREPRINT_VERSION_3,
-    'preprint_published_at_date': date.fromisoformat('2021-03-01'),
-    'tdm_path': TDM_PATH_3
-}
-
-LICENSE_1 = 'license_1'
-
-DOCMAPS_QUERY_RESULT_ITEM_1: dict = {
-    'manuscript_id': 'manuscript_id_1',
-    'qc_complete_timestamp': datetime.fromisoformat('2022-01-01T01:02:03+00:00'),
-    'under_review_timestamp': datetime.fromisoformat('2022-02-01T01:02:03+00:00'),
-    'publisher_json': '{"id": "publisher_1"}',
-    'elife_doi': ELIFE_DOI_1,
-    'license': LICENSE_1,
+MANUSCRIPT_DETAIL_2: dict = {
+    'long_manuscript_identifier': LONG_MANUSCRIPT_ID_2,
+    'qc_complete_timestamp': datetime.fromisoformat('2022-02-02T02:02:02+00:00'),
+    'under_review_timestamp': datetime.fromisoformat('2022-03-02T02:02:02+00:00'),
     'editor_details': [],
     'senior_editor_details': [],
-    'evaluations': [],
-    'preprints': [PREPRINT_DETAILS_1],
+    'preprint_url': PREPRINT_LINK_2,
+    'elife_doi_version_str': ELIFE_DOI_VERSION_STR_2,
+    'preprint_doi': DOI_2,
+    'preprint_version': PREPRINT_VERSION_2,
+    'preprint_published_at_date': date.fromisoformat('2021-02-02'),
+    'tdm_path': TDM_PATH_2,
+    'evaluations': []
+}
+
+DOCMAPS_QUERY_RESULT_ITEM_1: dict = {
+    'publisher_json': '{"id": "publisher_1"}',
+    'manuscript_id': 'manuscript_id_1',
+    'elife_doi': ELIFE_DOI_1,
+    'license': LICENSE_1,
+    'is_reviewed_preprint_type': True,
+    'manuscript_detail': [MANUSCRIPT_DETAIL_1]
+}
+
+DOCMAPS_QUERY_RESULT_ITEM_2: dict = {
+    'publisher_json': '{"id": "publisher_1"}',
+    'manuscript_id': 'manuscript_id_1',
+    'elife_doi': ELIFE_DOI_1,
+    'license': LICENSE_1,
+    'is_reviewed_preprint_type': True,
+    'manuscript_detail': [MANUSCRIPT_DETAIL_1, MANUSCRIPT_DETAIL_2]
 }
 
 HYPOTHESIS_ID_1 = 'hypothesis_1'
@@ -98,20 +111,10 @@ DOCMAPS_QUERY_RESULT_EVALUATION_2 = {
 
 DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS = {
     **DOCMAPS_QUERY_RESULT_ITEM_1,
-    'evaluations': [DOCMAPS_QUERY_RESULT_EVALUATION_1]
-}
-
-DOCMAPS_QUERY_RESULT_ITEM_WITH_REVISED_PREPRPINT: dict = {
-    'manuscript_id': 'manuscript_id_1',
-    'qc_complete_timestamp': datetime.fromisoformat('2022-01-01T01:02:03+00:00'),
-    'under_review_timestamp': datetime.fromisoformat('2022-02-01T01:02:03+00:00'),
-    'publisher_json': '{"id": "publisher_1"}',
-    'elife_doi': ELIFE_DOI_1,
-    'license': 'license_1',
-    'editor_details': [],
-    'senior_editor_details': [],
-    'evaluations': [DOCMAPS_QUERY_RESULT_EVALUATION_1, DOCMAPS_QUERY_RESULT_EVALUATION_2],
-    'preprints': [PREPRINT_DETAILS_1, PREPRINT_DETAILS_2],
+    'manuscript_detail': [{
+        **MANUSCRIPT_DETAIL_1,
+        'evaluations': [DOCMAPS_QUERY_RESULT_EVALUATION_1]
+    }]
 }
 
 EDITOR_DETAIL_1 = {

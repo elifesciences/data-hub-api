@@ -1,18 +1,18 @@
 from datetime import date, datetime
 from typing import Optional, Sequence, TypedDict
 
-ApiPreprintInput = TypedDict(
-    'ApiPreprintInput',
-    {
-        'preprint_url': str,
-        'elife_doi_version_str': str,
-        'preprint_doi': str,
-        'preprint_version': str,
-        'preprint_published_at_date': date,
-        'tdm_path': str
-    },
-    total=False
-)
+# ApiPreprintInput = TypedDict(
+#     'ApiPreprintInput',
+#     {
+#         'preprint_url': str,
+#         'elife_doi_version_str': str,
+#         'preprint_doi': str,
+#         'preprint_version': str,
+#         'preprint_published_at_date': date,
+#         'tdm_path': str
+#     },
+#     total=False
+# )
 
 ApiEvaluationInput = TypedDict(
     'ApiEvaluationInput',
@@ -37,19 +37,35 @@ ApiEditorDetailInput = TypedDict(
     total=False
 )
 
+ApiManuscriptDetailInput = TypedDict(
+    'ApiManuscriptDetailInput',
+    {
+        'long_manuscript_identifier': str,
+        'qc_complete_timestamp': datetime,
+        'under_review_timestamp': datetime,
+        'editor_details': Sequence[ApiEditorDetailInput],
+        'senior_editor_details': Sequence[ApiEditorDetailInput],
+        'preprint_url': str,
+        'elife_doi_version_str': str,
+        'preprint_doi': str,
+        'preprint_version': str,
+        'preprint_published_at_date': date,
+        'tdm_path': str,
+        'evaluations': Sequence[ApiEvaluationInput]
+    },
+    total=False
+)
+
+
 ApiInput = TypedDict(
     'ApiInput',
     {
-        'manuscript_id': str,
-        'qc_complete_timestamp': datetime,
-        'under_review_timestamp': datetime,
         'publisher_json': dict,
+        'manuscript_id': str,
         'elife_doi': str,
         'license': str,
-        'editor_details': Sequence[ApiEditorDetailInput],
-        'senior_editor_details': Sequence[ApiEditorDetailInput],
-        'evaluations': Sequence[ApiEvaluationInput],
-        'preprints': Sequence[ApiPreprintInput]
+        'is_reviewed_preprint_type': bool,
+        'manuscript_detail': Sequence[ApiManuscriptDetailInput]
     },
     total=False
 )

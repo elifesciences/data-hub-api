@@ -7,7 +7,7 @@ from data_hub_api.docmaps.v2.api_input_typing import (
     ApiEditorDetailInput,
     ApiEvaluationInput,
     ApiInput,
-    ApiPreprintInput
+    ApiManuscriptDetailInput
 )
 from data_hub_api.docmaps.v2.docmap_typing import (
     DocmapAction,
@@ -56,12 +56,12 @@ def get_elife_evaluation_doi_url(
 
 def get_docmap_evaluation_input(
     query_result_item: ApiInput,
-    preprint: ApiPreprintInput,
+    manuscript_detail: ApiManuscriptDetailInput,
     evaluation_suffix: str,
     docmap_evaluation_type: str
 ) -> DocmapEvaluationInput:
     elife_evaluation_doi = get_elife_evaluation_doi(
-        elife_doi_version_str=preprint['elife_doi_version_str'],
+        elife_doi_version_str=manuscript_detail['elife_doi_version_str'],
         elife_doi=query_result_item['elife_doi'],
         evaluation_suffix=evaluation_suffix
     )
@@ -104,15 +104,15 @@ def get_docmap_evaluation_output_content(
 
 def get_docmap_evaluation_output(
     query_result_item: ApiInput,
-    preprint: ApiPreprintInput,
+    manuscript_detail: ApiManuscriptDetailInput,
     hypothesis_id: str,
     evaluation_suffix: str,
     annotation_created_timestamp: datetime,
     docmap_evaluation_type: str
 ) -> DocmapEvaluationOutput:
-    preprint_doi = preprint['preprint_doi']
+    preprint_doi = manuscript_detail['preprint_doi']
     elife_evaluation_doi = get_elife_evaluation_doi(
-        elife_doi_version_str=preprint['elife_doi_version_str'],
+        elife_doi_version_str=manuscript_detail['elife_doi_version_str'],
         elife_doi=query_result_item['elife_doi'],
         evaluation_suffix=evaluation_suffix
     )
@@ -217,11 +217,11 @@ def get_docmap_evaluation_participants_for_evalution_summary_type(
 
 
 def get_docmap_evaluation_participants(
-    query_result_item: ApiInput,
+    manuscript_detail: ApiManuscriptDetailInput,
     docmap_evaluation_type: str
 ) -> Sequence[DocmapParticipant]:
-    editor_details_list = query_result_item['editor_details']
-    senior_editor_details_list = query_result_item['senior_editor_details']
+    editor_details_list = manuscript_detail['editor_details']
+    senior_editor_details_list = manuscript_detail['senior_editor_details']
     if docmap_evaluation_type == DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE:
         return get_docmap_evaluation_participants_for_review_article_type()
     if docmap_evaluation_type == DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY:
@@ -234,7 +234,7 @@ def get_docmap_evaluation_participants(
 
 def get_docmap_actions_for_evaluations(
     query_result_item: ApiInput,
-    preprint: ApiPreprintInput,
+    manuscript_detail: ApiManuscriptDetailInput,
     hypothesis_id: str,
     evaluation_suffix: str,
     annotation_created_timestamp: datetime,
@@ -242,13 +242,13 @@ def get_docmap_actions_for_evaluations(
 ) -> DocmapAction:
     return {
         'participants': get_docmap_evaluation_participants(
-            query_result_item=query_result_item,
+            manuscript_detail=manuscript_detail,
             docmap_evaluation_type=docmap_evaluation_type
         ),
         'outputs': [
             get_docmap_evaluation_output(
                 query_result_item=query_result_item,
-                preprint=preprint,
+                manuscript_detail=manuscript_detail,
                 hypothesis_id=hypothesis_id,
                 annotation_created_timestamp=annotation_created_timestamp,
                 evaluation_suffix=evaluation_suffix,
@@ -281,10 +281,10 @@ def iter_evaluation_and_type_for_related_preprint_url(
 
 def iter_docmap_actions_for_evaluations(
     query_result_item: ApiInput,
-    preprint: ApiPreprintInput
+    manuscript_detail: ApiManuscriptDetailInput
 ) -> Iterable[DocmapAction]:
-    evaluations = query_result_item['evaluations']
-    preprint_url = preprint['preprint_url']
+    evaluations = manuscript_detail['evaluations']
+    preprint_url = manuscript_detail['preprint_url']
     for evaluation, docmap_evaluation_type in iter_evaluation_and_type_for_related_preprint_url(
         evaluations,
         preprint_url
@@ -294,7 +294,7 @@ def iter_docmap_actions_for_evaluations(
         evaluation_suffix = evaluation['evaluation_suffix']
         yield get_docmap_actions_for_evaluations(
             query_result_item=query_result_item,
-            preprint=preprint,
+            manuscript_detail=manuscript_detail,
             hypothesis_id=hypothesis_id,
             annotation_created_timestamp=annotation_created_timestamp,
             evaluation_suffix=evaluation_suffix,
@@ -304,10 +304,10 @@ def iter_docmap_actions_for_evaluations(
 
 def iter_docmap_evaluation_input(
     query_result_item: ApiInput,
-    preprint: ApiPreprintInput
+    manuscript_detail: ApiManuscriptDetailInput
 ):
-    evaluations = query_result_item['evaluations']
-    preprint_url = preprint['preprint_url']
+    evaluations = manuscript_detail['evaluations']
+    preprint_url = manuscript_detail['preprint_url']
     for evaluation, docmap_evaluation_type in iter_evaluation_and_type_for_related_preprint_url(
         evaluations,
         preprint_url
@@ -315,7 +315,7 @@ def iter_docmap_evaluation_input(
         evaluation_suffix = evaluation['evaluation_suffix']
         yield get_docmap_evaluation_input(
             query_result_item=query_result_item,
-            preprint=preprint,
+            manuscript_detail=manuscript_detail,
             evaluation_suffix=evaluation_suffix,
             docmap_evaluation_type=docmap_evaluation_type
         )
