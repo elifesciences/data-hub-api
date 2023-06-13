@@ -214,8 +214,11 @@ def iter_docmap_steps_for_query_result_item(query_result_item: ApiInput) -> Iter
     for manuscript_detail in manuscript_details:
         yield get_docmaps_step_for_under_review_status(query_result_item, manuscript_detail)
         if manuscript_detail['evaluations']:
-            if manuscript_detail['position_in_overall_stage']==1:
-                yield get_docmaps_step_for_peer_reviewed_status(query_result_item, manuscript_detail)
+            if manuscript_detail['position_in_overall_stage'] == 1:
+                yield get_docmaps_step_for_peer_reviewed_status(
+                    query_result_item,
+                    manuscript_detail
+                )
             else:
                 yield get_docmaps_step_for_revised_status(query_result_item, manuscript_detail)
             yield get_docmaps_step_for_manuscript_published_status(
