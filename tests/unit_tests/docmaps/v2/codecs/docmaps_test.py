@@ -48,6 +48,7 @@ from tests.unit_tests.docmaps.v2.test_data import (
     HYPOTHESIS_ID_2,
     HYPOTHESIS_ID_3,
     MANUSCRIPT_DETAIL_1,
+    MANUSCRIPT_DETAIL_WITH_EVALUATIONS_1,
     PREPRINT_LINK_PREFIX,
     PREPRINT_VERSION_1,
     PREPRINT_VERSION_2,
@@ -475,9 +476,9 @@ class TestGetDocmapsItemForQueryResultItem:
         docmaps_item = get_docmap_item_for_query_result_item({
             **DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS,
             'manuscript_detail': [{
-                **MANUSCRIPT_DETAIL_1,
+                **MANUSCRIPT_DETAIL_WITH_EVALUATIONS_1,
                 'preprint_published_at_date': None
             }]
         })
-        manuscript_published_step = docmaps_item['steps']['_:b0']
+        manuscript_published_step = docmaps_item['steps']['_:b2']
         assert "" == manuscript_published_step['actions'][0]['outputs'][0].get('published')

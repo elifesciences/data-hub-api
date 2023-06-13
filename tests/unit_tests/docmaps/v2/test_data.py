@@ -2,8 +2,8 @@ from datetime import date, datetime
 
 MANUSCRIPT_ID_1 = 'manuscript_id_1'
 
-LONG_MANUSCRIPT_ID_1 = 'long_manuscript_id_1'
-LONG_MANUSCRIPT_ID_2 = 'long_manuscript_id_2'
+LONG_MANUSCRIPT_ID_1 = 'long_manuscript_id'
+LONG_MANUSCRIPT_ID_2 = 'long_manuscript_id_R1'
 
 DOI_1 = '10.1101.test/doi1'
 DOI_2 = '10.1101.test/doi2'
@@ -33,6 +33,7 @@ LICENSE_1 = 'license_1'
 
 MANUSCRIPT_DETAIL_1: dict = {
     'long_manuscript_identifier': LONG_MANUSCRIPT_ID_1,
+    'position_in_overall_stage': 1,
     'qc_complete_timestamp': datetime.fromisoformat('2022-01-01T01:02:03+00:00'),
     'under_review_timestamp': datetime.fromisoformat('2022-02-01T01:02:03+00:00'),
     'editor_details': [],
@@ -48,6 +49,7 @@ MANUSCRIPT_DETAIL_1: dict = {
 
 MANUSCRIPT_DETAIL_2: dict = {
     'long_manuscript_identifier': LONG_MANUSCRIPT_ID_2,
+    'position_in_overall_stage': 2,
     'qc_complete_timestamp': datetime.fromisoformat('2022-02-02T02:02:02+00:00'),
     'under_review_timestamp': datetime.fromisoformat('2022-03-02T02:02:02+00:00'),
     'editor_details': [],
@@ -109,12 +111,14 @@ DOCMAPS_QUERY_RESULT_EVALUATION_2 = {
     'evaluation_suffix': EVALUATION_SUFFIX_2
 }
 
+MANUSCRIPT_DETAIL_WITH_EVALUATIONS_1 = {
+    **MANUSCRIPT_DETAIL_1,
+    'evaluations': [DOCMAPS_QUERY_RESULT_EVALUATION_1]
+}
+
 DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS = {
     **DOCMAPS_QUERY_RESULT_ITEM_1,
-    'manuscript_detail': [{
-        **MANUSCRIPT_DETAIL_1,
-        'evaluations': [DOCMAPS_QUERY_RESULT_EVALUATION_1]
-    }]
+    'manuscript_detail': [MANUSCRIPT_DETAIL_WITH_EVALUATIONS_1]
 }
 
 EDITOR_DETAIL_1 = {
