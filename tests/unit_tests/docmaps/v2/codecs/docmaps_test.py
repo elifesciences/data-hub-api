@@ -25,6 +25,8 @@ from data_hub_api.docmaps.v2.codecs.preprint import (
 )
 
 from data_hub_api.docmaps.v2.codecs.docmaps import (
+    get_docmap_actions_for_under_review_step,
+    get_docmap_assertions_for_under_review_step,
     get_docmap_item_for_query_result_item,
     DOCMAPS_JSONLD_SCHEMA_URL,
     DOCMAP_ID_PREFIX,
@@ -48,6 +50,7 @@ from tests.unit_tests.docmaps.v2.test_data import (
     HYPOTHESIS_ID_2,
     HYPOTHESIS_ID_3,
     MANUSCRIPT_DETAIL_1,
+    MANUSCRIPT_DETAIL_2,
     MANUSCRIPT_DETAIL_WITH_EVALUATIONS_1,
     PREPRINT_LINK_PREFIX,
     PREPRINT_VERSION_1,
@@ -482,3 +485,36 @@ class TestGetDocmapsItemForQueryResultItem:
         })
         manuscript_published_step = docmaps_item['steps']['_:b2']
         assert "" == manuscript_published_step['actions'][0]['outputs'][0].get('published')
+
+    def test_should_populate_inputs_for_second_under_review_step(self):
+        query_result_item = {
+            **DOCMAPS_QUERY_RESULT_ITEM_1,
+            'manuscript_detail': [MANUSCRIPT_DETAIL_WITH_EVALUATIONS_1, MANUSCRIPT_DETAIL_2]
+        }
+        docmaps_item = get_docmap_item_for_query_result_item(query_result_item)
+        under_review_step = docmaps_item['steps']['_:b3']
+        assert under_review_step['inputs'] == [
+            get_docmap_preprint_input(manuscript_detail=MANUSCRIPT_DETAIL_2, detailed=True)
+        ]
+
+    def test_should_populate_actions_for_second_under_review_step(self):
+        query_result_item = {
+            **DOCMAPS_QUERY_RESULT_ITEM_1,
+            'manuscript_detail': [MANUSCRIPT_DETAIL_WITH_EVALUATIONS_1, MANUSCRIPT_DETAIL_2]
+        }
+        docmaps_item = get_docmap_item_for_query_result_item(query_result_item)
+        under_review_step = docmaps_item['steps']['_:b3']
+        assert under_review_step['actions'] == (
+            get_docmap_actions_for_under_review_step(query_result_item, MANUSCRIPT_DETAIL_2)
+        )
+
+    def test_should_populate_assertions_for_second_under_review_step(self):
+        query_result_item = {
+            **DOCMAPS_QUERY_RESULT_ITEM_1,
+            'manuscript_detail': [MANUSCRIPT_DETAIL_WITH_EVALUATIONS_1, MANUSCRIPT_DETAIL_2]
+        }
+        docmaps_item = get_docmap_item_for_query_result_item(query_result_item)
+        under_review_step = docmaps_item['steps']['_:b3']
+        assert under_review_step['assertions'] == (
+            get_docmap_assertions_for_under_review_step(query_result_item, MANUSCRIPT_DETAIL_2)
+        )
