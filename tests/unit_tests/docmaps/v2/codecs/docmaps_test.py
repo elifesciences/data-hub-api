@@ -52,6 +52,7 @@ from tests.unit_tests.docmaps.v2.test_data import (
     MANUSCRIPT_DETAIL_1,
     MANUSCRIPT_DETAIL_2,
     MANUSCRIPT_DETAIL_WITH_EVALUATIONS_1,
+    MANUSCRIPT_DETAIL_WITH_EVALUATIONS_2,
     PREPRINT_LINK_PREFIX,
     PREPRINT_VERSION_1,
     PREPRINT_VERSION_2,
@@ -518,3 +519,32 @@ class TestGetDocmapsItemForQueryResultItem:
         assert under_review_step['assertions'] == (
             get_docmap_assertions_for_under_review_step(query_result_item, MANUSCRIPT_DETAIL_2)
         )
+
+    def test_should_populate_assertions_revised_step(self):
+        query_result_item = {
+            **DOCMAPS_QUERY_RESULT_ITEM_1,
+            'manuscript_detail': [
+                MANUSCRIPT_DETAIL_WITH_EVALUATIONS_1,
+                MANUSCRIPT_DETAIL_WITH_EVALUATIONS_2
+            ]
+        }
+        docmaps_item = get_docmap_item_for_query_result_item(query_result_item)
+        peer_reviewed_step = docmaps_item['steps']['_:b4']
+        assert peer_reviewed_step['assertions'] == [{
+            'item': get_docmap_preprint_assertion_item(MANUSCRIPT_DETAIL_WITH_EVALUATIONS_2),
+            'status': 'revised'
+        }]
+
+    def test_should_populate_inputs_revised_step(self):
+        query_result_item = {
+            **DOCMAPS_QUERY_RESULT_ITEM_1,
+            'manuscript_detail': [
+                MANUSCRIPT_DETAIL_WITH_EVALUATIONS_1,
+                MANUSCRIPT_DETAIL_WITH_EVALUATIONS_2
+            ]
+        }
+        docmaps_item = get_docmap_item_for_query_result_item(query_result_item)
+        peer_reviewed_step = docmaps_item['steps']['_:b4']
+        assert peer_reviewed_step['inputs'] == [
+            get_docmap_preprint_input(MANUSCRIPT_DETAIL_WITH_EVALUATIONS_2, False)
+        ]

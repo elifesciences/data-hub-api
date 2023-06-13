@@ -120,6 +120,32 @@ def get_docmaps_step_for_peer_reviewed_status(
     }
 
 
+def get_docmap_assertions_for_revised_step(
+    manuscript_detail: ApiManuscriptDetailInput
+) -> Sequence[DocmapAssertion]:
+    return [{
+        'item': get_docmap_preprint_assertion_item(manuscript_detail=manuscript_detail),
+        'status': 'revised'
+    }]
+
+
+def get_docmaps_step_for_revised_status(
+    query_result_item: ApiInput,
+    manuscript_detail: ApiManuscriptDetailInput
+):
+    return {
+        'actions': list(iter_docmap_actions_for_evaluations(
+            query_result_item=query_result_item,
+            manuscript_detail=manuscript_detail
+            )
+        ),
+        'assertions': get_docmap_assertions_for_revised_step(
+            manuscript_detail=manuscript_detail
+        ),
+        'inputs': [get_docmap_preprint_input(manuscript_detail=manuscript_detail, detailed=False)]
+    }
+
+
 def get_docmap_assertions_for_manuscript_published_step(
     query_result_item: ApiInput,
     manuscript_detail: ApiManuscriptDetailInput
@@ -188,7 +214,10 @@ def iter_docmap_steps_for_query_result_item(query_result_item: ApiInput) -> Iter
     for manuscript_detail in manuscript_details:
         yield get_docmaps_step_for_under_review_status(query_result_item, manuscript_detail)
         if manuscript_detail['evaluations']:
-            yield get_docmaps_step_for_peer_reviewed_status(query_result_item, manuscript_detail)
+            if manuscript_detail['position_in_overall_stage']==1:
+                yield get_docmaps_step_for_peer_reviewed_status(query_result_item, manuscript_detail)
+            else:
+                yield get_docmaps_step_for_revised_status(query_result_item, manuscript_detail)
             yield get_docmaps_step_for_manuscript_published_status(
                 query_result_item,
                 manuscript_detail
