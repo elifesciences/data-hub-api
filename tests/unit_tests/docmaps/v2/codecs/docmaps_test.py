@@ -418,7 +418,7 @@ class TestGetDocmapsItemForQueryResultItem:
             )
         )
 
-    def test_should_populate_assertions_manuscript_published_step_with_elife_doi(self):
+    def test_should_populate_assertions_for_first_manuscript_published_step(self):
         docmaps_item = get_docmap_item_for_query_result_item(
             DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS
         )
@@ -431,7 +431,7 @@ class TestGetDocmapsItemForQueryResultItem:
             'status': 'manuscript-published'
         }]
 
-    def test_should_populate_actions_outputs_manuscript_published_step(self):
+    def test_should_populate_actions_outputs_for_first_manuscript_published_step(self):
         docmaps_item = get_docmap_item_for_query_result_item(
             DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS
         )
@@ -444,7 +444,7 @@ class TestGetDocmapsItemForQueryResultItem:
             )]
         }]
 
-    def test_should_populate_inputs_manuscript_published_step_with_preprint_and_evaluations(self):
+    def test_should_populate_inputs_for_first_manuscript_published_step(self):
         docmaps_item = get_docmap_item_for_query_result_item({
             **DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS,
             'manuscript_detail': [{
@@ -548,3 +548,21 @@ class TestGetDocmapsItemForQueryResultItem:
         assert peer_reviewed_step['inputs'] == [
             get_docmap_preprint_input(MANUSCRIPT_DETAIL_WITH_EVALUATIONS_2, False)
         ]
+
+    def test_should_populate_assertions_for_second_manuscript_published_step(self):
+        query_result_item = {
+            **DOCMAPS_QUERY_RESULT_ITEM_1,
+            'manuscript_detail': [
+                MANUSCRIPT_DETAIL_WITH_EVALUATIONS_1,
+                MANUSCRIPT_DETAIL_WITH_EVALUATIONS_2
+            ]
+        }
+        docmaps_item = get_docmap_item_for_query_result_item(query_result_item)
+        manuscript_published_step = docmaps_item['steps']['_:b5']
+        assert manuscript_published_step['assertions'] == [{
+            'item': get_docmap_elife_manuscript_doi_assertion_item(
+                query_result_item=query_result_item,
+                manuscript_detail=MANUSCRIPT_DETAIL_WITH_EVALUATIONS_2
+            ),
+            'status': 'manuscript-published'
+        }]
