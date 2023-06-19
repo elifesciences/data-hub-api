@@ -37,8 +37,8 @@ ApiEditorDetailInput = TypedDict(
     total=False
 )
 
-ApiManuscriptDetailInput = TypedDict(
-    'ApiManuscriptDetailInput',
+ApiManuscriptVersionInput = TypedDict(
+    'ApiManuscriptVersionInput',
     {
         'long_manuscript_identifier': str,
         'position_in_overall_stage': int,
@@ -66,7 +66,7 @@ ApiInput = TypedDict(
         'elife_doi': str,
         'license': str,
         'is_reviewed_preprint_type': bool,
-        'manuscript_detail': Sequence[ApiManuscriptDetailInput]
+        'manuscript_versions': Sequence[ApiManuscriptVersionInput]
     },
     total=False
 )

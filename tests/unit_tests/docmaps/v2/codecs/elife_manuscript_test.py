@@ -6,7 +6,7 @@ from data_hub_api.docmaps.v2.codecs.elife_manuscript import (
 
 from tests.unit_tests.docmaps.v2.test_data import (
     DOCMAPS_QUERY_RESULT_ITEM_1,
-    MANUSCRIPT_DETAIL_1
+    MANUSCRIPT_VERSION_1
 )
 
 
@@ -29,15 +29,15 @@ class TestGetDocmapElifeManuscriptDoiAssertionItem:
     def test_should_populate_docmaps_elife_manuscript_doi_assertion_item(self):
         result = get_docmap_elife_manuscript_doi_assertion_item(
             query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1,
-            manuscript_detail=MANUSCRIPT_DETAIL_1
+            manuscript_version=MANUSCRIPT_VERSION_1
         )
         assert result == {
             'type': 'preprint',
             'doi': get_elife_manuscript_version_doi(
-                elife_doi_version_str=MANUSCRIPT_DETAIL_1['elife_doi_version_str'],
+                elife_doi_version_str=MANUSCRIPT_VERSION_1['elife_doi_version_str'],
                 elife_doi=DOCMAPS_QUERY_RESULT_ITEM_1['elife_doi']
             ),
-            'versionIdentifier': MANUSCRIPT_DETAIL_1['elife_doi_version_str']
+            'versionIdentifier': MANUSCRIPT_VERSION_1['elife_doi_version_str']
         }
 
 
@@ -45,16 +45,16 @@ class TestGetDocmapElifeManuscriptOutput:
     def test_should_populate_docmaps_elife_manuscript_output(self):
         result = get_docmap_elife_manuscript_output(
             query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1,
-            manuscript_detail=MANUSCRIPT_DETAIL_1
+            manuscript_version=MANUSCRIPT_VERSION_1
         )
         assert result == {
             'type': 'preprint',
             'identifier': DOCMAPS_QUERY_RESULT_ITEM_1['manuscript_id'],
             'doi': get_elife_manuscript_version_doi(
-                elife_doi_version_str=MANUSCRIPT_DETAIL_1['elife_doi_version_str'],
+                elife_doi_version_str=MANUSCRIPT_VERSION_1['elife_doi_version_str'],
                 elife_doi=DOCMAPS_QUERY_RESULT_ITEM_1['elife_doi']
             ),
-            'versionIdentifier': MANUSCRIPT_DETAIL_1['elife_doi_version_str'],
+            'versionIdentifier': MANUSCRIPT_VERSION_1['elife_doi_version_str'],
             'published': '',
             'license': DOCMAPS_QUERY_RESULT_ITEM_1['license']
         }

@@ -31,7 +31,7 @@ TDM_PATH_3 = 'tdm_path_3'
 
 LICENSE_1 = 'license_1'
 
-MANUSCRIPT_DETAIL_1: dict = {
+MANUSCRIPT_VERSION_1: dict = {
     'long_manuscript_identifier': LONG_MANUSCRIPT_ID_1,
     'position_in_overall_stage': 1,
     'qc_complete_timestamp': datetime.fromisoformat('2022-01-01T01:02:03+00:00'),
@@ -47,7 +47,7 @@ MANUSCRIPT_DETAIL_1: dict = {
     'evaluations': []
 }
 
-MANUSCRIPT_DETAIL_2: dict = {
+MANUSCRIPT_VERSION_2: dict = {
     'long_manuscript_identifier': LONG_MANUSCRIPT_ID_2,
     'position_in_overall_stage': 2,
     'qc_complete_timestamp': datetime.fromisoformat('2022-02-02T02:02:02+00:00'),
@@ -69,7 +69,7 @@ DOCMAPS_QUERY_RESULT_ITEM_1: dict = {
     'elife_doi': ELIFE_DOI_1,
     'license': LICENSE_1,
     'is_reviewed_preprint_type': True,
-    'manuscript_detail': [MANUSCRIPT_DETAIL_1]
+    'manuscript_versions': [MANUSCRIPT_VERSION_1]
 }
 
 DOCMAPS_QUERY_RESULT_ITEM_2: dict = {
@@ -78,7 +78,7 @@ DOCMAPS_QUERY_RESULT_ITEM_2: dict = {
     'elife_doi': ELIFE_DOI_1,
     'license': LICENSE_1,
     'is_reviewed_preprint_type': True,
-    'manuscript_detail': [MANUSCRIPT_DETAIL_1, MANUSCRIPT_DETAIL_2]
+    'manuscript_versions': [MANUSCRIPT_VERSION_1, MANUSCRIPT_VERSION_2]
 }
 
 HYPOTHESIS_ID_1 = 'hypothesis_1'
@@ -111,19 +111,19 @@ DOCMAPS_QUERY_RESULT_EVALUATION_2 = {
     'evaluation_suffix': EVALUATION_SUFFIX_2
 }
 
-MANUSCRIPT_DETAIL_WITH_EVALUATIONS_1 = {
-    **MANUSCRIPT_DETAIL_1,
+MANUSCRIPT_VERSION_WITH_EVALUATIONS_1 = {
+    **MANUSCRIPT_VERSION_1,
     'evaluations': [DOCMAPS_QUERY_RESULT_EVALUATION_1]
 }
 
-MANUSCRIPT_DETAIL_WITH_EVALUATIONS_2 = {
-    **MANUSCRIPT_DETAIL_2,
+MANUSCRIPT_VERSION_WITH_EVALUATIONS_2 = {
+    **MANUSCRIPT_VERSION_2,
     'evaluations': [DOCMAPS_QUERY_RESULT_EVALUATION_2]
 }
 
 DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS = {
     **DOCMAPS_QUERY_RESULT_ITEM_1,
-    'manuscript_detail': [MANUSCRIPT_DETAIL_WITH_EVALUATIONS_1]
+    'manuscript_versions': [MANUSCRIPT_VERSION_WITH_EVALUATIONS_1]
 }
 
 EDITOR_DETAIL_1 = {

@@ -5,7 +5,7 @@ from data_hub_api.docmaps.v2.codecs.preprint import (
 )
 from tests.unit_tests.docmaps.v2.test_data import (
     DOI_1,
-    MANUSCRIPT_DETAIL_1,
+    MANUSCRIPT_VERSION_1,
     PREPRINT_LINK_1,
     PREPRINT_VERSION_1,
     TDM_PATH_1
@@ -15,7 +15,7 @@ from tests.unit_tests.docmaps.v2.test_data import (
 class TestGetDocmapPreprintInput:
     def test_should_populate_published_and_tdm_path_if_detailed_param_true(self):
         result = get_docmap_preprint_input(
-            manuscript_detail=MANUSCRIPT_DETAIL_1,
+            manuscript_version=MANUSCRIPT_VERSION_1,
             detailed=True
         )
         assert result == {
@@ -28,12 +28,12 @@ class TestGetDocmapPreprintInput:
         }
 
     def test_should_return_empty_str_for_published_if_not_defined(self):
-        manuscript_detail = {
-            **MANUSCRIPT_DETAIL_1,
+        manuscript_version = {
+            **MANUSCRIPT_VERSION_1,
             'preprint_published_at_date': None
         }
         result = get_docmap_preprint_input(
-            manuscript_detail=manuscript_detail,
+            manuscript_version=manuscript_version,
             detailed=True
         )
         assert result == {
@@ -47,7 +47,7 @@ class TestGetDocmapPreprintInput:
 
     def test_should_not_populate_published_and_tdm_path_if_detailed_param_false(self):
         result = get_docmap_preprint_input(
-            manuscript_detail=MANUSCRIPT_DETAIL_1,
+            manuscript_version=MANUSCRIPT_VERSION_1,
             detailed=False
         )
         assert result == {
@@ -60,7 +60,7 @@ class TestGetDocmapPreprintInput:
 
 class TestGetDocmapPreprintAssertionItem:
     def test_should_populate_docmaps_preprint_input(self):
-        result = get_docmap_preprint_assertion_item(manuscript_detail=MANUSCRIPT_DETAIL_1)
+        result = get_docmap_preprint_assertion_item(manuscript_version=MANUSCRIPT_VERSION_1)
         assert result == {
             'type': 'preprint',
             'doi': DOI_1,

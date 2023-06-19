@@ -31,7 +31,7 @@ from tests.unit_tests.docmaps.v2.test_data import (
     EVALUATION_SUFFIX_1,
     HYPOTHESIS_ID_1,
     LICENSE_1,
-    MANUSCRIPT_DETAIL_1,
+    MANUSCRIPT_VERSION_1,
     SENIOR_EDITOR_DETAIL_1
 )
 
@@ -88,7 +88,7 @@ class TestGetDocmapEvaluationInput:
     def test_should_populate_evaluation_input(self):
         result = get_docmap_evaluation_input(
             query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1,
-            manuscript_detail=MANUSCRIPT_DETAIL_1,
+            manuscript_version=MANUSCRIPT_VERSION_1,
             evaluation_suffix=EVALUATION_SUFFIX_1,
             docmap_evaluation_type='docmap_evaluation_type_1'
         )
@@ -151,7 +151,7 @@ class TestGetDocmapEvaluationOutput:
     def test_should_populate_evaluation_output(self):
         result = get_docmap_evaluation_output(
             query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1,
-            manuscript_detail=MANUSCRIPT_DETAIL_1,
+            manuscript_version=MANUSCRIPT_VERSION_1,
             hypothesis_id=HYPOTHESIS_ID_1,
             evaluation_suffix=EVALUATION_SUFFIX_1,
             annotation_created_timestamp=ANNOTATION_CREATED_TIMESTAMP_1,
@@ -299,7 +299,7 @@ class TestGetDocmapEvaluationParticipants:
             'get_docmap_evaluation_participants_for_review_article_type'
         ) as mock:
             get_docmap_evaluation_participants(
-                manuscript_detail=MANUSCRIPT_DETAIL_1,
+                manuscript_version=MANUSCRIPT_VERSION_1,
                 docmap_evaluation_type=DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE
             )
             mock.assert_called_once()
@@ -310,7 +310,7 @@ class TestGetDocmapEvaluationParticipants:
             'get_docmap_evaluation_participants_for_evalution_summary_type'
         ) as mock:
             get_docmap_evaluation_participants(
-                manuscript_detail=MANUSCRIPT_DETAIL_1,
+                manuscript_version=MANUSCRIPT_VERSION_1,
                 docmap_evaluation_type=DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY
             )
             mock.assert_called_once()
