@@ -31,7 +31,7 @@ from data_hub_api.docmaps.v1.codecs.docmaps import (
     DOCMAP_ID_PREFIX,
     generate_docmap_steps,
 )
-from tests.unit_tests.docmaps.v1.test_data import (
+from tests.unit_tests.docmaps.v1.v1_test_data import (
     ANNOTATION_CREATED_TIMESTAMP_1,
     ANNOTATION_CREATED_TIMESTAMP_2,
     ANNOTATION_CREATED_TIMESTAMP_3,

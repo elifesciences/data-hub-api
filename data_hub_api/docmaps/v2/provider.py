@@ -4,10 +4,10 @@ from time import monotonic
 from typing import Iterable, Optional, Sequence, Tuple, cast
 
 import objsize
-from data_hub_api.docmaps.v1.codecs.docmaps import get_docmap_item_for_query_result_item
-from data_hub_api.docmaps.v1.api_input_typing import ApiInput
+from data_hub_api.docmaps.v2.codecs.docmaps import get_docmap_item_for_query_result_item
+from data_hub_api.docmaps.v2.api_input_typing import ApiInput
 
-from data_hub_api.docmaps.v1.docmap_typing import (
+from data_hub_api.docmaps.v2.docmap_typing import (
     Docmap
 )
 
@@ -15,13 +15,13 @@ from data_hub_api.utils.bigquery import (
     iter_dict_from_bq_query
 )
 from data_hub_api.utils.cache import SingleObjectCache, DummySingleObjectCache
-from data_hub_api.docmaps.v1.sql import get_sql_path
+from data_hub_api.docmaps.v2.sql import get_sql_path
 
 
 LOGGER = logging.getLogger(__name__)
 
 
-class DocmapsProviderV1:
+class DocmapsProvider:
     def __init__(
         self,
         gcp_project_name: str = 'elife-data-pipeline',
@@ -36,13 +36,9 @@ class DocmapsProviderV1:
         )
         assert not (only_include_reviewed_preprint_type and only_include_evaluated_preprints)
         assert not (additionally_include_manuscript_ids and not only_include_reviewed_preprint_type)
-        if only_include_reviewed_preprint_type:
-            self.docmaps_index_query += (
-                '\nWHERE is_reviewed_preprint_type AND is_or_was_under_review'
-            )
         if only_include_reviewed_preprint_type and additionally_include_manuscript_ids:
             self.docmaps_index_query += (
-                f'\nOR result.manuscript_id IN {additionally_include_manuscript_ids}'
+                f'\nWHERE 1=1 OR result.manuscript_id IN {additionally_include_manuscript_ids}'
             )
         if only_include_evaluated_preprints:
             self.docmaps_index_query += '\nWHERE has_evaluations'
