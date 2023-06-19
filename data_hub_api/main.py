@@ -27,7 +27,6 @@ def create_app():
     )
 
     enhanced_preprints_docmaps_provider = DocmapsProvider(
-        only_include_reviewed_preprint_type=True,
         additionally_include_manuscript_ids=ADDITIONAL_MANUSCRIPT_IDS,
         query_results_cache=InMemorySingleObjectCache(max_age_in_seconds=max_age_in_seconds)
     )

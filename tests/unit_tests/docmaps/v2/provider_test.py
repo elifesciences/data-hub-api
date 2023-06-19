@@ -54,10 +54,8 @@ class TestEnhancedPreprintsDocmapsProvider:
         self
     ):
         provider = DocmapsProvider(
-            only_include_reviewed_preprint_type=True,
             additionally_include_manuscript_ids=ADDITIONAL_MANUSCRIPT_IDS
         )
         assert provider.docmaps_index_query.rstrip().endswith(
             f'WHERE 1=1 OR result.manuscript_id IN {ADDITIONAL_MANUSCRIPT_IDS}'
         )
-
