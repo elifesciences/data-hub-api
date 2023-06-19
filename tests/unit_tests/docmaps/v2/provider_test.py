@@ -49,13 +49,3 @@ class TestEnhancedPreprintsDocmapsProvider:
         assert docmaps_index['docmaps'] == [
             get_docmap_item_for_query_result_item(cast(ApiInput, DOCMAPS_QUERY_RESULT_ITEM_1))
         ]
-
-    def test_should_add_additional_manuscript_ids_to_query_filter(
-        self
-    ):
-        provider = DocmapsProvider(
-            additionally_include_manuscript_ids=ADDITIONAL_MANUSCRIPT_IDS
-        )
-        assert provider.docmaps_index_query.rstrip().endswith(
-            f'WHERE 1=1 OR result.manuscript_id IN {ADDITIONAL_MANUSCRIPT_IDS}'
-        )
