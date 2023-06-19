@@ -55,27 +55,9 @@ class TestEnhancedPreprintsDocmapsProvider:
     ):
         provider = DocmapsProvider(
             only_include_reviewed_preprint_type=True,
-            only_include_evaluated_preprints=False,
             additionally_include_manuscript_ids=ADDITIONAL_MANUSCRIPT_IDS
         )
         assert provider.docmaps_index_query.rstrip().endswith(
             f'WHERE 1=1 OR result.manuscript_id IN {ADDITIONAL_MANUSCRIPT_IDS}'
         )
 
-    def test_should_add_has_evaluatons_where_clause_to_query(
-        self
-    ):
-        provider = DocmapsProvider(
-            only_include_reviewed_preprint_type=False,
-            only_include_evaluated_preprints=True
-        )
-        assert provider.docmaps_index_query.rstrip().endswith('WHERE has_evaluations')
-
-    def test_should_allow_both_reviewed_prerint_type_and_evaluated_preprints_filter(
-        self
-    ):
-        with pytest.raises(AssertionError):
-            DocmapsProvider(
-                only_include_reviewed_preprint_type=True,
-                only_include_evaluated_preprints=True
-            )

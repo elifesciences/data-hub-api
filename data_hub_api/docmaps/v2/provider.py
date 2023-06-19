@@ -27,21 +27,17 @@ class DocmapsProvider:
         gcp_project_name: str = 'elife-data-pipeline',
         query_results_cache: Optional[SingleObjectCache[Sequence[dict]]] = None,
         only_include_reviewed_preprint_type: bool = True,
-        only_include_evaluated_preprints: bool = False,
         additionally_include_manuscript_ids: Optional[Tuple[str]] = None
     ) -> None:
         self.gcp_project_name = gcp_project_name
         self.docmaps_index_query = (
             Path(get_sql_path('docmaps_index.sql')).read_text(encoding='utf-8')
         )
-        assert not (only_include_reviewed_preprint_type and only_include_evaluated_preprints)
         assert not (additionally_include_manuscript_ids and not only_include_reviewed_preprint_type)
         if only_include_reviewed_preprint_type and additionally_include_manuscript_ids:
             self.docmaps_index_query += (
                 f'\nWHERE 1=1 OR result.manuscript_id IN {additionally_include_manuscript_ids}'
             )
-        if only_include_evaluated_preprints:
-            self.docmaps_index_query += '\nWHERE has_evaluations'
         if query_results_cache is None:
             query_results_cache = DummySingleObjectCache[Sequence[dict]]()
         self._query_results_cache = query_results_cache
