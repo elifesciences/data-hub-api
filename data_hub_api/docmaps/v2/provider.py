@@ -36,13 +36,9 @@ class DocmapsProvider:
         )
         assert not (only_include_reviewed_preprint_type and only_include_evaluated_preprints)
         assert not (additionally_include_manuscript_ids and not only_include_reviewed_preprint_type)
-        if only_include_reviewed_preprint_type:
-            self.docmaps_index_query += (
-                '\nWHERE is_reviewed_preprint_type AND is_or_was_under_review'
-            )
         if only_include_reviewed_preprint_type and additionally_include_manuscript_ids:
             self.docmaps_index_query += (
-                f'\nOR result.manuscript_id IN {additionally_include_manuscript_ids}'
+                f'\nWHERE 1=1 OR result.manuscript_id IN {additionally_include_manuscript_ids}'
             )
         if only_include_evaluated_preprints:
             self.docmaps_index_query += '\nWHERE has_evaluations'

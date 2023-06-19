@@ -14,6 +14,17 @@ WITH t_hypothesis_annotation_with_doi AS (
     END AS source_doi,
     CASE 
       WHEN annotation.uri LIKE '%10.1101/%'
+        THEN REGEXP_EXTRACT(annotation.uri, r'(10\.\d{3,}[^v]*)v?')
+      WHEN annotation.uri LIKE '%researchsquare.com/article/rs-%'
+        -- 'https://www.researchsquare.com/article/rs-2848731/v1' --> 'rs-2848731/v1'
+        THEN CONCAT('10.21203/rs.3.', REGEXP_EXTRACT(annotation.uri, r'\/(\w+-\d+)\/\w+'))
+      WHEN annotation.uri LIKE '%arxiv.org/abs/%'
+        -- 'https://arxiv.org/abs/2305.01403v1' -->  '2305.01403'
+        THEN CONCAT('10.48550/arXiv.', REGEXP_EXTRACT(annotation.uri, r'\/(\d+\.\d+)'))
+      ELSE NULL
+    END AS source_doi_without_version,
+    CASE 
+      WHEN annotation.uri LIKE '%10.1101/%'
         THEN REGEXP_EXTRACT(annotation.uri, r'10\.\d{3,}.*v([1-9])')
       WHEN annotation.uri LIKE '%researchsquare.com/article/rs-%' OR annotation.uri LIKE '%arxiv.org/abs/%'
         THEN REGEXP_EXTRACT(annotation.uri, r'v(\d+)$') 
@@ -29,23 +40,23 @@ t_distinct_hypothesis_uri_doi_version AS(
   SELECT 
     DISTINCT
     uri,
-    source_doi,
+    source_doi_without_version,
     source_doi_version
   FROM t_hypothesis_annotation_with_doi
 ),
 
-t_distinct_hypothesis_uri_doi_version_with_elife_doi_version AS (
+t_hypothesis_with_source_doi_rank AS (
   SELECT
     *,
     ROW_NUMBER() OVER(
-      PARTITION BY source_doi
+      PARTITION BY source_doi_without_version
       ORDER BY source_doi_version
-    ) AS elife_doi_version
+    ) AS source_doi_rank
   FROM t_distinct_hypothesis_uri_doi_version
 ),
 
-t_distinct_hypothesis_uri_id_and_timestamp AS(
-  SELECT 
+t_hypothesis_uri_id_and_timestamp AS(
+  SELECT
     uri,
     source_doi,
     source_doi_version,
@@ -61,12 +72,11 @@ t_distinct_hypothesis_with_evaluation_suffix_number AS (
       PARTITION BY source_doi, source_doi_version
       ORDER BY annotation_created_timestamp, hypothesis_id
     ) AS evaluation_suffix_number
-  FROM t_distinct_hypothesis_uri_id_and_timestamp
+  FROM t_hypothesis_uri_id_and_timestamp
 ),
 
-t_hypothesis_annotation_with_elife_doi_version AS (
+t_hypothesis_annotation_with_evaluation_suffix AS (
   SELECT 
-    CAST(elife_doi_version.elife_doi_version AS STRING) AS elife_doi_version_str,
     annotation.hypothesis_id,
     annotation.annotation_created_timestamp,
     annotation.uri,
@@ -74,24 +84,28 @@ t_hypothesis_annotation_with_elife_doi_version AS (
     annotation.normalized_tags,
     annotation.source_doi,
     annotation.source_doi_version,
+    doi_rank.source_doi_without_version,
+    doi_rank.source_doi_rank,
     CONCAT('sa',CAST(t_evaluation_suffix.evaluation_suffix_number AS STRING)) AS evaluation_suffix
   FROM t_hypothesis_annotation_with_doi AS annotation
-  INNER JOIN t_distinct_hypothesis_uri_doi_version_with_elife_doi_version AS elife_doi_version
-    ON annotation.uri = elife_doi_version.uri
+  INNER JOIN t_hypothesis_with_source_doi_rank AS doi_rank
+    ON annotation.uri = doi_rank.uri
   INNER JOIN t_distinct_hypothesis_with_evaluation_suffix_number AS t_evaluation_suffix
     ON annotation.uri = t_evaluation_suffix.uri 
     AND annotation.hypothesis_id = t_evaluation_suffix.hypothesis_id
 ),
 
-t_result_with_preprint_dois AS (
+t_reviewed_preprints_with_under_review_process AS (
   SELECT 
     * EXCEPT(
       source_site_id,
       preprint_url_from_ejp,
       ejp_normalized_title,
       biorxiv_medrxiv_normalized_title)
-  FROM `elife-data-pipeline.prod.v_manuscript_with_matching_preprint_server_doi`
+  FROM `elife-data-pipeline.prod.v_manuscript_with_matching_preprint_server_doi` --test data
   WHERE preprint_doi IS NOT NULL
+  AND is_reviewed_preprint_type 
+  AND is_or_was_under_review
 ),
 
 t_result_with_evaluations AS (
@@ -100,23 +114,11 @@ t_result_with_evaluations AS (
     ARRAY(
       SELECT AS STRUCT
         *
-      FROM t_hypothesis_annotation_with_elife_doi_version AS annotation
-      WHERE annotation.source_doi = t_result_with_preprint_dois.preprint_doi
+      FROM t_hypothesis_annotation_with_evaluation_suffix AS annotation
+      WHERE annotation.source_doi = t_reviewed_preprints_with_under_review_process.preprint_doi
+      AND annotation.source_doi_rank = t_reviewed_preprints_with_under_review_process.position_in_overall_stage
     ) AS evaluations,
-  FROM t_result_with_preprint_dois
-),
-
-t_result_with_sorted_evaluations AS (
-  SELECT
-    result.* EXCEPT(evaluations),
-
-    ARRAY(
-      SELECT AS STRUCT evaluation.*
-      FROM result.evaluations AS evaluation
-      ORDER BY evaluation.annotation_created_timestamp
-    ) AS evaluations
-
-  FROM t_result_with_evaluations AS result
+  FROM t_reviewed_preprints_with_under_review_process
 ),
 
 t_latest_biorxiv_medrxiv_api_response_version_by_doi AS (
@@ -134,7 +136,6 @@ t_latest_biorxiv_medrxiv_api_response_version_by_doi AS (
   )
   WHERE rn = 1
 ),
-
 
 t_result_with_preprint_url_and_has_evaluations AS (
   SELECT
@@ -155,63 +156,24 @@ t_result_with_preprint_url_and_has_evaluations AS (
 
     (ARRAY_LENGTH(result.evaluations) > 0) AS has_evaluations,
 
-  FROM t_result_with_sorted_evaluations AS result
+  FROM t_result_with_evaluations AS result
   LEFT JOIN t_latest_biorxiv_medrxiv_api_response_version_by_doi AS latest_biorxiv_medrxiv_version
     ON latest_biorxiv_medrxiv_version.doi = result.preprint_doi
 ),
 
-t_result_with_preprints AS (
-  SELECT 
-    result.* EXCEPT(
-      preprint_url,
-      ejp_validated_preprint_url,
-      preprint_url_source,
-      preprint_doi,
-      preprint_doi_source,
-      preprint_doi_url
-    ),
-
-    CASE WHEN result.preprint_url_source = 'evaluations' 
-      THEN ARRAY(SELECT STRUCT(
-        uri AS preprint_url,
-        elife_doi_version_str,
-        preprint_url_source,
-        preprint_doi,
-        preprint_doi_source,
-        preprint_doi_url
-      )
-      FROM result.evaluations 
-      GROUP BY uri, elife_doi_version_str)
-      ELSE ARRAY(SELECT STRUCT(
-        preprint_url,
-        '1',
-        preprint_url_source,
-        preprint_doi,
-        preprint_doi_source,
-        preprint_doi_url
-      ))
-    END AS preprints,
-
-  FROM t_result_with_preprint_url_and_has_evaluations AS result
-),
-
 t_result_with_preprint_version AS (
-  SELECT
-    * EXCEPT(preprints),
-    -- extract version from final preprint url to ensure url and version are consistent
-    ARRAY(
-      SELECT AS STRUCT 
-      preprint.*,
-      CASE 
-        WHEN preprint.preprint_url LIKE '%10.1101/%'
-          THEN REGEXP_EXTRACT(preprint.preprint_url, r'10\.\d{3,}.*v([1-9])')
-        WHEN preprint.preprint_url LIKE '%researchsquare.com/article/rs-%' OR preprint.preprint_url LIKE '%arxiv.org/abs/%'
-          THEN REGEXP_EXTRACT(preprint.preprint_url, r'v(\d+)$') 
-        ELSE NULL
-      END AS preprint_version,
-      FROM result.preprints AS preprint
-    ) AS preprints
-  FROM t_result_with_preprints AS result
+  SELECT 
+    *,
+    CASE 
+      WHEN preprint_url LIKE '%10.1101/%'
+        THEN REGEXP_EXTRACT(preprint_url, r'10\.\d{3,}.*v([1-9])')
+      WHEN preprint_url LIKE '%researchsquare.com/article/rs-%' OR preprint_url LIKE '%arxiv.org/abs/%'
+        THEN REGEXP_EXTRACT(preprint_url, r'v(\d+)$') 
+      WHEN REGEXP_CONTAINS(preprint_doi_url, r'(.*v\d+)$')
+        THEN REGEXP_EXTRACT(preprint_doi_url, r'v(\d+)$') 
+      ELSE NULL
+    END AS preprint_version
+  FROM t_result_with_preprint_url_and_has_evaluations
 ),
 
 t_latest_tdm_path_by_doi_and_version AS (
@@ -232,43 +194,54 @@ t_latest_tdm_path_by_doi_and_version AS (
   WHERE rn=1
 ),
 
-t_result_with_preprint_published_at_date_and_tdm_path AS(
+t_preprint_published_at_date_and_tdm_path AS(
   SELECT 
     result.manuscript_id,
-    preprint.*,
+    result.long_manuscript_identifier,
     biorxiv_medrxiv_api_response.date AS preprint_published_at_date,
     tdm.tdm_path
   FROM t_result_with_preprint_version AS result
-  LEFT JOIN UNNEST(preprints) AS preprint
   LEFT JOIN `elife-data-pipeline.prod.mv_latest_biorxiv_medrxiv_api_response` AS biorxiv_medrxiv_api_response
-    ON biorxiv_medrxiv_api_response.doi = preprint.preprint_doi
-    AND CAST(biorxiv_medrxiv_api_response.version AS STRING) = preprint.preprint_version
+    ON biorxiv_medrxiv_api_response.doi = result.preprint_doi
+    AND CAST(biorxiv_medrxiv_api_response.version AS STRING) = result.preprint_version
   LEFT JOIN t_latest_tdm_path_by_doi_and_version AS tdm
-    ON tdm.tdm_doi = preprint.preprint_doi
-    AND CAST(tdm.tdm_ms_version AS STRING) = preprint.preprint_version
+    ON tdm.tdm_doi = result.preprint_doi
+    AND CAST(tdm.tdm_ms_version AS STRING) = result.preprint_version
 ),
 
-t_result_with_preprints_array AS (
+t_result_with_manuscript_versions_array AS (
   SELECT
     result.manuscript_id,
+    result.is_reviewed_preprint_type,
+    result.elife_doi,
     ARRAY_AGG(
       STRUCT(
-        preprint.preprint_url,
-        preprint.elife_doi_version_str,
-        preprint.preprint_url_source,
-        preprint.preprint_doi,
-        preprint.preprint_version,
-        preprint.preprint_doi_source,
-        preprint.preprint_doi_url,
+        result.long_manuscript_identifier,
+        result.position_in_overall_stage,
+        result.is_or_was_under_review,
+        result.qc_complete_timestamp,
+        result.under_review_timestamp,
+        result.has_evaluations,
+        result.manuscript_title,
+        result.preprint_url,
+        CAST(result.position_in_overall_stage AS STRING) AS elife_doi_version_str,
+        result.preprint_url_source,
+        result.preprint_doi,
+        result.preprint_version,
+        result.preprint_doi_source,
+        result.preprint_doi_url,
         preprint.preprint_published_at_date,
-        preprint.tdm_path
+        preprint.tdm_path,
+        result.editor_details,
+        result.senior_editor_details,
+        result.author_names_csv,
+        result.evaluations
       )
-      ORDER BY preprint.preprint_url
-    ) AS preprints
+    ) AS manuscript_versions 
   FROM t_result_with_preprint_version AS result
-  LEFT JOIN t_result_with_preprint_published_at_date_and_tdm_path AS preprint
-  ON result.manuscript_id = preprint.manuscript_id 
-  GROUP BY result.manuscript_id
+  LEFT JOIN t_preprint_published_at_date_and_tdm_path AS preprint
+    ON result.long_manuscript_identifier = preprint.long_manuscript_identifier
+  GROUP BY result.manuscript_id, result.is_reviewed_preprint_type, result.elife_doi
 ),
 
 t_latest_manuscript_license AS (
@@ -291,8 +264,7 @@ t_latest_manuscript_license AS (
 )
 
 SELECT
-  result.* EXCEPT(preprints),
-  preprint.preprints,
+  result.*,
   PARSE_JSON(ARRAY_TO_STRING(
     [
       '{',
@@ -310,8 +282,6 @@ SELECT
   )) AS publisher_json,
   license.license_url AS license,
   license.license_timestamp,
-FROM t_result_with_preprint_version AS result
-LEFT JOIN t_result_with_preprints_array AS preprint
-  ON result.manuscript_id = preprint.manuscript_id
+FROM t_result_with_manuscript_versions_array AS result
 LEFT JOIN t_latest_manuscript_license AS license
   ON result.manuscript_id = license.manuscript_id

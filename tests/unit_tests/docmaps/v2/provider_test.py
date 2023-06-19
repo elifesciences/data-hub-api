@@ -50,18 +50,6 @@ class TestEnhancedPreprintsDocmapsProvider:
             get_docmap_item_for_query_result_item(cast(ApiInput, DOCMAPS_QUERY_RESULT_ITEM_1))
         ]
 
-    def test_should_add_is_reviewed_preprint_and_is_under_review_type_where_clause_to_query(
-        self
-    ):
-        provider = DocmapsProvider(
-            only_include_reviewed_preprint_type=True,
-            only_include_evaluated_preprints=False,
-            additionally_include_manuscript_ids=[]
-        )
-        assert provider.docmaps_index_query.rstrip().endswith(
-            'WHERE is_reviewed_preprint_type AND is_or_was_under_review'
-        )
-
     def test_should_add_additional_manuscript_ids_to_query_filter(
         self
     ):
@@ -71,7 +59,7 @@ class TestEnhancedPreprintsDocmapsProvider:
             additionally_include_manuscript_ids=ADDITIONAL_MANUSCRIPT_IDS
         )
         assert provider.docmaps_index_query.rstrip().endswith(
-            f'OR result.manuscript_id IN {ADDITIONAL_MANUSCRIPT_IDS}'
+            f'WHERE 1=1 OR result.manuscript_id IN {ADDITIONAL_MANUSCRIPT_IDS}'
         )
 
     def test_should_add_has_evaluatons_where_clause_to_query(
