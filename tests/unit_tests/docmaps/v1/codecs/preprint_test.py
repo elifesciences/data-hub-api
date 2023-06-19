@@ -3,7 +3,7 @@ from data_hub_api.docmaps.v1.codecs.preprint import (
     get_docmap_preprint_input,
     get_docmap_preprint_output
 )
-from tests.unit_tests.docmaps.v1.v1_test_data import (
+from tests.unit_tests.docmaps.v1.test_data import (
     DOI_1,
     PREPRINT_DETAILS_1,
     PREPRINT_LINK_1,

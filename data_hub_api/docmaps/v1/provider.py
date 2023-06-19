@@ -21,7 +21,7 @@ from data_hub_api.docmaps.v1.sql import get_sql_path
 LOGGER = logging.getLogger(__name__)
 
 
-class DocmapsProviderV1:
+class DocmapsProvider:
     def __init__(
         self,
         gcp_project_name: str = 'elife-data-pipeline',
