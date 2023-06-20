@@ -29,7 +29,6 @@ DocmapElifeManuscriptOutput = TypedDict(
         'doi': Optional[str],
         'identifier': str,
         'versionIdentifier': str,
-        'published': Optional[str],
         'license': str
     }
 )
