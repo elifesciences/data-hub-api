@@ -104,7 +104,6 @@ t_reviewed_preprints_with_under_review_process AS (
       biorxiv_medrxiv_normalized_title)
   FROM `elife-data-pipeline.prod.v_manuscript_with_matching_preprint_server_doi` --test data
   WHERE preprint_doi IS NOT NULL
-  AND is_reviewed_preprint_type 
   AND is_or_was_under_review
 ),
 
