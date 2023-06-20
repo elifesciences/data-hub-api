@@ -22,7 +22,7 @@ def get_docmap_preprint_input_with_published_and_tdmpath(
     manuscript_version: ApiManuscriptVersionInput
 ) -> DocmapPreprintInputWithPublishedTdmpath:
     return {
-        **get_docmap_preprint_input(manuscript_version),
+        **get_docmap_preprint_input(manuscript_version),  # type: ignore
         'published': (
             manuscript_version['preprint_published_at_date'].isoformat()
             if manuscript_version['preprint_published_at_date']
