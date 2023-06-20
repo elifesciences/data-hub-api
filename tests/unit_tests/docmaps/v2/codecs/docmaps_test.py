@@ -21,7 +21,8 @@ from data_hub_api.docmaps.v2.codecs.evaluation import (
 
 from data_hub_api.docmaps.v2.codecs.preprint import (
     get_docmap_preprint_assertion_item,
-    get_docmap_preprint_input
+    get_docmap_preprint_input,
+    get_docmap_preprint_input_with_published_and_tdmpath
 )
 
 from data_hub_api.docmaps.v2.codecs.docmaps import (
@@ -172,7 +173,9 @@ class TestGetDocmapsItemForQueryResultItem:
         docmaps_item = get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_2)
         under_review_step = docmaps_item['steps']['_:b0']
         assert under_review_step['inputs'] == [
-            get_docmap_preprint_input(manuscript_version=MANUSCRIPT_VERSION_1, detailed=True)
+            get_docmap_preprint_input_with_published_and_tdmpath(
+                manuscript_version=MANUSCRIPT_VERSION_1
+            )
         ]
 
     def test_should_populate_assertions_for_first_under_review_step(self):
@@ -220,7 +223,7 @@ class TestGetDocmapsItemForQueryResultItem:
         )
         peer_reviewed_step = docmaps_item['steps']['_:b1']
         assert peer_reviewed_step['inputs'] == [
-            get_docmap_preprint_input(manuscript_version=MANUSCRIPT_VERSION_1, detailed=False)
+            get_docmap_preprint_input(manuscript_version=MANUSCRIPT_VERSION_1)
         ]
 
     def test_should_filter_evaluations_by_preprint_link(self):
@@ -260,7 +263,7 @@ class TestGetDocmapsItemForQueryResultItem:
         })
         peer_reviewed_step = docmaps_item['steps']['_:b1']
         assert peer_reviewed_step['inputs'] == [
-            get_docmap_preprint_input(manuscript_version=MANUSCRIPT_VERSION_1, detailed=False)
+            get_docmap_preprint_input(manuscript_version=MANUSCRIPT_VERSION_1)
         ]
         actual_hypothesis_ids = set(get_hypothesis_ids_from_urls(
             get_hypothesis_urls_from_step_dict(peer_reviewed_step)
@@ -461,7 +464,7 @@ class TestGetDocmapsItemForQueryResultItem:
         })
         manuscript_published_step = docmaps_item['steps']['_:b2']
         assert manuscript_published_step['inputs'] == [
-            get_docmap_preprint_input(manuscript_version=MANUSCRIPT_VERSION_1, detailed=False),
+            get_docmap_preprint_input(manuscript_version=MANUSCRIPT_VERSION_1),
             get_docmap_evaluation_input(
                 query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1,
                 manuscript_version=MANUSCRIPT_VERSION_1,
@@ -484,7 +487,9 @@ class TestGetDocmapsItemForQueryResultItem:
         docmaps_item = get_docmap_item_for_query_result_item(query_result_item)
         under_review_step = docmaps_item['steps']['_:b3']
         assert under_review_step['inputs'] == [
-            get_docmap_preprint_input(manuscript_version=MANUSCRIPT_VERSION_2, detailed=True)
+            get_docmap_preprint_input_with_published_and_tdmpath(
+                manuscript_version=MANUSCRIPT_VERSION_2
+            )
         ]
 
     def test_should_populate_actions_for_second_under_review_step(self):
@@ -535,7 +540,7 @@ class TestGetDocmapsItemForQueryResultItem:
         docmaps_item = get_docmap_item_for_query_result_item(query_result_item)
         peer_reviewed_step = docmaps_item['steps']['_:b4']
         assert peer_reviewed_step['inputs'] == [
-            get_docmap_preprint_input(MANUSCRIPT_VERSION_WITH_EVALUATIONS_2, False)
+            get_docmap_preprint_input(MANUSCRIPT_VERSION_WITH_EVALUATIONS_2)
         ]
 
     def test_should_populate_assertions_for_second_manuscript_published_step(self):

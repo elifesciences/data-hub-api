@@ -13,7 +13,8 @@ from data_hub_api.docmaps.v2.codecs.evaluation import (
 )
 from data_hub_api.docmaps.v2.codecs.preprint import (
     get_docmap_preprint_assertion_item,
-    get_docmap_preprint_input
+    get_docmap_preprint_input,
+    get_docmap_preprint_input_with_published_and_tdmpath
 )
 from data_hub_api.docmaps.v2.api_input_typing import ApiInput, ApiManuscriptVersionInput
 
@@ -90,7 +91,9 @@ def get_docmaps_step_for_under_review_status(
             query_result_item=query_result_item,
             manuscript_version=manuscript_version
         ),
-        'inputs': [get_docmap_preprint_input(manuscript_version=manuscript_version, detailed=True)]
+        'inputs': [get_docmap_preprint_input_with_published_and_tdmpath(
+            manuscript_version=manuscript_version
+        )]
     }
 
 
@@ -116,7 +119,7 @@ def get_docmaps_step_for_peer_reviewed_status(
         'assertions': get_docmap_assertions_for_peer_reviewed_step(
             manuscript_version=manuscript_version
         ),
-        'inputs': [get_docmap_preprint_input(manuscript_version=manuscript_version, detailed=False)]
+        'inputs': [get_docmap_preprint_input(manuscript_version=manuscript_version)]
     }
 
 
@@ -142,7 +145,7 @@ def get_docmaps_step_for_revised_status(
         'assertions': get_docmap_assertions_for_revised_step(
             manuscript_version=manuscript_version
         ),
-        'inputs': [get_docmap_preprint_input(manuscript_version=manuscript_version, detailed=False)]
+        'inputs': [get_docmap_preprint_input(manuscript_version=manuscript_version)]
     }
 
 
@@ -178,8 +181,7 @@ def get_docmap_inputs_for_manuscript_published_step(
 ) -> Sequence[Union[DocmapPreprintInput, DocmapEvaluationInput]]:
     return (
         list([get_docmap_preprint_input(
-            manuscript_version=manuscript_version,
-            detailed=False
+            manuscript_version=manuscript_version
         )])
         +
         list(iter_docmap_evaluation_input(
