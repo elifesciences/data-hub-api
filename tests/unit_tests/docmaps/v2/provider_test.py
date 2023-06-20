@@ -2,7 +2,6 @@ from unittest.mock import patch, MagicMock
 from typing import Iterable, cast
 
 import pytest
-from data_hub_api.config import ADDITIONAL_MANUSCRIPT_IDS
 from data_hub_api.docmaps.v2.api_input_typing import ApiInput
 
 from data_hub_api.utils.cache import InMemorySingleObjectCache

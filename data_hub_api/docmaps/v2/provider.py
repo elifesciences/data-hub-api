@@ -1,7 +1,7 @@
 import logging
 from pathlib import Path
 from time import monotonic
-from typing import Iterable, Optional, Sequence, Tuple, cast
+from typing import Iterable, Optional, Sequence, cast
 
 import objsize
 from data_hub_api.docmaps.v2.codecs.docmaps import get_docmap_item_for_query_result_item
