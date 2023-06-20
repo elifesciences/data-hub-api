@@ -41,6 +41,5 @@ def get_docmap_elife_manuscript_output(
             elife_doi_version_str=manuscript_version['elife_doi_version_str']
         ),
         'versionIdentifier': manuscript_version['elife_doi_version_str'],
-        'published': '',
         'license': query_result_item['license']
     }
