@@ -2,7 +2,8 @@
 from data_hub_api.docmaps.v2.api_input_typing import ApiManuscriptVersionInput
 from data_hub_api.docmaps.v2.docmap_typing import (
     DocmapAssertionItem,
-    DocmapPreprintInput
+    DocmapPreprintInput,
+    DocmapPreprintInputWithPublishedTdmpath
 )
 
 
@@ -19,7 +20,7 @@ def get_docmap_preprint_input(
 
 def get_docmap_preprint_input_with_published_and_tdmpath(
     manuscript_version: ApiManuscriptVersionInput
-) -> DocmapPreprintInput:
+) -> DocmapPreprintInputWithPublishedTdmpath:
     return {
         **get_docmap_preprint_input(manuscript_version),
         'published': (
