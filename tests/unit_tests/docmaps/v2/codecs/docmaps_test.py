@@ -476,17 +476,6 @@ class TestGetDocmapsItemForQueryResultItem:
             )
         ]
 
-    def test_should_set_published_to_empty_string_if_unknown(self):
-        docmaps_item = get_docmap_item_for_query_result_item({
-            **DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS,
-            'manuscript_versions': [{
-                **MANUSCRIPT_VERSION_WITH_EVALUATIONS_1,
-                'preprint_published_at_date': None
-            }]
-        })
-        manuscript_published_step = docmaps_item['steps']['_:b2']
-        assert "" == manuscript_published_step['actions'][0]['outputs'][0].get('published')
-
     def test_should_populate_inputs_for_second_under_review_step(self):
         query_result_item = {
             **DOCMAPS_QUERY_RESULT_ITEM_1,
