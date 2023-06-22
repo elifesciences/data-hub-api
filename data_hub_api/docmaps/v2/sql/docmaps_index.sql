@@ -105,6 +105,7 @@ t_reviewed_preprints_with_under_review_process AS (
   FROM `elife-data-pipeline.prod.v_manuscript_with_matching_preprint_server_doi`
   WHERE preprint_doi IS NOT NULL
   AND is_or_was_under_review -- to include the "six" additional manuscripts
+  AND long_manuscript_identifier NOT LIKE '%VOR%'
 ),
 
 t_result_with_evaluations AS (
