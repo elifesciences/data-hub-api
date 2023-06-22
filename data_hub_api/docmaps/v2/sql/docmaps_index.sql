@@ -102,7 +102,7 @@ t_reviewed_preprints_with_under_review_process AS (
       preprint_url_from_ejp,
       ejp_normalized_title,
       biorxiv_medrxiv_normalized_title)
-  FROM `elife-data-pipeline.prod.v_manuscript_with_matching_preprint_server_doi` --test data
+  FROM `elife-data-pipeline.prod.v_manuscript_with_matching_preprint_server_doi`
   WHERE preprint_doi IS NOT NULL
   AND is_or_was_under_review -- to include the "six" additional manuscripts
 ),
@@ -118,6 +118,19 @@ t_result_with_evaluations AS (
       AND annotation.source_doi_rank = t_reviewed_preprints_with_under_review_process.position_in_overall_stage
     ) AS evaluations,
   FROM t_reviewed_preprints_with_under_review_process
+),
+
+t_result_with_sorted_evaluations AS (
+  SELECT
+    result.* EXCEPT(evaluations),
+
+    ARRAY(
+      SELECT AS STRUCT evaluation.*
+      FROM result.evaluations AS evaluation
+      ORDER BY evaluation.annotation_created_timestamp
+    ) AS evaluations
+
+  FROM t_result_with_evaluations AS result
 ),
 
 t_latest_biorxiv_medrxiv_api_response_version_by_doi AS (
@@ -155,7 +168,7 @@ t_result_with_preprint_url_and_has_evaluations AS (
 
     (ARRAY_LENGTH(result.evaluations) > 0) AS has_evaluations,
 
-  FROM t_result_with_evaluations AS result
+  FROM t_result_with_sorted_evaluations AS result
   LEFT JOIN t_latest_biorxiv_medrxiv_api_response_version_by_doi AS latest_biorxiv_medrxiv_version
     ON latest_biorxiv_medrxiv_version.doi = result.preprint_doi
 ),
