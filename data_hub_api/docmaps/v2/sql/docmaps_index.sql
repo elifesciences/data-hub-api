@@ -175,8 +175,16 @@ t_result_with_preprint_url_and_has_evaluations AS (
 ),
 
 t_result_with_preprint_version AS (
-  SELECT 
-    *,
+  SELECT
+    * EXCEPT(elife_doi),
+
+    CASE 
+      WHEN elife_doi IS NULL
+        THEN CONCAT('10.7554/eLife.',manuscript_id)
+      ELSE 
+        elife_doi
+    END AS elife_doi,
+     
     CASE 
       WHEN preprint_url LIKE '%10.1101/%'
         THEN REGEXP_EXTRACT(preprint_url, r'10\.\d{3,}.*v([1-9])')
