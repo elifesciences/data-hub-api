@@ -84,7 +84,7 @@ class TestGetDocmapElifeManuscriptOutputForVor:
             elife_doi_version_str=MANUSCRIPT_VERSION_1['elife_doi_version_str']
         )
         assert result == {
-            'type': 'preprint',
+            'type': 'version-of-record',
             'doi': manuscript_version_doi,
             'url': f'{DOI_ROOT_URL}' + manuscript_version_doi,
             'content': [{

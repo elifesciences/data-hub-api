@@ -78,7 +78,7 @@ def get_docmap_elife_manuscript_output_for_vor(
         elife_doi_version_str=manuscript_version['elife_doi_version_str']
     )
     return {
-        'type': 'preprint',
+        'type': 'version-of-record',
         'doi': manuscript_version_doi,
         'url': f'{DOI_ROOT_URL}' + manuscript_version_doi,
         'content': get_docmap_elife_manuscript_output_content_for_vor(
