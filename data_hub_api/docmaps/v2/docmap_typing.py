@@ -22,6 +22,16 @@ DocmapEvaluationOutput = TypedDict(
     }
 )
 
+DocmapElifeManuscriptInput = TypedDict(
+    'DocmapElifeManuscriptInput',
+    {
+        'type': str,
+        'doi': str,
+        'identifier': str,
+        'versionIdentifier': str
+    }
+)
+
 DocmapElifeManuscriptOutput = TypedDict(
     'DocmapElifeManuscriptOutput',
     {
@@ -107,7 +117,11 @@ DocmapStep = TypedDict(
     {
         'actions': Sequence[DocmapAction],
         'assertions': Sequence[DocmapAssertion],
-        'inputs': Sequence[Union[DocmapPreprintInput, DocmapEvaluationInput]],
+        'inputs': Sequence[Union[
+            DocmapPreprintInput,
+            DocmapEvaluationInput,
+            DocmapElifeManuscriptInput
+        ]],
         'next-step': NotRequired[str],
         'previous-step': NotRequired[str]
     },

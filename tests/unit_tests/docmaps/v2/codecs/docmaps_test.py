@@ -5,6 +5,7 @@ import urllib
 import pytest
 from data_hub_api.docmaps.v2.codecs.elife_manuscript import (
     get_docmap_elife_manuscript_doi_assertion_item,
+    get_docmap_elife_manuscript_input,
     get_docmap_elife_manuscript_output,
     get_elife_manuscript_version_doi
 )
@@ -42,6 +43,7 @@ from tests.unit_tests.docmaps.v2.test_data import (
     DOCMAPS_QUERY_RESULT_ITEM_1,
     DOCMAPS_QUERY_RESULT_ITEM_2,
     DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS,
+    DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSION,
     DOI_1,
     EDITOR_DETAIL_1,
     EVALUATION_SUFFIX_1,
@@ -54,6 +56,7 @@ from tests.unit_tests.docmaps.v2.test_data import (
     MANUSCRIPT_VERSION_2,
     MANUSCRIPT_VERSION_WITH_EVALUATIONS_1,
     MANUSCRIPT_VERSION_WITH_EVALUATIONS_2,
+    MANUSCRIPT_VOR_VERSION_1,
     PREPRINT_LINK_PREFIX,
     PREPRINT_VERSION_1,
     PREPRINT_VERSION_2,
@@ -560,3 +563,19 @@ class TestGetDocmapsItemForQueryResultItem:
             ),
             'status': 'manuscript-published'
         }]
+
+    def test_should_populate_input_for_vor_published_step(self):
+        query_result_item = {
+            **DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSION,
+            'manuscript_versions': [
+                MANUSCRIPT_VERSION_WITH_EVALUATIONS_1,
+                MANUSCRIPT_VERSION_WITH_EVALUATIONS_2,
+                MANUSCRIPT_VOR_VERSION_1
+            ]
+        }
+        docmaps_item = get_docmap_item_for_query_result_item(query_result_item)
+        vor_published_step = docmaps_item['steps']['_:b6']
+        assert vor_published_step['inputs'] == get_docmap_elife_manuscript_input(
+            query_result_item=query_result_item,
+            manuscript_version=MANUSCRIPT_VOR_VERSION_1
+        )
