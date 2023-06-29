@@ -257,6 +257,19 @@ t_result_with_manuscript_versions_array AS (
   GROUP BY result.manuscript_id, result.is_reviewed_preprint_type, result.elife_doi
 ),
 
+t_result_with_sorted_manuscript_versions AS (
+  SELECT
+    result.* EXCEPT(manuscript_versions),
+
+    ARRAY(
+      SELECT AS STRUCT manuscript_versions.*
+      FROM result.manuscript_versions AS manuscript_versions
+      ORDER BY manuscript_versions.position_in_overall_stage
+    ) AS evaluamanuscript_versionstions
+
+  FROM t_result_with_manuscript_versions_array AS result
+),
+
 t_latest_manuscript_license AS (
   SELECT 
     * EXCEPT(rn),
@@ -295,6 +308,6 @@ SELECT
   )) AS publisher_json,
   license.license_url AS license,
   license.license_timestamp,
-FROM t_result_with_manuscript_versions_array AS result
+FROM t_result_with_sorted_manuscript_versions AS result
 LEFT JOIN t_latest_manuscript_license AS license
   ON result.manuscript_id = license.manuscript_id
