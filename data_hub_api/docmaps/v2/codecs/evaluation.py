@@ -1,6 +1,7 @@
 from datetime import datetime
 import logging
 from typing import Iterable, Optional, Sequence, cast, Tuple
+from data_hub_api.config import DOI_ROOT_URL
 
 from data_hub_api.docmaps.v2.codecs.elife_manuscript import get_elife_manuscript_version_doi
 from data_hub_api.docmaps.v2.api_input_typing import (
@@ -18,8 +19,6 @@ from data_hub_api.docmaps.v2.docmap_typing import (
 )
 
 LOGGER = logging.getLogger(__name__)
-
-DOI_ROOT_URL = 'https://doi.org/'
 
 HYPOTHESIS_URL = 'https://hypothes.is/a/'
 SCIETY_ARTICLES_ACTIVITY_URL = 'https://sciety.org/articles/activity/'

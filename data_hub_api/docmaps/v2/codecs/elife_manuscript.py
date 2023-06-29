@@ -1,9 +1,12 @@
 from typing import Sequence
+from data_hub_api.config import DOI_ROOT_URL
 from data_hub_api.docmaps.v2.api_input_typing import ApiInput, ApiManuscriptVersionInput
 from data_hub_api.docmaps.v2.docmap_typing import (
     DocmapAssertionItem,
+    DocmapContent,
     DocmapElifeManuscriptInput,
-    DocmapElifeManuscriptOutput
+    DocmapElifeManuscriptOutput,
+    DocmapElifeManuscriptOutputVor
 )
 
 
@@ -28,7 +31,7 @@ def get_docmap_elife_manuscript_doi_assertion_item(
     }
 
 
-def get_docmap_elife_manuscript_doi_assertion_item_for_vor_published_step(
+def get_docmap_elife_manuscript_doi_assertion_item_for_vor(
     query_result_item: ApiInput,
     manuscript_version: ApiManuscriptVersionInput
 ) -> DocmapAssertionItem:
@@ -54,6 +57,33 @@ def get_docmap_elife_manuscript_output(
         ),
         'versionIdentifier': manuscript_version['elife_doi_version_str'],
         'license': query_result_item['license']
+    }
+
+
+def get_docmap_elife_manuscript_output_content_for_vor(
+    query_result_item: ApiInput
+) -> Sequence[DocmapContent]:
+    return [{
+        'type': 'web-page',
+        'url': 'https://elifesciences.org/articles/' + query_result_item['manuscript_id']
+    }]
+
+
+def get_docmap_elife_manuscript_output_for_vor(
+    query_result_item: ApiInput,
+    manuscript_version: ApiManuscriptVersionInput
+) -> DocmapElifeManuscriptOutputVor:
+    manuscript_version_doi = get_elife_manuscript_version_doi(
+        elife_doi=query_result_item['elife_doi'],
+        elife_doi_version_str=manuscript_version['elife_doi_version_str']
+    )
+    return {
+        'type': 'preprint',
+        'doi': manuscript_version_doi,
+        'url': f'{DOI_ROOT_URL}' + manuscript_version_doi,
+        'content': get_docmap_elife_manuscript_output_content_for_vor(
+            query_result_item=query_result_item
+        )
     }
 
 

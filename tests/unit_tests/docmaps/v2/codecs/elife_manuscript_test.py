@@ -1,8 +1,10 @@
+from data_hub_api.config import DOI_ROOT_URL
 from data_hub_api.docmaps.v2.codecs.elife_manuscript import (
     get_docmap_elife_manuscript_doi_assertion_item,
-    get_docmap_elife_manuscript_doi_assertion_item_for_vor_published_step,
+    get_docmap_elife_manuscript_doi_assertion_item_for_vor,
     get_docmap_elife_manuscript_input,
     get_docmap_elife_manuscript_output,
+    get_docmap_elife_manuscript_output_for_vor,
     get_elife_manuscript_version_doi
 )
 
@@ -37,9 +39,9 @@ class TestGetDocmapElifeManuscriptDoiAssertionItem:
         }
 
 
-class TestGetDocmapElifeManuscriptDoiAssertionItemForVorPublishedStep:
-    def test_should_populate_docmaps_elife_manuscript_doi_assertion_item(self):
-        result = get_docmap_elife_manuscript_doi_assertion_item_for_vor_published_step(
+class TestGetDocmapElifeManuscriptDoiAssertionItemForVor:
+    def test_should_populate_docmaps_elife_manuscript_doi_assertion_item_for_vor(self):
+        result = get_docmap_elife_manuscript_doi_assertion_item_for_vor(
             query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1,
             manuscript_version=MANUSCRIPT_VERSION_1
         )
@@ -68,6 +70,30 @@ class TestGetDocmapElifeManuscriptOutput:
             ),
             'versionIdentifier': MANUSCRIPT_VERSION_1['elife_doi_version_str'],
             'license': DOCMAPS_QUERY_RESULT_ITEM_1['license']
+        }
+
+
+class TestGetDocmapElifeManuscriptOutputForVor:
+    def test_should_populate_docmaps_elife_manuscript_output_for_vor(self):
+        result = get_docmap_elife_manuscript_output_for_vor(
+            query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1,
+            manuscript_version=MANUSCRIPT_VERSION_1
+        )
+        manuscript_version_doi = get_elife_manuscript_version_doi(
+            elife_doi=DOCMAPS_QUERY_RESULT_ITEM_1['elife_doi'],
+            elife_doi_version_str=MANUSCRIPT_VERSION_1['elife_doi_version_str']
+        )
+        assert result == {
+            'type': 'preprint',
+            'doi': manuscript_version_doi,
+            'url': f'{DOI_ROOT_URL}' + manuscript_version_doi,
+            'content': [{
+                'type': 'web-page',
+                'url': (
+                    'https://elifesciences.org/articles/'
+                    + DOCMAPS_QUERY_RESULT_ITEM_1['manuscript_id']
+                )
+            }]
         }
 
 

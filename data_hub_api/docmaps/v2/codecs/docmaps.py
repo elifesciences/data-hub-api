@@ -5,9 +5,10 @@ import urllib
 
 from data_hub_api.docmaps.v2.codecs.elife_manuscript import (
     get_docmap_elife_manuscript_doi_assertion_item,
-    get_docmap_elife_manuscript_doi_assertion_item_for_vor_published_step,
+    get_docmap_elife_manuscript_doi_assertion_item_for_vor,
     get_docmap_elife_manuscript_input,
-    get_docmap_elife_manuscript_output
+    get_docmap_elife_manuscript_output,
+    get_docmap_elife_manuscript_output_for_vor
 )
 from data_hub_api.docmaps.v2.codecs.evaluation import (
     iter_docmap_actions_for_evaluations,
@@ -218,11 +219,24 @@ def get_docmap_assertions_for_vor_published_step(
     manuscript_version: ApiManuscriptVersionInput
 ) -> Sequence[DocmapAssertion]:
     return [{
-        'item': get_docmap_elife_manuscript_doi_assertion_item_for_vor_published_step(
+        'item': get_docmap_elife_manuscript_doi_assertion_item_for_vor(
             query_result_item=query_result_item,
             manuscript_version=manuscript_version
         ),
         'status': 'vor-published'
+    }]
+
+
+def get_docmap_actions_for_vor_published_step(
+    query_result_item: ApiInput,
+    manuscript_version: ApiManuscriptVersionInput
+) -> Sequence[DocmapAction]:
+    return [{
+        'participants': [],
+        'outputs': [get_docmap_elife_manuscript_output_for_vor(
+            query_result_item=query_result_item,
+            manuscript_version=manuscript_version
+        )]
     }]
 
 
@@ -231,7 +245,10 @@ def get_docmaps_step_for_vor_published_status(
     manuscript_version: ApiManuscriptVersionInput
 ) -> DocmapStep:
     return {
-        'actions': [],
+        'actions': get_docmap_actions_for_vor_published_step(
+            query_result_item=query_result_item,
+            manuscript_version=manuscript_version
+        ),
         'assertions': get_docmap_assertions_for_vor_published_step(
             query_result_item=query_result_item,
             manuscript_version=manuscript_version

@@ -28,6 +28,7 @@ from data_hub_api.docmaps.v2.codecs.preprint import (
 
 from data_hub_api.docmaps.v2.codecs.docmaps import (
     get_docmap_actions_for_under_review_step,
+    get_docmap_actions_for_vor_published_step,
     get_docmap_assertions_for_under_review_step,
     get_docmap_assertions_for_vor_published_step,
     get_docmap_item_for_query_result_item,
@@ -584,6 +585,22 @@ class TestGetDocmapsItemForQueryResultItem:
         docmaps_item = get_docmap_item_for_query_result_item(query_result_item)
         vor_published_step = docmaps_item['steps']['_:b6']
         assert vor_published_step['assertions'] == get_docmap_assertions_for_vor_published_step(
+            query_result_item=query_result_item,
+            manuscript_version=MANUSCRIPT_VOR_VERSION_1
+        )
+
+    def test_should_populate_actions_for_vor_published_step(self):
+        query_result_item = {
+            **DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSION,
+            'manuscript_versions': [
+                MANUSCRIPT_VERSION_WITH_EVALUATIONS_1,
+                MANUSCRIPT_VERSION_WITH_EVALUATIONS_2,
+                MANUSCRIPT_VOR_VERSION_1
+            ]
+        }
+        docmaps_item = get_docmap_item_for_query_result_item(query_result_item)
+        vor_published_step = docmaps_item['steps']['_:b6']
+        assert vor_published_step['actions'] == get_docmap_actions_for_vor_published_step(
             query_result_item=query_result_item,
             manuscript_version=MANUSCRIPT_VOR_VERSION_1
         )

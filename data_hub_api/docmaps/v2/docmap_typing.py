@@ -43,8 +43,8 @@ DocmapElifeManuscriptOutput = TypedDict(
     }
 )
 
-DocmapElifeManuscriptOutputVorStep = TypedDict(
-    'DocmapElifeManuscriptOutputVorStep',
+DocmapElifeManuscriptOutputVor = TypedDict(
+    'DocmapElifeManuscriptOutputVor',
     {
         'type': str,
         'doi': str,
@@ -117,7 +117,11 @@ DocmapAction = TypedDict(
     {
         'participants': Sequence[DocmapParticipant],
         'outputs': Sequence[
-            Union[DocmapElifeManuscriptOutput, DocmapEvaluationOutput]
+            Union[
+                DocmapElifeManuscriptOutput,
+                DocmapEvaluationOutput,
+                DocmapElifeManuscriptOutputVor
+            ]
         ]
     }
 )
