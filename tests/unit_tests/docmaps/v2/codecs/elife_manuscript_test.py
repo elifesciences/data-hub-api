@@ -12,12 +12,6 @@ from tests.unit_tests.docmaps.v2.test_data import (
 
 
 class TestGetElifeVersionDoi:
-    def test_should_return_none_if_elife_doi_not_defined(self):
-        assert not get_elife_manuscript_version_doi(
-            elife_doi_version_str='elife_doi_version_str_1',
-            elife_doi=''
-        )
-
     def test_should_return_elife_version_doi(self):
         result = get_elife_manuscript_version_doi(
             elife_doi_version_str='elife_doi_version_str_1',

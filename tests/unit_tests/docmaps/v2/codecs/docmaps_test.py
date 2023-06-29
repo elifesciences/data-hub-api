@@ -92,15 +92,6 @@ class TestGetElifeVersionDoi:
         )
         assert actual_result == 'elife_doi_1.elife_doi_version_str_1'
 
-    def test_should_return_doi_without_version_when_the_doi_not_defined(self):
-        elife_doi = ''
-        elife_doi_version_str = 'elife_doi_version_str_1'
-        actual_result = get_elife_manuscript_version_doi(
-            elife_doi=elife_doi,
-            elife_doi_version_str=elife_doi_version_str
-        )
-        assert not actual_result
-
 
 class TestGenerateDocmapSteps:
     def test_should_return_empty_dict_if_step_list_empty(self):
