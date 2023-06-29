@@ -28,6 +28,19 @@ def get_docmap_elife_manuscript_doi_assertion_item(
     }
 
 
+def get_docmap_elife_manuscript_doi_assertion_item_for_vor_published_step(
+    query_result_item: ApiInput,
+    manuscript_version: ApiManuscriptVersionInput
+) -> DocmapAssertionItem:
+    return {
+        **get_docmap_elife_manuscript_doi_assertion_item(  # type: ignore
+            query_result_item=query_result_item,
+            manuscript_version=manuscript_version
+        ),
+        'type': 'version-of-record'
+    }
+
+
 def get_docmap_elife_manuscript_output(
     query_result_item: ApiInput,
     manuscript_version: ApiManuscriptVersionInput
