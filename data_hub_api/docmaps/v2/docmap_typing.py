@@ -36,10 +36,20 @@ DocmapElifeManuscriptOutput = TypedDict(
     'DocmapElifeManuscriptOutput',
     {
         'type': str,
-        'doi': Optional[str],
+        'doi': str,
         'identifier': str,
         'versionIdentifier': str,
         'license': str
+    }
+)
+
+DocmapElifeManuscriptOutputVorStep = TypedDict(
+    'DocmapElifeManuscriptOutputVorStep',
+    {
+        'type': str,
+        'doi': str,
+        'url': str,
+        'content': Sequence[DocmapContent]
     }
 )
 
