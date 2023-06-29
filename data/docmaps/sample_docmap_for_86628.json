@@ -1,7 +1,7 @@
 {
   "@context": "https://w3id.org/docmaps/context.jsonld",
   "type": "docmap",
-  "id": "https://data-hub-api.elifesciences.org/enhanced-preprints/docmaps/v1/by-publisher/elife/get-by-manuscript-id?manuscript_id=86628",
+  "id": "https://data-hub-api.elifesciences.org/enhanced-preprints/docmaps/v2/by-publisher/elife/get-by-manuscript-id?manuscript_id=86628",
   "created": "2023-02-02T07:04:33+00:00",
   "updated": "2023-02-02T07:04:33+00:00",
   "publisher": "{\"account\":{\"id\":\"https://sciety.org/groups/elife\",\"service\":\"https://sciety.org\"},\"homepage\":\"https://elifesciences.org/\",\"id\":\"https://elifesciences.org/\",\"logo\":\"https://sciety.org/static/groups/elife--b560187e-f2fb-4ff9-a861-a204f3fc0fb0.png\",\"name\":\"eLife\"}",
