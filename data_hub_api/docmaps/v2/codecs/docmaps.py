@@ -211,6 +211,12 @@ def get_docmaps_step_for_manuscript_published_status(
     }
 
 
+def get_docmaps_step_for_vor_published_status(
+    query_result_item: ApiInput,
+    manuscript_version: ApiManuscriptVersionInput
+) -> DocmapStep:
+    pass
+
 def iter_docmap_steps_for_query_result_item(query_result_item: ApiInput) -> Iterable[DocmapStep]:
     manuscript_versions = query_result_item['manuscript_versions']
     for manuscript_version in manuscript_versions:
@@ -224,6 +230,11 @@ def iter_docmap_steps_for_query_result_item(query_result_item: ApiInput) -> Iter
             else:
                 yield get_docmaps_step_for_revised_status(query_result_item, manuscript_version)
             yield get_docmaps_step_for_manuscript_published_status(
+                query_result_item,
+                manuscript_version
+            )
+        if '%-VOR-%' in manuscript_version['long_manuscript_identifier']:
+            yield get_docmaps_step_for_vor_published_status(
                 query_result_item,
                 manuscript_version
             )
