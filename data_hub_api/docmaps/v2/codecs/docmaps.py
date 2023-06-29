@@ -222,7 +222,7 @@ def get_docmap_assertions_for_vor_published_step(
             query_result_item=query_result_item,
             manuscript_version=manuscript_version
         ),
-        'status': 'manuscript-published'
+        'status': 'vor-published'
     }]
 
 
