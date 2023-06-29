@@ -273,7 +273,7 @@ t_result_with_sorted_manuscript_versions AS (
       SELECT AS STRUCT manuscript_versions.*
       FROM result.manuscript_versions AS manuscript_versions
       ORDER BY manuscript_versions.position_in_overall_stage
-    ) AS evaluamanuscript_versionstions
+    ) AS manuscript_versions
 
   FROM t_result_with_manuscript_versions_array AS result
 ),
