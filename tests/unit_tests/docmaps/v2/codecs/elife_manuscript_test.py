@@ -103,7 +103,7 @@ class TestGetDocmapElifeManuscriptInput:
             query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1,
             manuscript_version=MANUSCRIPT_VERSION_1
         )
-        assert result == [{
+        assert result == {
             'type': 'preprint',
             'doi': get_elife_manuscript_version_doi(
                 elife_doi_version_str=MANUSCRIPT_VERSION_1['elife_doi_version_str'],
@@ -111,4 +111,4 @@ class TestGetDocmapElifeManuscriptInput:
             ),
             'identifier': DOCMAPS_QUERY_RESULT_ITEM_1['manuscript_id'],
             'versionIdentifier': MANUSCRIPT_VERSION_1['elife_doi_version_str']
-        }]
+        }

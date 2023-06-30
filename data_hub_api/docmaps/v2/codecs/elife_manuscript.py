@@ -90,8 +90,8 @@ def get_docmap_elife_manuscript_output_for_vor(
 def get_docmap_elife_manuscript_input(
     query_result_item: ApiInput,
     manuscript_version: ApiManuscriptVersionInput
-) -> Sequence[DocmapElifeManuscriptInput]:
-    return [{
+) -> DocmapElifeManuscriptInput:
+    return {
         'type': 'preprint',
         'doi': get_elife_manuscript_version_doi(
             elife_doi=query_result_item['elife_doi'],
@@ -99,4 +99,4 @@ def get_docmap_elife_manuscript_input(
         ),
         'identifier': query_result_item['manuscript_id'],
         'versionIdentifier': manuscript_version['elife_doi_version_str']
-    }]
+    }
