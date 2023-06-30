@@ -254,17 +254,21 @@ def get_docmaps_step_for_vor_published_status(
             query_result_item=query_result_item,
             manuscript_version=manuscript_version
         ),
-        'inputs': get_docmap_elife_manuscript_input(
+        'inputs': [get_docmap_elife_manuscript_input(
             query_result_item=query_result_item,
             manuscript_version=previous_manuscript_version
-        )
+        )]
     }
+
+
+def is_manuscript_version(long_manuscript_identifier:str) -> bool:
+    return ('-VOR-' in long_manuscript_identifier)
 
 
 def iter_docmap_steps_for_query_result_item(query_result_item: ApiInput) -> Iterable[DocmapStep]:
     manuscript_versions = query_result_item['manuscript_versions']
     for index, manuscript_version in enumerate(manuscript_versions):
-        if '-VOR-' not in manuscript_version['long_manuscript_identifier']:
+        if not is_manuscript_version(manuscript_version['long_manuscript_identifier']):
             yield get_docmaps_step_for_under_review_status(query_result_item, manuscript_version)
             if manuscript_version['evaluations']:
                 if manuscript_version['position_in_overall_stage'] == 1:
@@ -279,7 +283,7 @@ def iter_docmap_steps_for_query_result_item(query_result_item: ApiInput) -> Iter
                     manuscript_version
                 )
         else:
-            previous_manuscript_version = query_result_item['manuscript_versions'][index-1]
+            previous_manuscript_version = query_result_item['manuscript_versions'][index - 1]
             assert manuscript_version['position_in_overall_stage'] > 1
             yield get_docmaps_step_for_vor_published_status(
                 query_result_item,
