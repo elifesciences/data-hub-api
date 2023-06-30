@@ -570,7 +570,7 @@ class TestGetDocmapsItemForQueryResultItem:
         vor_published_step = docmaps_item['steps']['_:b6']
         assert vor_published_step['inputs'] == get_docmap_elife_manuscript_input(
             query_result_item=query_result_item,
-            manuscript_version=MANUSCRIPT_VOR_VERSION_1
+            manuscript_version=MANUSCRIPT_VERSION_WITH_EVALUATIONS_2,
         )
 
     def test_should_populate_assertions_for_vor_published_step(self):

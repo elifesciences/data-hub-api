@@ -194,7 +194,8 @@
         {
           "type": "evaluation-summary",
           "doi": "10.7554/eLife.86628.1.sa2"
-        }],
+        }
+      ],
       "next-step": "_:b3",
       "previous-step": "_:b1"
     },
