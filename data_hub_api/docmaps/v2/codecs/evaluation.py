@@ -1,6 +1,7 @@
 from datetime import datetime
 import logging
 from typing import Iterable, Optional, Sequence, cast, Tuple
+from data_hub_api.config import DOI_ROOT_URL
 
 from data_hub_api.docmaps.v2.codecs.elife_manuscript import get_elife_manuscript_version_doi
 from data_hub_api.docmaps.v2.api_input_typing import (
@@ -19,8 +20,6 @@ from data_hub_api.docmaps.v2.docmap_typing import (
 
 LOGGER = logging.getLogger(__name__)
 
-DOI_ROOT_URL = 'https://doi.org/'
-
 HYPOTHESIS_URL = 'https://hypothes.is/a/'
 SCIETY_ARTICLES_ACTIVITY_URL = 'https://sciety.org/articles/activity/'
 SCIETY_ARTICLES_EVALUATIONS_URL = 'https://sciety.org/evaluations/hypothesis:'
@@ -32,17 +31,13 @@ DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE = 'review-article'
 
 def get_elife_evaluation_doi(
     elife_doi_version_str: str,
-    elife_doi: Optional[str] = None,
-    evaluation_suffix: Optional[str] = None
-) -> Optional[str]:
+    elife_doi: str,
+    evaluation_suffix: str
+) -> str:
     elife_version_doi = get_elife_manuscript_version_doi(
         elife_doi=elife_doi,
         elife_doi_version_str=elife_doi_version_str
     )
-    if not elife_version_doi:
-        return None
-    if not evaluation_suffix:
-        return elife_version_doi
     return elife_version_doi + '.' + evaluation_suffix
 
 

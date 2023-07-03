@@ -5,6 +5,7 @@ import urllib
 import pytest
 from data_hub_api.docmaps.v2.codecs.elife_manuscript import (
     get_docmap_elife_manuscript_doi_assertion_item,
+    get_docmap_elife_manuscript_input,
     get_docmap_elife_manuscript_output,
     get_elife_manuscript_version_doi
 )
@@ -27,7 +28,9 @@ from data_hub_api.docmaps.v2.codecs.preprint import (
 
 from data_hub_api.docmaps.v2.codecs.docmaps import (
     get_docmap_actions_for_under_review_step,
+    get_docmap_actions_for_vor_published_step,
     get_docmap_assertions_for_under_review_step,
+    get_docmap_assertions_for_vor_published_step,
     get_docmap_item_for_query_result_item,
     DOCMAPS_JSONLD_SCHEMA_URL,
     DOCMAP_ID_PREFIX,
@@ -42,6 +45,7 @@ from tests.unit_tests.docmaps.v2.test_data import (
     DOCMAPS_QUERY_RESULT_ITEM_1,
     DOCMAPS_QUERY_RESULT_ITEM_2,
     DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS,
+    DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSION,
     DOI_1,
     EDITOR_DETAIL_1,
     EVALUATION_SUFFIX_1,
@@ -54,6 +58,7 @@ from tests.unit_tests.docmaps.v2.test_data import (
     MANUSCRIPT_VERSION_2,
     MANUSCRIPT_VERSION_WITH_EVALUATIONS_1,
     MANUSCRIPT_VERSION_WITH_EVALUATIONS_2,
+    MANUSCRIPT_VOR_VERSION_1,
     PREPRINT_LINK_PREFIX,
     PREPRINT_VERSION_1,
     PREPRINT_VERSION_2,
@@ -88,15 +93,6 @@ class TestGetElifeVersionDoi:
             elife_doi_version_str=elife_doi_version_str
         )
         assert actual_result == 'elife_doi_1.elife_doi_version_str_1'
-
-    def test_should_return_doi_without_version_when_the_doi_not_defined(self):
-        elife_doi = ''
-        elife_doi_version_str = 'elife_doi_version_str_1'
-        actual_result = get_elife_manuscript_version_doi(
-            elife_doi=elife_doi,
-            elife_doi_version_str=elife_doi_version_str
-        )
-        assert not actual_result
 
 
 class TestGenerateDocmapSteps:
@@ -560,3 +556,51 @@ class TestGetDocmapsItemForQueryResultItem:
             ),
             'status': 'manuscript-published'
         }]
+
+    def test_should_populate_inputs_for_vor_published_step(self):
+        query_result_item = {
+            **DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSION,
+            'manuscript_versions': [
+                MANUSCRIPT_VERSION_WITH_EVALUATIONS_1,
+                MANUSCRIPT_VERSION_WITH_EVALUATIONS_2,
+                MANUSCRIPT_VOR_VERSION_1
+            ]
+        }
+        docmaps_item = get_docmap_item_for_query_result_item(query_result_item)
+        vor_published_step = docmaps_item['steps']['_:b6']
+        assert vor_published_step['inputs'] == [get_docmap_elife_manuscript_input(
+            query_result_item=query_result_item,
+            manuscript_version=MANUSCRIPT_VERSION_WITH_EVALUATIONS_2,
+        )]
+
+    def test_should_populate_assertions_for_vor_published_step(self):
+        query_result_item = {
+            **DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSION,
+            'manuscript_versions': [
+                MANUSCRIPT_VERSION_WITH_EVALUATIONS_1,
+                MANUSCRIPT_VERSION_WITH_EVALUATIONS_2,
+                MANUSCRIPT_VOR_VERSION_1
+            ]
+        }
+        docmaps_item = get_docmap_item_for_query_result_item(query_result_item)
+        vor_published_step = docmaps_item['steps']['_:b6']
+        assert vor_published_step['assertions'] == get_docmap_assertions_for_vor_published_step(
+            query_result_item=query_result_item,
+            manuscript_version=MANUSCRIPT_VOR_VERSION_1
+        )
+
+    def test_should_populate_actions_for_vor_published_step(self):
+        query_result_item = {
+            **DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSION,
+            'manuscript_versions': [
+                MANUSCRIPT_VERSION_WITH_EVALUATIONS_1,
+                MANUSCRIPT_VERSION_WITH_EVALUATIONS_2,
+                MANUSCRIPT_VOR_VERSION_1
+            ]
+        }
+        docmaps_item = get_docmap_item_for_query_result_item(query_result_item)
+        vor_published_step = docmaps_item['steps']['_:b6']
+        assert vor_published_step['actions'] == get_docmap_actions_for_vor_published_step(
+            query_result_item=query_result_item,
+            manuscript_version=MANUSCRIPT_VOR_VERSION_1
+        )

@@ -5,6 +5,8 @@ MANUSCRIPT_ID_1 = 'manuscript_id_1'
 LONG_MANUSCRIPT_ID_1 = 'long_manuscript_id'
 LONG_MANUSCRIPT_ID_2 = 'long_manuscript_id_R1'
 
+LONG_MANUSCRIPT_VOR_ID_1 = 'long_manuscript-VOR-id'
+
 DOI_1 = '10.1101.test/doi1'
 DOI_2 = '10.1101.test/doi2'
 
@@ -60,6 +62,22 @@ MANUSCRIPT_VERSION_2: dict = {
     'preprint_version': PREPRINT_VERSION_2,
     'preprint_published_at_date': date.fromisoformat('2021-02-02'),
     'tdm_path': TDM_PATH_2,
+    'evaluations': []
+}
+
+MANUSCRIPT_VOR_VERSION_1: dict = {
+    'long_manuscript_identifier': LONG_MANUSCRIPT_VOR_ID_1,
+    'position_in_overall_stage': 2,
+    'qc_complete_timestamp': datetime.fromisoformat('2022-04-02T02:02:02+00:00'),
+    'under_review_timestamp': None,
+    'editor_details': [],
+    'senior_editor_details': [],
+    'preprint_url': None,
+    'elife_doi_version_str': ELIFE_DOI_VERSION_STR_3,
+    'preprint_doi': None,
+    'preprint_version': None,
+    'preprint_published_at_date': None,
+    'tdm_path': None,
     'evaluations': []
 }
 
@@ -124,6 +142,11 @@ MANUSCRIPT_VERSION_WITH_EVALUATIONS_2 = {
 DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS = {
     **DOCMAPS_QUERY_RESULT_ITEM_1,
     'manuscript_versions': [MANUSCRIPT_VERSION_WITH_EVALUATIONS_1]
+}
+
+DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSION = {
+    **DOCMAPS_QUERY_RESULT_ITEM_1,
+    'manuscript_versions': [MANUSCRIPT_VOR_VERSION_1]
 }
 
 EDITOR_DETAIL_1 = {

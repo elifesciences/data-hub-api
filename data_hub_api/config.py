@@ -6,3 +6,5 @@ ADDITIONAL_MANUSCRIPT_IDS = (
     '81535',
     '80729'
 )
+
+DOI_ROOT_URL = 'https://doi.org/'

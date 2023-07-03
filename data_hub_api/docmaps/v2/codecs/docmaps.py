@@ -5,7 +5,10 @@ import urllib
 
 from data_hub_api.docmaps.v2.codecs.elife_manuscript import (
     get_docmap_elife_manuscript_doi_assertion_item,
-    get_docmap_elife_manuscript_output
+    get_docmap_elife_manuscript_doi_assertion_item_for_vor,
+    get_docmap_elife_manuscript_input,
+    get_docmap_elife_manuscript_output,
+    get_docmap_elife_manuscript_output_for_vor
 )
 from data_hub_api.docmaps.v2.codecs.evaluation import (
     iter_docmap_actions_for_evaluations,
@@ -211,21 +214,81 @@ def get_docmaps_step_for_manuscript_published_status(
     }
 
 
+def get_docmap_assertions_for_vor_published_step(
+    query_result_item: ApiInput,
+    manuscript_version: ApiManuscriptVersionInput
+) -> Sequence[DocmapAssertion]:
+    return [{
+        'item': get_docmap_elife_manuscript_doi_assertion_item_for_vor(
+            query_result_item=query_result_item,
+            manuscript_version=manuscript_version
+        ),
+        'status': 'vor-published'
+    }]
+
+
+def get_docmap_actions_for_vor_published_step(
+    query_result_item: ApiInput,
+    manuscript_version: ApiManuscriptVersionInput
+) -> Sequence[DocmapAction]:
+    return [{
+        'participants': [],
+        'outputs': [get_docmap_elife_manuscript_output_for_vor(
+            query_result_item=query_result_item,
+            manuscript_version=manuscript_version
+        )]
+    }]
+
+
+def get_docmaps_step_for_vor_published_status(
+    query_result_item: ApiInput,
+    manuscript_version: ApiManuscriptVersionInput,
+    previous_manuscript_version: ApiManuscriptVersionInput
+) -> DocmapStep:
+    return {
+        'actions': get_docmap_actions_for_vor_published_step(
+            query_result_item=query_result_item,
+            manuscript_version=manuscript_version
+        ),
+        'assertions': get_docmap_assertions_for_vor_published_step(
+            query_result_item=query_result_item,
+            manuscript_version=manuscript_version
+        ),
+        'inputs': [get_docmap_elife_manuscript_input(
+            query_result_item=query_result_item,
+            manuscript_version=previous_manuscript_version
+        )]
+    }
+
+
+def is_manuscript_version(long_manuscript_identifier: str) -> bool:
+    return ('-VOR-' in long_manuscript_identifier)
+
+
 def iter_docmap_steps_for_query_result_item(query_result_item: ApiInput) -> Iterable[DocmapStep]:
     manuscript_versions = query_result_item['manuscript_versions']
-    for manuscript_version in manuscript_versions:
-        yield get_docmaps_step_for_under_review_status(query_result_item, manuscript_version)
-        if manuscript_version['evaluations']:
-            if manuscript_version['position_in_overall_stage'] == 1:
-                yield get_docmaps_step_for_peer_reviewed_status(
+    for index, manuscript_version in enumerate(manuscript_versions):
+        if not is_manuscript_version(manuscript_version['long_manuscript_identifier']):
+            yield get_docmaps_step_for_under_review_status(query_result_item, manuscript_version)
+            if manuscript_version['evaluations']:
+                if manuscript_version['position_in_overall_stage'] == 1:
+                    yield get_docmaps_step_for_peer_reviewed_status(
+                        query_result_item,
+                        manuscript_version
+                    )
+                else:
+                    yield get_docmaps_step_for_revised_status(query_result_item, manuscript_version)
+                yield get_docmaps_step_for_manuscript_published_status(
                     query_result_item,
                     manuscript_version
                 )
-            else:
-                yield get_docmaps_step_for_revised_status(query_result_item, manuscript_version)
-            yield get_docmaps_step_for_manuscript_published_status(
+        else:
+            previous_manuscript_version = query_result_item['manuscript_versions'][index - 1]
+            assert manuscript_version['position_in_overall_stage'] > 1
+            yield get_docmaps_step_for_vor_published_status(
                 query_result_item,
-                manuscript_version
+                manuscript_version,
+                previous_manuscript_version
             )
 
 

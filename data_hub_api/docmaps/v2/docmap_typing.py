@@ -22,14 +22,34 @@ DocmapEvaluationOutput = TypedDict(
     }
 )
 
+DocmapElifeManuscriptInput = TypedDict(
+    'DocmapElifeManuscriptInput',
+    {
+        'type': str,
+        'doi': str,
+        'identifier': str,
+        'versionIdentifier': str
+    }
+)
+
 DocmapElifeManuscriptOutput = TypedDict(
     'DocmapElifeManuscriptOutput',
     {
         'type': str,
-        'doi': Optional[str],
+        'doi': str,
         'identifier': str,
         'versionIdentifier': str,
         'license': str
+    }
+)
+
+DocmapElifeManuscriptVorOutput = TypedDict(
+    'DocmapElifeManuscriptVorOutput',
+    {
+        'type': str,
+        'doi': str,
+        'url': str,
+        'content': Sequence[DocmapContent]
     }
 )
 
@@ -97,7 +117,11 @@ DocmapAction = TypedDict(
     {
         'participants': Sequence[DocmapParticipant],
         'outputs': Sequence[
-            Union[DocmapElifeManuscriptOutput, DocmapEvaluationOutput]
+            Union[
+                DocmapElifeManuscriptOutput,
+                DocmapEvaluationOutput,
+                DocmapElifeManuscriptVorOutput
+            ]
         ]
     }
 )
@@ -107,7 +131,11 @@ DocmapStep = TypedDict(
     {
         'actions': Sequence[DocmapAction],
         'assertions': Sequence[DocmapAssertion],
-        'inputs': Sequence[Union[DocmapPreprintInput, DocmapEvaluationInput]],
+        'inputs': Sequence[Union[
+            DocmapPreprintInput,
+            DocmapEvaluationInput,
+            DocmapElifeManuscriptInput
+        ]],
         'next-step': NotRequired[str],
         'previous-step': NotRequired[str]
     },

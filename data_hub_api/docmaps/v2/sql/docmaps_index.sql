@@ -96,17 +96,29 @@ t_hypothesis_annotation_with_evaluation_suffix AS (
     AND annotation.hypothesis_id = t_evaluation_suffix.hypothesis_id
 ),
 
-t_reviewed_preprints_with_under_review_process AS (
+t_reviewed_preprints AS (
   SELECT 
     * EXCEPT(
       source_site_id,
       preprint_url_from_ejp,
       ejp_normalized_title,
-      biorxiv_medrxiv_normalized_title)
+      biorxiv_medrxiv_normalized_title),
+    (
+      under_review_timestamp IS NOT NULL
+      OR 
+      (
+        is_reviewed_preprint_type
+        AND long_manuscript_identifier LIKE '%-VOR-%'
+      )
+    ) AS should_provide_docmaps_for,
   FROM `elife-data-pipeline.prod.v_manuscript_with_matching_preprint_server_doi`
   WHERE preprint_doi IS NOT NULL
-  AND is_or_was_under_review -- to include the "six" additional manuscripts
-  AND long_manuscript_identifier NOT LIKE '%VOR%'
+),
+
+t_reviewed_preprints_for_docmaps AS (
+  SELECT * 
+  FROM t_reviewed_preprints
+  WHERE should_provide_docmaps_for
 ),
 
 t_result_with_evaluations AS (
@@ -116,10 +128,10 @@ t_result_with_evaluations AS (
       SELECT AS STRUCT
         *
       FROM t_hypothesis_annotation_with_evaluation_suffix AS annotation
-      WHERE annotation.source_doi = t_reviewed_preprints_with_under_review_process.preprint_doi
-      AND annotation.source_doi_rank = t_reviewed_preprints_with_under_review_process.position_in_overall_stage
+      WHERE annotation.source_doi = t_reviewed_preprints_for_docmaps.preprint_doi
+      AND annotation.source_doi_rank = t_reviewed_preprints_for_docmaps.position_in_overall_stage
     ) AS evaluations,
-  FROM t_reviewed_preprints_with_under_review_process
+  FROM t_reviewed_preprints_for_docmaps
 ),
 
 t_result_with_sorted_evaluations AS (
@@ -176,8 +188,16 @@ t_result_with_preprint_url_and_has_evaluations AS (
 ),
 
 t_result_with_preprint_version AS (
-  SELECT 
-    *,
+  SELECT
+    * EXCEPT(elife_doi),
+
+    CASE 
+      WHEN elife_doi IS NULL
+        THEN CONCAT('10.7554/eLife.',manuscript_id)
+      ELSE 
+        elife_doi
+    END AS elife_doi,
+     
     CASE 
       WHEN preprint_url LIKE '%10.1101/%'
         THEN REGEXP_EXTRACT(preprint_url, r'10\.\d{3,}.*v([1-9])')
@@ -223,7 +243,7 @@ t_preprint_published_at_date_and_tdm_path AS(
     AND CAST(tdm.tdm_ms_version AS STRING) = result.preprint_version
 ),
 
-t_result_with_manuscript_versions_array AS (
+t_result_with_sorted_manuscript_versions_array AS (
   SELECT
     result.manuscript_id,
     result.is_reviewed_preprint_type,
@@ -251,6 +271,7 @@ t_result_with_manuscript_versions_array AS (
         result.author_names_csv,
         result.evaluations
       )
+    ORDER BY result.position_in_overall_stage
     ) AS manuscript_versions 
   FROM t_result_with_preprint_version AS result
   LEFT JOIN t_preprint_published_at_date_and_tdm_path AS preprint
@@ -296,6 +317,6 @@ SELECT
   )) AS publisher_json,
   license.license_url AS license,
   license.license_timestamp,
-FROM t_result_with_manuscript_versions_array AS result
+FROM t_result_with_sorted_manuscript_versions_array AS result
 LEFT JOIN t_latest_manuscript_license AS license
   ON result.manuscript_id = license.manuscript_id
