@@ -96,16 +96,29 @@ t_hypothesis_annotation_with_evaluation_suffix AS (
     AND annotation.hypothesis_id = t_evaluation_suffix.hypothesis_id
 ),
 
-t_reviewed_preprints_with_under_review_process AS (
+t_reviewed_preprints AS (
   SELECT 
     * EXCEPT(
       source_site_id,
       preprint_url_from_ejp,
       ejp_normalized_title,
-      biorxiv_medrxiv_normalized_title)
+      biorxiv_medrxiv_normalized_title),
+    (
+      under_review_timestamp IS NOT NULL
+      OR 
+      (
+        is_reviewed_preprint_type
+        AND long_manuscript_identifier LIKE '%-VOR-%'
+      )
+    ) AS should_provide_docmaps_for,
   FROM `elife-data-pipeline.prod.v_manuscript_with_matching_preprint_server_doi`
   WHERE preprint_doi IS NOT NULL
-  AND provide_docmaps_for
+),
+
+t_reviewed_preprints_for_docmaps AS (
+  SELECT * 
+  FROM t_reviewed_preprints
+  WHERE should_provide_docmaps_for
 ),
 
 t_result_with_evaluations AS (
@@ -115,10 +128,10 @@ t_result_with_evaluations AS (
       SELECT AS STRUCT
         *
       FROM t_hypothesis_annotation_with_evaluation_suffix AS annotation
-      WHERE annotation.source_doi = t_reviewed_preprints_with_under_review_process.preprint_doi
-      AND annotation.source_doi_rank = t_reviewed_preprints_with_under_review_process.position_in_overall_stage
+      WHERE annotation.source_doi = t_reviewed_preprints_for_docmaps.preprint_doi
+      AND annotation.source_doi_rank = t_reviewed_preprints_for_docmaps.position_in_overall_stage
     ) AS evaluations,
-  FROM t_reviewed_preprints_with_under_review_process
+  FROM t_reviewed_preprints_for_docmaps
 ),
 
 t_result_with_sorted_evaluations AS (
