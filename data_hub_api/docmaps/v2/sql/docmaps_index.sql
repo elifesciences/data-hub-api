@@ -243,10 +243,11 @@ t_preprint_published_at_date_and_tdm_path AS(
         THEN tdm.tdm_path 
       WHEN result.preprint_doi LIKE '10.21203/rs%' OR result.preprint_doi LIKE '%arXiv%'
         THEN CONCAT(
-          's3://prod-elife-epp-meca/', 
-          result.preprint_doi_without_version, 
+          's3://prod-elife-epp-meca/',
+          result.preprint_doi_without_version,
           '-v',
-          result.preprint_version, '-meca.zip'
+          result.preprint_version,
+          '-meca.zip'
         )
       ELSE NULL
     END AS tdm_path
