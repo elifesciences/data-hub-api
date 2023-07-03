@@ -206,7 +206,12 @@ t_result_with_preprint_version AS (
       WHEN REGEXP_CONTAINS(preprint_doi_url, r'(.*v\d+)$')
         THEN REGEXP_EXTRACT(preprint_doi_url, r'v(\d+)$') 
       ELSE NULL
-    END AS preprint_version
+    END AS preprint_version,
+    CASE 
+      WHEN preprint_doi LIKE '%/rs%rs-%'
+        THEN REGEXP_EXTRACT(preprint_doi, r'(.+)\/\w+') 
+      ELSE preprint_doi
+    END AS preprint_doi_without_version,
   FROM t_result_with_preprint_url_and_has_evaluations
 ),
 
@@ -233,7 +238,19 @@ t_preprint_published_at_date_and_tdm_path AS(
     result.manuscript_id,
     result.long_manuscript_identifier,
     biorxiv_medrxiv_api_response.date AS preprint_published_at_date,
-    tdm.tdm_path
+    CASE 
+      WHEN result.preprint_doi LIKE '10.1101/%'
+        THEN tdm.tdm_path 
+      WHEN result.preprint_doi LIKE '10.21203/rs%' OR result.preprint_doi LIKE '%arXiv%'
+        THEN CONCAT(
+          's3://prod-elife-epp-meca/',
+          result.preprint_doi_without_version,
+          '-v',
+          result.preprint_version,
+          '-meca.zip'
+        )
+      ELSE NULL
+    END AS tdm_path
   FROM t_result_with_preprint_version AS result
   LEFT JOIN `elife-data-pipeline.prod.mv_latest_biorxiv_medrxiv_api_response` AS biorxiv_medrxiv_api_response
     ON biorxiv_medrxiv_api_response.doi = result.preprint_doi
