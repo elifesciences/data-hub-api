@@ -241,14 +241,13 @@ t_preprint_published_at_date_and_tdm_path AS(
     CASE 
       WHEN result.preprint_doi LIKE '10.1101/%'
         THEN tdm.tdm_path 
-      WHEN result.preprint_doi LIKE '10.21203/rs%' or result.preprint_doi LIKE '%arXiv%'
-        THEN CONCAT('s3://prod-elife-epp-meca/', 
-              CONCAT(result.preprint_doi_without_version, 
-                CONCAT('-v',
-                  CONCAT(result.preprint_version, '-meca.zip')
-                )
-              )
-            )
+      WHEN result.preprint_doi LIKE '10.21203/rs%' OR result.preprint_doi LIKE '%arXiv%'
+        THEN CONCAT(
+          's3://prod-elife-epp-meca/', 
+          result.preprint_doi_without_version, 
+          '-v',
+          result.preprint_version, '-meca.zip'
+        )
       ELSE NULL
     END AS tdm_path
   FROM t_result_with_preprint_version AS result
