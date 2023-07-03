@@ -261,7 +261,7 @@ def get_docmaps_step_for_vor_published_status(
     }
 
 
-def is_manuscript_version(long_manuscript_identifier:str) -> bool:
+def is_manuscript_version(long_manuscript_identifier: str) -> bool:
     return ('-VOR-' in long_manuscript_identifier)
 
 
