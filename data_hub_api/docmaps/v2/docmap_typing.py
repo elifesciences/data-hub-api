@@ -43,8 +43,8 @@ DocmapElifeManuscriptOutput = TypedDict(
     }
 )
 
-DocmapElifeManuscriptOutputVor = TypedDict(
-    'DocmapElifeManuscriptOutputVor',
+DocmapElifeManuscriptVorOutput = TypedDict(
+    'DocmapElifeManuscriptVorOutput',
     {
         'type': str,
         'doi': str,
@@ -120,7 +120,7 @@ DocmapAction = TypedDict(
             Union[
                 DocmapElifeManuscriptOutput,
                 DocmapEvaluationOutput,
-                DocmapElifeManuscriptOutputVor
+                DocmapElifeManuscriptVorOutput
             ]
         ]
     }

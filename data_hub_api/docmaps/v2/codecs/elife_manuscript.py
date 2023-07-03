@@ -6,7 +6,7 @@ from data_hub_api.docmaps.v2.docmap_typing import (
     DocmapContent,
     DocmapElifeManuscriptInput,
     DocmapElifeManuscriptOutput,
-    DocmapElifeManuscriptOutputVor
+    DocmapElifeManuscriptVorOutput
 )
 
 
@@ -72,7 +72,7 @@ def get_docmap_elife_manuscript_output_content_for_vor(
 def get_docmap_elife_manuscript_output_for_vor(
     query_result_item: ApiInput,
     manuscript_version: ApiManuscriptVersionInput
-) -> DocmapElifeManuscriptOutputVor:
+) -> DocmapElifeManuscriptVorOutput:
     manuscript_version_doi = get_elife_manuscript_version_doi(
         elife_doi=query_result_item['elife_doi'],
         elife_doi_version_str=manuscript_version['elife_doi_version_str']
