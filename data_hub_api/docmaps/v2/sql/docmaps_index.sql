@@ -227,9 +227,11 @@ t_result_with_preprint_version AS (
       WHEN preprint_url LIKE '%10.1101/%'
         THEN REGEXP_EXTRACT(preprint_url, r'10\.\d{3,}.*v([1-9])')
       WHEN preprint_url LIKE '%researchsquare.com/article/rs-%' OR preprint_url LIKE '%arxiv.org/abs/%'
-        THEN REGEXP_EXTRACT(preprint_url, r'v(\d+)$') 
+        THEN REGEXP_EXTRACT(preprint_url, r'v(\d+)$')
       WHEN REGEXP_CONTAINS(preprint_doi_url, r'(.*v\d+)$')
-        THEN REGEXP_EXTRACT(preprint_doi_url, r'v(\d+)$') 
+        THEN REGEXP_EXTRACT(preprint_doi_url, r'v(\d+)$')
+      WHEN REGEXP_CONTAINS(preprint_doi_url, r'osf')
+        THEN result.evaluations[SAFE_OFFSET(0)].source_doi_version
       ELSE NULL
     END AS preprint_version,
     CASE 
@@ -237,7 +239,7 @@ t_result_with_preprint_version AS (
         THEN REGEXP_EXTRACT(preprint_doi, r'(.+)\/\w+') 
       ELSE preprint_doi
     END AS preprint_doi_without_version,
-  FROM t_result_with_preprint_url_and_has_evaluations
+  FROM t_result_with_preprint_url_and_has_evaluations AS result
 ),
 
 t_latest_tdm_path_by_doi_and_version AS (
