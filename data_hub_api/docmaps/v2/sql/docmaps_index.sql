@@ -37,7 +37,7 @@ WITH t_hypothesis_annotation_with_doi AS (
     AND created >= '2022-09-01' -- to ignore any public reviews posted before Sep 2022
 ),
 
-t_manual_osf_preprint_match AS(
+t_manual_osf_preprint_match AS (
   SELECT
     * EXCEPT(rn)
   FROM
@@ -51,18 +51,29 @@ t_manual_osf_preprint_match AS(
   WHERE rn=1
 ),
 
-t_hypothesis_annotation_with_osf_doi AS(
+t_hypothesis_with_temp_filtered_osf_annotations AS (
+  SELECT
+    *
+  FROM t_hypothesis_annotation_with_doi
+  WHERE (
+    (uri LIKE 'https://psyarxiv.com/%' AND annotation_created_timestamp < '2023-07-01') -- filter for revisions
+    OR
+    uri NOT LIKE 'https://psyarxiv.com/%'
+  )
+),
+
+t_hypothesis_annotation_with_osf_doi AS (
   SELECT 
     hypothesis.* EXCEPT(source_doi, source_doi_without_version, source_doi_version),
     IFNULL(source_doi, osf.preprint_doi) AS source_doi,
     IFNULL(source_doi_without_version, osf.preprint_doi) AS source_doi_without_version,
     IFNULL(source_doi_version, osf.preprint_doi_version) AS source_doi_version,
-  FROM t_hypothesis_annotation_with_doi AS hypothesis
+  FROM t_hypothesis_with_temp_filtered_osf_annotations AS hypothesis
   LEFT JOIN t_manual_osf_preprint_match AS osf
     ON hypothesis.uri = osf.osf_preprint_url
 ),
 
-t_distinct_hypothesis_uri_doi_version AS(
+t_distinct_hypothesis_uri_doi_version AS (
   SELECT 
     DISTINCT
     uri,
@@ -81,7 +92,7 @@ t_hypothesis_with_source_doi_rank AS (
   FROM t_distinct_hypothesis_uri_doi_version
 ),
 
-t_hypothesis_uri_id_and_timestamp AS(
+t_hypothesis_uri_id_and_timestamp AS (
   SELECT
     uri,
     source_doi,
@@ -260,7 +271,7 @@ t_latest_tdm_path_by_doi_and_version AS (
   WHERE rn=1
 ),
 
-t_preprint_published_at_date_and_tdm_path AS(
+t_preprint_published_at_date_and_tdm_path AS (
   SELECT 
     result.manuscript_id,
     result.long_manuscript_identifier,
