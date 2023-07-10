@@ -37,13 +37,38 @@ WITH t_hypothesis_annotation_with_doi AS (
   AND created >= '2022-09-01' -- to ignore any public reviews posted before Sep 2022
 ),
 
+t_manual_osf_preprint_match AS(
+  SELECT
+    * EXCEPT(rn)
+  FROM
+  (
+    SELECT 
+      *,
+      ROW_NUMBER() OVER(PARTITION BY manuscript_id ORDER BY imported_timestamp DESC) AS rn
+    FROM `elife-data-pipeline.prod.unmatched_manuscripts`
+    WHERE osf_preprint_url IS NOT NULL
+  )
+  WHERE rn=1
+),
+
+t_hypothesis_annotation_with_osf_doi AS(
+  SELECT 
+    hypothesis.* EXCEPT(source_doi, source_doi_without_version, source_doi_version),
+    IFNULL(source_doi, osf.preprint_doi) AS source_doi,
+    IFNULL(source_doi_without_version, osf.preprint_doi) AS source_doi_without_version,
+    IFNULL(source_doi_version, osf.preprint_doi_version) AS source_doi_version,
+  FROM t_hypothesis_annotation_with_doi AS hypothesis
+  LEFT JOIN t_manual_osf_preprint_match AS osf
+  ON hypothesis.uri = osf.osf_preprint_url
+),
+
 t_distinct_hypothesis_uri_doi_version AS(
   SELECT 
     DISTINCT
     uri,
     source_doi_without_version,
     source_doi_version
-  FROM t_hypothesis_annotation_with_doi
+  FROM t_hypothesis_annotation_with_osf_doi
 ),
 
 t_hypothesis_with_source_doi_rank AS (
@@ -63,7 +88,7 @@ t_hypothesis_uri_id_and_timestamp AS(
     source_doi_version,
     annotation_created_timestamp,
     hypothesis_id
-  FROM t_hypothesis_annotation_with_doi
+  FROM t_hypothesis_annotation_with_osf_doi
 ),
 
 t_distinct_hypothesis_with_evaluation_suffix_number AS (
@@ -88,7 +113,7 @@ t_hypothesis_annotation_with_evaluation_suffix AS (
     doi_rank.source_doi_without_version,
     doi_rank.source_doi_rank,
     CONCAT('sa',CAST(t_evaluation_suffix.evaluation_suffix_number AS STRING)) AS evaluation_suffix
-  FROM t_hypothesis_annotation_with_doi AS annotation
+  FROM t_hypothesis_annotation_with_osf_doi AS annotation
   INNER JOIN t_hypothesis_with_source_doi_rank AS doi_rank
     ON annotation.uri = doi_rank.uri
   INNER JOIN t_distinct_hypothesis_with_evaluation_suffix_number AS t_evaluation_suffix
