@@ -34,7 +34,7 @@ WITH t_hypothesis_annotation_with_doi AS (
     annotation.created AS annotation_created_timestamp,
   FROM `elife-data-pipeline.de_proto.v_hypothesis_annotation` AS annotation
   WHERE annotation.group = 'q5X6RWJ6'
-  AND created >= '2022-09-01' -- to ignore any public reviews posted before Sep 2022
+    AND created >= '2022-09-01' -- to ignore any public reviews posted before Sep 2022
 ),
 
 t_manual_osf_preprint_match AS(
@@ -59,7 +59,7 @@ t_hypothesis_annotation_with_osf_doi AS(
     IFNULL(source_doi_version, osf.preprint_doi_version) AS source_doi_version,
   FROM t_hypothesis_annotation_with_doi AS hypothesis
   LEFT JOIN t_manual_osf_preprint_match AS osf
-  ON hypothesis.uri = osf.osf_preprint_url
+    ON hypothesis.uri = osf.osf_preprint_url
 ),
 
 t_distinct_hypothesis_uri_doi_version AS(
@@ -154,7 +154,7 @@ t_result_with_evaluations AS (
         *
       FROM t_hypothesis_annotation_with_evaluation_suffix AS annotation
       WHERE annotation.source_doi = t_reviewed_preprints_for_docmaps.preprint_doi
-      AND annotation.source_doi_rank = t_reviewed_preprints_for_docmaps.position_in_overall_stage
+        AND annotation.source_doi_rank = t_reviewed_preprints_for_docmaps.position_in_overall_stage
     ) AS evaluations,
   FROM t_reviewed_preprints_for_docmaps
 ),
@@ -326,9 +326,10 @@ t_result_with_sorted_manuscript_versions_array AS (
 t_latest_manuscript_license AS (
   SELECT 
     * EXCEPT(rn),
-    CASE WHEN license_id = 1 THEN 'http://creativecommons.org/licenses/by/4.0/'
-    WHEN license_id = 2 THEN 'https://creativecommons.org/publicdomain/zero/1.0/'
-    ELSE NULL 
+    CASE
+      WHEN license_id = 1 THEN 'http://creativecommons.org/licenses/by/4.0/'
+      WHEN license_id = 2 THEN 'https://creativecommons.org/publicdomain/zero/1.0/'
+      ELSE NULL 
     END AS license_url
   FROM (
     SELECT
