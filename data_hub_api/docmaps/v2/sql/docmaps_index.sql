@@ -235,15 +235,15 @@ t_result_with_preprint_version AS (
     END AS elife_doi,
      
     CASE 
-      WHEN preprint_url LIKE '%10.1101/%'
+      WHEN preprint_url LIKE '%10.1101/%v%'
         THEN REGEXP_EXTRACT(preprint_url, r'10\.\d{3,}.*v([1-9])')
-      WHEN preprint_url LIKE '%researchsquare.com/article/rs-%' OR preprint_url LIKE '%arxiv.org/abs/%'
+      WHEN preprint_url LIKE '%researchsquare.com/article/rs-%v%' OR preprint_url LIKE '%arxiv.org/abs/%v%'
         THEN REGEXP_EXTRACT(preprint_url, r'v(\d+)$')
       WHEN REGEXP_CONTAINS(preprint_doi_url, r'(.*v\d+)$')
         THEN REGEXP_EXTRACT(preprint_doi_url, r'v(\d+)$')
       WHEN REGEXP_CONTAINS(preprint_doi_url, r'osf')
         THEN result.evaluations[SAFE_OFFSET(0)].source_doi_version
-      ELSE NULL
+      ELSE manual_preprint_version
     END AS preprint_version,
     CASE 
       WHEN preprint_doi LIKE '%/rs%rs-%'
