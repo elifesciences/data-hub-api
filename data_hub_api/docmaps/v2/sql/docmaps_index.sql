@@ -234,10 +234,12 @@ t_result_with_preprint_version AS (
         elife_doi
     END AS elife_doi,
      
-    CASE 
-      WHEN preprint_url LIKE '%10.1101/%'
+    CASE
+      WHEN manual_preprint_version IS NOT NULL
+        THEN manual_preprint_version
+      WHEN preprint_url LIKE '%10.1101/%v%'
         THEN REGEXP_EXTRACT(preprint_url, r'10\.\d{3,}.*v([1-9])')
-      WHEN preprint_url LIKE '%researchsquare.com/article/rs-%' OR preprint_url LIKE '%arxiv.org/abs/%'
+      WHEN preprint_url LIKE '%researchsquare.com/article/rs-%v%' OR preprint_url LIKE '%arxiv.org/abs/%v%'
         THEN REGEXP_EXTRACT(preprint_url, r'v(\d+)$')
       WHEN REGEXP_CONTAINS(preprint_doi_url, r'(.*v\d+)$')
         THEN REGEXP_EXTRACT(preprint_doi_url, r'v(\d+)$')
