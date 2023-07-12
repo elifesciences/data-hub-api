@@ -36,6 +36,7 @@ DocmapElifeManuscriptOutput = TypedDict(
     'DocmapElifeManuscriptOutput',
     {
         'type': str,
+        'published': str,
         'doi': str,
         'identifier': str,
         'versionIdentifier': str,
