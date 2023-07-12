@@ -6,7 +6,8 @@ from data_hub_api.docmaps.v2.docmap_typing import (
     DocmapContent,
     DocmapElifeManuscriptInput,
     DocmapElifeManuscriptOutput,
-    DocmapElifeManuscriptVorOutput
+    DocmapElifeManuscriptVorOutput,
+    DocmapPublishedElifeManuscriptOutput
 )
 
 
@@ -50,7 +51,6 @@ def get_docmap_elife_manuscript_output(
 ) -> DocmapElifeManuscriptOutput:
     return {
         'type': 'preprint',
-        'published': manuscript_version['manuscript_published_date'],
         'identifier': query_result_item['manuscript_id'],
         'doi': get_elife_manuscript_version_doi(
             elife_doi=query_result_item['elife_doi'],
@@ -58,6 +58,19 @@ def get_docmap_elife_manuscript_output(
         ),
         'versionIdentifier': manuscript_version['elife_doi_version_str'],
         'license': query_result_item['license']
+    }
+
+
+def get_docmap_elife_manuscript_output_for_published(
+    query_result_item: ApiInput,
+    manuscript_version: ApiManuscriptVersionInput
+) -> DocmapPublishedElifeManuscriptOutput:
+    return {
+        **get_docmap_elife_manuscript_output(
+            query_result_item,
+            manuscript_version
+        ),
+        'published': manuscript_version['manuscript_published_date']
     }
 
 

@@ -8,6 +8,7 @@ from data_hub_api.docmaps.v2.codecs.elife_manuscript import (
     get_docmap_elife_manuscript_doi_assertion_item_for_vor,
     get_docmap_elife_manuscript_input,
     get_docmap_elife_manuscript_output,
+    get_docmap_elife_manuscript_output_for_published,
     get_docmap_elife_manuscript_output_for_vor
 )
 from data_hub_api.docmaps.v2.codecs.evaluation import (
@@ -171,7 +172,7 @@ def get_docmap_actions_for_manuscript_published_step(
 ) -> Sequence[DocmapAction]:
     return [{
         'participants': [],
-        'outputs': [get_docmap_elife_manuscript_output(
+        'outputs': [get_docmap_elife_manuscript_output_for_published(
             query_result_item=query_result_item,
             manuscript_version=manuscript_version
         )]
