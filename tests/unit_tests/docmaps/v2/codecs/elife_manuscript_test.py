@@ -10,6 +10,7 @@ from data_hub_api.docmaps.v2.codecs.elife_manuscript import (
 
 from tests.unit_tests.docmaps.v2.test_data import (
     DOCMAPS_QUERY_RESULT_ITEM_1,
+    MANUSCRIPT_PUBLISHED_DATE_1,
     MANUSCRIPT_VERSION_1
 )
 
@@ -63,6 +64,7 @@ class TestGetDocmapElifeManuscriptOutput:
         )
         assert result == {
             'type': 'preprint',
+            'published': MANUSCRIPT_PUBLISHED_DATE_1,
             'identifier': DOCMAPS_QUERY_RESULT_ITEM_1['manuscript_id'],
             'doi': get_elife_manuscript_version_doi(
                 elife_doi_version_str=MANUSCRIPT_VERSION_1['elife_doi_version_str'],

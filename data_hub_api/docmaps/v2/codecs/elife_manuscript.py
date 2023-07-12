@@ -50,6 +50,7 @@ def get_docmap_elife_manuscript_output(
 ) -> DocmapElifeManuscriptOutput:
     return {
         'type': 'preprint',
+        'published': manuscript_version['manuscript_published_date'],
         'identifier': query_result_item['manuscript_id'],
         'doi': get_elife_manuscript_version_doi(
             elife_doi=query_result_item['elife_doi'],

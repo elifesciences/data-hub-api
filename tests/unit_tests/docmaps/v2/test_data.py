@@ -30,8 +30,10 @@ TDM_PATH_1 = 'tdm_path_1'
 TDM_PATH_2 = 'tdm_path_2'
 TDM_PATH_3 = 'tdm_path_3'
 
-
 LICENSE_1 = 'license_1'
+
+MANUSCRIPT_PUBLISHED_DATE_1 = 'manuscript_published_date_1'
+MANUSCRIPT_PUBLISHED_DATE_2 = 'manuscript_published_date_2'
 
 MANUSCRIPT_VERSION_1: dict = {
     'long_manuscript_identifier': LONG_MANUSCRIPT_ID_1,
@@ -46,7 +48,8 @@ MANUSCRIPT_VERSION_1: dict = {
     'preprint_version': PREPRINT_VERSION_1,
     'preprint_published_at_date': date.fromisoformat('2021-01-01'),
     'tdm_path': TDM_PATH_1,
-    'evaluations': []
+    'evaluations': [],
+    'manuscript_published_date': MANUSCRIPT_PUBLISHED_DATE_1
 }
 
 MANUSCRIPT_VERSION_2: dict = {
@@ -62,7 +65,8 @@ MANUSCRIPT_VERSION_2: dict = {
     'preprint_version': PREPRINT_VERSION_2,
     'preprint_published_at_date': date.fromisoformat('2021-02-02'),
     'tdm_path': TDM_PATH_2,
-    'evaluations': []
+    'evaluations': [],
+    'manuscript_published_date': MANUSCRIPT_PUBLISHED_DATE_2
 }
 
 MANUSCRIPT_VOR_VERSION_1: dict = {
@@ -78,7 +82,8 @@ MANUSCRIPT_VOR_VERSION_1: dict = {
     'preprint_version': None,
     'preprint_published_at_date': None,
     'tdm_path': None,
-    'evaluations': []
+    'evaluations': [],
+    'manuscript_published_date': None
 }
 
 DOCMAPS_QUERY_RESULT_ITEM_1: dict = {
