@@ -326,7 +326,6 @@ t_result_with_sorted_manuscript_versions_array AS (
         result.qc_complete_timestamp,
         result.under_review_timestamp,
         result.has_evaluations,
-        published.published_date,
         result.manuscript_title,
         result.preprint_url,
         CAST(result.position_in_overall_stage AS STRING) AS elife_doi_version_str,
@@ -340,7 +339,8 @@ t_result_with_sorted_manuscript_versions_array AS (
         result.editor_details,
         result.senior_editor_details,
         result.author_names_csv,
-        result.evaluations
+        result.evaluations,
+        published.published_date AS manuscript_published_date,
       )
     ORDER BY result.position_in_overall_stage
     ) AS manuscript_versions 
