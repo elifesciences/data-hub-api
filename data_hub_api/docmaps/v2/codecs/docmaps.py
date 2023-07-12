@@ -261,14 +261,14 @@ def get_docmaps_step_for_vor_published_status(
     }
 
 
-def is_manuscript_version(long_manuscript_identifier: str) -> bool:
+def is_manuscript_vor(long_manuscript_identifier: str) -> bool:
     return ('-VOR-' in long_manuscript_identifier)
 
 
 def iter_docmap_steps_for_query_result_item(query_result_item: ApiInput) -> Iterable[DocmapStep]:
     manuscript_versions = query_result_item['manuscript_versions']
     for index, manuscript_version in enumerate(manuscript_versions):
-        if not is_manuscript_version(manuscript_version['long_manuscript_identifier']):
+        if not is_manuscript_vor(manuscript_version['long_manuscript_identifier']):
             yield get_docmaps_step_for_under_review_status(query_result_item, manuscript_version)
             if manuscript_version['evaluations']:
                 if manuscript_version['position_in_overall_stage'] == 1:
