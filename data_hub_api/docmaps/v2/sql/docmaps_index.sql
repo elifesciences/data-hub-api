@@ -340,7 +340,7 @@ t_result_with_sorted_manuscript_versions_array AS (
         result.senior_editor_details,
         result.author_names_csv,
         result.evaluations,
-        published.published_date AS manuscript_published_date,
+        published.published_date AS manuscript_published_date
       )
     ORDER BY result.position_in_overall_stage
     ) AS manuscript_versions 
