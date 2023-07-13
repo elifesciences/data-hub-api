@@ -255,7 +255,7 @@ t_result_with_preprint_version AS (
   FROM t_result_with_preprint_url_and_has_evaluations AS result
 ),
 
-t_latest_biorxiv_medrxiv_tdm_path_by_doi_and_version AS (
+t_latest_tdm_path_by_doi_and_version AS (
   SELECT 
     * EXCEPT(rn) 
   FROM (
@@ -273,7 +273,7 @@ t_latest_biorxiv_medrxiv_tdm_path_by_doi_and_version AS (
   WHERE rn=1
 ),
 
-t_preprint_published_at_date_and_meca_path AS (
+t_preprint_published_at_date_and_tdm_path AS (
   SELECT 
     result.manuscript_id,
     result.long_manuscript_identifier,
@@ -294,12 +294,12 @@ t_preprint_published_at_date_and_meca_path AS (
           '-meca.zip'
         )
       ELSE NULL
-    END AS meca_path
+    END AS tdm_path
   FROM t_result_with_preprint_version AS result
   LEFT JOIN `elife-data-pipeline.prod.mv_latest_biorxiv_medrxiv_api_response` AS biorxiv_medrxiv_api_response
     ON biorxiv_medrxiv_api_response.doi = result.preprint_doi
     AND CAST(biorxiv_medrxiv_api_response.version AS STRING) = result.preprint_version
-  LEFT JOIN t_latest_biorxiv_medrxiv_tdm_path_by_doi_and_version AS tdm
+  LEFT JOIN t_latest_tdm_path_by_doi_and_version AS tdm
     ON tdm.tdm_doi = result.preprint_doi
     AND CAST(tdm.tdm_ms_version AS STRING) = result.preprint_version
 ),
@@ -326,7 +326,7 @@ t_result_with_sorted_manuscript_versions_array AS (
         result.preprint_doi_source,
         result.preprint_doi_url,
         preprint.preprint_published_at_date,
-        preprint.meca_path,
+        preprint.tdm_path,
         result.editor_details,
         result.senior_editor_details,
         result.author_names_csv,
@@ -335,7 +335,7 @@ t_result_with_sorted_manuscript_versions_array AS (
     ORDER BY result.position_in_overall_stage
     ) AS manuscript_versions 
   FROM t_result_with_preprint_version AS result
-  LEFT JOIN t_preprint_published_at_date_and_meca_path AS preprint
+  LEFT JOIN t_preprint_published_at_date_and_tdm_path AS preprint
     ON result.long_manuscript_identifier = preprint.long_manuscript_identifier
   GROUP BY result.manuscript_id, result.is_reviewed_preprint_type, result.elife_doi
 ),
