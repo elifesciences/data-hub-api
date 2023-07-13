@@ -2,8 +2,9 @@
 from data_hub_api.docmaps.v2.api_input_typing import ApiManuscriptVersionInput
 from data_hub_api.docmaps.v2.docmap_typing import (
     DocmapAssertionItem,
+    DocmapContent,
     DocmapPreprintInput,
-    DocmapPreprintInputWithPublishedTdmpath
+    DocmapPreprintInputWithPublishedMecapath
 )
 
 
@@ -18,9 +19,16 @@ def get_docmap_preprint_input(
     }
 
 
-def get_docmap_preprint_input_with_published_and_tdmpath(
+def get_meca_path_content(meca_path: str) -> DocmapContent:
+    return {
+        'type': 'web-manifestation',
+        'url': meca_path
+    }
+
+
+def get_docmap_preprint_input_with_published_and_meca_path(
     manuscript_version: ApiManuscriptVersionInput
-) -> DocmapPreprintInputWithPublishedTdmpath:
+) -> DocmapPreprintInputWithPublishedMecapath:
     return {
         **get_docmap_preprint_input(manuscript_version),  # type: ignore
         'published': (
@@ -28,7 +36,11 @@ def get_docmap_preprint_input_with_published_and_tdmpath(
             if manuscript_version['preprint_published_at_date']
             else ''
         ),
-        '_tdmPath': manuscript_version['tdm_path'],
+        'content': (
+            [get_meca_path_content(manuscript_version['meca_path'])]
+            if manuscript_version['meca_path']
+            else []
+        )
     }
 
 
