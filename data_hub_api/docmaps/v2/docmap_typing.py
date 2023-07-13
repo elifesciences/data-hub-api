@@ -80,7 +80,7 @@ DocmapPreprintInputWithPublishedTdmpath = TypedDict(
         'url': str,
         'versionIdentifier': str,
         'published': str,
-        '_tdmPath': Optional[str]
+        '_tdmPath': Sequence[DocmapContent]
     },
     total=False
 )
