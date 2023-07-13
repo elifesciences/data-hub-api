@@ -26,9 +26,9 @@ ELIFE_DOI_VERSION_STR_1 = 'elife_doi_version_str_1'
 ELIFE_DOI_VERSION_STR_2 = 'elife_doi_version_str_2'
 ELIFE_DOI_VERSION_STR_3 = 'elife_doi_version_str_3'
 
-TDM_PATH_1 = 'tdm_path_1'
-TDM_PATH_2 = 'tdm_path_2'
-TDM_PATH_3 = 'tdm_path_3'
+MECA_PATH_1 = 'meca_path_1'
+MECA_PATH_2 = 'meca_path_2'
+MECA_PATH_3 = 'meca_path_3'
 
 
 LICENSE_1 = 'license_1'
@@ -45,7 +45,7 @@ MANUSCRIPT_VERSION_1: dict = {
     'preprint_doi': DOI_1,
     'preprint_version': PREPRINT_VERSION_1,
     'preprint_published_at_date': date.fromisoformat('2021-01-01'),
-    'tdm_path': TDM_PATH_1,
+    'meca_path': MECA_PATH_1,
     'evaluations': []
 }
 
@@ -61,7 +61,7 @@ MANUSCRIPT_VERSION_2: dict = {
     'preprint_doi': DOI_2,
     'preprint_version': PREPRINT_VERSION_2,
     'preprint_published_at_date': date.fromisoformat('2021-02-02'),
-    'tdm_path': TDM_PATH_2,
+    'meca_path': MECA_PATH_2,
     'evaluations': []
 }
 
@@ -77,7 +77,7 @@ MANUSCRIPT_VOR_VERSION_1: dict = {
     'preprint_doi': None,
     'preprint_version': None,
     'preprint_published_at_date': None,
-    'tdm_path': None,
+    'meca_path': None,
     'evaluations': []
 }
 
