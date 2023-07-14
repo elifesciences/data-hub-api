@@ -30,7 +30,7 @@ class TestGetMecaPathContent:
     def test_should_populate_meca_path_content(self):
         result = get_meca_path_content(MECA_PATH_1)
         assert result == {
-            'type': 'web-manifestation',
+            'type': 'computer-file',
             'url': MECA_PATH_1
         }
 

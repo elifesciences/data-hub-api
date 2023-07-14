@@ -21,7 +21,7 @@ def get_docmap_preprint_input(
 
 def get_meca_path_content(meca_path: str) -> DocmapContent:
     return {
-        'type': 'web-manifestation',
+        'type': 'computer-file',
         'url': meca_path
     }
 
