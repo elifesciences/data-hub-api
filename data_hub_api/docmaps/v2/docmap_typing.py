@@ -85,15 +85,15 @@ DocmapPreprintInput = TypedDict(
     }
 )
 
-DocmapPreprintInputWithPublishedTdmpath = TypedDict(
-    'DocmapPreprintInputWithPublishedTdmpath',
+DocmapPreprintInputWithPublishedMecaPath = TypedDict(
+    'DocmapPreprintInputWithPublishedMecaPath',
     {
         'type': str,
         'doi': str,
         'url': str,
         'versionIdentifier': str,
         'published': str,
-        '_tdmPath': Optional[str]
+        'content': Sequence[DocmapContent]
     },
     total=False
 )

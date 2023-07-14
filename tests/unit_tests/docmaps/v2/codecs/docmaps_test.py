@@ -24,7 +24,7 @@ from data_hub_api.docmaps.v2.codecs.evaluation import (
 from data_hub_api.docmaps.v2.codecs.preprint import (
     get_docmap_preprint_assertion_item,
     get_docmap_preprint_input,
-    get_docmap_preprint_input_with_published_and_tdmpath
+    get_docmap_preprint_input_with_published_and_meca_path
 )
 
 from data_hub_api.docmaps.v2.codecs.docmaps import (
@@ -170,7 +170,7 @@ class TestGetDocmapsItemForQueryResultItem:
         docmaps_item = get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_2)
         under_review_step = docmaps_item['steps']['_:b0']
         assert under_review_step['inputs'] == [
-            get_docmap_preprint_input_with_published_and_tdmpath(
+            get_docmap_preprint_input_with_published_and_meca_path(
                 manuscript_version=MANUSCRIPT_VERSION_1
             )
         ]
@@ -484,7 +484,7 @@ class TestGetDocmapsItemForQueryResultItem:
         docmaps_item = get_docmap_item_for_query_result_item(query_result_item)
         under_review_step = docmaps_item['steps']['_:b3']
         assert under_review_step['inputs'] == [
-            get_docmap_preprint_input_with_published_and_tdmpath(
+            get_docmap_preprint_input_with_published_and_meca_path(
                 manuscript_version=MANUSCRIPT_VERSION_2
             )
         ]
