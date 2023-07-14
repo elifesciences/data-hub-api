@@ -34,12 +34,12 @@ def get_docmap_preprint_input_with_published_and_meca_path(
         'published': (
             manuscript_version['preprint_published_at_date'].isoformat()
             if manuscript_version['preprint_published_at_date']
-            else ''
+            else None
         ),
         'content': (
             [get_meca_path_content(manuscript_version['meca_path'])]
             if manuscript_version['meca_path']
-            else []
+            else None
         )
     }
 

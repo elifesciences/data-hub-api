@@ -52,7 +52,7 @@ class TestGetDocmapPreprintInputWithPublishedAndMecaPath:
             ]
         }
 
-    def test_should_return_empty_str_for_published_if_not_defined(self):
+    def test_should_return_none_for_published_if_not_defined(self):
         manuscript_version = {
             **MANUSCRIPT_VERSION_1,
             'preprint_published_at_date': None
@@ -60,9 +60,9 @@ class TestGetDocmapPreprintInputWithPublishedAndMecaPath:
         result = get_docmap_preprint_input_with_published_and_meca_path(
             manuscript_version=manuscript_version
         )
-        assert result['published'] == ''
+        assert not result['published']
 
-    def test_should_return_empty_list_for_meca_path_content_if_not_defined(self):
+    def test_should_return_none_for_meca_path_content_if_not_defined(self):
         manuscript_version = {
             **MANUSCRIPT_VERSION_1,
             'meca_path': None
@@ -70,7 +70,7 @@ class TestGetDocmapPreprintInputWithPublishedAndMecaPath:
         result = get_docmap_preprint_input_with_published_and_meca_path(
             manuscript_version=manuscript_version
         )
-        assert result['content'] == []
+        assert not result['content']
 
 
 class TestGetDocmapPreprintAssertionItem:
