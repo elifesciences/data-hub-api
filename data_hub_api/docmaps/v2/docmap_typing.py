@@ -72,8 +72,8 @@ DocmapPreprintInput = TypedDict(
     }
 )
 
-DocmapPreprintInputWithPublishedMecapath = TypedDict(
-    'DocmapPreprintInputWithPublishedMecapath',
+DocmapPreprintInputWithPublishedMecaPath = TypedDict(
+    'DocmapPreprintInputWithPublishedMecaPath',
     {
         'type': str,
         'doi': str,
