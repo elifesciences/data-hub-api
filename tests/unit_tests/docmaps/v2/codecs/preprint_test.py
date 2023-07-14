@@ -46,7 +46,7 @@ class TestGetDocmapPreprintInputWithPublishedAndMecaPath:
             'doi': DOI_1,
             'url': PREPRINT_LINK_1,
             'versionIdentifier': PREPRINT_VERSION_1,
-            'published': date.fromisoformat('2021-01-01').isoformat(),
+            'published': '2021-01-01',
             'content': [
                 get_meca_path_content(MECA_PATH_1)
             ]
