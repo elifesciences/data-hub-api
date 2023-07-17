@@ -70,7 +70,7 @@ def get_docmap_elife_manuscript_output_for_published(
             query_result_item,
             manuscript_version
         ),
-        'published': manuscript_version['manuscript_published_date']
+        'published': manuscript_version['rp_publication_timestamp']
     }
 
 
