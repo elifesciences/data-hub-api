@@ -20,8 +20,7 @@ ApiEditorDetailInput = TypedDict(
         'name': str,
         'institution': str,
         'country': Optional[str],
-    },
-    total=False
+    }
 )
 
 ApiManuscriptVersionInput = TypedDict(
