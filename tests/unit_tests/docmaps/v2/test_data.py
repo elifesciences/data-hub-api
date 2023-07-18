@@ -1,6 +1,10 @@
 from datetime import date, datetime
 
-from data_hub_api.docmaps.v2.api_input_typing import ApiEvaluationInput, ApiManuscriptVersionInput
+from data_hub_api.docmaps.v2.api_input_typing import (
+    ApiEvaluationInput,
+    ApiInput,
+    ApiManuscriptVersionInput
+)
 
 MANUSCRIPT_ID_1 = 'manuscript_id_1'
 
@@ -83,8 +87,8 @@ MANUSCRIPT_VOR_VERSION_1: ApiManuscriptVersionInput = {
     'evaluations': []
 }
 
-DOCMAPS_QUERY_RESULT_ITEM_1: dict = {
-    'publisher_json': '{"id": "publisher_1"}',
+DOCMAPS_QUERY_RESULT_ITEM_1: ApiInput = {
+    'publisher_json': {"id": "publisher_1"},
     'manuscript_id': 'manuscript_id_1',
     'elife_doi': ELIFE_DOI_1,
     'license': LICENSE_1,
@@ -92,8 +96,8 @@ DOCMAPS_QUERY_RESULT_ITEM_1: dict = {
     'manuscript_versions': [MANUSCRIPT_VERSION_1]
 }
 
-DOCMAPS_QUERY_RESULT_ITEM_2: dict = {
-    'publisher_json': '{"id": "publisher_1"}',
+DOCMAPS_QUERY_RESULT_ITEM_2: ApiInput = {
+    'publisher_json': {"id": "publisher_1"},
     'manuscript_id': 'manuscript_id_1',
     'elife_doi': ELIFE_DOI_1,
     'license': LICENSE_1,
@@ -142,12 +146,12 @@ MANUSCRIPT_VERSION_WITH_EVALUATIONS_2: ApiManuscriptVersionInput = {
 }
 
 DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS = {
-    **DOCMAPS_QUERY_RESULT_ITEM_1,
+    **DOCMAPS_QUERY_RESULT_ITEM_1,  # type: ignore
     'manuscript_versions': [MANUSCRIPT_VERSION_WITH_EVALUATIONS_1]
 }
 
 DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSION = {
-    **DOCMAPS_QUERY_RESULT_ITEM_1,
+    **DOCMAPS_QUERY_RESULT_ITEM_1,  # type: ignore
     'manuscript_versions': [MANUSCRIPT_VOR_VERSION_1]
 }
 
