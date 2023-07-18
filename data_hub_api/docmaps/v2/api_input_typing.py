@@ -31,15 +31,15 @@ ApiManuscriptVersionInput = TypedDict(
         'long_manuscript_identifier': str,
         'position_in_overall_stage': int,
         'qc_complete_timestamp': datetime,
-        'under_review_timestamp': datetime,
+        'under_review_timestamp': Optional[datetime],
         'editor_details': Sequence[ApiEditorDetailInput],
         'senior_editor_details': Sequence[ApiEditorDetailInput],
-        'preprint_url': str,
+        'preprint_url': str,  # check Optional from BQ
         'elife_doi_version_str': str,
         'preprint_doi': str,
-        'preprint_version': str,
-        'preprint_published_at_date': date,
-        'meca_path': str,
+        'preprint_version': Optional[str],  # check Optional from BQ
+        'preprint_published_at_date': Optional[date],  # check Optional from BQ
+        'meca_path': Optional[str],  # check Optional from BQ
         'evaluations': Sequence[ApiEvaluationInput]
     },
     total=False

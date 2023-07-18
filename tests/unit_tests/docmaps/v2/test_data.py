@@ -1,5 +1,7 @@
 from datetime import date, datetime
 
+from data_hub_api.docmaps.v2.api_input_typing import ApiEvaluationInput, ApiManuscriptVersionInput
+
 MANUSCRIPT_ID_1 = 'manuscript_id_1'
 
 LONG_MANUSCRIPT_ID_1 = 'long_manuscript_id'
@@ -33,7 +35,7 @@ MECA_PATH_3 = 'meca_path_3'
 
 LICENSE_1 = 'license_1'
 
-MANUSCRIPT_VERSION_1: dict = {
+MANUSCRIPT_VERSION_1: ApiManuscriptVersionInput = {
     'long_manuscript_identifier': LONG_MANUSCRIPT_ID_1,
     'position_in_overall_stage': 1,
     'qc_complete_timestamp': datetime.fromisoformat('2022-01-01T01:02:03+00:00'),
@@ -49,7 +51,7 @@ MANUSCRIPT_VERSION_1: dict = {
     'evaluations': []
 }
 
-MANUSCRIPT_VERSION_2: dict = {
+MANUSCRIPT_VERSION_2: ApiManuscriptVersionInput = {
     'long_manuscript_identifier': LONG_MANUSCRIPT_ID_2,
     'position_in_overall_stage': 2,
     'qc_complete_timestamp': datetime.fromisoformat('2022-02-02T02:02:02+00:00'),
@@ -65,16 +67,16 @@ MANUSCRIPT_VERSION_2: dict = {
     'evaluations': []
 }
 
-MANUSCRIPT_VOR_VERSION_1: dict = {
+MANUSCRIPT_VOR_VERSION_1: ApiManuscriptVersionInput = {
     'long_manuscript_identifier': LONG_MANUSCRIPT_VOR_ID_1,
     'position_in_overall_stage': 2,
     'qc_complete_timestamp': datetime.fromisoformat('2022-04-02T02:02:02+00:00'),
     'under_review_timestamp': None,
     'editor_details': [],
     'senior_editor_details': [],
-    'preprint_url': None,
+    'preprint_url': PREPRINT_LINK_3,  # check Optional from BQ or if it is 3
     'elife_doi_version_str': ELIFE_DOI_VERSION_STR_3,
-    'preprint_doi': None,
+    'preprint_doi': DOI_2,  # check Optional from BQ
     'preprint_version': None,
     'preprint_published_at_date': None,
     'meca_path': None,
@@ -111,7 +113,7 @@ ANNOTATION_CREATED_TIMESTAMP_1 = datetime.fromisoformat('2020-01-01T01:02:03+00:
 ANNOTATION_CREATED_TIMESTAMP_2 = datetime.fromisoformat('2021-01-01T01:02:03+00:00')
 ANNOTATION_CREATED_TIMESTAMP_3 = datetime.fromisoformat('2022-01-01T01:02:03+00:00')
 
-DOCMAPS_QUERY_RESULT_EVALUATION_1 = {
+DOCMAPS_QUERY_RESULT_EVALUATION_1: ApiEvaluationInput = {
     'hypothesis_id': HYPOTHESIS_ID_1,
     'annotation_created_timestamp': ANNOTATION_CREATED_TIMESTAMP_1,
     'tags': [],
@@ -120,7 +122,7 @@ DOCMAPS_QUERY_RESULT_EVALUATION_1 = {
     'evaluation_suffix': EVALUATION_SUFFIX_1
 }
 
-DOCMAPS_QUERY_RESULT_EVALUATION_2 = {
+DOCMAPS_QUERY_RESULT_EVALUATION_2: ApiEvaluationInput = {
     'hypothesis_id': HYPOTHESIS_ID_2,
     'annotation_created_timestamp': ANNOTATION_CREATED_TIMESTAMP_2,
     'tags': [],
@@ -129,13 +131,13 @@ DOCMAPS_QUERY_RESULT_EVALUATION_2 = {
     'evaluation_suffix': EVALUATION_SUFFIX_2
 }
 
-MANUSCRIPT_VERSION_WITH_EVALUATIONS_1 = {
-    **MANUSCRIPT_VERSION_1,
+MANUSCRIPT_VERSION_WITH_EVALUATIONS_1: ApiManuscriptVersionInput = {
+    **MANUSCRIPT_VERSION_1,  # type: ignore
     'evaluations': [DOCMAPS_QUERY_RESULT_EVALUATION_1]
 }
 
-MANUSCRIPT_VERSION_WITH_EVALUATIONS_2 = {
-    **MANUSCRIPT_VERSION_2,
+MANUSCRIPT_VERSION_WITH_EVALUATIONS_2: ApiManuscriptVersionInput = {
+    **MANUSCRIPT_VERSION_2,  # type: ignore
     'evaluations': [DOCMAPS_QUERY_RESULT_EVALUATION_2]
 }
 
