@@ -11,8 +11,7 @@ ApiEvaluationInput = TypedDict(
         'uri': str,
         'source_version': str,
         'evaluation_suffix': str
-    },
-    total=False
+    }
 )
 
 ApiEditorDetailInput = TypedDict(
