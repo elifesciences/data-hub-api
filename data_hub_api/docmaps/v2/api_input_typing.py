@@ -53,6 +53,5 @@ ApiInput = TypedDict(
         'license': str,
         'is_reviewed_preprint_type': bool,
         'manuscript_versions': Sequence[ApiManuscriptVersionInput]
-    },
-    total=False
+    }
 )
