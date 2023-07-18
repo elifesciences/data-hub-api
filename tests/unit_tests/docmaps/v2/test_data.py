@@ -1,6 +1,7 @@
 from datetime import date, datetime
 
 from data_hub_api.docmaps.v2.api_input_typing import (
+    ApiEditorDetailInput,
     ApiEvaluationInput,
     ApiInput,
     ApiManuscriptVersionInput
@@ -155,13 +156,13 @@ DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSION = {
     'manuscript_versions': [MANUSCRIPT_VOR_VERSION_1]
 }
 
-EDITOR_DETAIL_1 = {
+EDITOR_DETAIL_1: ApiEditorDetailInput = {
     'name': 'editor_name_1',
     'institution': 'editor_institution_1',
     'country': 'editor_country_1'
 }
 
-SENIOR_EDITOR_DETAIL_1 = {
+SENIOR_EDITOR_DETAIL_1: ApiEditorDetailInput = {
     'name': 'senior_editor_name_1',
     'institution': 'senior_editor_institution_1',
     'country': 'senior_editor_country_1'
