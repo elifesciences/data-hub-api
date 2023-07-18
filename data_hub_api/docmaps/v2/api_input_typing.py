@@ -39,8 +39,7 @@ ApiManuscriptVersionInput = TypedDict(
         'preprint_published_at_date': Optional[date],  # check Optional from BQ
         'meca_path': Optional[str],  # check Optional from BQ
         'evaluations': Sequence[ApiEvaluationInput]
-    },
-    total=False
+    }
 )
 
 
