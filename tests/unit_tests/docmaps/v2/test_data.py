@@ -35,8 +35,6 @@ ELIFE_DOI_VERSION_STR_3 = 'elife_doi_version_str_3'
 
 MECA_PATH_1 = 'meca_path_1'
 MECA_PATH_2 = 'meca_path_2'
-MECA_PATH_3 = 'meca_path_3'
-
 
 LICENSE_1 = 'license_1'
 
