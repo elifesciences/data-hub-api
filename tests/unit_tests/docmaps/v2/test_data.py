@@ -77,9 +77,9 @@ MANUSCRIPT_VOR_VERSION_1: ApiManuscriptVersionInput = {
     'under_review_timestamp': None,
     'editor_details': [],
     'senior_editor_details': [],
-    'preprint_url': PREPRINT_LINK_3,  # check Optional from BQ or if it is 3
+    'preprint_url': PREPRINT_LINK_3,
     'elife_doi_version_str': ELIFE_DOI_VERSION_STR_3,
-    'preprint_doi': DOI_2,  # check Optional from BQ
+    'preprint_doi': DOI_2,
     'preprint_version': None,
     'preprint_published_at_date': None,
     'meca_path': None,

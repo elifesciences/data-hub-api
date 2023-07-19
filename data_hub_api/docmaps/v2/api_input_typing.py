@@ -32,12 +32,12 @@ ApiManuscriptVersionInput = TypedDict(
         'under_review_timestamp': Optional[datetime],
         'editor_details': Sequence[ApiEditorDetailInput],
         'senior_editor_details': Sequence[ApiEditorDetailInput],
-        'preprint_url': str,  # check Optional from BQ
+        'preprint_url': str,
         'elife_doi_version_str': str,
         'preprint_doi': str,
-        'preprint_version': Optional[str],  # check Optional from BQ
-        'preprint_published_at_date': Optional[date],  # check Optional from BQ
-        'meca_path': Optional[str],  # check Optional from BQ
+        'preprint_version': Optional[str],
+        'preprint_published_at_date': Optional[date],
+        'meca_path': Optional[str],
         'evaluations': Sequence[ApiEvaluationInput]
     }
 )
