@@ -61,7 +61,7 @@ def get_docmap_elife_manuscript_output(
     }
 
 
-def get_docmap_elife_manuscript_output_for_published(
+def get_docmap_elife_manuscript_output_for_published_step(
     query_result_item: ApiInput,
     manuscript_version: ApiManuscriptVersionInput
 ) -> DocmapPublishedElifeManuscriptOutput:

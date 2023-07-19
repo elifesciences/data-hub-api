@@ -7,7 +7,7 @@ from data_hub_api.docmaps.v2.codecs.elife_manuscript import (
     get_docmap_elife_manuscript_doi_assertion_item,
     get_docmap_elife_manuscript_input,
     get_docmap_elife_manuscript_output,
-    get_docmap_elife_manuscript_output_for_published,
+    get_docmap_elife_manuscript_output_for_published_step,
     get_elife_manuscript_version_doi
 )
 from data_hub_api.docmaps.v2.codecs.evaluation import (
@@ -438,7 +438,7 @@ class TestGetDocmapsItemForQueryResultItem:
         manuscript_published_step = docmaps_item['steps']['_:b2']
         assert manuscript_published_step['actions'] == [{
             'participants': [],
-            'outputs': [get_docmap_elife_manuscript_output_for_published(
+            'outputs': [get_docmap_elife_manuscript_output_for_published_step(
                 query_result_item=DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS,
                 manuscript_version=MANUSCRIPT_VERSION_1
             )]

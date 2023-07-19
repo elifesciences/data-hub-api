@@ -4,7 +4,7 @@ from data_hub_api.docmaps.v2.codecs.elife_manuscript import (
     get_docmap_elife_manuscript_doi_assertion_item_for_vor,
     get_docmap_elife_manuscript_input,
     get_docmap_elife_manuscript_output,
-    get_docmap_elife_manuscript_output_for_published,
+    get_docmap_elife_manuscript_output_for_published_step,
     get_docmap_elife_manuscript_output_for_vor,
     get_elife_manuscript_version_doi
 )
@@ -77,7 +77,7 @@ class TestGetDocmapElifeManuscriptOutput:
 
 class TestGetDocmapElifeManuscriptOutputForPublished:
     def test_should_populate_docmaps_elife_manuscript_output_for_published(self):
-        result = get_docmap_elife_manuscript_output_for_published(
+        result = get_docmap_elife_manuscript_output_for_published_step(
             query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1,
             manuscript_version=MANUSCRIPT_VERSION_1
         )
