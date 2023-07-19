@@ -8,6 +8,7 @@ from data_hub_api.docmaps.v2.codecs.elife_manuscript import (
     get_docmap_elife_manuscript_output_for_vor,
     get_elife_manuscript_version_doi
 )
+from data_hub_api.utils.format_datetime import format_datetime_string_to_utc_timestamp
 
 from tests.unit_tests.docmaps.v2.test_data import (
     DOCMAPS_QUERY_RESULT_ITEM_1,
@@ -75,8 +76,8 @@ class TestGetDocmapElifeManuscriptOutput:
         }
 
 
-class TestGetDocmapElifeManuscriptOutputForPublished:
-    def test_should_populate_docmaps_elife_manuscript_output_for_published(self):
+class TestGetDocmapElifeManuscriptOutputForPublishedStep:
+    def test_should_populate_docmaps_elife_manuscript_output_for_published_step(self):
         result = get_docmap_elife_manuscript_output_for_published_step(
             query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1,
             manuscript_version=MANUSCRIPT_VERSION_1
