@@ -9,7 +9,7 @@ def format_datetime_with_utc_offset(
 
     if isinstance(date_string, datetime):
         date_string = date_string.strftime("%Y-%m-%dT%H:%M:%S%z")
-        
+
     dt_object = parse(date_string)
 
     # Set the UTC timezone explicitly
@@ -17,10 +17,10 @@ def format_datetime_with_utc_offset(
 
     # Convert to the desired timezone (UTC) with the colon in the UTC offset
     dt_object_with_tz = dt_object_utc.astimezone(timezone.utc)
-    
+
     # Format the datetime object with the correct UTC offset format
     formatted_date_string = dt_object_with_tz.strftime(date_format)
-    
+
     # Manually add the colon in the UTC offset
     formatted_date_string = formatted_date_string[:-2] + ":" + formatted_date_string[-2:]
 
