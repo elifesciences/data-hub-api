@@ -80,8 +80,8 @@ DocmapPreprintInput = TypedDict(
     {
         'type': str,
         'doi': str,
-        'url': str,
-        'versionIdentifier': str
+        'url': Optional[str],
+        'versionIdentifier': Optional[str]
     }
 )
 
@@ -111,7 +111,7 @@ DocmapAssertionItem = TypedDict(
     {
         'type': str,
         'doi': Optional[str],
-        'versionIdentifier': str
+        'versionIdentifier': Optional[str]
     }
 )
 
