@@ -9,6 +9,7 @@ from data_hub_api.docmaps.v2.docmap_typing import (
     DocmapElifeManuscriptVorOutput,
     DocmapPublishedElifeManuscriptOutput
 )
+from data_hub_api.utils.format_datetime import format_datetime_with_utc_offset
 
 
 def get_elife_manuscript_version_doi(
@@ -70,7 +71,10 @@ def get_docmap_elife_manuscript_output_for_published_step(
             query_result_item,
             manuscript_version
         ),
-        'published': manuscript_version['rp_publication_timestamp']
+        # 'published': manuscript_version['rp_publication_timestamp']
+        'published': format_datetime_with_utc_offset(
+            date_string=str(manuscript_version['rp_publication_timestamp'])
+        )
     }
 
 

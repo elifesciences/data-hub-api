@@ -8,7 +8,7 @@ from data_hub_api.docmaps.v2.codecs.elife_manuscript import (
     get_docmap_elife_manuscript_output_for_vor,
     get_elife_manuscript_version_doi
 )
-from data_hub_api.utils.format_datetime import format_datetime_string_to_utc_timestamp
+from data_hub_api.utils.format_datetime import format_datetime_with_utc_offset
 
 from tests.unit_tests.docmaps.v2.test_data import (
     DOCMAPS_QUERY_RESULT_ITEM_1,
@@ -84,7 +84,10 @@ class TestGetDocmapElifeManuscriptOutputForPublishedStep:
         )
         assert result == {
             'type': 'preprint',
-            'published': RP_PUBLICATION_TIMESTAMP_1,
+            # 'published': RP_PUBLICATION_TIMESTAMP_1,
+            'published': format_datetime_with_utc_offset(
+                date_string=RP_PUBLICATION_TIMESTAMP_1
+            ),
             'identifier': DOCMAPS_QUERY_RESULT_ITEM_1['manuscript_id'],
             'doi': get_elife_manuscript_version_doi(
                 elife_doi_version_str=MANUSCRIPT_VERSION_1['elife_doi_version_str'],
