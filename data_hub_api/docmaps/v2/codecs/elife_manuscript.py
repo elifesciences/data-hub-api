@@ -71,9 +71,12 @@ def get_docmap_elife_manuscript_output_for_published_step(
             query_result_item,
             manuscript_version
         ),
-        # 'published': manuscript_version['rp_publication_timestamp']
-        'published': format_datetime_with_utc_offset(
-            date_string=str(manuscript_version['rp_publication_timestamp'])
+        'published': (
+            format_datetime_with_utc_offset(
+                date_string=str(manuscript_version['rp_publication_timestamp'])
+            )
+            if manuscript_version['rp_publication_timestamp']
+            else None
         )
     }
 
