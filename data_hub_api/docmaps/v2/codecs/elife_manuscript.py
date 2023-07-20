@@ -6,8 +6,10 @@ from data_hub_api.docmaps.v2.docmap_typing import (
     DocmapContent,
     DocmapElifeManuscriptInput,
     DocmapElifeManuscriptOutput,
-    DocmapElifeManuscriptVorOutput
+    DocmapElifeManuscriptVorOutput,
+    DocmapPublishedElifeManuscriptOutput
 )
+from data_hub_api.utils.format_datetime import format_datetime_with_utc_offset
 
 
 def get_elife_manuscript_version_doi(
@@ -57,6 +59,22 @@ def get_docmap_elife_manuscript_output(
         ),
         'versionIdentifier': manuscript_version['elife_doi_version_str'],
         'license': query_result_item['license']
+    }
+
+
+def get_docmap_elife_manuscript_output_for_published_step(
+    query_result_item: ApiInput,
+    manuscript_version: ApiManuscriptVersionInput
+) -> DocmapPublishedElifeManuscriptOutput:
+    return {
+        **get_docmap_elife_manuscript_output(  # type: ignore
+            query_result_item,
+            manuscript_version
+        ),
+        # 'published': manuscript_version['rp_publication_timestamp']
+        'published': format_datetime_with_utc_offset(
+            date_string=str(manuscript_version['rp_publication_timestamp'])
+        )
     }
 
 

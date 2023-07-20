@@ -304,6 +304,19 @@ t_preprint_published_at_date_and_meca_path AS (
     AND CAST(tdm.tdm_ms_version AS STRING) = result.preprint_version
 ),
 
+t_rp_publication_date AS (
+  SELECT
+    * EXCEPT(rn)
+  FROM
+  (
+    SELECT 
+      *,
+      ROW_NUMBER() OVER(PARTITION BY elife_doi, elife_doi_version ORDER BY imported_timestamp DESC) AS rn
+    FROM `elife-data-pipeline.prod.reviewed_preprint_publication_date`
+  )
+  WHERE rn=1
+),
+
 t_result_with_sorted_manuscript_versions_array AS (
   SELECT
     result.manuscript_id,
@@ -330,13 +343,17 @@ t_result_with_sorted_manuscript_versions_array AS (
         result.editor_details,
         result.senior_editor_details,
         result.author_names_csv,
-        result.evaluations
+        result.evaluations,
+        CONCAT(publication.publication_date, ' ', publication.utc_publication_time) AS rp_publication_timestamp
       )
     ORDER BY result.position_in_overall_stage
     ) AS manuscript_versions 
   FROM t_result_with_preprint_version AS result
   LEFT JOIN t_preprint_published_at_date_and_meca_path AS preprint
     ON result.long_manuscript_identifier = preprint.long_manuscript_identifier
+  LEFT JOIN t_rp_publication_date AS publication
+    ON result.elife_doi = publication.elife_doi
+    AND result.position_in_overall_stage = publication.elife_doi_version
   GROUP BY result.manuscript_id, result.is_reviewed_preprint_type, result.elife_doi
 ),
 

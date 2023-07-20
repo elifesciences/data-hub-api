@@ -48,7 +48,12 @@
           "url": "https://www.biorxiv.org/content/10.1101/2023.02.14.528498v2",
           "versionIdentifier": "2",
           "published": "2023-02-21",
-          "_tdmPath": "s3://transfers-elife/biorxiv_Current_Content/February_2023/22_Feb_23_Batch_1531/c27a22b7-6c43-1014-aa80-efc7cf011f1d.meca"
+          "content": [
+            {
+              "type": "computer-file",
+              "url": "s3://transfers-elife/biorxiv_Current_Content/February_2023/22_Feb_23_Batch_1531/c27a22b7-6c43-1014-aa80-efc7cf011f1d.meca"
+            }
+          ]
         }
       ],
       "next-step": "_:b1"
@@ -161,11 +166,11 @@
           "outputs": [
             {
               "type": "preprint",
-              "published": "TBC",
               "identifier": "86628",
               "doi": "10.7554/eLife.86628.1",
               "versionIdentifier": "1",
-              "license": "http://creativecommons.org/licenses/by/4.0/"
+              "license": "http://creativecommons.org/licenses/by/4.0/",
+              "published": "2023-04-11T14:00:00+00:00"
             }
           ]
         }
@@ -239,8 +244,7 @@
           "doi": "10.1101/2023.02.14.528498",
           "url": "https://www.biorxiv.org/content/10.1101/2023.02.14.528498v3",
           "versionIdentifier": "3",
-          "published": "2023-04-24",
-          "_tdmPath": ""
+          "published": "2023-04-24"
         }
       ],
       "next-step": "_:b4",
@@ -380,11 +384,11 @@
           "outputs": [
             {
               "type": "preprint",
-              "published": "TBC",
               "identifier": "86628",
               "doi": "10.7554/eLife.86628.2",
               "versionIdentifier": "2",
-              "license": "http://creativecommons.org/licenses/by/4.0/"
+              "license": "http://creativecommons.org/licenses/by/4.0/",
+              "published": "2023-05-15T14:00:00+00:00"
             }
           ]
         }
