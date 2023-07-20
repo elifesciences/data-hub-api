@@ -1,5 +1,5 @@
-from dateutil.parser import parse
 from datetime import datetime, timezone
+from dateutil.parser import parse
 
 
 def format_datetime_with_utc_offset(
