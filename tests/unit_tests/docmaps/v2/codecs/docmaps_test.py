@@ -1,4 +1,3 @@
-import json
 from typing import Iterable
 import urllib
 
@@ -63,6 +62,7 @@ from tests.unit_tests.docmaps.v2.test_data import (
     PREPRINT_LINK_PREFIX,
     PREPRINT_VERSION_1,
     PREPRINT_VERSION_2,
+    PUBLISHER_DICT_1,
     SENIOR_EDITOR_DETAIL_1
 )
 
@@ -162,9 +162,7 @@ class TestGetDocmapsItemForQueryResultItem:
 
     def test_should_parse_and_include_publisher_json(self):
         docmaps_item = get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_1)
-        assert docmaps_item['publisher'] == json.loads(json.dumps(
-            DOCMAPS_QUERY_RESULT_ITEM_1['publisher_json']
-        ))
+        assert docmaps_item['publisher'] == PUBLISHER_DICT_1
 
     def test_should_populate_inputs_for_first_under_review_step(self):
         docmaps_item = get_docmap_item_for_query_result_item(DOCMAPS_QUERY_RESULT_ITEM_2)

@@ -92,8 +92,11 @@ MANUSCRIPT_VOR_VERSION_1: ApiManuscriptVersionInput = {
     'rp_publication_timestamp': None
 }
 
+PUBLISHER_DICT_1 = {"id": "publisher_1"}
+PUBLISHER_DICT_STR_1 = f'{PUBLISHER_DICT_1}'
+
 DOCMAPS_QUERY_RESULT_ITEM_1: ApiInput = {
-    'publisher_json': {"id": "publisher_1"},
+    'publisher_json': PUBLISHER_DICT_STR_1,
     'manuscript_id': 'manuscript_id_1',
     'elife_doi': ELIFE_DOI_1,
     'license': LICENSE_1,
@@ -102,7 +105,7 @@ DOCMAPS_QUERY_RESULT_ITEM_1: ApiInput = {
 }
 
 DOCMAPS_QUERY_RESULT_ITEM_2: ApiInput = {
-    'publisher_json': {"id": "publisher_1"},
+    'publisher_json': PUBLISHER_DICT_STR_1,
     'manuscript_id': 'manuscript_id_1',
     'elife_doi': ELIFE_DOI_1,
     'license': LICENSE_1,
