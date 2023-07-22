@@ -1,5 +1,5 @@
 import logging
-import json
+import ast
 from typing import Dict, Iterable, Sequence, Union, cast
 import urllib
 
@@ -310,17 +310,15 @@ def get_docmap_item_for_query_result_item(query_result_item: ApiInput) -> Docmap
     manuscript_first_version = query_result_item['manuscript_versions'][0]
     qc_complete_timestamp_str = manuscript_first_version['qc_complete_timestamp'].isoformat()
     id_query_param = {'manuscript_id': query_result_item['manuscript_id']}
-    publisher_json = query_result_item['publisher_json']
+    publisher_json = ast.literal_eval(query_result_item['publisher_json'])
     LOGGER.debug('publisher_json: %r', publisher_json)
-    publisher_json_str = json.dumps(publisher_json)
-    publisher_data = json.loads(publisher_json_str)
     return {
         '@context': DOCMAPS_JSONLD_SCHEMA_URL,
         'type': 'docmap',
         'id': DOCMAP_ID_PREFIX + urllib.parse.urlencode(id_query_param),
         'created': qc_complete_timestamp_str,
         'updated': qc_complete_timestamp_str,
-        'publisher': publisher_data,
+        'publisher': publisher_json,
         'first-step': '_:b0',
         'steps': generate_docmap_steps(iter_docmap_steps_for_query_result_item(query_result_item))
     }

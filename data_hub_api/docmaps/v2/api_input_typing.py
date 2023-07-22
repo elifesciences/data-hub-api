@@ -47,7 +47,7 @@ ApiManuscriptVersionInput = TypedDict(
 ApiInput = TypedDict(
     'ApiInput',
     {
-        'publisher_json': dict,
+        'publisher_json': str,
         'manuscript_id': str,
         'elife_doi': str,
         'license': str,
