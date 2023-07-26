@@ -279,10 +279,11 @@ def iter_docmap_steps_for_query_result_item(query_result_item: ApiInput) -> Iter
                     )
                 else:
                     yield get_docmaps_step_for_revised_status(query_result_item, manuscript_version)
-                yield get_docmaps_step_for_manuscript_published_status(
-                    query_result_item,
-                    manuscript_version
-                )
+                if manuscript_version['rp_publication_timestamp']:
+                    yield get_docmaps_step_for_manuscript_published_status(
+                        query_result_item,
+                        manuscript_version
+                    )
         else:
             previous_manuscript_version = query_result_item['manuscript_versions'][index - 1]
             assert manuscript_version['position_in_overall_stage'] > 1

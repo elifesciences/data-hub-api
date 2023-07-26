@@ -424,7 +424,7 @@ class TestGetDocmapsItemForQueryResultItem:
         assert manuscript_published_step['assertions'] == [{
             'item': get_docmap_elife_manuscript_doi_assertion_item(
                 query_result_item=DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS,
-                manuscript_version=MANUSCRIPT_VERSION_1
+                manuscript_version=MANUSCRIPT_VERSION_WITH_EVALUATIONS_1
             ),
             'status': 'manuscript-published'
         }]
@@ -438,7 +438,7 @@ class TestGetDocmapsItemForQueryResultItem:
             'participants': [],
             'outputs': [get_docmap_elife_manuscript_output_for_published_step(
                 query_result_item=DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS,
-                manuscript_version=MANUSCRIPT_VERSION_1
+                manuscript_version=MANUSCRIPT_VERSION_WITH_EVALUATIONS_1
             )]
         }]
 
@@ -461,14 +461,14 @@ class TestGetDocmapsItemForQueryResultItem:
         assert manuscript_published_step['inputs'] == [
             get_docmap_preprint_input(manuscript_version=MANUSCRIPT_VERSION_1),
             get_docmap_evaluation_input(
-                query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1,
-                manuscript_version=MANUSCRIPT_VERSION_1,
+                query_result_item=DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS,
+                manuscript_version=MANUSCRIPT_VERSION_WITH_EVALUATIONS_1,
                 evaluation_suffix=EVALUATION_SUFFIX_1,
                 docmap_evaluation_type=DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE
             ),
             get_docmap_evaluation_input(
-                query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1,
-                manuscript_version=MANUSCRIPT_VERSION_1,
+                query_result_item=DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS,
+                manuscript_version=MANUSCRIPT_VERSION_WITH_EVALUATIONS_1,
                 evaluation_suffix=EVALUATION_SUFFIX_2,
                 docmap_evaluation_type=DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY
             )
@@ -603,3 +603,34 @@ class TestGetDocmapsItemForQueryResultItem:
             query_result_item=query_result_item,
             manuscript_version=MANUSCRIPT_VOR_VERSION_1
         )
+
+    def test_should_not_have_first_manuscript_published_step_if_publication_timestamp_not_provided(
+        self
+    ):
+        query_result_item = {
+            **DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS,
+            'manuscript_versions': [{
+                **MANUSCRIPT_VERSION_WITH_EVALUATIONS_1,
+                'rp_publication_timestamp': None
+            }]
+        }
+        docmaps_item = get_docmap_item_for_query_result_item(query_result_item)
+
+        assert '_:b2' not in docmaps_item['steps'].keys()
+
+    def test_should_not_have_second_manuscript_published_if_publication_timestamp_not_provided(
+        self
+    ):
+        query_result_item = {
+            **DOCMAPS_QUERY_RESULT_ITEM_1,
+            'manuscript_versions': [
+                MANUSCRIPT_VERSION_WITH_EVALUATIONS_1,
+                {
+                    **MANUSCRIPT_VERSION_WITH_EVALUATIONS_2,
+                    'rp_publication_timestamp': None
+                }
+            ]
+        }
+        docmaps_item = get_docmap_item_for_query_result_item(query_result_item)
+
+        assert '_:b5' not in docmaps_item['steps'].keys()
