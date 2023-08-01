@@ -134,7 +134,7 @@ class TestGetDocmapElifeManuscriptOutputForVor:
         assert result == {
             'type': 'version-of-record',
             'doi': manuscript_version_doi,
-            'published': VOR_PUBLICATION_DATE_1.strftime('%Y-%m-%d'),
+            'published': VOR_PUBLICATION_DATE_1.isoformat(),
             'url': f'{DOI_ROOT_URL}' + manuscript_version_doi,
             'content': [{
                 'type': 'web-page',

@@ -102,7 +102,7 @@ def get_docmap_elife_manuscript_output_for_vor(
         'type': 'version-of-record',
         'doi': manuscript_version_doi,
         'published': (
-            manuscript_version['vor_publication_date'].strftime('%Y-%m-%d')
+            manuscript_version['vor_publication_date'].isoformat()
             if manuscript_version['vor_publication_date']
             else None
         ),
