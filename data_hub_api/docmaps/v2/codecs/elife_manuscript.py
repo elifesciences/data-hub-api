@@ -101,6 +101,11 @@ def get_docmap_elife_manuscript_output_for_vor(
     return {
         'type': 'version-of-record',
         'doi': manuscript_version_doi,
+        'published': (
+            manuscript_version['vor_publication_date'].strftime('%Y-%m-%d')
+            if manuscript_version['vor_publication_date']
+            else None
+        ),
         'url': f'{DOI_ROOT_URL}' + manuscript_version_doi,
         'content': get_docmap_elife_manuscript_output_content_for_vor(
             query_result_item=query_result_item
