@@ -341,7 +341,7 @@ t_result_with_sorted_manuscript_versions_array AS (
         result.has_evaluations,
         result.manuscript_title,
         result.preprint_url,
-        CAST(result.position_in_overall_stage AS STRING) AS elife_doi_version_str,
+        CAST(result.position_in_overall_stage - 1 AS STRING) AS elife_doi_version_str,
         result.preprint_url_source,
         result.preprint_doi,
         result.preprint_version,
