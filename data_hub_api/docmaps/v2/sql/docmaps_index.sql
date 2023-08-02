@@ -317,6 +317,15 @@ t_rp_publication_date AS (
   WHERE rn=1
 ),
 
+t_vor_publication_date AS (
+  SELECT 
+    article_id,
+    vor_publication_date
+  FROM `elife-data-pipeline.prod.v_elife_article_xml_data`
+  WHERE is_latest_xml_version
+  AND vor_publication_date IS NOT NULL
+),
+
 t_result_with_sorted_manuscript_versions_array AS (
   SELECT
     result.manuscript_id,
@@ -344,7 +353,11 @@ t_result_with_sorted_manuscript_versions_array AS (
         result.senior_editor_details,
         result.author_names_csv,
         result.evaluations,
-        CONCAT(publication.publication_date, ' ', publication.utc_publication_time) AS rp_publication_timestamp
+        PARSE_TIMESTAMP(
+          '%Y-%m-%d %H:%M:%S',
+          CONCAT(publication.publication_date, ' ', publication.utc_publication_time)
+        ) AS rp_publication_timestamp,
+        vor_date.vor_publication_date
       )
     ORDER BY result.position_in_overall_stage
     ) AS manuscript_versions 
@@ -354,6 +367,8 @@ t_result_with_sorted_manuscript_versions_array AS (
   LEFT JOIN t_rp_publication_date AS publication
     ON result.elife_doi = publication.elife_doi
     AND result.position_in_overall_stage = publication.elife_doi_version
+  LEFT JOIN t_vor_publication_date AS vor_date
+    ON result.manuscript_id = vor_date.article_id
   GROUP BY result.manuscript_id, result.is_reviewed_preprint_type, result.elife_doi
 ),
 

@@ -41,6 +41,8 @@ LICENSE_1 = 'license_1'
 RP_PUBLICATION_TIMESTAMP_1 = datetime.fromisoformat('2023-05-05T01:02:03+00:00')
 RP_PUBLICATION_TIMESTAMP_2 = datetime.fromisoformat('2023-06-05T01:02:03+00:00')
 
+VOR_PUBLICATION_DATE_1 = date.fromisoformat('2023-08-03')
+
 MANUSCRIPT_VERSION_1: ApiManuscriptVersionInput = {
     'long_manuscript_identifier': LONG_MANUSCRIPT_ID_1,
     'position_in_overall_stage': 1,
@@ -55,7 +57,8 @@ MANUSCRIPT_VERSION_1: ApiManuscriptVersionInput = {
     'preprint_published_at_date': date.fromisoformat('2021-01-01'),
     'meca_path': MECA_PATH_1,
     'evaluations': [],
-    'rp_publication_timestamp': RP_PUBLICATION_TIMESTAMP_1
+    'rp_publication_timestamp': RP_PUBLICATION_TIMESTAMP_1,
+    'vor_publication_date': None
 }
 
 MANUSCRIPT_VERSION_2: ApiManuscriptVersionInput = {
@@ -72,7 +75,8 @@ MANUSCRIPT_VERSION_2: ApiManuscriptVersionInput = {
     'preprint_published_at_date': date.fromisoformat('2021-02-02'),
     'meca_path': MECA_PATH_2,
     'evaluations': [],
-    'rp_publication_timestamp': RP_PUBLICATION_TIMESTAMP_2
+    'rp_publication_timestamp': RP_PUBLICATION_TIMESTAMP_2,
+    'vor_publication_date': None
 }
 
 MANUSCRIPT_VOR_VERSION_1: ApiManuscriptVersionInput = {
@@ -89,7 +93,8 @@ MANUSCRIPT_VOR_VERSION_1: ApiManuscriptVersionInput = {
     'preprint_published_at_date': None,
     'meca_path': None,
     'evaluations': [],
-    'rp_publication_timestamp': None
+    'rp_publication_timestamp': None,
+    'vor_publication_date': VOR_PUBLICATION_DATE_1
 }
 
 PUBLISHER_DICT_1 = {"id": "publisher_1"}

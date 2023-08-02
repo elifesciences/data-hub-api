@@ -8,12 +8,14 @@ from data_hub_api.docmaps.v2.codecs.elife_manuscript import (
     get_docmap_elife_manuscript_output_for_vor,
     get_elife_manuscript_version_doi
 )
-from data_hub_api.utils.format_datetime import format_datetime_with_utc_offset
 
 from tests.unit_tests.docmaps.v2.test_data import (
     DOCMAPS_QUERY_RESULT_ITEM_1,
+    DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSION,
+    MANUSCRIPT_VOR_VERSION_1,
     RP_PUBLICATION_TIMESTAMP_1,
-    MANUSCRIPT_VERSION_1
+    MANUSCRIPT_VERSION_1,
+    VOR_PUBLICATION_DATE_1
 )
 
 
@@ -84,9 +86,7 @@ class TestGetDocmapElifeManuscriptOutputForPublishedStep:
         )
         assert result == {
             'type': 'preprint',
-            'published': format_datetime_with_utc_offset(
-                date_string=RP_PUBLICATION_TIMESTAMP_1
-            ),
+            'published': RP_PUBLICATION_TIMESTAMP_1.isoformat(),
             'identifier': DOCMAPS_QUERY_RESULT_ITEM_1['manuscript_id'],
             'doi': get_elife_manuscript_version_doi(
                 elife_doi_version_str=MANUSCRIPT_VERSION_1['elife_doi_version_str'],
@@ -121,22 +121,23 @@ class TestGetDocmapElifeManuscriptOutputForPublishedStep:
 class TestGetDocmapElifeManuscriptOutputForVor:
     def test_should_populate_docmaps_elife_manuscript_output_for_vor(self):
         result = get_docmap_elife_manuscript_output_for_vor(
-            query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1,
-            manuscript_version=MANUSCRIPT_VERSION_1
+            query_result_item=DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSION,
+            manuscript_version=MANUSCRIPT_VOR_VERSION_1
         )
         manuscript_version_doi = get_elife_manuscript_version_doi(
-            elife_doi=DOCMAPS_QUERY_RESULT_ITEM_1['elife_doi'],
-            elife_doi_version_str=MANUSCRIPT_VERSION_1['elife_doi_version_str']
+            elife_doi=DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSION['elife_doi'],
+            elife_doi_version_str=MANUSCRIPT_VOR_VERSION_1['elife_doi_version_str']
         )
         assert result == {
             'type': 'version-of-record',
             'doi': manuscript_version_doi,
+            'published': VOR_PUBLICATION_DATE_1.isoformat(),
             'url': f'{DOI_ROOT_URL}' + manuscript_version_doi,
             'content': [{
                 'type': 'web-page',
                 'url': (
                     'https://elifesciences.org/articles/'
-                    + DOCMAPS_QUERY_RESULT_ITEM_1['manuscript_id']
+                    + DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSION['manuscript_id']
                 )
             }]
         }
