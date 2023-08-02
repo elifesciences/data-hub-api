@@ -1,6 +1,8 @@
 from typing import Mapping, Optional, Sequence, TypedDict, Union
 from typing_extensions import NotRequired
 
+date_str = str
+timestamp_str = str
 
 DocmapContent = TypedDict(
     'DocmapContent',
@@ -15,7 +17,7 @@ DocmapEvaluationOutput = TypedDict(
     {
         'type': str,
         'doi': Optional[str],
-        'published': Optional[str],
+        'published': Optional[timestamp_str],
         'license': str,
         'url': Optional[str],
         'content': Sequence[DocmapContent]
@@ -47,7 +49,7 @@ DocmapPublishedElifeManuscriptOutput = TypedDict(
     'DocmapPublishedElifeManuscriptOutput',
     {
         'type': str,
-        'published': Optional[str],
+        'published': Optional[timestamp_str],
         'doi': str,
         'identifier': str,
         'versionIdentifier': str,
@@ -61,7 +63,7 @@ DocmapElifeManuscriptVorOutput = TypedDict(
     {
         'type': str,
         'doi': str,
-        'published': Optional[str],
+        'published': Optional[date_str],
         'url': str,
         'content': Sequence[DocmapContent]
     }
@@ -93,7 +95,7 @@ DocmapPreprintInputWithPublishedMecaPath = TypedDict(
         'doi': str,
         'url': str,
         'versionIdentifier': str,
-        'published': str,
+        'published': timestamp_str,
         'content': Sequence[DocmapContent]
     },
     total=False
@@ -164,8 +166,8 @@ Docmap = TypedDict(
         '@context': str,
         'type': str,
         'id': str,
-        'created': str,
-        'updated': str,
+        'created': timestamp_str,
+        'updated': timestamp_str,
         'publisher': dict,
         'first-step': str,
         'steps': DocmapSteps
