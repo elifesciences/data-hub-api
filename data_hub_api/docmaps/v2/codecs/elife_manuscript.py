@@ -71,7 +71,7 @@ def get_docmap_elife_manuscript_output_for_published_step(
             manuscript_version
         ),
         'published': (
-            manuscript_version['rp_publication_timestamp']
+            manuscript_version['rp_publication_timestamp'].isoformat()
             if manuscript_version['rp_publication_timestamp']
             else None
         )

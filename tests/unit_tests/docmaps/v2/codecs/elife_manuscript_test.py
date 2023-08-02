@@ -86,7 +86,7 @@ class TestGetDocmapElifeManuscriptOutputForPublishedStep:
         )
         assert result == {
             'type': 'preprint',
-            'published': RP_PUBLICATION_TIMESTAMP_1,
+            'published': RP_PUBLICATION_TIMESTAMP_1.isoformat(),
             'identifier': DOCMAPS_QUERY_RESULT_ITEM_1['manuscript_id'],
             'doi': get_elife_manuscript_version_doi(
                 elife_doi_version_str=MANUSCRIPT_VERSION_1['elife_doi_version_str'],

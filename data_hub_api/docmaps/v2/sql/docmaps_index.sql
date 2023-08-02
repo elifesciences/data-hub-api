@@ -353,12 +353,9 @@ t_result_with_sorted_manuscript_versions_array AS (
         result.senior_editor_details,
         result.author_names_csv,
         result.evaluations,
-        FORMAT_TIMESTAMP(
-          '%Y-%m-%dT%H:%M:%E*S%Ez',
-          PARSE_TIMESTAMP(
-            '%Y-%m-%d %H:%M:%S',
-            CONCAT(publication.publication_date, ' ', publication.utc_publication_time)
-          )
+        PARSE_TIMESTAMP(
+          '%Y-%m-%d %H:%M:%S',
+          CONCAT(publication.publication_date, ' ', publication.utc_publication_time)
         ) AS rp_publication_timestamp,
         vor_date.vor_publication_date
       )
