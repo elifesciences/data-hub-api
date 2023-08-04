@@ -179,7 +179,14 @@
               "doi": "10.7554/eLife.86628.1",
               "versionIdentifier": "1",
               "license": "http://creativecommons.org/licenses/by/4.0/",
-              "published": "2023-04-11T14:00:00+00:00"
+              "published": "2023-04-11T14:00:00+00:00",
+              "partOf": {
+                "type": "manuscript",
+                "doi": "10.7554/eLife.86628",
+                "identifier": "86628",
+                "volumeIdentifier": "12",
+                "electronicArticleIdentifier": "RP86628"
+              }
             }
           ]
         }
@@ -397,14 +404,7 @@
               "doi": "10.7554/eLife.86628.2",
               "versionIdentifier": "2",
               "license": "http://creativecommons.org/licenses/by/4.0/",
-              "published": "2023-05-15T14:00:00+00:00",
-              "partOf": {
-                "type": "manuscript",
-                "doi": "10.7554/eLife.86628",
-                "identifier": "86628",
-                "volumeIdentifier": "12",
-                "electronicArticleIdentifier": "RP86628"
-              }
+              "published": "2023-05-15T14:00:00+00:00"
             }
           ]
         }
