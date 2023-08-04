@@ -1,5 +1,5 @@
-from typing import Sequence
-from data_hub_api.config import DOI_ROOT_URL
+from typing import Optional, Sequence
+from data_hub_api.config import DOI_ROOT_URL, ELIFE_FIRST_PUBLICATION_YEAR
 from data_hub_api.docmaps.v2.api_input_typing import ApiInput, ApiManuscriptVersionInput
 from data_hub_api.docmaps.v2.docmap_typing import (
     DocmapAssertionItem,
@@ -60,6 +60,15 @@ def get_docmap_elife_manuscript_output(
         'versionIdentifier': manuscript_version['elife_doi_version_str'],
         'license': query_result_item['license']
     }
+
+
+def get_elife_manuscript_volume(
+    manuscript_version: ApiManuscriptVersionInput
+) -> Optional[int]:
+    rp_publication_year = manuscript_version['rp_publication_year']
+    if rp_publication_year and rp_publication_year >= ELIFE_FIRST_PUBLICATION_YEAR:
+        return rp_publication_year - ELIFE_FIRST_PUBLICATION_YEAR
+    return None
 
 
 def get_elife_manuscript_part_of_section(

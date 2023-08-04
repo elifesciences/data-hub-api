@@ -1,4 +1,4 @@
-from data_hub_api.config import DOI_ROOT_URL
+from data_hub_api.config import DOI_ROOT_URL, ELIFE_FIRST_PUBLICATION_YEAR
 from data_hub_api.docmaps.v2.codecs.elife_manuscript import (
     get_docmap_elife_manuscript_doi_assertion_item,
     get_docmap_elife_manuscript_doi_assertion_item_for_vor,
@@ -7,7 +7,8 @@ from data_hub_api.docmaps.v2.codecs.elife_manuscript import (
     get_docmap_elife_manuscript_output_for_published_step,
     get_docmap_elife_manuscript_output_for_vor,
     get_elife_manuscript_part_of_section,
-    get_elife_manuscript_version_doi
+    get_elife_manuscript_version_doi,
+    get_elife_manuscript_volume
 )
 
 from tests.unit_tests.docmaps.v2.test_data import (
@@ -77,6 +78,31 @@ class TestGetDocmapElifeManuscriptOutput:
             'versionIdentifier': MANUSCRIPT_VERSION_1['elife_doi_version_str'],
             'license': DOCMAPS_QUERY_RESULT_ITEM_1['license']
         }
+
+
+class TestGetElifeManuscriptVolume:
+    def test_should_return_none_if_rp_publication_year_is_none(self):
+        result = get_elife_manuscript_volume({
+            **MANUSCRIPT_VERSION_1,
+            'rp_publication_year': None
+        })
+        assert not result
+
+    def test_should_return_volume_when_rp_publication_year_is_defined(self):
+        result = get_elife_manuscript_volume({
+            **MANUSCRIPT_VERSION_1,
+            'rp_publication_year': 2020
+        })
+        assert result == 2020 - ELIFE_FIRST_PUBLICATION_YEAR
+
+    def test_should_return_none_when_rp_publication_year_less_than_elife_first_publication_year(
+        self
+    ):
+        result = get_elife_manuscript_volume({
+            **MANUSCRIPT_VERSION_1,
+            'rp_publication_year': 2010
+        })
+        assert not result
 
 
 class TestGetElifeManuscriptPartOfSection:
