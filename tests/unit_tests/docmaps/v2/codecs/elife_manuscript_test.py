@@ -96,27 +96,6 @@ class TestGetDocmapElifeManuscriptOutputForPublishedStep:
             'license': DOCMAPS_QUERY_RESULT_ITEM_1['license']
         }
 
-    def test_should_not_populate_published_if_rp_publication_timestamp_is_none(self):
-        manuscript_version = {
-            **MANUSCRIPT_VERSION_1,
-            'rp_publication_timestamp': None
-        }
-        result = get_docmap_elife_manuscript_output_for_published_step(
-            query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1,
-            manuscript_version=manuscript_version
-        )
-        assert result == {
-            'type': 'preprint',
-            'published': None,
-            'identifier': DOCMAPS_QUERY_RESULT_ITEM_1['manuscript_id'],
-            'doi': get_elife_manuscript_version_doi(
-                elife_doi_version_str=MANUSCRIPT_VERSION_1['elife_doi_version_str'],
-                elife_doi=DOCMAPS_QUERY_RESULT_ITEM_1['elife_doi']
-            ),
-            'versionIdentifier': MANUSCRIPT_VERSION_1['elife_doi_version_str'],
-            'license': DOCMAPS_QUERY_RESULT_ITEM_1['license']
-        }
-
 
 class TestGetDocmapElifeManuscriptOutputForVor:
     def test_should_populate_docmaps_elife_manuscript_output_for_vor(self):
