@@ -24,8 +24,8 @@
             {
               "type": "preprint",
               "identifier": "86628",
-              "doi": "10.7554/eLife.86628.1",
-              "versionIdentifier": "1",
+              "doi": "10.7554/eLife.86628.0",
+              "versionIdentifier": "0",
               "license": "http://creativecommons.org/licenses/by/4.0/"
             }
           ]
@@ -44,8 +44,8 @@
         {
           "item": {
             "type": "preprint",
-            "doi": "10.7554/eLife.86628.1",
-            "versionIdentifier": "1"
+            "doi": "10.7554/eLife.86628.0",
+            "versionIdentifier": "0"
           },
           "status": "draft"
         }
@@ -83,9 +83,9 @@
             {
               "type": "review-article",
               "published": "2023-04-06T11:44:05.502835+00:00",
-              "doi": "10.7554/eLife.86628.1.sa1",
+              "doi": "10.7554/eLife.86628.0.sa1",
               "license": "http://creativecommons.org/licenses/by/4.0/",
-              "url": "https://doi.org/10.7554/eLife.86628.1.sa1",
+              "url": "https://doi.org/10.7554/eLife.86628.0.sa1",
               "content": [
                 {
                   "type": "web-page",
@@ -126,9 +126,9 @@
             {
               "type": "evaluation-summary",
               "published": "2023-04-06T11:44:15.700445+00:00",
-              "doi": "10.7554/eLife.86628.1.sa2",
+              "doi": "10.7554/eLife.86628.0.sa2",
               "license": "http://creativecommons.org/licenses/by/4.0/",
-              "url": "https://doi.org/10.7554/eLife.86628.1.sa2",
+              "url": "https://doi.org/10.7554/eLife.86628.0.sa2",
               "content": [
                 {
                   "type": "web-page",
@@ -176,8 +176,8 @@
             {
               "type": "preprint",
               "identifier": "86628",
-              "doi": "10.7554/eLife.86628.1",
-              "versionIdentifier": "1",
+              "doi": "10.7554/eLife.86628.0",
+              "versionIdentifier": "0",
               "license": "http://creativecommons.org/licenses/by/4.0/",
               "published": "2023-04-11T14:00:00+00:00",
               "partOf": {
@@ -195,8 +195,8 @@
         {
           "item": {
             "type": "preprint",
-            "doi": "10.7554/eLife.86628.1",
-            "versionIdentifier": "1"
+            "doi": "10.7554/eLife.86628.0",
+            "versionIdentifier": "0"
           },
           "status": "manuscript-published"
         }
@@ -210,11 +210,11 @@
         },
         {
           "type": "review-article",
-          "doi": "10.7554/eLife.86628.1.sa1"
+          "doi": "10.7554/eLife.86628.0.sa1"
         },
         {
           "type": "evaluation-summary",
-          "doi": "10.7554/eLife.86628.1.sa2"
+          "doi": "10.7554/eLife.86628.0.sa2"
         }
       ],
       "next-step": "_:b3",
@@ -228,8 +228,8 @@
             {
               "type": "preprint",
               "identifier": "86628",
-              "doi": "10.7554/eLife.86628.2",
-              "versionIdentifier": "2",
+              "doi": "10.7554/eLife.86628.1",
+              "versionIdentifier": "1",
               "license": "http://creativecommons.org/licenses/by/4.0/"
             }
           ]
@@ -248,8 +248,8 @@
         {
           "item": {
             "type": "preprint",
-            "doi": "10.7554/eLife.86628.2",
-            "versionIdentifier": "2"
+            "doi": "10.7554/eLife.86628.1",
+            "versionIdentifier": "1"
           },
           "status": "draft"
         }
@@ -274,9 +274,9 @@
             {
               "type": "reply",
               "published": "2023-05-11T11:34:27.242112+00:00",
-              "doi": "10.7554/eLife.86628.2.sa1",
+              "doi": "10.7554/eLife.86628.1.sa1",
               "license": "http://creativecommons.org/licenses/by/4.0/",
-              "url": "https://doi.org/10.7554/eLife.86628.2.sa1",
+              "url": "https://doi.org/10.7554/eLife.86628.1.sa1",
               "content": [
                 {
                   "type": "web-page",
@@ -308,9 +308,9 @@
             {
               "type": "review-article",
               "published": "2023-05-11T11:34:28.135284+00:00",
-              "doi": "10.7554/eLife.86628.2.sa2",
+              "doi": "10.7554/eLife.86628.1.sa2",
               "license": "http://creativecommons.org/licenses/by/4.0/",
-              "url": "https://doi.org/10.7554/eLife.86628.2.sa2",
+              "url": "https://doi.org/10.7554/eLife.86628.1.sa2",
               "content": [
                 {
                   "type": "web-page",
@@ -351,9 +351,9 @@
             {
               "type": "evaluation-summary",
               "published": "2023-05-11T11:34:28.903631+00:00",
-              "doi": "10.7554/eLife.86628.2.sa3",
+              "doi": "10.7554/eLife.86628.1.sa3",
               "license": "http://creativecommons.org/licenses/by/4.0/",
-              "url": "https://doi.org/10.7554/eLife.86628.2.sa3",
+              "url": "https://doi.org/10.7554/eLife.86628.1.sa3",
               "content": [
                 {
                   "type": "web-page",
@@ -401,8 +401,8 @@
             {
               "type": "preprint",
               "identifier": "86628",
-              "doi": "10.7554/eLife.86628.2",
-              "versionIdentifier": "2",
+              "doi": "10.7554/eLife.86628.1",
+              "versionIdentifier": "1",
               "license": "http://creativecommons.org/licenses/by/4.0/",
               "published": "2023-05-15T14:00:00+00:00"
             }
@@ -413,8 +413,8 @@
         {
           "item": {
             "type": "preprint",
-            "doi": "10.7554/eLife.86628.2",
-            "versionIdentifier": "2"
+            "doi": "10.7554/eLife.86628.1",
+            "versionIdentifier": "1"
           },
           "status": "manuscript-published"
         }
@@ -428,15 +428,15 @@
         },
         {
           "type": "reply",
-          "doi": "10.7554/eLife.86628.2.sa1"
+          "doi": "10.7554/eLife.86628.1.sa1"
         },
         {
           "type": "review-article",
-          "doi": "10.7554/eLife.86628.2.sa2"
+          "doi": "10.7554/eLife.86628.1.sa2"
         },
         {
           "type": "evaluation-summary",
-          "doi": "10.7554/eLife.86628.2.sa3"
+          "doi": "10.7554/eLife.86628.1.sa3"
         }
       ],
       "next-step": "_:b6",
@@ -449,9 +449,9 @@
           "outputs": [
             {
               "type": "version-of-record",
-              "doi": "10.7554/eLife.86628.3",
+              "doi": "10.7554/eLife.86628.2",
               "published": "2023-06-02",
-              "url": "https://doi.org/10.7554/eLife.86628.3",
+              "url": "https://doi.org/10.7554/eLife.86628.2",
               "content": [
                 {
                   "type": "web-page",
@@ -466,8 +466,8 @@
         {
           "item": {
             "type": "version-of-record",
-            "doi": "10.7554/eLife.86628.3",
-            "versionIdentifier": "3"
+            "doi": "10.7554/eLife.86628.2",
+            "versionIdentifier": "2"
           },
           "status": "vor-published"
         }
@@ -475,9 +475,9 @@
       "inputs": [
         {
           "type": "preprint",
-          "doi": "10.7554/eLife.86628.2",
+          "doi": "10.7554/eLife.86628.1",
           "identifier": "86628",
-          "versionIdentifier": "2"
+          "versionIdentifier": "1"
         }
       ],
       "previous-step": "_:b5"
