@@ -38,8 +38,11 @@ MECA_PATH_2 = 'meca_path_2'
 
 LICENSE_1 = 'license_1'
 
-RP_PUBLICATION_TIMESTAMP_1 = datetime.fromisoformat('2023-05-05T01:02:03+00:00')
+RP_PUBLICATION_TIMESTAMP_1 = datetime.fromisoformat('2022-05-05T01:02:03+00:00')
 RP_PUBLICATION_TIMESTAMP_2 = datetime.fromisoformat('2023-06-05T01:02:03+00:00')
+
+RP_PUBLICATION_YEAR_1 = 2022
+RP_PUBLICATION_YEAR_2 = 2023
 
 VOR_PUBLICATION_DATE_1 = date.fromisoformat('2023-08-03')
 
@@ -58,6 +61,7 @@ MANUSCRIPT_VERSION_1: ApiManuscriptVersionInput = {
     'meca_path': MECA_PATH_1,
     'evaluations': [],
     'rp_publication_timestamp': RP_PUBLICATION_TIMESTAMP_1,
+    'rp_publication_year': RP_PUBLICATION_YEAR_1,
     'vor_publication_date': None
 }
 
@@ -76,6 +80,7 @@ MANUSCRIPT_VERSION_2: ApiManuscriptVersionInput = {
     'meca_path': MECA_PATH_2,
     'evaluations': [],
     'rp_publication_timestamp': RP_PUBLICATION_TIMESTAMP_2,
+    'rp_publication_year': RP_PUBLICATION_YEAR_2,
     'vor_publication_date': None
 }
 
@@ -94,6 +99,7 @@ MANUSCRIPT_VOR_VERSION_1: ApiManuscriptVersionInput = {
     'meca_path': None,
     'evaluations': [],
     'rp_publication_timestamp': None,
+    'rp_publication_year': None,
     'vor_publication_date': VOR_PUBLICATION_DATE_1
 }
 

@@ -311,7 +311,7 @@ t_rp_publication_date AS (
   (
     SELECT 
       *,
-      EXTRACT(YEAR FROM publication_date) publication_year,
+      EXTRACT(YEAR FROM publication_date) rp_publication_year,
       ROW_NUMBER() OVER(PARTITION BY elife_doi, elife_doi_version ORDER BY imported_timestamp DESC) AS rn
     FROM `elife-data-pipeline.prod.reviewed_preprint_publication_date`
   )
@@ -358,7 +358,7 @@ t_result_with_sorted_manuscript_versions_array AS (
           '%Y-%m-%d %H:%M:%S',
           CONCAT(publication.publication_date, ' ', publication.utc_publication_time)
         ) AS rp_publication_timestamp,
-        publication.publication_year,
+        publication.rp_publication_year,
         vor_date.vor_publication_date
       )
     ORDER BY result.position_in_overall_stage

@@ -40,6 +40,7 @@ ApiManuscriptVersionInput = TypedDict(
         'meca_path': Optional[str],
         'evaluations': Sequence[ApiEvaluationInput],
         'rp_publication_timestamp': Optional[datetime],
+        'rp_publication_year': Optional[int],
         'vor_publication_date': Optional[date]
     }
 )
