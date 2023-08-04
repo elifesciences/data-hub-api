@@ -94,7 +94,7 @@ class TestGetElifeManuscriptVolume:
             **MANUSCRIPT_VERSION_1,
             'rp_publication_year': 2020
         })
-        assert result == 2020 - ELIFE_FIRST_PUBLICATION_YEAR
+        assert result == str(2020 - ELIFE_FIRST_PUBLICATION_YEAR)
 
     def test_should_return_none_when_rp_publication_year_less_than_elife_first_publication_year(
         self
