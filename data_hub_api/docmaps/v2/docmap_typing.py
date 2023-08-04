@@ -51,7 +51,7 @@ DocmapPublishedElifeManuscriptPartOf = TypedDict(
         'type': str,
         'doi': str,
         'identifier': str,
-        'volumeIdentifier': str,
+        'volumeIdentifier': Optional[int],
         'electronicArticleIdentifier': str
     }
 )
