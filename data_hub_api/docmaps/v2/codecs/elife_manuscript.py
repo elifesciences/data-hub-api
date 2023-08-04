@@ -7,7 +7,8 @@ from data_hub_api.docmaps.v2.docmap_typing import (
     DocmapElifeManuscriptInput,
     DocmapElifeManuscriptOutput,
     DocmapElifeManuscriptVorOutput,
-    DocmapPublishedElifeManuscriptOutput
+    DocmapPublishedElifeManuscriptOutput,
+    DocmapPublishedElifeManuscriptPartOf
 )
 
 
@@ -61,6 +62,12 @@ def get_docmap_elife_manuscript_output(
     }
 
 
+def get_elife_manuscript_part_of_section(
+
+) -> DocmapPublishedElifeManuscriptPartOf:
+    return {}
+
+
 def get_docmap_elife_manuscript_output_for_published_step(
     query_result_item: ApiInput,
     manuscript_version: ApiManuscriptVersionInput
@@ -72,7 +79,8 @@ def get_docmap_elife_manuscript_output_for_published_step(
         ),
         'published': (
             manuscript_version['rp_publication_timestamp'].isoformat()
-        )
+        ),
+        'partOf': get_elife_manuscript_part_of_section()
     }
 
 

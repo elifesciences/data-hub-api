@@ -6,6 +6,7 @@ from data_hub_api.docmaps.v2.codecs.elife_manuscript import (
     get_docmap_elife_manuscript_output,
     get_docmap_elife_manuscript_output_for_published_step,
     get_docmap_elife_manuscript_output_for_vor,
+    get_elife_manuscript_part_of_section,
     get_elife_manuscript_version_doi
 )
 
@@ -93,7 +94,8 @@ class TestGetDocmapElifeManuscriptOutputForPublishedStep:
                 elife_doi=DOCMAPS_QUERY_RESULT_ITEM_1['elife_doi']
             ),
             'versionIdentifier': MANUSCRIPT_VERSION_1['elife_doi_version_str'],
-            'license': DOCMAPS_QUERY_RESULT_ITEM_1['license']
+            'license': DOCMAPS_QUERY_RESULT_ITEM_1['license'],
+            'partOf': get_elife_manuscript_part_of_section()
         }
 
 
