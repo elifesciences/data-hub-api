@@ -79,6 +79,20 @@ class TestGetDocmapElifeManuscriptOutput:
         }
 
 
+class TestGetElifeManuscriptPartOfSection:
+    def test_should_populate_elife_manuscript_part_of_section(self):
+        result = get_elife_manuscript_part_of_section(
+            query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1
+        )
+        assert result == {
+            'type': 'manuscript',
+            'doi': DOCMAPS_QUERY_RESULT_ITEM_1['elife_doi'],
+            'identifier': DOCMAPS_QUERY_RESULT_ITEM_1['manuscript_id'],
+            'volumeIdentifier': '',
+            'electronicArticleIdentifier': ''
+        }
+
+
 class TestGetDocmapElifeManuscriptOutputForPublishedStep:
     def test_should_populate_docmaps_elife_manuscript_output_for_published_step(self):
         result = get_docmap_elife_manuscript_output_for_published_step(
@@ -95,7 +109,7 @@ class TestGetDocmapElifeManuscriptOutputForPublishedStep:
             ),
             'versionIdentifier': MANUSCRIPT_VERSION_1['elife_doi_version_str'],
             'license': DOCMAPS_QUERY_RESULT_ITEM_1['license'],
-            'partOf': get_elife_manuscript_part_of_section()
+            'partOf': get_elife_manuscript_part_of_section(DOCMAPS_QUERY_RESULT_ITEM_1)
         }
 
 

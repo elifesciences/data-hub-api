@@ -63,9 +63,15 @@ def get_docmap_elife_manuscript_output(
 
 
 def get_elife_manuscript_part_of_section(
-
+    query_result_item: ApiInput
 ) -> DocmapPublishedElifeManuscriptPartOf:
-    return {}
+    return {
+        'type': 'manuscript',
+        'doi': query_result_item['elife_doi'],
+        'identifier': query_result_item['manuscript_id'],
+        'volumeIdentifier': '',
+        'electronicArticleIdentifier': ''
+    }
 
 
 def get_docmap_elife_manuscript_output_for_published_step(
@@ -80,7 +86,9 @@ def get_docmap_elife_manuscript_output_for_published_step(
         'published': (
             manuscript_version['rp_publication_timestamp'].isoformat()
         ),
-        'partOf': get_elife_manuscript_part_of_section()
+        'partOf': get_elife_manuscript_part_of_section(
+            query_result_item=query_result_item
+        )
     }
 
 
