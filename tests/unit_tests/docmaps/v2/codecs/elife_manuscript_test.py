@@ -6,6 +6,7 @@ from data_hub_api.docmaps.v2.codecs.elife_manuscript import (
     get_docmap_elife_manuscript_output,
     get_docmap_elife_manuscript_output_for_published_step,
     get_docmap_elife_manuscript_output_for_vor,
+    get_elife_manuscript_electronic_article_identifier,
     get_elife_manuscript_part_of_section,
     get_elife_manuscript_version_doi,
     get_elife_manuscript_volume
@@ -105,6 +106,15 @@ class TestGetElifeManuscriptVolume:
         assert not result
 
 
+class TestGetElifeManuscriptElectronicArticleIdentifier:
+    def test_should_concat_rp_prefix_with_manuscript_id(self):
+        result = get_elife_manuscript_electronic_article_identifier({
+            **DOCMAPS_QUERY_RESULT_ITEM_1,
+            'manuscript_id': 'manuscript_id_1'
+        })
+        assert result == 'RP' + 'manuscript_id_1'
+
+
 class TestGetElifeManuscriptPartOfSection:
     def test_should_populate_elife_manuscript_part_of_section(self):
         result = get_elife_manuscript_part_of_section(
@@ -116,7 +126,9 @@ class TestGetElifeManuscriptPartOfSection:
             'doi': DOCMAPS_QUERY_RESULT_ITEM_1['elife_doi'],
             'identifier': DOCMAPS_QUERY_RESULT_ITEM_1['manuscript_id'],
             'volumeIdentifier': get_elife_manuscript_volume(MANUSCRIPT_VERSION_1),
-            'electronicArticleIdentifier': ''
+            'electronicArticleIdentifier': get_elife_manuscript_electronic_article_identifier(
+                DOCMAPS_QUERY_RESULT_ITEM_1
+            )
         }
 
 

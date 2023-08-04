@@ -1,5 +1,9 @@
 from typing import Optional, Sequence
-from data_hub_api.config import DOI_ROOT_URL, ELIFE_FIRST_PUBLICATION_YEAR
+from data_hub_api.config import (
+    DOI_ROOT_URL,
+    ELECTRONIC_ARTICLE_IDENTIFIER_PREFIX,
+    ELIFE_FIRST_PUBLICATION_YEAR
+)
 from data_hub_api.docmaps.v2.api_input_typing import ApiInput, ApiManuscriptVersionInput
 from data_hub_api.docmaps.v2.docmap_typing import (
     DocmapAssertionItem,
@@ -71,6 +75,12 @@ def get_elife_manuscript_volume(
     return None
 
 
+def get_elife_manuscript_electronic_article_identifier(
+    query_result_item: ApiInput
+) -> str:
+    return ELECTRONIC_ARTICLE_IDENTIFIER_PREFIX + query_result_item['manuscript_id']
+
+
 def get_elife_manuscript_part_of_section(
     query_result_item: ApiInput,
     manuscript_version: ApiManuscriptVersionInput
@@ -80,7 +90,9 @@ def get_elife_manuscript_part_of_section(
         'doi': query_result_item['elife_doi'],
         'identifier': query_result_item['manuscript_id'],
         'volumeIdentifier': get_elife_manuscript_volume(manuscript_version),
-        'electronicArticleIdentifier': ''
+        'electronicArticleIdentifier': get_elife_manuscript_electronic_article_identifier(
+            query_result_item
+        )
     }
 
 
