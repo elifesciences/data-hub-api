@@ -15,6 +15,7 @@ from data_hub_api.docmaps.v2.codecs.elife_manuscript import (
 
 from tests.unit_tests.docmaps.v2.test_data import (
     DOCMAPS_QUERY_RESULT_ITEM_1,
+    DOCMAPS_QUERY_RESULT_ITEM_2,
     DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSION,
     MANUSCRIPT_VOR_VERSION_1,
     RP_PUBLICATION_TIMESTAMP_1,
@@ -119,8 +120,7 @@ class TestGetElifeManuscriptElectronicArticleIdentifier:
 class TestGetElifeManuscriptPartOfSection:
     def test_should_populate_elife_manuscript_part_of_section(self):
         result = get_elife_manuscript_part_of_section(
-            query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1,
-            manuscript_version=MANUSCRIPT_VERSION_1
+            query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1
         )
         assert result == {
             'type': 'manuscript',
@@ -132,28 +132,16 @@ class TestGetElifeManuscriptPartOfSection:
             )
         }
 
-    def test_should_have_same_manuscript_volume_for_each_version_of_manuscripts(self):
-        manuscript_version_1 = {
-            **MANUSCRIPT_VERSION_1,
-            'rp_publication_timestamp': datetime.fromisoformat('2020-05-05T01:02:03+00:00')
-        }
-        manuscript_version_2 = {
-            **MANUSCRIPT_VERSION_1,
-            'rp_publication_timestamp': datetime.fromisoformat('2023-05-05T01:02:03+00:00')
-        }
+    def test_should_populate_volume_id_caculated_by_first_publication_year_for_each_version(self):
         result_for_fist_version = get_elife_manuscript_part_of_section(
-            query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1,
-            manuscript_version=manuscript_version_1
+            query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1
         )
         result_for_second_version = get_elife_manuscript_part_of_section(
-            query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1,
-            manuscript_version=manuscript_version_2
+            query_result_item=DOCMAPS_QUERY_RESULT_ITEM_2
         )
-        assert (
-            result_for_fist_version['volumeIdentifier']
-            ==
-            result_for_second_version['volumeIdentifier']
-        )
+        expected_result = str(2022 - ELIFE_FIRST_PUBLICATION_YEAR)
+        assert result_for_fist_version['volumeIdentifier'] == expected_result
+        assert result_for_second_version['volumeIdentifier'] == expected_result
 
 
 class TestGetDocmapElifeManuscriptOutputForPublishedStep:
@@ -173,8 +161,7 @@ class TestGetDocmapElifeManuscriptOutputForPublishedStep:
             'versionIdentifier': MANUSCRIPT_VERSION_1['elife_doi_version_str'],
             'license': DOCMAPS_QUERY_RESULT_ITEM_1['license'],
             'partOf': get_elife_manuscript_part_of_section(
-                DOCMAPS_QUERY_RESULT_ITEM_1,
-                MANUSCRIPT_VERSION_1
+                DOCMAPS_QUERY_RESULT_ITEM_1
             )
         }
 
