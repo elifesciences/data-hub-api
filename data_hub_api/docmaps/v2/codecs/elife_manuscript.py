@@ -69,10 +69,9 @@ def get_docmap_elife_manuscript_output(
 def get_elife_manuscript_volume(
     first_manuscript_version: ApiManuscriptVersionInput
 ) -> Optional[str]:
-    if first_manuscript_version['rp_publication_timestamp']:
-        first_rp_publication_year = first_manuscript_version['rp_publication_timestamp'].year
-        if first_rp_publication_year >= ELIFE_FIRST_PUBLICATION_YEAR:
-            return str(first_rp_publication_year - ELIFE_FIRST_PUBLICATION_YEAR)
+    first_rp_publication_year = first_manuscript_version['rp_publication_timestamp'].year
+    if first_rp_publication_year >= ELIFE_FIRST_PUBLICATION_YEAR:
+        return str(first_rp_publication_year - ELIFE_FIRST_PUBLICATION_YEAR)
     return None
 
 

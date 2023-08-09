@@ -84,13 +84,6 @@ class TestGetDocmapElifeManuscriptOutput:
 
 
 class TestGetElifeManuscriptVolume:
-    def test_should_return_none_if_rp_publication_timestamp_not_defined(self):
-        result = get_elife_manuscript_volume({
-            **MANUSCRIPT_VERSION_1,
-            'rp_publication_timestamp': None
-        })
-        assert not result
-
     def test_should_return_volume_when_rp_publication_timestamp_is_defined(self):
         result = get_elife_manuscript_volume({
             **MANUSCRIPT_VERSION_1,
