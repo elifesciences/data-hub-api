@@ -1,5 +1,5 @@
 from datetime import datetime
-from data_hub_api.config import DOI_ROOT_URL, ELIFE_FIRST_PUBLICATION_YEAR
+from data_hub_api.config import DOI_ROOT_URL, ELECTRONIC_ARTICLE_IDENTIFIER_PREFIX, ELIFE_FIRST_PUBLICATION_YEAR
 from data_hub_api.docmaps.v2.codecs.elife_manuscript import (
     get_docmap_elife_manuscript_doi_assertion_item,
     get_docmap_elife_manuscript_doi_assertion_item_for_vor,
@@ -107,7 +107,7 @@ class TestGetElifeManuscriptElectronicArticleIdentifier:
             **DOCMAPS_QUERY_RESULT_ITEM_1,
             'manuscript_id': 'manuscript_id_1'
         })
-        assert result == 'RP' + 'manuscript_id_1'
+        assert result == ELECTRONIC_ARTICLE_IDENTIFIER_PREFIX + 'manuscript_id_1'
 
 
 class TestGetElifeManuscriptPartOfSection:
