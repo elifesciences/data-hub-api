@@ -123,7 +123,7 @@ t_hypothesis_annotation_with_evaluation_suffix AS (
     annotation.source_doi_version,
     doi_rank.source_doi_without_version,
     doi_rank.source_doi_rank,
-    CONCAT('sa',CAST(t_evaluation_suffix.evaluation_suffix_number AS STRING)) AS evaluation_suffix
+    CONCAT('sa',CAST(t_evaluation_suffix.evaluation_suffix_number - 1 AS STRING)) AS evaluation_suffix
   FROM t_hypothesis_annotation_with_osf_doi AS annotation
   INNER JOIN t_hypothesis_with_source_doi_rank AS doi_rank
     ON annotation.uri = doi_rank.uri
@@ -341,7 +341,7 @@ t_result_with_sorted_manuscript_versions_array AS (
         result.has_evaluations,
         result.manuscript_title,
         result.preprint_url,
-        CAST(result.position_in_overall_stage - 1 AS STRING) AS elife_doi_version_str,
+        CAST(result.position_in_overall_stage AS STRING) AS elife_doi_version_str,
         result.preprint_url_source,
         result.preprint_doi,
         result.preprint_version,
