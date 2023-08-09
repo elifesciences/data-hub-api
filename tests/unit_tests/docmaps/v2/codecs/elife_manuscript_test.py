@@ -1,3 +1,4 @@
+from datetime import datetime
 from data_hub_api.config import DOI_ROOT_URL, ELIFE_FIRST_PUBLICATION_YEAR
 from data_hub_api.docmaps.v2.codecs.elife_manuscript import (
     get_docmap_elife_manuscript_doi_assertion_item,
@@ -82,26 +83,26 @@ class TestGetDocmapElifeManuscriptOutput:
 
 
 class TestGetElifeManuscriptVolume:
-    def test_should_return_none_if_rp_publication_year_is_none(self):
+    def test_should_return_none_if_rp_publication_timestamp_not_defined(self):
         result = get_elife_manuscript_volume({
             **MANUSCRIPT_VERSION_1,
-            'rp_publication_year': None
+            'rp_publication_timestamp': None
         })
         assert not result
 
-    def test_should_return_volume_when_rp_publication_year_is_defined(self):
+    def test_should_return_volume_when_rp_publication_timestamp_is_defined(self):
         result = get_elife_manuscript_volume({
             **MANUSCRIPT_VERSION_1,
-            'rp_publication_year': 2020
+            'rp_publication_timestamp': datetime.fromisoformat('2020-05-05T01:02:03+00:00')
         })
         assert result == str(2020 - ELIFE_FIRST_PUBLICATION_YEAR)
 
-    def test_should_return_none_when_rp_publication_year_less_than_elife_first_publication_year(
+    def test_should_return_none_when_rp_publication_timestamp_less_than_elife_first_publication_year(
         self
     ):
         result = get_elife_manuscript_volume({
             **MANUSCRIPT_VERSION_1,
-            'rp_publication_year': 2010
+            'rp_publication_timestamp': datetime.fromisoformat('2010-05-05T01:02:03+00:00')
         })
         assert not result
 

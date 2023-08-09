@@ -69,9 +69,10 @@ def get_docmap_elife_manuscript_output(
 def get_elife_manuscript_volume(
     manuscript_version: ApiManuscriptVersionInput
 ) -> Optional[str]:
-    rp_publication_year = manuscript_version['rp_publication_year']
-    if rp_publication_year and rp_publication_year >= ELIFE_FIRST_PUBLICATION_YEAR:
-        return str(rp_publication_year - ELIFE_FIRST_PUBLICATION_YEAR)
+    if manuscript_version['rp_publication_timestamp']:
+        rp_publication_year = manuscript_version['rp_publication_timestamp'].year
+        if rp_publication_year >= ELIFE_FIRST_PUBLICATION_YEAR:
+            return str(rp_publication_year - ELIFE_FIRST_PUBLICATION_YEAR)
     return None
 
 
@@ -85,11 +86,12 @@ def get_elife_manuscript_part_of_section(
     query_result_item: ApiInput,
     manuscript_version: ApiManuscriptVersionInput
 ) -> DocmapPublishedElifeManuscriptPartOf:
+    first_manuscript_version = query_result_item['manuscript_versions'][0]
     return {
         'type': 'manuscript',
         'doi': query_result_item['elife_doi'],
         'identifier': query_result_item['manuscript_id'],
-        'volumeIdentifier': get_elife_manuscript_volume(manuscript_version),
+        'volumeIdentifier': get_elife_manuscript_volume(first_manuscript_version),
         'electronicArticleIdentifier': get_elife_manuscript_electronic_article_identifier(
             query_result_item
         )
