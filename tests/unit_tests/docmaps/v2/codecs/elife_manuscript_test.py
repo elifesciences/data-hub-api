@@ -132,6 +132,29 @@ class TestGetElifeManuscriptPartOfSection:
             )
         }
 
+    def test_should_have_same_manuscript_volume_for_each_version_of_manuscripts(self):
+        manuscript_version_1 = {
+            **MANUSCRIPT_VERSION_1,
+            'rp_publication_timestamp': datetime.fromisoformat('2020-05-05T01:02:03+00:00')
+        }
+        manuscript_version_2 = {
+            **MANUSCRIPT_VERSION_1,
+            'rp_publication_timestamp': datetime.fromisoformat('2023-05-05T01:02:03+00:00')
+        }
+        result_for_fist_version = get_elife_manuscript_part_of_section(
+            query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1,
+            manuscript_version=manuscript_version_1
+        )
+        result_for_second_version = get_elife_manuscript_part_of_section(
+            query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1,
+            manuscript_version=manuscript_version_2
+        )
+        assert (
+            result_for_fist_version['volumeIdentifier']
+            ==
+            result_for_second_version['volumeIdentifier']
+        )
+
 
 class TestGetDocmapElifeManuscriptOutputForPublishedStep:
     def test_should_populate_docmaps_elife_manuscript_output_for_published_step(self):
