@@ -97,7 +97,7 @@ class TestGetElifeManuscriptVolume:
         })
         assert result == str(2020 - ELIFE_FIRST_PUBLICATION_YEAR)
 
-    def test_should_return_none_when_rp_publication_timestamp_less_than_elife_first_publication_year(
+    def test_should_return_none_when_rp_publication_timestamp_less_than_first_publication_year(
         self
     ):
         result = get_elife_manuscript_volume({
