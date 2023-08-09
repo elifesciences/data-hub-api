@@ -1,5 +1,9 @@
 from datetime import datetime
-from data_hub_api.config import DOI_ROOT_URL, ELECTRONIC_ARTICLE_IDENTIFIER_PREFIX, ELIFE_FIRST_PUBLICATION_YEAR
+from data_hub_api.config import (
+    DOI_ROOT_URL,
+    ELECTRONIC_ARTICLE_IDENTIFIER_PREFIX,
+    ELIFE_FIRST_PUBLICATION_YEAR
+)
 from data_hub_api.docmaps.v2.codecs.elife_manuscript import (
     get_docmap_elife_manuscript_doi_assertion_item,
     get_docmap_elife_manuscript_doi_assertion_item_for_vor,
