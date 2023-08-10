@@ -45,15 +45,27 @@ DocmapElifeManuscriptOutput = TypedDict(
     }
 )
 
+DocmapPublishedElifeManuscriptPartOf = TypedDict(
+    'DocmapPublishedElifeManuscriptPartOf',
+    {
+        'type': str,
+        'doi': str,
+        'identifier': str,
+        'volumeIdentifier': Optional[str],
+        'electronicArticleIdentifier': str
+    }
+)
+
 DocmapPublishedElifeManuscriptOutput = TypedDict(
     'DocmapPublishedElifeManuscriptOutput',
     {
         'type': str,
-        'published': Optional[timestamp_str],
+        'published': timestamp_str,
         'doi': str,
         'identifier': str,
         'versionIdentifier': str,
-        'license': str
+        'license': str,
+        'partOf': DocmapPublishedElifeManuscriptPartOf
     }
 )
 

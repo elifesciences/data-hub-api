@@ -1,4 +1,9 @@
-from data_hub_api.config import DOI_ROOT_URL
+from datetime import datetime
+from data_hub_api.config import (
+    DOI_ROOT_URL,
+    ELECTRONIC_ARTICLE_IDENTIFIER_PREFIX,
+    ELIFE_FIRST_PUBLICATION_YEAR
+)
 from data_hub_api.docmaps.v2.codecs.elife_manuscript import (
     get_docmap_elife_manuscript_doi_assertion_item,
     get_docmap_elife_manuscript_doi_assertion_item_for_vor,
@@ -6,11 +11,15 @@ from data_hub_api.docmaps.v2.codecs.elife_manuscript import (
     get_docmap_elife_manuscript_output,
     get_docmap_elife_manuscript_output_for_published_step,
     get_docmap_elife_manuscript_output_for_vor,
-    get_elife_manuscript_version_doi
+    get_elife_manuscript_electronic_article_identifier,
+    get_elife_manuscript_part_of_section,
+    get_elife_manuscript_version_doi,
+    get_elife_manuscript_volume
 )
 
 from tests.unit_tests.docmaps.v2.test_data import (
     DOCMAPS_QUERY_RESULT_ITEM_1,
+    DOCMAPS_QUERY_RESULT_ITEM_2,
     DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSION,
     MANUSCRIPT_VOR_VERSION_1,
     RP_PUBLICATION_TIMESTAMP_1,
@@ -78,6 +87,60 @@ class TestGetDocmapElifeManuscriptOutput:
         }
 
 
+class TestGetElifeManuscriptVolume:
+    def test_should_return_volume_when_rp_publication_timestamp_is_defined(self):
+        result = get_elife_manuscript_volume({
+            **MANUSCRIPT_VERSION_1,
+            'rp_publication_timestamp': datetime.fromisoformat('2020-05-05T01:02:03+00:00')
+        })
+        assert result == str(2020 - ELIFE_FIRST_PUBLICATION_YEAR)
+
+    def test_should_return_none_when_rp_publication_timestamp_less_than_first_publication_year(
+        self
+    ):
+        result = get_elife_manuscript_volume({
+            **MANUSCRIPT_VERSION_1,
+            'rp_publication_timestamp': datetime.fromisoformat('2010-05-05T01:02:03+00:00')
+        })
+        assert not result
+
+
+class TestGetElifeManuscriptElectronicArticleIdentifier:
+    def test_should_concat_rp_prefix_with_manuscript_id(self):
+        result = get_elife_manuscript_electronic_article_identifier({
+            **DOCMAPS_QUERY_RESULT_ITEM_1,
+            'manuscript_id': 'manuscript_id_1'
+        })
+        assert result == ELECTRONIC_ARTICLE_IDENTIFIER_PREFIX + 'manuscript_id_1'
+
+
+class TestGetElifeManuscriptPartOfSection:
+    def test_should_populate_elife_manuscript_part_of_section(self):
+        result = get_elife_manuscript_part_of_section(
+            query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1
+        )
+        assert result == {
+            'type': 'manuscript',
+            'doi': DOCMAPS_QUERY_RESULT_ITEM_1['elife_doi'],
+            'identifier': DOCMAPS_QUERY_RESULT_ITEM_1['manuscript_id'],
+            'volumeIdentifier': get_elife_manuscript_volume(MANUSCRIPT_VERSION_1),
+            'electronicArticleIdentifier': get_elife_manuscript_electronic_article_identifier(
+                DOCMAPS_QUERY_RESULT_ITEM_1
+            )
+        }
+
+    def test_should_populate_volume_id_caculated_by_first_publication_year_for_each_version(self):
+        result_for_fist_version = get_elife_manuscript_part_of_section(
+            query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1
+        )
+        result_for_second_version = get_elife_manuscript_part_of_section(
+            query_result_item=DOCMAPS_QUERY_RESULT_ITEM_2
+        )
+        expected_result = str(2022 - ELIFE_FIRST_PUBLICATION_YEAR)
+        assert result_for_fist_version['volumeIdentifier'] == expected_result
+        assert result_for_second_version['volumeIdentifier'] == expected_result
+
+
 class TestGetDocmapElifeManuscriptOutputForPublishedStep:
     def test_should_populate_docmaps_elife_manuscript_output_for_published_step(self):
         result = get_docmap_elife_manuscript_output_for_published_step(
@@ -93,28 +156,10 @@ class TestGetDocmapElifeManuscriptOutputForPublishedStep:
                 elife_doi=DOCMAPS_QUERY_RESULT_ITEM_1['elife_doi']
             ),
             'versionIdentifier': MANUSCRIPT_VERSION_1['elife_doi_version_str'],
-            'license': DOCMAPS_QUERY_RESULT_ITEM_1['license']
-        }
-
-    def test_should_not_populate_published_if_rp_publication_timestamp_is_none(self):
-        manuscript_version = {
-            **MANUSCRIPT_VERSION_1,
-            'rp_publication_timestamp': None
-        }
-        result = get_docmap_elife_manuscript_output_for_published_step(
-            query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1,
-            manuscript_version=manuscript_version
-        )
-        assert result == {
-            'type': 'preprint',
-            'published': None,
-            'identifier': DOCMAPS_QUERY_RESULT_ITEM_1['manuscript_id'],
-            'doi': get_elife_manuscript_version_doi(
-                elife_doi_version_str=MANUSCRIPT_VERSION_1['elife_doi_version_str'],
-                elife_doi=DOCMAPS_QUERY_RESULT_ITEM_1['elife_doi']
-            ),
-            'versionIdentifier': MANUSCRIPT_VERSION_1['elife_doi_version_str'],
-            'license': DOCMAPS_QUERY_RESULT_ITEM_1['license']
+            'license': DOCMAPS_QUERY_RESULT_ITEM_1['license'],
+            'partOf': get_elife_manuscript_part_of_section(
+                DOCMAPS_QUERY_RESULT_ITEM_1
+            )
         }
 
 

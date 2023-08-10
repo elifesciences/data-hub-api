@@ -1,5 +1,9 @@
-from typing import Sequence
-from data_hub_api.config import DOI_ROOT_URL
+from typing import Optional, Sequence
+from data_hub_api.config import (
+    DOI_ROOT_URL,
+    ELECTRONIC_ARTICLE_IDENTIFIER_PREFIX,
+    ELIFE_FIRST_PUBLICATION_YEAR
+)
 from data_hub_api.docmaps.v2.api_input_typing import ApiInput, ApiManuscriptVersionInput
 from data_hub_api.docmaps.v2.docmap_typing import (
     DocmapAssertionItem,
@@ -7,7 +11,8 @@ from data_hub_api.docmaps.v2.docmap_typing import (
     DocmapElifeManuscriptInput,
     DocmapElifeManuscriptOutput,
     DocmapElifeManuscriptVorOutput,
-    DocmapPublishedElifeManuscriptOutput
+    DocmapPublishedElifeManuscriptOutput,
+    DocmapPublishedElifeManuscriptPartOf
 )
 
 
@@ -61,6 +66,37 @@ def get_docmap_elife_manuscript_output(
     }
 
 
+def get_elife_manuscript_volume(
+    first_manuscript_version: ApiManuscriptVersionInput
+) -> Optional[str]:
+    assert first_manuscript_version['rp_publication_timestamp']
+    first_rp_publication_year = first_manuscript_version['rp_publication_timestamp'].year
+    if first_rp_publication_year >= ELIFE_FIRST_PUBLICATION_YEAR:
+        return str(first_rp_publication_year - ELIFE_FIRST_PUBLICATION_YEAR)
+    return None
+
+
+def get_elife_manuscript_electronic_article_identifier(
+    query_result_item: ApiInput
+) -> str:
+    return ELECTRONIC_ARTICLE_IDENTIFIER_PREFIX + query_result_item['manuscript_id']
+
+
+def get_elife_manuscript_part_of_section(
+    query_result_item: ApiInput
+) -> DocmapPublishedElifeManuscriptPartOf:
+    first_manuscript_version = query_result_item['manuscript_versions'][0]
+    return {
+        'type': 'manuscript',
+        'doi': query_result_item['elife_doi'],
+        'identifier': query_result_item['manuscript_id'],
+        'volumeIdentifier': get_elife_manuscript_volume(first_manuscript_version),
+        'electronicArticleIdentifier': get_elife_manuscript_electronic_article_identifier(
+            query_result_item
+        )
+    }
+
+
 def get_docmap_elife_manuscript_output_for_published_step(
     query_result_item: ApiInput,
     manuscript_version: ApiManuscriptVersionInput
@@ -72,8 +108,9 @@ def get_docmap_elife_manuscript_output_for_published_step(
         ),
         'published': (
             manuscript_version['rp_publication_timestamp'].isoformat()
-            if manuscript_version['rp_publication_timestamp']
-            else None
+        ),
+        'partOf': get_elife_manuscript_part_of_section(
+            query_result_item=query_result_item
         )
     }
 

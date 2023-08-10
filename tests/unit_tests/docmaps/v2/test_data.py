@@ -38,7 +38,7 @@ MECA_PATH_2 = 'meca_path_2'
 
 LICENSE_1 = 'license_1'
 
-RP_PUBLICATION_TIMESTAMP_1 = datetime.fromisoformat('2023-05-05T01:02:03+00:00')
+RP_PUBLICATION_TIMESTAMP_1 = datetime.fromisoformat('2022-05-05T01:02:03+00:00')
 RP_PUBLICATION_TIMESTAMP_2 = datetime.fromisoformat('2023-06-05T01:02:03+00:00')
 
 VOR_PUBLICATION_DATE_1 = date.fromisoformat('2023-08-03')
