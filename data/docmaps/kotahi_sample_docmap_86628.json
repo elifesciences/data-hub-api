@@ -1,0 +1,430 @@
+{
+  "@context": "https://w3id.org/docmaps/context.jsonld",
+  "type": "docmap",
+  "id": "https://data-hub-api.elifesciences.org/enhanced-preprints/docmaps/v2/by-publisher/elife/get-by-manuscript-id?manuscript_id=86628",
+  "created": "2023-02-02T07:04:33+00:00",
+  "updated": "2023-02-02T07:04:33+00:00",
+  "publisher": {
+    "account": {
+      "id": "https://sciety.org/groups/elife",
+      "service": "https://sciety.org"
+    },
+    "homepage": "https://elifesciences.org/",
+    "id": "https://elifesciences.org/",
+    "logo": "https://sciety.org/static/groups/elife--b560187e-f2fb-4ff9-a861-a204f3fc0fb0.png",
+    "name": "eLife"
+  },
+  "first-step": "_:b0",
+  "steps": {
+    "_:b0": {
+      "actions": [
+        {
+          "participants": [],
+          "outputs": [
+            {
+              "type": "preprint",
+              "identifier": "86628",
+              "doi": "10.7554/eLife.86628.1",
+              "versionIdentifier": "1",
+              "license": "http://creativecommons.org/licenses/by/4.0/",
+              "title": "Optical tools for visualizing and controlling human GLP-1 receptor activation with high spatiotemporal resolution"
+            }
+          ]
+        }
+      ],
+      "assertions": [
+        {
+          "item": {
+            "type": "preprint",
+            "doi": "10.1101/2023.02.14.528498",
+            "versionIdentifier": "2"
+          },
+          "status": "under-review",
+          "happened": "2023-02-14T15:44:21+00:00"
+        },
+        {
+          "item": {
+            "type": "preprint",
+            "doi": "10.7554/eLife.86628.1",
+            "versionIdentifier": "1"
+          },
+          "status": "draft"
+        }
+      ],
+      "inputs": [
+        {
+          "type": "preprint",
+          "doi": "10.1101/2023.02.14.528498",
+          "url": "https://www.biorxiv.org/content/10.1101/2023.02.14.528498v2",
+          "versionIdentifier": "2",
+          "published": "2023-02-21",
+          "content": [
+            {
+              "type": "computer-file",
+              "url": "s3://transfers-elife/biorxiv_Current_Content/February_2023/22_Feb_23_Batch_1531/c27a22b7-6c43-1014-aa80-efc7cf011f1d.meca"
+            }
+          ]
+        }
+      ],
+      "next-step": "_:b1"
+    },
+    "_:b1": {
+      "actions": [
+        {
+          "participants": [
+            {
+              "actor": {
+                "name": "anonymous",
+                "type": "person"
+              },
+              "role": "peer-reviewer"
+            }
+          ],
+          "outputs": [
+            {
+              "type": "review-article",
+              "published": "2023-04-06T11:44:05.502835+00:00",
+              "doi": "10.7554/eLife.86628.1.sa0",
+              "license": "http://creativecommons.org/licenses/by/4.0/",
+              "url": "https://doi.org/10.7554/eLife.86628.1.sa0",
+              "text": "This paper presents two new tools for investigating GLP-1 signaling. The genetically encoded sensor GLPLight1 follows the plan for other GPCR-based fluorescent sensors, inserting a circularly permuted GFP into an intracellular loop of the GPCR. The light-uncaged agonist peptide, photo-GLP1, has no detectable agonist activity (as judged by the GLPLight1 sensor) until it is activated by light. However, based on the current characterization, it is unclear how useful either of these tools will be for investigating native GLP-1 signaling.                The GLPLight1 sensor has a strong fluorescent response to GLP-1 with an EC50 of ~10 nM, and its specificity is high, as shown by lack of response to ligands of related class B GPCRs. However, the native GLP1R enables biological responses to concentrations that are ~1000-fold lower than this (as shown, for instance, in a supplemental figure of this paper). This makes it difficult to see how the sensor will be useful for in vivo detection of GLP-1 release, as claimed; although there may be biological situations where the concentration is adequate to stimulate the sensor, this is not established. Data using a GLP-1 secreting cell line suggest that the sensor has bound some of the released GLP-1, but it is difficult to have confidence without seeing an actual fluorescence response to stimulated release.                              Alternatively, the sensor might be used for drug screening, but it is unclear that this would be an improvement over existing high-throughput methods using the cAMP response to GLP1R activation (since those are much more sensitive and also allow detection of signaling through different downstream pathways).                              The utility of the caged agonist PhotoGLP1 is similarly unclear. The data demonstrate a substantial antagonism of GLP-1 binding by the still-caged compound, and it is therefore unclear whether the kinetics of the response to PhotoGLP1 itself would mimic the normal activation by GLP-1 in the absence of the caged compound. A further concern is that the light-dependence of the agonist effect of PhotoGLP1 was evaluated only with the GLPLight1 sensor and not with GLP1R signaling itself, which is 1000x more sensitive and which would be the presumed target of the tool. In addition, PhotoGLP1 is based upon native GLP-1, which is rapidly truncated and inactivated by the peptidase DPPIV, expressed in most cell types, and expressed at very high levels in the plasma. The utility of PhotoGLP1 is therefore limited to acute (minutes) in vitro experiments."
+            }
+          ]
+        },
+        {
+          "participants": [
+            {
+              "actor": {
+                "name": "Gary Yellen",
+                "type": "person",
+                "_relatesToOrganization": "Harvard Medical School, United States of America"
+              },
+              "role": "editor"
+            },
+            {
+              "actor": {
+                "name": "David James",
+                "type": "person",
+                "_relatesToOrganization": "University of Sydney, Australia"
+              },
+              "role": "senior-editor"
+            }
+          ],
+          "outputs": [
+            {
+              "type": "evaluation-summary",
+              "published": "2023-04-06T11:44:15.700445+00:00",
+              "doi": "10.7554/eLife.86628.1.sa1",
+              "license": "http://creativecommons.org/licenses/by/4.0/",
+              "url": "https://doi.org/10.7554/eLife.86628.1.sa1",
+              "text": "This valuable Tools and Resources paper presents new tools for investigating GLP-1 signaling: a genetically-encoded sensor constructed from a mutated GLP1R receptor as well as a caged agonist peptide. The evidence for these tools working as advertised is largely convincing and they may be helpful for screening compounds that bind to GLP1R. On the other hand, their overall utility is limited by their very weak apparent affinity relative to the likely biological concentration and response. Incomplete characterization of the properties of the tools makes it difficult to anticipate which applications are most likely to succeed."
+            }
+          ]
+        }
+      ],
+      "assertions": [
+        {
+          "item": {
+            "type": "preprint",
+            "doi": "10.1101/2023.02.14.528498",
+            "versionIdentifier": "2"
+          },
+          "status": "peer-reviewed"
+        }
+      ],
+      "inputs": [
+        {
+          "type": "preprint",
+          "doi": "10.1101/2023.02.14.528498",
+          "url": "https://www.biorxiv.org/content/10.1101/2023.02.14.528498v2",
+          "versionIdentifier": "2"
+        }
+      ],
+      "next-step": "_:b2",
+      "previous-step": "_:b0"
+    },
+    "_:b2": {
+      "actions": [
+        {
+          "participants": [],
+          "outputs": [
+            {
+              "type": "preprint",
+              "identifier": "86628",
+              "doi": "10.7554/eLife.86628.1",
+              "versionIdentifier": "1",
+              "license": "http://creativecommons.org/licenses/by/4.0/",
+              "published": "2023-04-11T14:00:00+00:00",
+              "partOf": {
+                "type": "manuscript",
+                "doi": "10.7554/eLife.86628",
+                "identifier": "86628",
+                "volumeIdentifier": "12",
+                "electronicArticleIdentifier": "RP86628"
+              }
+            }
+          ]
+        }
+      ],
+      "assertions": [
+        {
+          "item": {
+            "type": "preprint",
+            "doi": "10.7554/eLife.86628.1",
+            "versionIdentifier": "1"
+          },
+          "status": "manuscript-published"
+        }
+      ],
+      "inputs": [
+        {
+          "type": "preprint",
+          "doi": "10.1101/2023.02.14.528498",
+          "url": "https://www.biorxiv.org/content/10.1101/2023.02.14.528498v2",
+          "versionIdentifier": "2"
+        },
+        {
+          "type": "review-article",
+          "doi": "10.7554/eLife.86628.1.sa0"
+        },
+        {
+          "type": "evaluation-summary",
+          "doi": "10.7554/eLife.86628.1.sa1"
+        }
+      ],
+      "next-step": "_:b3",
+      "previous-step": "_:b1"
+    },
+    "_:b3": {
+      "actions": [
+        {
+          "participants": [],
+          "outputs": [
+            {
+              "type": "preprint",
+              "identifier": "86628",
+              "doi": "10.7554/eLife.86628.2",
+              "versionIdentifier": "2",
+              "license": "http://creativecommons.org/licenses/by/4.0/",
+              "title": "Optical tools for visualizing and controlling human GLP-1 receptor activation with high spatiotemporal resolution"
+            }
+          ]
+        }
+      ],
+      "assertions": [
+        {
+          "item": {
+            "type": "preprint",
+            "doi": "10.1101/2023.02.14.528498",
+            "versionIdentifier": "3"
+          },
+          "status": "under-review",
+          "happened": "2023-04-11T13:15:26+00:00"
+        },
+        {
+          "item": {
+            "type": "preprint",
+            "doi": "10.7554/eLife.86628.2",
+            "versionIdentifier": "2"
+          },
+          "status": "draft"
+        }
+      ],
+      "inputs": [
+        {
+          "type": "preprint",
+          "doi": "10.1101/2023.02.14.528498",
+          "url": "https://www.biorxiv.org/content/10.1101/2023.02.14.528498v3",
+          "versionIdentifier": "3",
+          "published": "2023-04-24"
+        }
+      ],
+      "next-step": "_:b4",
+      "previous-step": "_:b2"
+    },
+    "_:b4": {
+      "actions": [
+        {
+          "participants": [],
+          "outputs": [
+            {
+              "type": "reply",
+              "published": "2023-05-11T11:34:27.242112+00:00",
+              "doi": "10.7554/eLife.86628.2.sa0",
+              "license": "http://creativecommons.org/licenses/by/4.0/",
+              "url": "https://doi.org/10.7554/eLife.86628.2.sa0",
+              "text": "<FILL> https://hypothes.is/a/yVioUu_vEe2vQTPxYtnZSw"
+            }
+          ]
+        },
+        {
+          "participants": [
+            {
+              "actor": {
+                "name": "anonymous",
+                "type": "person"
+              },
+              "role": "peer-reviewer"
+            }
+          ],
+          "outputs": [
+            {
+              "type": "review-article",
+              "published": "2023-05-11T11:34:28.135284+00:00",
+              "doi": "10.7554/eLife.86628.2.sa1",
+              "license": "http://creativecommons.org/licenses/by/4.0/",
+              "url": "https://doi.org/10.7554/eLife.86628.2.sa1",
+              "text": "This paper presents two new tools for investigating GLP-1 signaling. The genetically encoded sensor GLPLight1 follows the plan for other GPCR-based fluorescent sensors, inserting a circularly permuted GFP into an intracellular loop of the GPCR. The light-uncaged agonist peptide, photo-GLP1, has no detectable agonist activity (as judged by the GLPLight1 sensor) until it is activated by light. However, based on the current characterization, it is unclear how useful either of these tools will be for investigating native GLP-1 signaling.                The GLPLight1 sensor has a strong fluorescent response to GLP-1 with an EC50 of ~10 nM, and its specificity is high, as shown by lack of response to ligands of related class B GPCRs. However, the native GLP1R enables biological responses to concentrations that are ~1000-fold lower than this (as shown, for instance, in a supplemental figure of this paper). This makes it difficult to see how the sensor will be useful for in vivo detection of GLP-1 release, as claimed; although there may be biological situations where the concentration is adequate to stimulate the sensor, this is not established. Data using a GLP-1 secreting cell line suggest that the sensor has bound some of the released GLP-1, but it is difficult to have confidence without seeing an actual fluorescence response to stimulated release.                              Alternatively, the sensor might be used for drug screening, but it is unclear that this would be an improvement over existing high-throughput methods using the cAMP response to GLP1R activation (since those are much more sensitive and also allow detection of signaling through different downstream pathways).                              The utility of the caged agonist PhotoGLP1 is similarly unclear. The data demonstrate a substantial antagonism of GLP-1 binding by the still-caged compound, and it is therefore unclear whether the kinetics of the response to PhotoGLP1 itself would mimic the normal activation by GLP-1 in the absence of the caged compound. A further concern is that the light-dependence of the agonist effect of PhotoGLP1 was evaluated only with the GLPLight1 sensor and not with GLP1R signaling itself, which is 1000x more sensitive and which would be the presumed target of the tool. In addition, PhotoGLP1 is based upon native GLP-1, which is rapidly truncated and inactivated by the peptidase DPPIV, expressed in most cell types, and expressed at very high levels in the plasma. The utility of PhotoGLP1 is therefore limited to acute (minutes) in vitro experiments."
+            }
+          ]
+        },
+        {
+          "participants": [
+            {
+              "actor": {
+                "name": "Gary Yellen",
+                "type": "person",
+                "_relatesToOrganization": "Harvard Medical School, United States of America"
+              },
+              "role": "editor"
+            },
+            {
+              "actor": {
+                "name": "David James",
+                "type": "person",
+                "_relatesToOrganization": "University of Sydney, Australia"
+              },
+              "role": "senior-editor"
+            }
+          ],
+          "outputs": [
+            {
+              "type": "evaluation-summary",
+              "published": "2023-05-11T11:34:28.903631+00:00",
+              "doi": "10.7554/eLife.86628.2.sa2",
+              "license": "http://creativecommons.org/licenses/by/4.0/",
+              "url": "https://doi.org/10.7554/eLife.86628.2.sa2",
+              "text": "This valuable Tools and Resources paper presents new tools for investigating GLP-1 signaling: a genetically-encoded sensor constructed from a mutated GLP1R receptor as well as a caged agonist peptide. The evidence for these tools working as advertised is solid and they may be helpful for screening compounds that bind to GLP1R."
+            }
+          ]
+        }
+      ],
+      "assertions": [
+        {
+          "item": {
+            "type": "preprint",
+            "doi": "10.1101/2023.02.14.528498",
+            "versionIdentifier": "3"
+          },
+          "status": "revised"
+        }
+      ],
+      "inputs": [
+        {
+          "type": "preprint",
+          "doi": "10.1101/2023.02.14.528498",
+          "url": "https://www.biorxiv.org/content/10.1101/2023.02.14.528498v3",
+          "versionIdentifier": "3"
+        }
+      ],
+      "next-step": "_:b5",
+      "previous-step": "_:b3"
+    },
+    "_:b5": {
+      "actions": [
+        {
+          "participants": [],
+          "outputs": [
+            {
+              "type": "preprint",
+              "identifier": "86628",
+              "doi": "10.7554/eLife.86628.2",
+              "versionIdentifier": "2",
+              "license": "http://creativecommons.org/licenses/by/4.0/",
+              "published": "2023-05-15T14:00:00+00:00",
+              "partOf": {
+                "type": "manuscript",
+                "doi": "10.7554/eLife.86628",
+                "identifier": "86628",
+                "volumeIdentifier": "12",
+                "electronicArticleIdentifier": "RP86628"
+              }
+            }
+          ]
+        }
+      ],
+      "assertions": [
+        {
+          "item": {
+            "type": "preprint",
+            "doi": "10.7554/eLife.86628.2",
+            "versionIdentifier": "2"
+          },
+          "status": "manuscript-published"
+        }
+      ],
+      "inputs": [
+        {
+          "type": "preprint",
+          "doi": "10.1101/2023.02.14.528498",
+          "url": "https://www.biorxiv.org/content/10.1101/2023.02.14.528498v3",
+          "versionIdentifier": "3"
+        },
+        {
+          "type": "reply",
+          "doi": "10.7554/eLife.86628.2.sa0"
+        },
+        {
+          "type": "review-article",
+          "doi": "10.7554/eLife.86628.2.sa1"
+        },
+        {
+          "type": "evaluation-summary",
+          "doi": "10.7554/eLife.86628.2.sa2"
+        }
+      ],
+      "next-step": "_:b6",
+      "previous-step": "_:b4"
+    },
+    "_:b6": {
+      "actions": [
+        {
+          "participants": [],
+          "outputs": [
+            {
+              "type": "version-of-record",
+              "doi": "10.7554/eLife.86628.3",
+              "published": "2023-06-02",
+              "url": "https://doi.org/10.7554/eLife.86628.3",
+              "content": [
+                {
+                  "type": "web-page",
+                  "url": "https://elifesciences.org/articles/86628"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "assertions": [
+        {
+          "item": {
+            "type": "version-of-record",
+            "doi": "10.7554/eLife.86628.3",
+            "versionIdentifier": "3"
+          },
+          "status": "vor-published"
+        }
+      ],
+      "inputs": [
+        {
+          "type": "preprint",
+          "doi": "10.7554/eLife.86628.2",
+          "identifier": "86628",
+          "versionIdentifier": "2"
+        }
+      ],
+      "previous-step": "_:b5"
+    }
+  }
+}
