@@ -273,12 +273,27 @@ t_latest_biorxiv_medrxiv_tdm_path_by_doi_and_version AS (
   WHERE rn=1
 ),
 
+t_rp_meca_path_update AS (
+  SELECT
+    * EXCEPT(rn)
+  FROM
+  (
+    SELECT 
+      *,
+      ROW_NUMBER() OVER(PARTITION BY manuscript_id, long_manuscript_identifier ORDER BY imported_timestamp DESC) AS rn
+    FROM `elife-data-pipeline.prod.reviewed_preprint_meca_path_update`
+  )
+  WHERE rn=1
+),
+
 t_preprint_published_at_date_and_meca_path AS (
   SELECT 
     result.manuscript_id,
     result.long_manuscript_identifier,
     biorxiv_medrxiv_api_response.date AS preprint_published_at_date,
-    CASE 
+    CASE
+      WHEN meca_path_update.meca_path IS NOT NULL
+        THEN meca_path_update.meca_path
       WHEN result.preprint_doi LIKE '10.1101/%'
         THEN tdm.tdm_path 
       WHEN (
@@ -296,6 +311,8 @@ t_preprint_published_at_date_and_meca_path AS (
       ELSE NULL
     END AS meca_path
   FROM t_result_with_preprint_version AS result
+  LEFT JOIN t_rp_meca_path_update AS meca_path_update
+    ON result.long_manuscript_identifier = meca_path_update.long_manuscript_identifier
   LEFT JOIN `elife-data-pipeline.prod.mv_latest_biorxiv_medrxiv_api_response` AS biorxiv_medrxiv_api_response
     ON biorxiv_medrxiv_api_response.doi = result.preprint_doi
     AND CAST(biorxiv_medrxiv_api_response.version AS STRING) = result.preprint_version
