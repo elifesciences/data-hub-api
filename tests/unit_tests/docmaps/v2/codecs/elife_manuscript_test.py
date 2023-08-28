@@ -144,6 +144,9 @@ class TestGetElifeManuscriptPartOfSection:
             'type': 'manuscript',
             'doi': DOCMAPS_QUERY_RESULT_ITEM_1['elife_doi'],
             'identifier': DOCMAPS_QUERY_RESULT_ITEM_1['manuscript_id'],
+            'subjectDisciplines': get_elife_manuscript_subject_disciplines(
+                MANUSCRIPT_VERSION_1['subject_areas']
+            ),
             'published': MANUSCRIPT_VERSION_1['rp_publication_timestamp'].isoformat(),
             'volumeIdentifier': get_elife_manuscript_volume(MANUSCRIPT_VERSION_1),
             'electronicArticleIdentifier': get_elife_manuscript_electronic_article_identifier(

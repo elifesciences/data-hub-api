@@ -106,6 +106,9 @@ def get_elife_manuscript_part_of_section(
         'type': 'manuscript',
         'doi': query_result_item['elife_doi'],
         'identifier': query_result_item['manuscript_id'],
+        'subjectDisciplines': get_elife_manuscript_subject_disciplines(
+            first_manuscript_version['subject_areas']
+        ),
         'published': first_manuscript_version['rp_publication_timestamp'].isoformat(),
         'volumeIdentifier': get_elife_manuscript_volume(first_manuscript_version),
         'electronicArticleIdentifier': get_elife_manuscript_electronic_article_identifier(
