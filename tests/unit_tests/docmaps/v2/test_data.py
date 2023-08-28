@@ -62,10 +62,11 @@ MANUSCRIPT_VERSION_1: ApiManuscriptVersionInput = {
     'evaluations': [],
     'rp_publication_timestamp': RP_PUBLICATION_TIMESTAMP_1,
     'vor_publication_date': None,
-    'subject_areas': [
-        {'subject_area_name': SUBJECT_AREA_NAME_1},
-        {'subject_area_name': SUBJECT_AREA_NAME_2}
-    ]
+    'subject_areas': [{
+        'subject_area_name': SUBJECT_AREA_NAME_1
+    }, {
+        'subject_area_name': SUBJECT_AREA_NAME_2
+    }]
 }
 
 MANUSCRIPT_VERSION_2: ApiManuscriptVersionInput = {
@@ -84,7 +85,7 @@ MANUSCRIPT_VERSION_2: ApiManuscriptVersionInput = {
     'evaluations': [],
     'rp_publication_timestamp': RP_PUBLICATION_TIMESTAMP_2,
     'vor_publication_date': None,
-     'subject_areas': [
+    'subject_areas': [
         {'subject_area_name': SUBJECT_AREA_NAME_1},
         {'subject_area_name': SUBJECT_AREA_NAME_2}
     ]
