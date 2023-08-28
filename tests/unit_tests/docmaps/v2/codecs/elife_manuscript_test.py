@@ -123,6 +123,7 @@ class TestGetElifeManuscriptPartOfSection:
             'type': 'manuscript',
             'doi': DOCMAPS_QUERY_RESULT_ITEM_1['elife_doi'],
             'identifier': DOCMAPS_QUERY_RESULT_ITEM_1['manuscript_id'],
+            'published': MANUSCRIPT_VERSION_1['rp_publication_timestamp'].isoformat(),
             'volumeIdentifier': get_elife_manuscript_volume(MANUSCRIPT_VERSION_1),
             'electronicArticleIdentifier': get_elife_manuscript_electronic_article_identifier(
                 DOCMAPS_QUERY_RESULT_ITEM_1
@@ -130,15 +131,25 @@ class TestGetElifeManuscriptPartOfSection:
         }
 
     def test_should_populate_volume_id_caculated_by_first_publication_year_for_each_version(self):
-        result_for_fist_version = get_elife_manuscript_part_of_section(
+        result_for_first_version = get_elife_manuscript_part_of_section(
             query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1
         )
         result_for_second_version = get_elife_manuscript_part_of_section(
             query_result_item=DOCMAPS_QUERY_RESULT_ITEM_2
         )
         expected_result = str(2022 - ELIFE_FIRST_PUBLICATION_YEAR)
-        assert result_for_fist_version['volumeIdentifier'] == expected_result
+        assert result_for_first_version['volumeIdentifier'] == expected_result
         assert result_for_second_version['volumeIdentifier'] == expected_result
+
+    def test_should_populate_published_with_the_first_version_rp_publication(self):
+        published_for_first_version = get_elife_manuscript_part_of_section(
+            query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1
+        )['published']
+        published_for_second_version = get_elife_manuscript_part_of_section(
+            query_result_item=DOCMAPS_QUERY_RESULT_ITEM_2
+        )['published']
+        assert published_for_first_version == RP_PUBLICATION_TIMESTAMP_1.isoformat()
+        assert published_for_second_version == RP_PUBLICATION_TIMESTAMP_1.isoformat()
 
 
 class TestGetDocmapElifeManuscriptOutputForPublishedStep:
