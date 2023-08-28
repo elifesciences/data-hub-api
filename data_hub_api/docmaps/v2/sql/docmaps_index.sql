@@ -369,6 +369,7 @@ t_result_with_sorted_manuscript_versions_array AS (
         result.editor_details,
         result.senior_editor_details,
         result.author_names_csv,
+        result.subject_areas,
         result.evaluations,
         PARSE_TIMESTAMP(
           '%Y-%m-%d %H:%M:%S',
