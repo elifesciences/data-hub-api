@@ -86,15 +86,12 @@ def get_elife_manuscript_part_of_section(
     query_result_item: ApiInput
 ) -> DocmapPublishedElifeManuscriptPartOf:
     first_manuscript_version = query_result_item['manuscript_versions'][0]
+    assert first_manuscript_version['rp_publication_timestamp']
     return {
         'type': 'manuscript',
         'doi': query_result_item['elife_doi'],
         'identifier': query_result_item['manuscript_id'],
-        'published': (
-            first_manuscript_version['rp_publication_timestamp'].isoformat()
-            if first_manuscript_version['rp_publication_timestamp']
-            else None
-        ),
+        'published': first_manuscript_version['rp_publication_timestamp'].isoformat(),
         'volumeIdentifier': get_elife_manuscript_volume(first_manuscript_version),
         'electronicArticleIdentifier': get_elife_manuscript_electronic_article_identifier(
             query_result_item
