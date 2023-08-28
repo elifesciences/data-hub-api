@@ -43,6 +43,9 @@ RP_PUBLICATION_TIMESTAMP_2 = datetime.fromisoformat('2023-06-05T01:02:03+00:00')
 
 VOR_PUBLICATION_DATE_1 = date.fromisoformat('2023-08-03')
 
+SUBJECT_AREA_NAME_1 = 'subject_area_name_1'
+SUBJECT_AREA_NAME_2 = 'subject_area_name_2'
+
 MANUSCRIPT_VERSION_1: ApiManuscriptVersionInput = {
     'long_manuscript_identifier': LONG_MANUSCRIPT_ID_1,
     'position_in_overall_stage': 1,
@@ -58,7 +61,11 @@ MANUSCRIPT_VERSION_1: ApiManuscriptVersionInput = {
     'meca_path': MECA_PATH_1,
     'evaluations': [],
     'rp_publication_timestamp': RP_PUBLICATION_TIMESTAMP_1,
-    'vor_publication_date': None
+    'vor_publication_date': None,
+    'subject_areas': [
+        {'subject_area_name': SUBJECT_AREA_NAME_1},
+        {'subject_area_name': SUBJECT_AREA_NAME_2}
+    ]
 }
 
 MANUSCRIPT_VERSION_2: ApiManuscriptVersionInput = {
@@ -76,7 +83,11 @@ MANUSCRIPT_VERSION_2: ApiManuscriptVersionInput = {
     'meca_path': MECA_PATH_2,
     'evaluations': [],
     'rp_publication_timestamp': RP_PUBLICATION_TIMESTAMP_2,
-    'vor_publication_date': None
+    'vor_publication_date': None,
+     'subject_areas': [
+        {'subject_area_name': SUBJECT_AREA_NAME_1},
+        {'subject_area_name': SUBJECT_AREA_NAME_2}
+    ]
 }
 
 MANUSCRIPT_VOR_VERSION_1: ApiManuscriptVersionInput = {
@@ -94,7 +105,11 @@ MANUSCRIPT_VOR_VERSION_1: ApiManuscriptVersionInput = {
     'meca_path': None,
     'evaluations': [],
     'rp_publication_timestamp': None,
-    'vor_publication_date': VOR_PUBLICATION_DATE_1
+    'vor_publication_date': VOR_PUBLICATION_DATE_1,
+    'subject_areas': [
+        {'subject_area_name': SUBJECT_AREA_NAME_1},
+        {'subject_area_name': SUBJECT_AREA_NAME_2}
+    ]
 }
 
 PUBLISHER_DICT_1 = {"id": "publisher_1"}

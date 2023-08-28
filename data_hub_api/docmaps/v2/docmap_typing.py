@@ -51,6 +51,7 @@ DocmapPublishedElifeManuscriptPartOf = TypedDict(
         'type': str,
         'doi': str,
         'identifier': str,
+        'subjectDisciplines': Sequence[str],
         'published': timestamp_str,
         'volumeIdentifier': Optional[str],
         'electronicArticleIdentifier': str

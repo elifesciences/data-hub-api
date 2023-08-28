@@ -4,7 +4,7 @@ from data_hub_api.config import (
     ELECTRONIC_ARTICLE_IDENTIFIER_PREFIX,
     ELIFE_FIRST_PUBLICATION_YEAR
 )
-from data_hub_api.docmaps.v2.api_input_typing import ApiInput, ApiManuscriptVersionInput
+from data_hub_api.docmaps.v2.api_input_typing import ApiInput, ApiManuscriptVersionInput, ApiSubjectAreaInput
 from data_hub_api.docmaps.v2.docmap_typing import (
     DocmapAssertionItem,
     DocmapContent,
@@ -80,6 +80,17 @@ def get_elife_manuscript_electronic_article_identifier(
     query_result_item: ApiInput
 ) -> str:
     return ELECTRONIC_ARTICLE_IDENTIFIER_PREFIX + query_result_item['manuscript_id']
+
+
+def get_elife_manuscript_subject_disciplines(
+    subject_areas: Sequence[ApiSubjectAreaInput]
+) -> Sequence[str]:
+    subject_area_list = []
+    if subject_areas:
+        for subject_area in subject_areas:
+            subject_area_list.append(subject_area['subject_area_name'])
+        return subject_area_list
+    return None
 
 
 def get_elife_manuscript_part_of_section(
