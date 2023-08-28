@@ -17,7 +17,7 @@ DocmapEvaluationOutput = TypedDict(
     {
         'type': str,
         'doi': Optional[str],
-        'published': Optional[timestamp_str],
+        'published': timestamp_str,
         'license': str,
         'url': Optional[str],
         'content': Sequence[DocmapContent]
@@ -51,6 +51,7 @@ DocmapPublishedElifeManuscriptPartOf = TypedDict(
         'type': str,
         'doi': str,
         'identifier': str,
+        'published': timestamp_str,
         'volumeIdentifier': Optional[str],
         'electronicArticleIdentifier': str
     }
