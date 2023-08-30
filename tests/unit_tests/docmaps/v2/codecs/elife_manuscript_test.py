@@ -13,6 +13,7 @@ from data_hub_api.docmaps.v2.codecs.elife_manuscript import (
     get_docmap_elife_manuscript_output_for_vor,
     get_elife_manuscript_electronic_article_identifier,
     get_elife_manuscript_part_of_section,
+    get_elife_manuscript_subject_disciplines,
     get_elife_manuscript_version_doi,
     get_elife_manuscript_volume
 )
@@ -24,6 +25,8 @@ from tests.unit_tests.docmaps.v2.test_data import (
     MANUSCRIPT_VOR_VERSION_1,
     RP_PUBLICATION_TIMESTAMP_1,
     MANUSCRIPT_VERSION_1,
+    SUBJECT_AREA_NAME_1,
+    SUBJECT_AREA_NAME_2,
     VOR_PUBLICATION_DATE_1
 )
 
@@ -114,6 +117,24 @@ class TestGetElifeManuscriptElectronicArticleIdentifier:
         assert result == ELECTRONIC_ARTICLE_IDENTIFIER_PREFIX + 'manuscript_id_1'
 
 
+class TestGetElifeManuscriptSubjectDisciplines:
+    def test_should_return_list_of_subject_disciplines(self):
+        result = get_elife_manuscript_subject_disciplines(
+            MANUSCRIPT_VERSION_1['subject_areas']
+        )
+        assert result == [SUBJECT_AREA_NAME_1, SUBJECT_AREA_NAME_2]
+
+    def test_should_return_none_when_subject_areas_is_none(self):
+        manuscript_version_without_subject_area = {
+            **MANUSCRIPT_VERSION_1,
+            'subject_areas': None
+        }
+        result = get_elife_manuscript_subject_disciplines(
+            manuscript_version_without_subject_area['subject_areas']
+        )
+        assert not result
+
+
 class TestGetElifeManuscriptPartOfSection:
     def test_should_populate_elife_manuscript_part_of_section(self):
         result = get_elife_manuscript_part_of_section(
@@ -123,6 +144,9 @@ class TestGetElifeManuscriptPartOfSection:
             'type': 'manuscript',
             'doi': DOCMAPS_QUERY_RESULT_ITEM_1['elife_doi'],
             'identifier': DOCMAPS_QUERY_RESULT_ITEM_1['manuscript_id'],
+            'subjectDisciplines': get_elife_manuscript_subject_disciplines(
+                MANUSCRIPT_VERSION_1['subject_areas']
+            ),
             'published': MANUSCRIPT_VERSION_1['rp_publication_timestamp'].isoformat(),
             'volumeIdentifier': get_elife_manuscript_volume(MANUSCRIPT_VERSION_1),
             'electronicArticleIdentifier': get_elife_manuscript_electronic_article_identifier(

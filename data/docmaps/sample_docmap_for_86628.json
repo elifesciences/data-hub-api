@@ -184,6 +184,9 @@
                 "type": "manuscript",
                 "doi": "10.7554/eLife.86628",
                 "identifier": "86628",
+                "subjectDisciplines": [
+                  "Biochemistry and Chemical Biology"
+                ],
                 "published": "2023-04-11T14:00:00+00:00",
                 "volumeIdentifier": "12",
                 "electronicArticleIdentifier": "RP86628"
@@ -410,6 +413,9 @@
                 "type": "manuscript",
                 "doi": "10.7554/eLife.86628",
                 "identifier": "86628",
+                "subjectDisciplines": [
+                  "Biochemistry and Chemical Biology"
+                ],
                 "published": "2023-04-11T14:00:00+00:00",
                 "volumeIdentifier": "12",
                 "electronicArticleIdentifier": "RP86628"

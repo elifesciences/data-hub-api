@@ -23,6 +23,13 @@ ApiEditorDetailInput = TypedDict(
     }
 )
 
+ApiSubjectAreaInput = TypedDict(
+    'ApiSubjectAreaInput',
+    {
+        'subject_area_name': str
+    }
+)
+
 ApiManuscriptVersionInput = TypedDict(
     'ApiManuscriptVersionInput',
     {
@@ -40,10 +47,10 @@ ApiManuscriptVersionInput = TypedDict(
         'meca_path': Optional[str],
         'evaluations': Sequence[ApiEvaluationInput],
         'rp_publication_timestamp': Optional[datetime],
-        'vor_publication_date': Optional[date]
+        'vor_publication_date': Optional[date],
+        'subject_areas': Sequence[ApiSubjectAreaInput]
     }
 )
-
 
 ApiInput = TypedDict(
     'ApiInput',
