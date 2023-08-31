@@ -32,7 +32,7 @@ WITH t_hypothesis_annotation_with_doi AS (
     END AS source_doi_version,
     annotation.id AS hypothesis_id,
     annotation.created AS annotation_created_timestamp,
-  FROM `elife-data-pipeline.de_proto.v_hypothesis_annotation` AS annotation
+  FROM `elife-data-pipeline.prod.v_hypothesis_annotation` AS annotation
   WHERE annotation.group = 'q5X6RWJ6'
     AND created >= '2022-09-01' -- to ignore any public reviews posted before Sep 2022
 ),
