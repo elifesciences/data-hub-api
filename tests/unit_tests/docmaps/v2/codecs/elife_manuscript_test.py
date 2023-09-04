@@ -13,6 +13,7 @@ from data_hub_api.docmaps.v2.codecs.elife_manuscript import (
     get_docmap_elife_manuscript_output_for_vor,
     get_elife_manuscript_electronic_article_identifier,
     get_elife_manuscript_part_of_section,
+    get_elife_manuscript_subject_disciplines,
     get_elife_manuscript_version_doi,
     get_elife_manuscript_volume
 )
@@ -24,6 +25,8 @@ from tests.unit_tests.docmaps.v2.test_data import (
     MANUSCRIPT_VOR_VERSION_1,
     RP_PUBLICATION_TIMESTAMP_1,
     MANUSCRIPT_VERSION_1,
+    SUBJECT_AREA_NAME_1,
+    SUBJECT_AREA_NAME_2,
     VOR_PUBLICATION_DATE_1
 )
 
@@ -114,6 +117,24 @@ class TestGetElifeManuscriptElectronicArticleIdentifier:
         assert result == ELECTRONIC_ARTICLE_IDENTIFIER_PREFIX + 'manuscript_id_1'
 
 
+class TestGetElifeManuscriptSubjectDisciplines:
+    def test_should_return_list_of_subject_disciplines(self):
+        result = get_elife_manuscript_subject_disciplines(
+            MANUSCRIPT_VERSION_1['subject_areas']
+        )
+        assert result == [SUBJECT_AREA_NAME_1, SUBJECT_AREA_NAME_2]
+
+    def test_should_return_none_when_subject_areas_is_none(self):
+        manuscript_version_without_subject_area = {
+            **MANUSCRIPT_VERSION_1,
+            'subject_areas': None
+        }
+        result = get_elife_manuscript_subject_disciplines(
+            manuscript_version_without_subject_area['subject_areas']
+        )
+        assert not result
+
+
 class TestGetElifeManuscriptPartOfSection:
     def test_should_populate_elife_manuscript_part_of_section(self):
         result = get_elife_manuscript_part_of_section(
@@ -123,6 +144,10 @@ class TestGetElifeManuscriptPartOfSection:
             'type': 'manuscript',
             'doi': DOCMAPS_QUERY_RESULT_ITEM_1['elife_doi'],
             'identifier': DOCMAPS_QUERY_RESULT_ITEM_1['manuscript_id'],
+            'subjectDisciplines': get_elife_manuscript_subject_disciplines(
+                MANUSCRIPT_VERSION_1['subject_areas']
+            ),
+            'published': MANUSCRIPT_VERSION_1['rp_publication_timestamp'].isoformat(),
             'volumeIdentifier': get_elife_manuscript_volume(MANUSCRIPT_VERSION_1),
             'electronicArticleIdentifier': get_elife_manuscript_electronic_article_identifier(
                 DOCMAPS_QUERY_RESULT_ITEM_1
@@ -130,15 +155,25 @@ class TestGetElifeManuscriptPartOfSection:
         }
 
     def test_should_populate_volume_id_caculated_by_first_publication_year_for_each_version(self):
-        result_for_fist_version = get_elife_manuscript_part_of_section(
+        result_for_first_version = get_elife_manuscript_part_of_section(
             query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1
         )
         result_for_second_version = get_elife_manuscript_part_of_section(
             query_result_item=DOCMAPS_QUERY_RESULT_ITEM_2
         )
         expected_result = str(2022 - ELIFE_FIRST_PUBLICATION_YEAR)
-        assert result_for_fist_version['volumeIdentifier'] == expected_result
+        assert result_for_first_version['volumeIdentifier'] == expected_result
         assert result_for_second_version['volumeIdentifier'] == expected_result
+
+    def test_should_populate_published_with_the_first_version_rp_publication(self):
+        published_for_first_version = get_elife_manuscript_part_of_section(
+            query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1
+        )['published']
+        published_for_second_version = get_elife_manuscript_part_of_section(
+            query_result_item=DOCMAPS_QUERY_RESULT_ITEM_2
+        )['published']
+        assert published_for_first_version == RP_PUBLICATION_TIMESTAMP_1.isoformat()
+        assert published_for_second_version == RP_PUBLICATION_TIMESTAMP_1.isoformat()
 
 
 class TestGetDocmapElifeManuscriptOutputForPublishedStep:
