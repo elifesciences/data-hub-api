@@ -107,17 +107,31 @@
           "participants": [
             {
               "actor": {
+                "type":"person",
                 "name": "Gary Yellen",
-                "type": "person",
-                "_relatesToOrganization": "Harvard Medical School, United States of America"
+                "firstName": "Gary",
+                "surname": "Yellen",
+                "_relatesToOrganization": "Harvard Medical School, United States of America",
+                "affiliation": {
+                  "type": "organization",
+                  "name": "Harvard Medical School",
+                  "location": "United States of America"
+                }
               },
               "role": "editor"
             },
             {
               "actor": {
+                "type":"person",
                 "name": "David James",
-                "type": "person",
-                "_relatesToOrganization": "University of Sydney, Australia"
+                "firstName": "David",
+                "surname": "James",
+                "_relatesToOrganization": "University of Sydney, Australia",
+                "affiliation": {
+                  "type": "organization",
+                  "name": "University of Sydney",
+                  "location": "Australia"
+                }
               },
               "role": "senior-editor"
             }
@@ -336,17 +350,31 @@
           "participants": [
             {
               "actor": {
+                "type":"person",
                 "name": "Gary Yellen",
-                "type": "person",
-                "_relatesToOrganization": "Harvard Medical School, United States of America"
+                "firstName": "Gary",
+                "surname": "Yellen",
+                "_relatesToOrganization": "Harvard Medical School, United States of America",
+                "affiliation": {
+                  "type": "organization",
+                  "name": "Harvard Medical School",
+                  "location": "United States of America"
+                }
               },
               "role": "editor"
             },
             {
               "actor": {
+                "type":"person",
                 "name": "David James",
-                "type": "person",
-                "_relatesToOrganization": "University of Sydney, Australia"
+                "firstName": "David",
+                "surname": "James",
+                "_relatesToOrganization": "University of Sydney, Australia",
+                "affiliation": {
+                  "type": "organization",
+                  "name": "University of Sydney",
+                  "location": "Australia"
+                }
               },
               "role": "senior-editor"
             }
