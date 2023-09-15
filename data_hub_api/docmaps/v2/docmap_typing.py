@@ -96,7 +96,7 @@ DocmapAffiliation = TypedDict(
     {
         'type': str,
         'name': str,
-        'location': str
+        'location': Optional[str]
     }
 )
 

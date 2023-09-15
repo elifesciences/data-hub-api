@@ -178,7 +178,21 @@ def get_docmap_evaluation_participants_for_review_article_type() -> Sequence[Doc
 def get_docmap_affiliation(
     editor_detail: ApiEditorDetailInput
 ) -> DocmapAffiliation:
-    return {}
+    if editor_detail['country']:
+        return {
+            'type': 'organization',
+            'name': editor_detail['institution'],
+            'location': (
+                editor_detail['city'] + ', ' + editor_detail['country']
+                if editor_detail['city']
+                else editor_detail['country']
+            )
+        }
+    return {
+        'type': 'organization',
+        'name': editor_detail['institution'],
+        'location': None
+    }
 
 
 def get_docmap_actor_for_evaluation_summary_type(
