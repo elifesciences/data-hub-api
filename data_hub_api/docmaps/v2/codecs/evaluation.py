@@ -199,8 +199,8 @@ def get_docmap_actor_for_evaluation_summary_type(
     editor_detail: ApiEditorDetailInput
 ) -> DocmapActorEditor:
     return {
-        'name': editor_detail['name'],
         'type': 'person',
+        'name': editor_detail['name'],
         'firstName': editor_detail['first_name'],
         '_middleName': (editor_detail['middle_name'] if editor_detail['middle_name'] else None),
         'surname': editor_detail['last_name'],
