@@ -14,6 +14,7 @@ from data_hub_api.docmaps.v2.docmap_typing import (
     DocmapAction,
     DocmapActorAnonymous,
     DocmapActorEditor,
+    DocmapAffiliation,
     DocmapContent,
     DocmapEvaluationInput,
     DocmapEvaluationOutput,
@@ -174,14 +175,25 @@ def get_docmap_evaluation_participants_for_review_article_type() -> Sequence[Doc
     }]
 
 
+def get_docmap_affiliation(
+    editor_detail: ApiEditorDetailInput
+) -> DocmapAffiliation:
+    return {}
+
+
 def get_docmap_actor_for_evaluation_summary_type(
     editor_detail: ApiEditorDetailInput
 ) -> DocmapActorEditor:
     return {
         'name': editor_detail['name'],
         'type': 'person',
-        '_relatesToOrganization': get_related_organization_detail(editor_detail)
+        'firstName': editor_detail['first_name'],
+        '_middleName': (editor_detail['middle_name'] if editor_detail['middle_name'] else None),
+        'surname': editor_detail['last_name'],
+        '_relatesToOrganization': get_related_organization_detail(editor_detail),
+        'affiliation': get_docmap_affiliation(editor_detail)
     }
+
 
 def get_related_organization_detail(
     editor_detail: ApiEditorDetailInput

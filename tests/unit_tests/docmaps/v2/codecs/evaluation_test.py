@@ -236,7 +236,7 @@ class TestGetDocmapEvaluationParticipantsForEvaluationSummaryType:
             )
 
     def test_should_populate_participants_with_and_given_reviewing_editor_detail_(self):
-        editor_detail_dict = {'name': 'name_1', 'institution': 'institution_1', 'country': None}
+        editor_detail_dict = EDITOR_DETAIL_1
         role = 'editor'
         result = get_docmap_evaluation_participants_for_evaluation_summary_type(
             editor_detail=editor_detail_dict,
@@ -244,9 +244,36 @@ class TestGetDocmapEvaluationParticipantsForEvaluationSummaryType:
         )
         assert result == {
             'actor': {
-                'name': 'name_1',
+                'name': 'editor_name_1',
                 'type': 'person',
-                '_relatesToOrganization': get_related_organization_detail(editor_detail_dict)
+                'firstName': 'editor_first_name_1',
+                '_middleName': 'editor_middle_name_1',
+                'surname': 'editor_last_name_1',
+                '_relatesToOrganization': get_related_organization_detail(editor_detail_dict),
+                'affiliation': {}
+            },
+            'role': 'editor'
+        }
+
+    def test_should_return_none_for_middle_name_if_not_defined(self):
+        editor_detail_dict = {
+            **EDITOR_DETAIL_1,
+            'middle_name': None
+        }
+        role = 'editor'
+        result = get_docmap_evaluation_participants_for_evaluation_summary_type(
+            editor_detail=editor_detail_dict,
+            role=role
+        )
+        assert result == {
+            'actor': {
+                'name': 'editor_name_1',
+                'type': 'person',
+                'firstName': 'editor_first_name_1',
+                '_middleName': None,
+                'surname': 'editor_last_name_1',
+                '_relatesToOrganization': get_related_organization_detail(editor_detail_dict),
+                'affiliation': {}
             },
             'role': 'editor'
         }
