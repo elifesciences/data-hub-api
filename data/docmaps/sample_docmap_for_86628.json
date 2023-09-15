@@ -110,12 +110,13 @@
                 "type":"person",
                 "name": "Gary Yellen",
                 "firstName": "Gary",
+                "_middleName": "",
                 "surname": "Yellen",
                 "_relatesToOrganization": "Harvard Medical School, United States of America",
                 "affiliation": {
                   "type": "organization",
                   "name": "Harvard Medical School",
-                  "location": "United States of America"
+                  "location": "Boston, United States of America"
                 }
               },
               "role": "editor"
@@ -125,12 +126,13 @@
                 "type":"person",
                 "name": "David James",
                 "firstName": "David",
+                "_middleName": "E",
                 "surname": "James",
                 "_relatesToOrganization": "University of Sydney, Australia",
                 "affiliation": {
                   "type": "organization",
                   "name": "University of Sydney",
-                  "location": "Australia"
+                  "location": "Sydney, Australia"
                 }
               },
               "role": "senior-editor"
@@ -353,12 +355,13 @@
                 "type":"person",
                 "name": "Gary Yellen",
                 "firstName": "Gary",
+                "_middleName": "",
                 "surname": "Yellen",
                 "_relatesToOrganization": "Harvard Medical School, United States of America",
                 "affiliation": {
                   "type": "organization",
                   "name": "Harvard Medical School",
-                  "location": "United States of America"
+                  "location": "Boston, United States of America"
                 }
               },
               "role": "editor"
@@ -368,12 +371,13 @@
                 "type":"person",
                 "name": "David James",
                 "firstName": "David",
+                "_middleName": "E",
                 "surname": "James",
                 "_relatesToOrganization": "University of Sydney, Australia",
                 "affiliation": {
                   "type": "organization",
                   "name": "University of Sydney",
-                  "location": "Australia"
+                  "location": "Sydney, Australia"
                 }
               },
               "role": "senior-editor"
