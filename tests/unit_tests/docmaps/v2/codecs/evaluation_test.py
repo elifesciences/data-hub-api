@@ -10,6 +10,7 @@ from data_hub_api.docmaps.v2.codecs.evaluation import (
     SCIETY_ARTICLES_ACTIVITY_URL,
     SCIETY_ARTICLES_EVALUATIONS_URL,
     get_docmap_affiliation,
+    get_docmap_affiliation_location,
     get_docmap_evaluation_input,
     get_docmap_evaluation_output,
     get_docmap_evaluation_output_content,
@@ -224,6 +225,19 @@ class TestGetRelatedOrganizationDetail:
         editor_detail_dict = {'institution': 'institution_1', 'country': 'country_1'}
         result = get_related_organization_detail(editor_detail_dict)
         assert result == 'institution_1, country_1'
+
+
+class TestGetDocmapAffiliationLocation:
+    def test_should_populate_docmap_location_with_given_details(self):
+        result = get_docmap_affiliation_location(EDITOR_DETAIL_1)
+        assert result == 'editor_city_1, editor_country_1'
+
+    def test_should_populate_docmap_location_with_only_country_if_city_none(self):
+        result = get_docmap_affiliation_location({
+            **EDITOR_DETAIL_1,
+            'city': None
+        })
+        assert result == 'editor_country_1'
 
 
 class TestGetDocmapAffiliation:

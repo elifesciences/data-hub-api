@@ -83,8 +83,8 @@ DocmapElifeManuscriptVorOutput = TypedDict(
     }
 )
 
-DocmapActorAnonymous = TypedDict(
-    'DocmapActorAnonymous',
+DocmapAnonymousActor = TypedDict(
+    'DocmapAnonymousActor',
     {
         'type': str,
         'name': str
@@ -100,8 +100,8 @@ DocmapAffiliation = TypedDict(
     }
 )
 
-DocmapActorEditor = TypedDict(
-    'DocmapActorEditor',
+DocmapEditorActor = TypedDict(
+    'DocmapEditorActor',
     {
         'type': str,
         'name': str,
@@ -116,7 +116,7 @@ DocmapActorEditor = TypedDict(
 DocmapParticipant = TypedDict(
     'DocmapParticipant',
     {
-        'actor': Union[DocmapActorEditor, DocmapActorAnonymous],
+        'actor': Union[DocmapEditorActor, DocmapAnonymousActor],
         'role': str
     },
     total=False

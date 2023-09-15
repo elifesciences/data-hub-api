@@ -12,8 +12,8 @@ from data_hub_api.docmaps.v2.api_input_typing import (
 )
 from data_hub_api.docmaps.v2.docmap_typing import (
     DocmapAction,
-    DocmapActorAnonymous,
-    DocmapActorEditor,
+    DocmapAnonymousActor,
+    DocmapEditorActor,
     DocmapAffiliation,
     DocmapContent,
     DocmapEvaluationInput,
@@ -161,7 +161,7 @@ def get_docmap_evaluation_type_form_tags(
     return None
 
 
-def get_docmap_actor_for_review_article_type() -> DocmapActorAnonymous:
+def get_docmap_actor_for_review_article_type() -> DocmapAnonymousActor:
     return {
         'name': 'anonymous',
         'type': 'person'
@@ -175,29 +175,27 @@ def get_docmap_evaluation_participants_for_review_article_type() -> Sequence[Doc
     }]
 
 
+def get_docmap_affiliation_location(
+    editor_detail: ApiEditorDetailInput
+) -> Optional[str]:
+    if editor_detail['city'] and editor_detail['country']:
+        return editor_detail['city'] + ', ' + editor_detail['country']
+    return editor_detail['country']
+
+
 def get_docmap_affiliation(
     editor_detail: ApiEditorDetailInput
 ) -> DocmapAffiliation:
-    if editor_detail['country']:
-        return {
-            'type': 'organization',
-            'name': editor_detail['institution'],
-            'location': (
-                editor_detail['city'] + ', ' + editor_detail['country']
-                if editor_detail['city']
-                else editor_detail['country']
-            )
-        }
     return {
         'type': 'organization',
         'name': editor_detail['institution'],
-        'location': None
+        'location': get_docmap_affiliation_location(editor_detail)
     }
 
 
 def get_docmap_actor_for_evaluation_summary_type(
     editor_detail: ApiEditorDetailInput
-) -> DocmapActorEditor:
+) -> DocmapEditorActor:
     return {
         'type': 'person',
         'name': editor_detail['name'],
