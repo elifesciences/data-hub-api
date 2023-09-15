@@ -9,6 +9,7 @@ from data_hub_api.docmaps.v2.codecs.evaluation import (
     HYPOTHESIS_URL,
     SCIETY_ARTICLES_ACTIVITY_URL,
     SCIETY_ARTICLES_EVALUATIONS_URL,
+    get_docmap_affiliation,
     get_docmap_evaluation_input,
     get_docmap_evaluation_output,
     get_docmap_evaluation_output_content,
@@ -273,7 +274,7 @@ class TestGetDocmapEvaluationParticipantsForEvaluationSummaryType:
                 '_middleName': None,
                 'surname': 'editor_last_name_1',
                 '_relatesToOrganization': get_related_organization_detail(editor_detail_dict),
-                'affiliation': {}
+                'affiliation': get_docmap_affiliation(editor_detail_dict)
             },
             'role': 'editor'
         }
