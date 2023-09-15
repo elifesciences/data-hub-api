@@ -9,6 +9,8 @@ from data_hub_api.docmaps.v2.codecs.evaluation import (
     HYPOTHESIS_URL,
     SCIETY_ARTICLES_ACTIVITY_URL,
     SCIETY_ARTICLES_EVALUATIONS_URL,
+    get_docmap_affiliation,
+    get_docmap_affiliation_location,
     get_docmap_evaluation_input,
     get_docmap_evaluation_output,
     get_docmap_evaluation_output_content,
@@ -225,6 +227,52 @@ class TestGetRelatedOrganizationDetail:
         assert result == 'institution_1, country_1'
 
 
+class TestGetDocmapAffiliationLocation:
+    def test_should_populate_docmap_location_with_given_details(self):
+        result = get_docmap_affiliation_location(EDITOR_DETAIL_1)
+        assert result == 'editor_city_1, editor_country_1'
+
+    def test_should_populate_docmap_location_with_only_country_if_city_none(self):
+        result = get_docmap_affiliation_location({
+            **EDITOR_DETAIL_1,
+            'city': None
+        })
+        assert result == 'editor_country_1'
+
+
+class TestGetDocmapAffiliation:
+    def test_should_populate_affiliation_with_given_details(self):
+        result = get_docmap_affiliation(EDITOR_DETAIL_1)
+        assert result == {
+            'type': 'organization',
+            'name': 'editor_institution_1',
+            'location': 'editor_city_1, editor_country_1'
+        }
+
+    def test_should_return_none_for_location_if_country_none(self):
+        result = get_docmap_affiliation({
+            **EDITOR_DETAIL_1,
+            'country': None
+        })
+        assert result == {
+            'type': 'organization',
+            'name': 'editor_institution_1',
+            'location': None
+        }
+
+    def test_should_populate_location_only_with_country_if_city_none(self):
+        result = get_docmap_affiliation({
+            **EDITOR_DETAIL_1,
+            'country': 'editor_country_1',
+            'city': None
+        })
+        assert result == {
+            'type': 'organization',
+            'name': 'editor_institution_1',
+            'location': 'editor_country_1'
+        }
+
+
 class TestGetDocmapEvaluationParticipantsForEvaluationSummaryType:
     def test_should_raise_assertion_error_if_the_role_not_editor_or_senior_editor(self):
         editor_detail_dict = {'name': 'name_1', 'institution': 'institution_1', 'country': None}
@@ -236,7 +284,7 @@ class TestGetDocmapEvaluationParticipantsForEvaluationSummaryType:
             )
 
     def test_should_populate_participants_with_and_given_reviewing_editor_detail_(self):
-        editor_detail_dict = {'name': 'name_1', 'institution': 'institution_1', 'country': None}
+        editor_detail_dict = EDITOR_DETAIL_1
         role = 'editor'
         result = get_docmap_evaluation_participants_for_evaluation_summary_type(
             editor_detail=editor_detail_dict,
@@ -244,9 +292,36 @@ class TestGetDocmapEvaluationParticipantsForEvaluationSummaryType:
         )
         assert result == {
             'actor': {
-                'name': 'name_1',
+                'name': 'editor_name_1',
                 'type': 'person',
-                '_relatesToOrganization': get_related_organization_detail(editor_detail_dict)
+                'firstName': 'editor_first_name_1',
+                '_middleName': 'editor_middle_name_1',
+                'surname': 'editor_last_name_1',
+                '_relatesToOrganization': get_related_organization_detail(editor_detail_dict),
+                'affiliation': get_docmap_affiliation(editor_detail_dict)
+            },
+            'role': 'editor'
+        }
+
+    def test_should_return_none_for_middle_name_if_not_defined(self):
+        editor_detail_dict = {
+            **EDITOR_DETAIL_1,
+            'middle_name': None
+        }
+        role = 'editor'
+        result = get_docmap_evaluation_participants_for_evaluation_summary_type(
+            editor_detail=editor_detail_dict,
+            role=role
+        )
+        assert result == {
+            'actor': {
+                'name': 'editor_name_1',
+                'type': 'person',
+                'firstName': 'editor_first_name_1',
+                '_middleName': None,
+                'surname': 'editor_last_name_1',
+                '_relatesToOrganization': get_related_organization_detail(editor_detail_dict),
+                'affiliation': get_docmap_affiliation(editor_detail_dict)
             },
             'role': 'editor'
         }

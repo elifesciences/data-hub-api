@@ -187,11 +187,21 @@ DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSION = {
 EDITOR_DETAIL_1: ApiEditorDetailInput = {
     'name': 'editor_name_1',
     'institution': 'editor_institution_1',
-    'country': 'editor_country_1'
+    'country': 'editor_country_1',
+    'title': 'editor_title_1',
+    'first_name': 'editor_first_name_1',
+    'middle_name': 'editor_middle_name_1',
+    'last_name': 'editor_last_name_1',
+    'city': 'editor_city_1'
 }
 
 SENIOR_EDITOR_DETAIL_1: ApiEditorDetailInput = {
     'name': 'senior_editor_name_1',
     'institution': 'senior_editor_institution_1',
-    'country': 'senior_editor_country_1'
+    'country': 'senior_editor_country_1',
+    'title': 'senior_editor_title_1',
+    'first_name': 'senior_editor_first_name_1',
+    'middle_name': 'senior_editor_middle_name_1',
+    'last_name': 'senior_editor_last_name_1',
+    'city': 'senior_editor_city_1'
 }

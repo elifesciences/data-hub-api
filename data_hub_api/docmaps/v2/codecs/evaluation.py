@@ -12,6 +12,9 @@ from data_hub_api.docmaps.v2.api_input_typing import (
 )
 from data_hub_api.docmaps.v2.docmap_typing import (
     DocmapAction,
+    DocmapAnonymousActor,
+    DocmapEditorActor,
+    DocmapAffiliation,
     DocmapContent,
     DocmapEvaluationInput,
     DocmapEvaluationOutput,
@@ -158,14 +161,50 @@ def get_docmap_evaluation_type_form_tags(
     return None
 
 
+def get_docmap_actor_for_review_article_type() -> DocmapAnonymousActor:
+    return {
+        'name': 'anonymous',
+        'type': 'person'
+    }
+
+
 def get_docmap_evaluation_participants_for_review_article_type() -> Sequence[DocmapParticipant]:
     return [{
-        'actor': {
-            'name': 'anonymous',
-            'type': 'person'
-        },
+        'actor': get_docmap_actor_for_review_article_type(),
         'role': 'peer-reviewer'
     }]
+
+
+def get_docmap_affiliation_location(
+    editor_detail: ApiEditorDetailInput
+) -> Optional[str]:
+    if editor_detail['city'] and editor_detail['country']:
+        return editor_detail['city'] + ', ' + editor_detail['country']
+    return editor_detail['country']
+
+
+def get_docmap_affiliation(
+    editor_detail: ApiEditorDetailInput
+) -> DocmapAffiliation:
+    return {
+        'type': 'organization',
+        'name': editor_detail['institution'],
+        'location': get_docmap_affiliation_location(editor_detail)
+    }
+
+
+def get_docmap_actor_for_evaluation_summary_type(
+    editor_detail: ApiEditorDetailInput
+) -> DocmapEditorActor:
+    return {
+        'type': 'person',
+        'name': editor_detail['name'],
+        'firstName': editor_detail['first_name'],
+        '_middleName': (editor_detail['middle_name'] if editor_detail['middle_name'] else None),
+        'surname': editor_detail['last_name'],
+        '_relatesToOrganization': get_related_organization_detail(editor_detail),
+        'affiliation': get_docmap_affiliation(editor_detail)
+    }
 
 
 def get_related_organization_detail(
@@ -182,11 +221,7 @@ def get_docmap_evaluation_participants_for_evaluation_summary_type(
 ) -> DocmapParticipant:
     assert role in ['editor', 'senior-editor']
     return {
-        'actor': {
-            'name': editor_detail['name'],
-            'type': 'person',
-            '_relatesToOrganization': get_related_organization_detail(editor_detail)
-        },
+        'actor': get_docmap_actor_for_evaluation_summary_type(editor_detail),
         'role': role
     }
 
