@@ -12,6 +12,8 @@ from data_hub_api.docmaps.v2.api_input_typing import (
 )
 from data_hub_api.docmaps.v2.docmap_typing import (
     DocmapAction,
+    DocmapActorAnonymous,
+    DocmapActorEditor,
     DocmapContent,
     DocmapEvaluationInput,
     DocmapEvaluationOutput,
@@ -158,15 +160,28 @@ def get_docmap_evaluation_type_form_tags(
     return None
 
 
+def get_docmap_actor_for_review_article_type() -> DocmapActorAnonymous:
+    return {
+        'name': 'anonymous',
+        'type': 'person'
+    }
+
+
 def get_docmap_evaluation_participants_for_review_article_type() -> Sequence[DocmapParticipant]:
     return [{
-        'actor': {
-            'name': 'anonymous',
-            'type': 'person'
-        },
+        'actor': get_docmap_actor_for_review_article_type(),
         'role': 'peer-reviewer'
     }]
 
+
+def get_docmap_actor_for_evaluation_summary_type(
+    editor_detail: ApiEditorDetailInput
+) -> DocmapActorEditor:
+    return {
+        'name': editor_detail['name'],
+        'type': 'person',
+        '_relatesToOrganization': get_related_organization_detail(editor_detail)
+    }
 
 def get_related_organization_detail(
     editor_detail: ApiEditorDetailInput
@@ -182,11 +197,7 @@ def get_docmap_evaluation_participants_for_evaluation_summary_type(
 ) -> DocmapParticipant:
     assert role in ['editor', 'senior-editor']
     return {
-        'actor': {
-            'name': editor_detail['name'],
-            'type': 'person',
-            '_relatesToOrganization': get_related_organization_detail(editor_detail)
-        },
+        'actor': get_docmap_actor_for_evaluation_summary_type(editor_detail),
         'role': role
     }
 
