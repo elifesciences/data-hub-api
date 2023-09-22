@@ -12,8 +12,8 @@ WITH t_hypothesis_annotation_with_cleaned_uri AS (
 
 t_hypothesis_annotation_with_doi AS (
   SELECT
-  *,
-  CASE
+    *,
+    CASE
       WHEN annotation.uri LIKE '%10.1101/%'
         THEN REGEXP_EXTRACT(annotation.uri, r'(10\.\d{3,}[^v]*)v?')
       WHEN annotation.uri LIKE '%researchsquare.com/article/rs-%'
