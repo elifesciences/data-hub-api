@@ -138,12 +138,8 @@ t_hypothesis_annotation_with_evaluation_suffix AS (
   INNER JOIN t_hypothesis_with_source_doi_rank AS doi_rank
     ON annotation.uri = doi_rank.uri
     AND (
-      CASE 
-        WHEN annotation.osf_preprint_version_rank IS NOT NULL
-          THEN annotation.osf_preprint_version_rank = doi_rank.source_doi_rank
-        ELSE
-          True
-      END
+      annotation.osf_preprint_version_rank IS NULL
+      OR annotation.osf_preprint_version_rank = doi_rank.source_doi_rank
     )
   INNER JOIN t_distinct_hypothesis_with_evaluation_suffix_number AS t_evaluation_suffix
     ON annotation.uri = t_evaluation_suffix.uri 
