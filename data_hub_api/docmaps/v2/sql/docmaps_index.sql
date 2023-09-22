@@ -1,7 +1,19 @@
-WITH t_hypothesis_annotation_with_doi AS (
+WITH t_hypothesis_annotation_with_cleaned_uri AS (
   SELECT
-    * EXCEPT (id, created),
-    CASE 
+    * EXCEPT (id, created, uri),
+    annotation.id AS hypothesis_id,
+    annotation.created AS annotation_created_timestamp,
+    DATE(annotation.created) AS annotation_created_date,
+    REGEXP_REPLACE(uri, r'/$', '') AS uri
+  FROM `elife-data-pipeline.prod.v_hypothesis_annotation` AS annotation
+  WHERE annotation.group = 'q5X6RWJ6'
+    AND created >= '2022-09-01' -- to ignore any public reviews posted before Sep 2022
+),
+
+t_hypothesis_annotation_with_doi AS (
+  SELECT
+    *,
+    CASE
       WHEN annotation.uri LIKE '%10.1101/%'
         THEN REGEXP_EXTRACT(annotation.uri, r'(10\.\d{3,}[^v]*)v?')
       WHEN annotation.uri LIKE '%researchsquare.com/article/rs-%'
@@ -29,48 +41,46 @@ WITH t_hypothesis_annotation_with_doi AS (
       WHEN annotation.uri LIKE '%researchsquare.com/article/rs-%' OR annotation.uri LIKE '%arxiv.org/abs/%'
         THEN REGEXP_EXTRACT(annotation.uri, r'v(\d+)$') 
       ELSE NULL
-    END AS source_doi_version,
-    annotation.id AS hypothesis_id,
-    annotation.created AS annotation_created_timestamp,
-  FROM `elife-data-pipeline.prod.v_hypothesis_annotation` AS annotation
-  WHERE annotation.group = 'q5X6RWJ6'
-    AND created >= '2022-09-01' -- to ignore any public reviews posted before Sep 2022
+    END AS source_doi_version
+  FROM t_hypothesis_annotation_with_cleaned_uri AS annotation
 ),
 
 t_manual_osf_preprint_match AS (
   SELECT
-    * EXCEPT(rn)
+    * EXCEPT(rn),
+    DENSE_RANK() OVER (PARTITION BY osf_preprint_url ORDER BY preprint_doi_version) AS osf_preprint_version_rank
   FROM
   (
     SELECT 
       *,
-      ROW_NUMBER() OVER(PARTITION BY manuscript_id ORDER BY imported_timestamp DESC) AS rn
+      ROW_NUMBER() OVER(PARTITION BY long_manuscript_identifier ORDER BY imported_timestamp DESC) AS rn
     FROM `elife-data-pipeline.prod.unmatched_manuscripts`
     WHERE osf_preprint_url IS NOT NULL
   )
   WHERE rn=1
 ),
 
-t_hypothesis_with_temp_filtered_osf_annotations AS (
-  SELECT
-    *
+t_hypothesis_annotation_for_osf_preprints AS (
+  SELECT 
+    *,
+    DENSE_RANK() OVER (PARTITION BY uri ORDER BY annotation_created_date DESC) AS osf_preprint_version_rank
   FROM t_hypothesis_annotation_with_doi
-  WHERE (
-    (uri LIKE 'https://psyarxiv.com/%' AND annotation_created_timestamp < '2023-07-01') -- filter for revisions
-    OR
-    uri NOT LIKE 'https://psyarxiv.com/%'
-  )
+  WHERE uri LIKE 'https://psyarxiv.com/%'
 ),
 
 t_hypothesis_annotation_with_osf_doi AS (
   SELECT 
     hypothesis.* EXCEPT(source_doi, source_doi_without_version, source_doi_version),
-    IFNULL(source_doi, osf.preprint_doi) AS source_doi,
-    IFNULL(source_doi_without_version, osf.preprint_doi) AS source_doi_without_version,
-    IFNULL(source_doi_version, osf.preprint_doi_version) AS source_doi_version,
-  FROM t_hypothesis_with_temp_filtered_osf_annotations AS hypothesis
+    IFNULL(hypothesis.source_doi, osf.preprint_doi) AS source_doi,
+    IFNULL(hypothesis.source_doi_without_version, osf.preprint_doi) AS source_doi_without_version,
+    IFNULL(hypothesis.source_doi_version, osf.preprint_doi_version) AS source_doi_version,
+    osf_hypothesis.osf_preprint_version_rank
+  FROM t_hypothesis_annotation_with_doi AS hypothesis
+  LEFT JOIN t_hypothesis_annotation_for_osf_preprints AS osf_hypothesis
+    ON hypothesis.hypothesis_id = osf_hypothesis.hypothesis_id
   LEFT JOIN t_manual_osf_preprint_match AS osf
-    ON hypothesis.uri = osf.osf_preprint_url
+    ON osf_hypothesis.uri = osf.osf_preprint_url
+    AND osf_hypothesis.osf_preprint_version_rank = osf.osf_preprint_version_rank
 ),
 
 t_distinct_hypothesis_uri_doi_version AS (
@@ -127,6 +137,10 @@ t_hypothesis_annotation_with_evaluation_suffix AS (
   FROM t_hypothesis_annotation_with_osf_doi AS annotation
   INNER JOIN t_hypothesis_with_source_doi_rank AS doi_rank
     ON annotation.uri = doi_rank.uri
+    AND (
+      annotation.osf_preprint_version_rank IS NULL
+      OR annotation.osf_preprint_version_rank = doi_rank.source_doi_rank
+    )
   INNER JOIN t_distinct_hypothesis_with_evaluation_suffix_number AS t_evaluation_suffix
     ON annotation.uri = t_evaluation_suffix.uri 
     AND annotation.hypothesis_id = t_evaluation_suffix.hypothesis_id
