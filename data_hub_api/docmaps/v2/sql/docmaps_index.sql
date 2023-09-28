@@ -247,7 +247,9 @@ t_result_with_preprint_version AS (
       ELSE 
         elife_doi
     END AS elife_doi,
-     
+
+    CAST(result.position_in_overall_stage AS STRING) AS elife_doi_version_str,
+
     CASE
       WHEN manual_preprint_version IS NOT NULL
         THEN manual_preprint_version
@@ -317,9 +319,9 @@ t_preprint_published_at_date_and_meca_path AS (
       )
         THEN CONCAT(
           's3://prod-elife-epp-meca/',
-          result.preprint_doi_without_version,
+          result.manuscript_id,
           '-v',
-          result.preprint_version,
+          elife_doi_version_str,
           '-meca.zip'
         )
       ELSE NULL
@@ -372,7 +374,7 @@ t_result_with_sorted_manuscript_versions_array AS (
         result.has_evaluations,
         result.manuscript_title,
         result.preprint_url,
-        CAST(result.position_in_overall_stage AS STRING) AS elife_doi_version_str,
+        result.elife_doi_version_str,
         result.preprint_url_source,
         result.preprint_doi,
         result.preprint_version,
