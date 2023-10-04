@@ -317,13 +317,26 @@ t_manual_preprint_match_for_published_date AS (
   WHERE rn=1
 ),
 
+t_europepmc_preprint_publication_date AS (
+  SELECT
+    response.doi,
+    response.firstPublicationDate,
+    url_list.url
+  FROM `elife-data-pipeline.prod.v_latest_europepmc_preprint_servers_response`  AS response
+  LEFT JOIN UNNEST(fullTextUrlList.fullTextUrl) AS url_list
+  -- This filter prevents date inaccuracies due to missing version numbers in OSF and arXiv URLs
+  WHERE LOWER(url_list.url) NOT LIKE '%/osf.io/%'
+    AND LOWER(url_list.url) NOT LIKE '%arxiv.org%'
+),
+
 t_preprint_published_at_date_and_meca_path AS (
   SELECT 
     result.manuscript_id,
     result.long_manuscript_identifier,
     COALESCE(
       biorxiv_medrxiv_api_response.date,
-      CAST(manual_preprint_published_date.preprint_published_at_date AS DATE)
+      CAST(manual_preprint_published_date.preprint_published_at_date AS DATE),
+      europepmc_pub_date.firstPublicationDate
     ) AS preprint_published_at_date,
     CASE
       WHEN meca_path_update.meca_path IS NOT NULL
@@ -355,6 +368,8 @@ t_preprint_published_at_date_and_meca_path AS (
     AND CAST(tdm.tdm_ms_version AS STRING) = result.preprint_version
   LEFT JOIN t_manual_preprint_match_for_published_date AS manual_preprint_published_date
     ON result.long_manuscript_identifier = manual_preprint_published_date.long_manuscript_identifier
+  LEFT JOIN t_europepmc_preprint_publication_date AS europepmc_pub_date
+    ON result.preprint_doi = europepmc_pub_date.doi
 ),
 
 t_rp_publication_date AS (
