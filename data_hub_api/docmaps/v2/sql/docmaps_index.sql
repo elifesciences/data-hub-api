@@ -302,11 +302,30 @@ t_rp_meca_path_update AS (
   WHERE rn=1
 ),
 
+t_manual_preprint_match_for_published_date AS (
+  SELECT
+    * EXCEPT(rn),
+  FROM
+  (
+    SELECT 
+      *,
+      ROW_NUMBER() OVER(PARTITION BY long_manuscript_identifier ORDER BY imported_timestamp DESC) AS rn
+    FROM `elife-data-pipeline.prod.unmatched_manuscripts`
+    WHERE preprint_published_at_date IS NOT NULL 
+      AND preprint_published_at_date != ''
+  )
+  WHERE rn=1
+),
+
 t_preprint_published_at_date_and_meca_path AS (
   SELECT 
     result.manuscript_id,
     result.long_manuscript_identifier,
-    biorxiv_medrxiv_api_response.date AS preprint_published_at_date,
+    COALESCE(
+      biorxiv_medrxiv_api_response.date,
+      CAST(manual_preprint_published_date.preprint_published_at_date AS DATE)
+    ) 
+    AS preprint_published_at_date,
     CASE
       WHEN meca_path_update.meca_path IS NOT NULL
         THEN meca_path_update.meca_path
@@ -335,6 +354,8 @@ t_preprint_published_at_date_and_meca_path AS (
   LEFT JOIN t_latest_biorxiv_medrxiv_tdm_path_by_doi_and_version AS tdm
     ON tdm.tdm_doi = result.preprint_doi
     AND CAST(tdm.tdm_ms_version AS STRING) = result.preprint_version
+  LEFT JOIN t_manual_preprint_match_for_published_date AS manual_preprint_published_date
+    ON result.long_manuscript_identifier = manual_preprint_published_date.long_manuscript_identifier
 ),
 
 t_rp_publication_date AS (
