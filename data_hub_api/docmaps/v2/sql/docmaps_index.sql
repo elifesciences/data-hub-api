@@ -320,8 +320,7 @@ t_manual_preprint_match_for_published_date AS (
 t_europepmc_preprint_publication_date AS (
   SELECT
     response.doi,
-    response.firstPublicationDate,
-    url_list.url
+    response.firstPublicationDate
   FROM `elife-data-pipeline.prod.v_latest_europepmc_preprint_servers_response`  AS response
   LEFT JOIN UNNEST(fullTextUrlList.fullTextUrl) AS url_list
   -- This filter prevents date inaccuracies due to missing version numbers in OSF and arXiv DOIs
