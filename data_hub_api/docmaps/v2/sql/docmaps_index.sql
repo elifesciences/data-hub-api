@@ -324,7 +324,7 @@ t_europepmc_preprint_publication_date AS (
     url_list.url
   FROM `elife-data-pipeline.prod.v_latest_europepmc_preprint_servers_response`  AS response
   LEFT JOIN UNNEST(fullTextUrlList.fullTextUrl) AS url_list
-  -- This filter prevents date inaccuracies due to missing version numbers in OSF and arXiv URLs
+  -- This filter prevents date inaccuracies due to missing version numbers in OSF and arXiv DOIs
   WHERE LOWER(url_list.url) NOT LIKE '%/osf.io/%'
     AND LOWER(url_list.url) NOT LIKE '%arxiv.org%'
 ),
