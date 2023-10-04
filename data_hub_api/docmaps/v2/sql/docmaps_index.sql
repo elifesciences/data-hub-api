@@ -324,8 +324,7 @@ t_preprint_published_at_date_and_meca_path AS (
     COALESCE(
       biorxiv_medrxiv_api_response.date,
       CAST(manual_preprint_published_date.preprint_published_at_date AS DATE)
-    ) 
-    AS preprint_published_at_date,
+    ) AS preprint_published_at_date,
     CASE
       WHEN meca_path_update.meca_path IS NOT NULL
         THEN meca_path_update.meca_path
