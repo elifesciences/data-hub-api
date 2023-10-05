@@ -314,7 +314,7 @@ t_manual_preprint_match_for_published_date AS (
     WHERE preprint_published_at_date IS NOT NULL 
       AND preprint_published_at_date != ''
   )
-  WHERE rn=1
+  WHERE rn = 1
 ),
 
 t_europepmc_preprint_publication_date AS (
