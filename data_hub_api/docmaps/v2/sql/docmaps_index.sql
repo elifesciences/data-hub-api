@@ -320,12 +320,21 @@ t_manual_preprint_match_for_published_date AS (
 t_europepmc_preprint_publication_date AS (
   SELECT
     response.doi,
-    response.firstPublicationDate
+    response.firstPublicationDate,
+    CASE
+      WHEN url_list.url LIKE '%10.1101/%v%'
+        THEN REGEXP_EXTRACT(url_list.url, r'10\.\d{3,}.*v([1-9])')
+      WHEN url_list.url LIKE '%researchsquare.com/article/rs-%v%' OR url_list.url LIKE '%arxiv.org/abs/%v%'
+        THEN REGEXP_EXTRACT(url_list.url, r'v(\d+)$')
+      WHEN REGEXP_CONTAINS(doi, r'(.*v\d+)$')
+        THEN REGEXP_EXTRACT(doi, r'v(\d+)$')
+      ELSE NULL
+    END AS doi_version,
   FROM `elife-data-pipeline.prod.v_latest_europepmc_preprint_servers_response`  AS response
   LEFT JOIN UNNEST(fullTextUrlList.fullTextUrl) AS url_list
-  -- This filter prevents date inaccuracies due to missing version numbers in OSF and arXiv DOIs
-  WHERE LOWER(url_list.url) NOT LIKE '%/osf.io/%'
-    AND LOWER(url_list.url) NOT LIKE '%arxiv.org%'
+  -- This filter prevents date inaccuracies due to missing version numbers in OSF and arXiv URLs
+  WHERE LOWER(doi) NOT LIKE '%/osf.io/%'
+    AND LOWER(doi) NOT LIKE '%/arxiv.%'
 ),
 
 t_preprint_published_at_date_and_meca_path AS (
@@ -369,6 +378,7 @@ t_preprint_published_at_date_and_meca_path AS (
     ON result.long_manuscript_identifier = manual_preprint_published_date.long_manuscript_identifier
   LEFT JOIN t_europepmc_preprint_publication_date AS europepmc_pub_date
     ON result.preprint_doi = europepmc_pub_date.doi
+    AND result.preprint_version = europepmc_pub_date.doi_version
 ),
 
 t_rp_publication_date AS (
