@@ -323,7 +323,6 @@ t_europepmc_preprint_publication_date AS (
     response.firstPublicationDate,
     REGEXP_EXTRACT(doi, r'v(\d+)$') AS doi_version,
   FROM `elife-data-pipeline.prod.v_latest_europepmc_preprint_servers_response`  AS response
-  -- This filter prevents date inaccuracies due to missing version numbers in OSF and arXiv URLs
   WHERE REGEXP_EXTRACT(doi, r'v(\d+)$') IS NOT NULL
 ),
 
