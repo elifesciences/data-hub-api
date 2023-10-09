@@ -24,12 +24,13 @@ LOGGER = logging.getLogger(__name__)
 class DocmapsProvider:
     def __init__(
         self,
+        sql_query_name: str,
         gcp_project_name: str = 'elife-data-pipeline',
         query_results_cache: Optional[SingleObjectCache[Sequence[dict]]] = None,
     ) -> None:
         self.gcp_project_name = gcp_project_name
         self.docmaps_index_query = (
-            Path(get_sql_path('docmaps_index.sql')).read_text(encoding='utf-8')
+            Path(get_sql_path(sql_query_name)).read_text(encoding='utf-8')
         )
         if query_results_cache is None:
             query_results_cache = DummySingleObjectCache[Sequence[dict]]()
