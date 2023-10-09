@@ -27,7 +27,7 @@ class TestEnhancedPreprintsDocmapsProvider:
         iter_dict_from_bq_query_mock.return_value = iter([
             DOCMAPS_QUERY_RESULT_ITEM_1
         ])
-        docmaps_index = DocmapsProvider(sql_query_name='docmaps_index.sql').get_docmaps_index()
+        docmaps_index = DocmapsProvider().get_docmaps_index()
         assert docmaps_index['docmaps'] == [
             get_docmap_item_for_query_result_item(cast(ApiInput, DOCMAPS_QUERY_RESULT_ITEM_1))
         ]
@@ -40,7 +40,6 @@ class TestEnhancedPreprintsDocmapsProvider:
             DOCMAPS_QUERY_RESULT_ITEM_1
         ]
         docmaps_provider = DocmapsProvider(
-            sql_query_name='docmaps_index.sql',
             query_results_cache=InMemorySingleObjectCache(max_age_in_seconds=10)
         )
         docmaps_provider.get_docmaps_index()
