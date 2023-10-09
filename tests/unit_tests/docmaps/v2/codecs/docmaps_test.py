@@ -1,13 +1,11 @@
 from typing import Iterable
 import urllib
 
-import pytest
 from data_hub_api.docmaps.v2.codecs.elife_manuscript import (
     get_docmap_elife_manuscript_doi_assertion_item,
     get_docmap_elife_manuscript_input,
     get_docmap_elife_manuscript_output,
-    get_docmap_elife_manuscript_output_for_published_step,
-    get_elife_manuscript_version_doi
+    get_docmap_elife_manuscript_output_for_published_step
 )
 from data_hub_api.docmaps.v2.codecs.evaluation import (
     DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY,
@@ -27,15 +25,18 @@ from data_hub_api.docmaps.v2.codecs.preprint import (
 )
 
 from data_hub_api.docmaps.v2.codecs.docmaps import (
-    get_docmap_actions_for_under_review_step,
-    get_docmap_actions_for_vor_published_step,
-    get_docmap_assertions_for_under_review_step,
-    get_docmap_assertions_for_vor_published_step,
     get_docmap_item_for_query_result_item,
     DOCMAPS_JSONLD_SCHEMA_URL,
     DOCMAP_ID_PREFIX,
-    generate_docmap_steps,
 )
+
+from data_hub_api.docmaps.v2.codecs.docmaps_steps import (
+    get_docmap_actions_for_under_review_step,
+    get_docmap_actions_for_vor_published_step,
+    get_docmap_assertions_for_under_review_step,
+    get_docmap_assertions_for_vor_published_step
+)
+
 
 from tests.unit_tests.docmaps.v2.test_data import (
     ANNOTATION_CREATED_TIMESTAMP_1,
@@ -83,58 +84,6 @@ def get_hypothesis_ids_from_urls(hypothesis_urls: Iterable[str]) -> Iterable[str
         for hypothesis_url in hypothesis_urls
         if hypothesis_url.startswith(HYPOTHESIS_URL)
     ]
-
-
-class TestGetElifeVersionDoi:
-    def test_should_return_doi_with_version_when_the_version_defined(self):
-        elife_doi = 'elife_doi_1'
-        elife_doi_version_str = 'elife_doi_version_str_1'
-        actual_result = get_elife_manuscript_version_doi(
-            elife_doi=elife_doi,
-            elife_doi_version_str=elife_doi_version_str
-        )
-        assert actual_result == 'elife_doi_1.elife_doi_version_str_1'
-
-
-class TestGenerateDocmapSteps:
-    def test_should_return_empty_dict_if_step_list_empty(self):
-        step_list = []
-        steps = generate_docmap_steps(step_list)
-        assert steps == {}
-
-    def test_should_return_all_step_keys_for_each_step(self):
-        step_list = [{'step_1': 1}, {'step_2': 2}, {'step_3': 3}]
-        steps = generate_docmap_steps(step_list)
-        step_key_list = list(steps.keys())
-        assert step_key_list == ['_:b0', '_:b1', '_:b2']
-
-    def test_should_not_have_next_or_previous_step_keys_when_there_is_only_one_step(self):
-        step_list = [{'step_1': 1}]
-        steps = generate_docmap_steps(step_list)
-        with pytest.raises(KeyError):
-            assert steps['_:b0']['previous-step']
-        with pytest.raises(KeyError):
-            assert steps['_:b0']['next-step']
-
-    def test_should_only_have_next_step_for_first_step_while_there_are_more_than_one_step(self):
-        step_list = [{'step_1': 1}, {'step_2': 2}]
-        steps = generate_docmap_steps(step_list)
-        assert steps['_:b0']['next-step'] == '_:b1'
-        with pytest.raises(KeyError):
-            assert steps['_:b0']['previous-step']
-
-    def test_should_have_both_next_and_previous_steps_keys_for_a_middle_step(self):
-        step_list = [{'step_1': 1}, {'step_2': 2}, {'step_3': 3}]
-        steps = generate_docmap_steps(step_list)
-        assert steps['_:b1']['next-step'] == '_:b2'
-        assert steps['_:b1']['previous-step'] == '_:b0'
-
-    def test_should_only_have_previous_step_for_latest_step(self):
-        step_list = [{'step_1': 1}, {'step_2': 2}, {'step_3': 3}]
-        steps = generate_docmap_steps(step_list)
-        assert steps['_:b2']['previous-step'] == '_:b1'
-        with pytest.raises(KeyError):
-            assert steps['_:b2']['next-step']
 
 
 class TestGetDocmapsItemForQueryResultItem:
