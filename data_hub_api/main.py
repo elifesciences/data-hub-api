@@ -5,8 +5,9 @@ from fastapi.responses import HTMLResponse
 from data_hub_api.config import ADDITIONAL_MANUSCRIPT_IDS
 from data_hub_api.docmaps.v1.api_router import create_docmaps_router as create_docmaps_router_v1
 from data_hub_api.docmaps.v2.api_router import create_docmaps_router
-from data_hub_api.docmaps.v2.kotahi_api_router import create_docmaps_router as kotahi_create_docmaps_router
-
+from data_hub_api.docmaps.v2.kotahi_api_router import (
+    create_docmaps_router as kotahi_create_docmaps_router
+)
 from data_hub_api.utils.cache import InMemorySingleObjectCache
 from data_hub_api.docmaps.v1.provider import DocmapsProviderV1
 from data_hub_api.docmaps.v2.provider import DocmapsProvider
