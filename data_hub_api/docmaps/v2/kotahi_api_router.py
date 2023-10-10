@@ -2,7 +2,7 @@ import logging
 
 from fastapi import APIRouter, HTTPException
 
-from data_hub_api.docmaps.v2.provider import DocmapsProvider
+from data_hub_api.docmaps.v2.kotahi_provider import DocmapsProvider
 
 
 LOGGER = logging.getLogger(__name__)

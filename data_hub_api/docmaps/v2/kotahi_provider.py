@@ -68,5 +68,5 @@ class DocmapsProvider:
         return list(self.iter_kotahi_docmaps_by_manuscript_id(manuscript_id))
 
     def get_kotahi_docmaps_index(self) -> dict:
-        article_docmaps_list = list(self.get_kotahi_docmaps_by_manuscript_id())
+        article_docmaps_list = list(self.iter_kotahi_docmaps_by_manuscript_id())
         return {'docmaps': article_docmaps_list}

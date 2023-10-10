@@ -4,10 +4,8 @@ from typing import Iterable
 import urllib
 from data_hub_api.docmaps.v2.codecs.docmaps_steps import (
     generate_docmap_steps,
-    get_docmaps_step_for_manuscript_published_status,
     get_docmaps_step_for_peer_reviewed_status,
     get_docmaps_step_for_revised_status,
-    get_docmaps_step_for_under_review_status,
     get_kotahi_docmaps_step_for_under_review_status,
     get_docmaps_step_for_vor_published_status
 )
@@ -38,7 +36,9 @@ def iter_docmap_steps_for_query_result_item(query_result_item: ApiInput) -> Iter
     manuscript_versions = query_result_item['manuscript_versions']
     for index, manuscript_version in enumerate(manuscript_versions):
         if not is_manuscript_vor(manuscript_version['long_manuscript_identifier']):
-            yield get_kotahi_docmaps_step_for_under_review_status(query_result_item, manuscript_version)
+            yield get_kotahi_docmaps_step_for_under_review_status(
+                query_result_item, manuscript_version
+            )
             if manuscript_version['evaluations']:
                 if manuscript_version['position_in_overall_stage'] == 1:
                     yield get_docmaps_step_for_peer_reviewed_status(
