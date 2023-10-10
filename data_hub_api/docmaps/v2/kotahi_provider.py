@@ -4,7 +4,9 @@ from time import monotonic
 from typing import Iterable, Optional, Sequence, cast
 import objsize
 
-from data_hub_api.docmaps.v2.codecs.docmaps import get_docmap_item_for_query_result_item
+from data_hub_api.docmaps.v2.codecs.kotahi_docmaps import (
+    get_kotahi_docmap_item_for_query_result_item
+)
 from data_hub_api.docmaps.v2.api_input_typing import ApiInput
 from data_hub_api.docmaps.v2.docmap_typing import Docmap
 
@@ -46,7 +48,7 @@ class DocmapsProvider:
         )
         return result
 
-    def iter_docmaps_by_manuscript_id(
+    def iter_kotahi_docmaps_by_manuscript_id(
         self,
         manuscript_id: Optional[str] = None
     ) -> Iterable[Docmap]:
@@ -60,11 +62,11 @@ class DocmapsProvider:
                 if bq_result['manuscript_id'] == manuscript_id
             ]
         for bq_result in bq_result_list:
-            yield get_docmap_item_for_query_result_item(cast(ApiInput, bq_result))
+            yield get_kotahi_docmap_item_for_query_result_item(cast(ApiInput, bq_result))
 
-    def get_docmaps_by_manuscript_id(self, manuscript_id: str) -> Sequence[Docmap]:
-        return list(self.iter_docmaps_by_manuscript_id(manuscript_id))
+    def get_kotahi_docmaps_by_manuscript_id(self, manuscript_id: str) -> Sequence[Docmap]:
+        return list(self.iter_kotahi_docmaps_by_manuscript_id(manuscript_id))
 
-    def get_docmaps_index(self) -> dict:
-        article_docmaps_list = list(self.iter_docmaps_by_manuscript_id())
+    def get_kotahi_docmaps_index(self) -> dict:
+        article_docmaps_list = list(self.get_kotahi_docmaps_by_manuscript_id())
         return {'docmaps': article_docmaps_list}

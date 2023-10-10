@@ -11,6 +11,7 @@ from data_hub_api.docmaps.v2.kotahi_api_router import (
 from data_hub_api.utils.cache import InMemorySingleObjectCache
 from data_hub_api.docmaps.v1.provider import DocmapsProviderV1
 from data_hub_api.docmaps.v2.provider import DocmapsProvider
+from data_hub_api.docmaps.v2.kotahi_provider import DocmapsProvider as KotahiDocmapsProvider
 
 
 LOGGER = logging.getLogger(__name__)
@@ -33,7 +34,7 @@ def create_app():
         query_results_cache=InMemorySingleObjectCache(max_age_in_seconds=max_age_in_seconds)
     )
 
-    kotahi_docmaps_provider = DocmapsProvider(
+    kotahi_docmaps_provider = KotahiDocmapsProvider(
         sql_query_name='kotahi_docmaps_index.sql',
         query_results_cache=InMemorySingleObjectCache(max_age_in_seconds=max_age_in_seconds)
     )

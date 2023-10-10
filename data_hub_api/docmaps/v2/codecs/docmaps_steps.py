@@ -16,6 +16,7 @@ from data_hub_api.docmaps.v2.codecs.evaluation import (
 from data_hub_api.docmaps.v2.codecs.preprint import (
     get_docmap_preprint_assertion_item,
     get_docmap_preprint_input,
+    get_docmap_preprint_input_with_published,
     get_docmap_preprint_input_with_published_and_meca_path
 )
 from data_hub_api.docmaps.v2.api_input_typing import ApiInput, ApiManuscriptVersionInput
@@ -92,6 +93,25 @@ def get_docmaps_step_for_under_review_status(
             manuscript_version=manuscript_version
         ),
         'inputs': [get_docmap_preprint_input_with_published_and_meca_path(
+            manuscript_version=manuscript_version
+        )]
+    }
+
+
+def get_kotahi_docmaps_step_for_under_review_status(
+    query_result_item: ApiInput,
+    manuscript_version: ApiManuscriptVersionInput
+):
+    return {
+        'actions': get_docmap_actions_for_under_review_step(
+            query_result_item=query_result_item,
+            manuscript_version=manuscript_version
+        ),
+        'assertions': get_docmap_assertions_for_under_review_step(
+            query_result_item=query_result_item,
+            manuscript_version=manuscript_version
+        ),
+        'inputs': [get_docmap_preprint_input_with_published(
             manuscript_version=manuscript_version
         )]
     }

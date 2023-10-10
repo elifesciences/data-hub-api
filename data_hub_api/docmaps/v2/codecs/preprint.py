@@ -19,6 +19,19 @@ def get_docmap_preprint_input(
     }
 
 
+def get_docmap_preprint_input_with_published(
+    manuscript_version: ApiManuscriptVersionInput
+) -> DocmapPreprintInputWithPublishedMecaPath:
+    return {
+        **get_docmap_preprint_input(manuscript_version),  # type: ignore
+        'published': (
+            manuscript_version['preprint_published_at_date'].isoformat()
+            if manuscript_version['preprint_published_at_date']
+            else None
+        )
+    }
+
+
 def get_meca_path_content(meca_path: str) -> DocmapContent:
     return {
         'type': 'computer-file',
@@ -30,12 +43,7 @@ def get_docmap_preprint_input_with_published_and_meca_path(
     manuscript_version: ApiManuscriptVersionInput
 ) -> DocmapPreprintInputWithPublishedMecaPath:
     return {
-        **get_docmap_preprint_input(manuscript_version),  # type: ignore
-        'published': (
-            manuscript_version['preprint_published_at_date'].isoformat()
-            if manuscript_version['preprint_published_at_date']
-            else None
-        ),
+        **get_docmap_preprint_input_with_published(manuscript_version),  # type: ignore
         'content': (
             [get_meca_path_content(manuscript_version['meca_path'])]
             if manuscript_version['meca_path']

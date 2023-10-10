@@ -15,11 +15,11 @@ def create_docmaps_router(
 
     @router.get("/v1/index")
     def get_kotahi_docmaps_index():
-        return docmaps_provider.get_docmaps_index()
+        return docmaps_provider.get_kotahi_docmaps_index()
 
     @router.get("/v1/by-publisher/elife/get-by-manuscript-id")
     def get_kotahi_docmaps_by_manuscript_id_by_publisher_elife(manuscript_id: str):
-        docmaps = docmaps_provider.get_docmaps_by_manuscript_id(manuscript_id)
+        docmaps = docmaps_provider.get_kotahi_docmaps_by_manuscript_id(manuscript_id)
         if not docmaps:
             raise HTTPException(
                 status_code=404,
