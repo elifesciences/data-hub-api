@@ -30,7 +30,7 @@ class TestGetEnhancedPreprintsDocmapsIndex:
         docmaps_index = [{'docmaps': [{'id': 'docmap_1'}, {'id': 'docmap_2'}]}]
         docmaps_provider_mock.get_docmaps_index.return_value = docmaps_index
         client = create_test_client(docmaps_provider_mock)
-        response = client.get('/v2/index')
+        response = client.get('/v1/index')
         assert response.json() == docmaps_index
 
     def test_should_return_not_available_message_for_invalid_manuscript_id_by_elife(
@@ -40,7 +40,7 @@ class TestGetEnhancedPreprintsDocmapsIndex:
         docmaps_provider_mock.get_docmaps_by_manuscript_id.return_value = []
         client = create_test_client(docmaps_provider_mock)
         response = client.get(
-            '/v2/by-publisher/elife/get-by-manuscript-id',
+            '/v1/by-publisher/elife/get-by-manuscript-id',
             params={'manuscript_id': MANUSCRIPT_ID}
         )
         assert response.status_code == 404
@@ -58,7 +58,7 @@ class TestGetEnhancedPreprintsDocmapsIndex:
         )
         client = create_test_client(docmaps_provider_mock)
         response = client.get(
-            '/v2/by-publisher/elife/get-by-manuscript-id',
+            '/v1/by-publisher/elife/get-by-manuscript-id',
             params={'manuscript_id': MANUSCRIPT_ID}
         )
         docmaps_provider_mock.get_docmaps_by_manuscript_id.assert_called_with(
