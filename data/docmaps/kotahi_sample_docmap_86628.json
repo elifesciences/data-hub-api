@@ -79,7 +79,7 @@
               "content": [
                 {
                   "type": "web-page",
-                  "url": "TODO"
+                  "url": "https://data-hub-api.elifesciences.org/kotahi/docmaps/v1/evaluation/get-by-evaluation-id?evaluation_id=id_1"
                 }
               ]
             }
@@ -125,7 +125,7 @@
               "content": [
                 {
                   "type": "web-page",
-                  "url": "TODO"
+                  "url": "https://data-hub-api.elifesciences.org/kotahi/docmaps/v1/evaluation/get-by-evaluation-id?evaluation_id=id_2"
                 }
               ]
             }
@@ -209,7 +209,7 @@
               "content": [
                 {
                   "type": "web-page",
-                  "url": "TODO"
+                  "url": "https://data-hub-api.elifesciences.org/kotahi/docmaps/v1/evaluation/get-by-evaluation-id?evaluation_id=id_3"
                 }
               ]
             }
@@ -231,7 +231,7 @@
               "content": [
                 {
                   "type": "web-page",
-                  "url": "TODO"
+                  "url": "https://data-hub-api.elifesciences.org/kotahi/docmaps/v1/evaluation/get-by-evaluation-id?evaluation_id=id_4"
                 }
               ]
             }
@@ -277,7 +277,7 @@
               "content": [
                 {
                   "type": "web-page",
-                  "url": "TODO"
+                  "url": "https://data-hub-api.elifesciences.org/kotahi/docmaps/v1/evaluation/get-by-evaluation-id?evaluation_id=id_5"
                 }
               ]
             }
