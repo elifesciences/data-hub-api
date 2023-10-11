@@ -24,15 +24,11 @@ from data_hub_api.kotahi_docmaps.v1.codecs.evaluation import (
     get_related_organization_detail
 )
 from tests.unit_tests.kotahi_docmaps.v1.test_data import (
-    ANNOTATION_CREATED_TIMESTAMP_1,
     DOCMAPS_QUERY_RESULT_ITEM_1,
-    DOI_1,
     EDITOR_DETAIL_1,
     ELIFE_DOI_1,
     ELIFE_DOI_VERSION_STR_1,
     EVALUATION_SUFFIX_1,
-    HYPOTHESIS_ID_1,
-    LICENSE_1,
     MANUSCRIPT_VERSION_1,
     SENIOR_EDITOR_DETAIL_1
 )
@@ -119,55 +115,24 @@ class TestGetDocmapEvaluationOutputContentUrl:
 
 class TestGetDocmapEvaluationOutputContent:
     def test_should_populate_evaluation_output_content(self):
-        hypothesis_id = 'hypothesis_id_1'
-        result = get_docmap_evaluation_output_content(HYPOTHESIS_URL, hypothesis_id)
+        result = get_docmap_evaluation_output_content()
         assert result == {
             'type': 'web-page',
-            'url': 'https://hypothes.is/a/hypothesis_id_1'
+            'url': 'TODO'
         }
 
 
 class TestGetDocmapEvaluationOutput:
     def test_should_populate_evaluation_output(self):
         result = get_docmap_evaluation_output(
-            query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1,
-            manuscript_version=MANUSCRIPT_VERSION_1,
-            hypothesis_id=HYPOTHESIS_ID_1,
-            evaluation_suffix=EVALUATION_SUFFIX_1,
-            annotation_created_timestamp=ANNOTATION_CREATED_TIMESTAMP_1,
             docmap_evaluation_type='docmap_evaluation_type_1'
-        )
-        elife_evaluation_doi = get_elife_evaluation_doi(
-            elife_doi=ELIFE_DOI_1,
-            elife_doi_version_str=ELIFE_DOI_VERSION_STR_1,
-            evaluation_suffix=EVALUATION_SUFFIX_1
         )
         assert result == {
             'type': 'docmap_evaluation_type_1',
-            'published': ANNOTATION_CREATED_TIMESTAMP_1.isoformat(),
-            'doi': elife_evaluation_doi,
-            'license': LICENSE_1,
-            'url': get_elife_evaluation_doi_url(
-                elife_evaluation_doi=elife_evaluation_doi,
-            ),
             'content': [
                 {
                     'type': 'web-page',
-                    'url': f'{HYPOTHESIS_URL}{HYPOTHESIS_ID_1}'
-                },
-                {
-                    'type': 'web-page',
-                    'url': (
-                        f'{SCIETY_ARTICLES_ACTIVITY_URL}'
-                        f'{DOI_1}#hypothesis:{HYPOTHESIS_ID_1}'
-                    )
-                },
-                {
-                    'type': 'web-page',
-                    'url': (
-                        f'{SCIETY_ARTICLES_EVALUATIONS_URL}'
-                        f'{HYPOTHESIS_ID_1}/content'
-                    )
+                    'url': 'TODO'
                 }
             ]
         }

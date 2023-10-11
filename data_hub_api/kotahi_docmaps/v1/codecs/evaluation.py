@@ -85,56 +85,19 @@ def get_docmap_evaluation_output_content_url(
     return base_url + hypothesis_id + '/content'
 
 
-def get_docmap_evaluation_output_content(
-    base_url: str,
-    hypothesis_id: str,
-    preprint_doi: Optional[str] = None
-) -> DocmapContent:
+def get_docmap_evaluation_output_content() -> DocmapContent:
     return {
         'type': 'web-page',
-        'url': get_docmap_evaluation_output_content_url(
-            base_url=base_url,
-            hypothesis_id=hypothesis_id,
-            preprint_doi=preprint_doi
-        )
+        'url': 'TODO'
     }
 
 
 def get_docmap_evaluation_output(
-    query_result_item: ApiInput,
-    manuscript_version: ApiManuscriptVersionInput,
-    hypothesis_id: str,
-    evaluation_suffix: str,
-    annotation_created_timestamp: datetime,
     docmap_evaluation_type: str
 ) -> DocmapEvaluationOutput:
-    preprint_doi = manuscript_version['preprint_doi']
-    elife_evaluation_doi = get_elife_evaluation_doi(
-        elife_doi_version_str=manuscript_version['elife_doi_version_str'],
-        elife_doi=query_result_item['elife_doi'],
-        evaluation_suffix=evaluation_suffix
-    )
     return {
         'type': docmap_evaluation_type,
-        'published': annotation_created_timestamp.isoformat(),
-        'doi': elife_evaluation_doi,
-        'license': query_result_item['license'],
-        'url': get_elife_evaluation_doi_url(elife_evaluation_doi=elife_evaluation_doi),
-        'content': [
-            get_docmap_evaluation_output_content(
-                base_url=HYPOTHESIS_URL,
-                hypothesis_id=hypothesis_id
-            ),
-            get_docmap_evaluation_output_content(
-                base_url=SCIETY_ARTICLES_ACTIVITY_URL,
-                hypothesis_id=hypothesis_id,
-                preprint_doi=preprint_doi
-            ),
-            get_docmap_evaluation_output_content(
-                base_url=SCIETY_ARTICLES_EVALUATIONS_URL,
-                hypothesis_id=hypothesis_id
-            )
-        ]
+        'content': [get_docmap_evaluation_output_content()]
     }
 
 
@@ -277,11 +240,6 @@ def get_docmap_actions_for_evaluations(
         ),
         'outputs': [
             get_docmap_evaluation_output(
-                query_result_item=query_result_item,
-                manuscript_version=manuscript_version,
-                hypothesis_id=hypothesis_id,
-                annotation_created_timestamp=annotation_created_timestamp,
-                evaluation_suffix=evaluation_suffix,
                 docmap_evaluation_type=docmap_evaluation_type
             )
         ]

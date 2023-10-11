@@ -1,4 +1,3 @@
-from typing import Iterable
 import urllib
 
 import pytest
@@ -12,7 +11,6 @@ from data_hub_api.kotahi_docmaps.v1.codecs.evaluation import (
     DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY,
     DOCMAP_EVALUATION_TYPE_FOR_REPLY,
     DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE,
-    HYPOTHESIS_URL,
     get_docmap_evaluation_output,
     get_docmap_evaluation_participants_for_evalution_summary_type,
     get_docmap_evaluation_participants_for_review_article_type
@@ -36,7 +34,6 @@ from data_hub_api.kotahi_docmaps.v1.codecs.docmaps import (
 )
 
 from tests.unit_tests.docmaps.v2.test_data import (
-    ANNOTATION_CREATED_TIMESTAMP_1,
     ANNOTATION_CREATED_TIMESTAMP_2,
     ANNOTATION_CREATED_TIMESTAMP_3,
     DOCMAPS_QUERY_RESULT_EVALUATION_1,
@@ -44,12 +41,9 @@ from tests.unit_tests.docmaps.v2.test_data import (
     DOCMAPS_QUERY_RESULT_ITEM_2,
     DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS,
     DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSION,
-    DOI_1,
     EDITOR_DETAIL_1,
-    EVALUATION_SUFFIX_1,
     EVALUATION_SUFFIX_2,
     EVALUATION_SUFFIX_3,
-    HYPOTHESIS_ID_1,
     HYPOTHESIS_ID_2,
     HYPOTHESIS_ID_3,
     MANUSCRIPT_VERSION_1,
@@ -57,30 +51,9 @@ from tests.unit_tests.docmaps.v2.test_data import (
     MANUSCRIPT_VERSION_WITH_EVALUATIONS_1,
     MANUSCRIPT_VERSION_WITH_EVALUATIONS_2,
     MANUSCRIPT_VOR_VERSION_1,
-    PREPRINT_LINK_PREFIX,
-    PREPRINT_VERSION_1,
-    PREPRINT_VERSION_2,
     PUBLISHER_DICT_1,
     SENIOR_EDITOR_DETAIL_1
 )
-
-
-def get_hypothesis_urls_from_step_dict(step_dict: dict) -> Iterable[str]:
-    return [
-        content['url']
-        for action in step_dict['actions']
-        for output in action['outputs']
-        for content in output['content']
-        if content['url'].startswith(HYPOTHESIS_URL)
-    ]
-
-
-def get_hypothesis_ids_from_urls(hypothesis_urls: Iterable[str]) -> Iterable[str]:
-    return [
-        hypothesis_url[len(HYPOTHESIS_URL):]
-        for hypothesis_url in hypothesis_urls
-        if hypothesis_url.startswith(HYPOTHESIS_URL)
-    ]
 
 
 class TestGetElifeVersionDoi:
@@ -219,50 +192,6 @@ class TestGetDocmapsItemForQueryResultItem:
             get_docmap_preprint_input(manuscript_version=MANUSCRIPT_VERSION_1)
         ]
 
-    def test_should_filter_evaluations_by_preprint_link(self):
-        expected_hypothesis_ids_of_first_version = {HYPOTHESIS_ID_1, HYPOTHESIS_ID_2}
-        evaluations_of_first_version = [{
-            **DOCMAPS_QUERY_RESULT_EVALUATION_1,
-            'hypothesis_id': HYPOTHESIS_ID_1,
-            'tags': ['PeerReview'],
-            'uri': f'{PREPRINT_LINK_PREFIX}{DOI_1}v{PREPRINT_VERSION_1}',
-            'source_version': PREPRINT_VERSION_1,
-            'evaluation_suffix': EVALUATION_SUFFIX_1
-        }, {
-            **DOCMAPS_QUERY_RESULT_EVALUATION_1,
-            'hypothesis_id': HYPOTHESIS_ID_2,
-            'tags': ['PeerReview'],
-            'uri': f'{PREPRINT_LINK_PREFIX}{DOI_1}v{PREPRINT_VERSION_1}',
-            'source_version': PREPRINT_VERSION_1,
-            'evaluation_suffix': EVALUATION_SUFFIX_2
-        }]
-        evaluations_of_other_version = [{
-            **DOCMAPS_QUERY_RESULT_EVALUATION_1,
-            'hypothesis_id': HYPOTHESIS_ID_3,
-            'tags': ['PeerReview'],
-            'uri': f'{PREPRINT_LINK_PREFIX}{DOI_1}v{PREPRINT_VERSION_2}',
-            'source_version': PREPRINT_VERSION_2,
-            'evaluation_suffix': EVALUATION_SUFFIX_1
-        }]
-        docmaps_item = get_docmap_item_for_query_result_item({
-            **DOCMAPS_QUERY_RESULT_ITEM_1,
-            'manuscript_versions': [{
-                **MANUSCRIPT_VERSION_1,
-                'evaluations': (
-                    evaluations_of_first_version
-                    + evaluations_of_other_version
-                )
-            }]
-        })
-        peer_reviewed_step = docmaps_item['steps']['_:b1']
-        assert peer_reviewed_step['inputs'] == [
-            get_docmap_preprint_input(manuscript_version=MANUSCRIPT_VERSION_1)
-        ]
-        actual_hypothesis_ids = set(get_hypothesis_ids_from_urls(
-            get_hypothesis_urls_from_step_dict(peer_reviewed_step)
-        ))
-        assert actual_hypothesis_ids == expected_hypothesis_ids_of_first_version
-
     def test_should_not_populate_actions_peer_reviewed_step_if_tags_are_empty(self):
         query_result_with_evaluation = {
             **DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS,
@@ -312,27 +241,12 @@ class TestGetDocmapsItemForQueryResultItem:
         peer_reviewed_actions = peer_reviewed_step['actions']
         assert len(peer_reviewed_actions) == 3
         assert peer_reviewed_actions[0]['outputs'][0] == get_docmap_evaluation_output(
-            query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1,
-            manuscript_version=MANUSCRIPT_VERSION_1,
-            hypothesis_id=HYPOTHESIS_ID_1,
-            evaluation_suffix=EVALUATION_SUFFIX_1,
-            annotation_created_timestamp=ANNOTATION_CREATED_TIMESTAMP_1,
             docmap_evaluation_type=DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE
         )
         assert peer_reviewed_actions[1]['outputs'][0] == get_docmap_evaluation_output(
-            query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1,
-            manuscript_version=MANUSCRIPT_VERSION_1,
-            hypothesis_id=HYPOTHESIS_ID_2,
-            evaluation_suffix=EVALUATION_SUFFIX_2,
-            annotation_created_timestamp=ANNOTATION_CREATED_TIMESTAMP_2,
             docmap_evaluation_type=DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY
         )
         assert peer_reviewed_actions[2]['outputs'][0] == get_docmap_evaluation_output(
-            query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1,
-            manuscript_version=MANUSCRIPT_VERSION_1,
-            hypothesis_id=HYPOTHESIS_ID_3,
-            evaluation_suffix=EVALUATION_SUFFIX_3,
-            annotation_created_timestamp=ANNOTATION_CREATED_TIMESTAMP_3,
             docmap_evaluation_type=DOCMAP_EVALUATION_TYPE_FOR_REPLY
         )
 
