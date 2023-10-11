@@ -1,6 +1,6 @@
 import logging
 import ast
-from typing import Dict, Iterable, Sequence, Union, cast
+from typing import Dict, Iterable, Sequence, cast
 import urllib
 
 from data_hub_api.kotahi_docmaps.v1.codecs.elife_manuscript import (
@@ -8,12 +8,10 @@ from data_hub_api.kotahi_docmaps.v1.codecs.elife_manuscript import (
     get_docmap_elife_manuscript_doi_assertion_item_for_vor,
     get_docmap_elife_manuscript_input,
     get_docmap_elife_manuscript_output,
-    get_docmap_elife_manuscript_output_for_published_step,
     get_docmap_elife_manuscript_output_for_vor
 )
 from data_hub_api.kotahi_docmaps.v1.codecs.evaluation import (
-    iter_docmap_actions_for_evaluations,
-    iter_docmap_evaluation_input,
+    iter_docmap_actions_for_evaluations
 )
 from data_hub_api.kotahi_docmaps.v1.codecs.preprint import (
     get_docmap_preprint_assertion_item,
@@ -25,8 +23,6 @@ from data_hub_api.kotahi_docmaps.v1.api_input_typing import ApiInput, ApiManuscr
 from data_hub_api.kotahi_docmaps.v1.docmap_typing import (
     DocmapAction,
     DocmapAssertion,
-    DocmapEvaluationInput,
-    DocmapPreprintInput,
     DocmapStep,
     DocmapSteps,
     Docmap
@@ -153,68 +149,6 @@ def get_docmaps_step_for_revised_status(
     }
 
 
-def get_docmap_assertions_for_manuscript_published_step(
-    query_result_item: ApiInput,
-    manuscript_version: ApiManuscriptVersionInput
-) -> Sequence[DocmapAssertion]:
-    return [{
-        'item': get_docmap_elife_manuscript_doi_assertion_item(
-            query_result_item=query_result_item,
-            manuscript_version=manuscript_version
-        ),
-        'status': 'manuscript-published'
-    }]
-
-
-def get_docmap_actions_for_manuscript_published_step(
-    query_result_item: ApiInput,
-    manuscript_version: ApiManuscriptVersionInput
-) -> Sequence[DocmapAction]:
-    return [{
-        'participants': [],
-        'outputs': [get_docmap_elife_manuscript_output_for_published_step(
-            query_result_item=query_result_item,
-            manuscript_version=manuscript_version
-        )]
-    }]
-
-
-def get_docmap_inputs_for_manuscript_published_step(
-    query_result_item: ApiInput,
-    manuscript_version: ApiManuscriptVersionInput,
-) -> Sequence[Union[DocmapPreprintInput, DocmapEvaluationInput]]:
-    return (
-        list([get_docmap_preprint_input(
-            manuscript_version=manuscript_version
-        )])
-        +
-        list(iter_docmap_evaluation_input(
-            query_result_item=query_result_item,
-            manuscript_version=manuscript_version
-        ))
-    )
-
-
-def get_docmaps_step_for_manuscript_published_status(
-    query_result_item: ApiInput,
-    manuscript_version: ApiManuscriptVersionInput
-) -> DocmapStep:
-    return {
-        'actions': get_docmap_actions_for_manuscript_published_step(
-            query_result_item=query_result_item,
-            manuscript_version=manuscript_version
-        ),
-        'assertions': get_docmap_assertions_for_manuscript_published_step(
-            query_result_item=query_result_item,
-            manuscript_version=manuscript_version
-        ),
-        'inputs': get_docmap_inputs_for_manuscript_published_step(
-            query_result_item=query_result_item,
-            manuscript_version=manuscript_version
-        )
-    }
-
-
 def get_docmap_assertions_for_vor_published_step(
     query_result_item: ApiInput,
     manuscript_version: ApiManuscriptVersionInput
@@ -279,11 +213,6 @@ def iter_docmap_steps_for_query_result_item(query_result_item: ApiInput) -> Iter
                     )
                 else:
                     yield get_docmaps_step_for_revised_status(query_result_item, manuscript_version)
-                if manuscript_version['rp_publication_timestamp']:
-                    yield get_docmaps_step_for_manuscript_published_status(
-                        query_result_item,
-                        manuscript_version
-                    )
         else:
             previous_manuscript_version = query_result_item['manuscript_versions'][index - 1]
             assert manuscript_version['position_in_overall_stage'] > 1
