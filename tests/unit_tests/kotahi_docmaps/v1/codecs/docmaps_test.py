@@ -2,14 +2,14 @@ from typing import Iterable
 import urllib
 
 import pytest
-from data_hub_api.docmaps.v2.codecs.elife_manuscript import (
+from data_hub_api.kotahi_docmaps.v1.codecs.elife_manuscript import (
     get_docmap_elife_manuscript_doi_assertion_item,
     get_docmap_elife_manuscript_input,
     get_docmap_elife_manuscript_output,
     get_docmap_elife_manuscript_output_for_published_step,
     get_elife_manuscript_version_doi
 )
-from data_hub_api.docmaps.v2.codecs.evaluation import (
+from data_hub_api.kotahi_docmaps.v1.codecs.evaluation import (
     DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY,
     DOCMAP_EVALUATION_TYPE_FOR_REPLY,
     DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE,
@@ -20,13 +20,13 @@ from data_hub_api.docmaps.v2.codecs.evaluation import (
     get_docmap_evaluation_participants_for_review_article_type
 )
 
-from data_hub_api.docmaps.v2.codecs.preprint import (
+from data_hub_api.kotahi_docmaps.v1.codecs.preprint import (
     get_docmap_preprint_assertion_item,
     get_docmap_preprint_input,
     get_docmap_preprint_input_with_published_and_meca_path
 )
 
-from data_hub_api.docmaps.v2.codecs.docmaps import (
+from data_hub_api.kotahi_docmaps.v1.codecs.docmaps import (
     get_docmap_actions_for_under_review_step,
     get_docmap_actions_for_vor_published_step,
     get_docmap_assertions_for_under_review_step,
