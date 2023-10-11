@@ -139,8 +139,7 @@ DocmapPreprintInputWithPublishedMecaPath = TypedDict(
         'doi': str,
         'url': str,
         'versionIdentifier': str,
-        'published': timestamp_str,
-        'content': Sequence[DocmapContent]
+        'published': timestamp_str
     },
     total=False
 )

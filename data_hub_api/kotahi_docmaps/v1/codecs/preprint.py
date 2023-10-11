@@ -25,7 +25,7 @@ def get_meca_path_content(meca_path: str) -> DocmapContent:
     }
 
 
-def get_docmap_preprint_input_with_published_and_meca_path(
+def get_docmap_preprint_input_with_published(
     manuscript_version: ApiManuscriptVersionInput
 ) -> DocmapPreprintInputWithPublishedMecaPath:
     return {
@@ -33,11 +33,6 @@ def get_docmap_preprint_input_with_published_and_meca_path(
         'published': (
             manuscript_version['preprint_published_at_date'].isoformat()
             if manuscript_version['preprint_published_at_date']
-            else None
-        ),
-        'content': (
-            [get_meca_path_content(manuscript_version['meca_path'])]
-            if manuscript_version['meca_path']
             else None
         )
     }

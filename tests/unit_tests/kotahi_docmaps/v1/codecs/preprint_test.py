@@ -1,7 +1,7 @@
 from data_hub_api.kotahi_docmaps.v1.codecs.preprint import (
     get_docmap_preprint_assertion_item,
     get_docmap_preprint_input,
-    get_docmap_preprint_input_with_published_and_meca_path,
+    get_docmap_preprint_input_with_published,
     get_meca_path_content
 )
 from tests.unit_tests.kotahi_docmaps.v1.test_data import (
@@ -35,9 +35,9 @@ class TestGetMecaPathContent:
         }
 
 
-class TestGetDocmapPreprintInputWithPublishedAndMecaPath:
-    def get_docmap_preprint_input_with_published_and_meca_path(self):
-        result = get_docmap_preprint_input(
+class TestGetDocmapPreprintInputWithPublished:
+    def test_should_populate_docmap_preprint_input(self):
+        result = get_docmap_preprint_input_with_published(
             manuscript_version=MANUSCRIPT_VERSION_1
         )
         assert result == {
@@ -45,10 +45,7 @@ class TestGetDocmapPreprintInputWithPublishedAndMecaPath:
             'doi': DOI_1,
             'url': PREPRINT_LINK_1,
             'versionIdentifier': PREPRINT_VERSION_1,
-            'published': '2021-01-01',
-            'content': [
-                get_meca_path_content(MECA_PATH_1)
-            ]
+            'published': '2021-01-01'
         }
 
     def test_should_return_none_for_published_if_not_defined(self):
@@ -56,20 +53,10 @@ class TestGetDocmapPreprintInputWithPublishedAndMecaPath:
             **MANUSCRIPT_VERSION_1,
             'preprint_published_at_date': None
         }
-        result = get_docmap_preprint_input_with_published_and_meca_path(
+        result = get_docmap_preprint_input_with_published(
             manuscript_version=manuscript_version
         )
         assert not result['published']
-
-    def test_should_return_none_for_meca_path_content_if_not_defined(self):
-        manuscript_version = {
-            **MANUSCRIPT_VERSION_1,
-            'meca_path': None
-        }
-        result = get_docmap_preprint_input_with_published_and_meca_path(
-            manuscript_version=manuscript_version
-        )
-        assert not result['content']
 
 
 class TestGetDocmapPreprintAssertionItem:
