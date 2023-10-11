@@ -36,8 +36,8 @@ class TestGetMecaPathContent:
 
 
 class TestGetDocmapPreprintInputWithPublishedAndMecaPath:
-    def get_docmap_preprint_input_with_published_and_meca_path(self):
-        result = get_docmap_preprint_input(
+    def test_should_populate_preprint_input_with_published_and_meca_path(self):
+        result = get_docmap_preprint_input_with_published_and_meca_path(
             manuscript_version=MANUSCRIPT_VERSION_1
         )
         assert result == {
