@@ -67,18 +67,6 @@ DocmapPublishedElifeManuscriptOutput = TypedDict(
     }
 )
 
-
-DocmapElifeManuscriptVorOutput = TypedDict(
-    'DocmapElifeManuscriptVorOutput',
-    {
-        'type': str,
-        'doi': str,
-        'published': Optional[date_str],
-        'url': str,
-        'content': Sequence[DocmapContent]
-    }
-)
-
 DocmapAnonymousActor = TypedDict(
     'DocmapAnonymousActor',
     {
@@ -174,8 +162,7 @@ DocmapAction = TypedDict(
         'outputs': Sequence[
             Union[
                 DocmapElifeManuscriptOutput,
-                DocmapEvaluationOutput,
-                DocmapElifeManuscriptVorOutput
+                DocmapEvaluationOutput
             ]
         ]
     }

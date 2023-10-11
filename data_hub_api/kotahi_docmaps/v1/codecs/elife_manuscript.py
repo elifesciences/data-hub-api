@@ -1,6 +1,5 @@
 from typing import Optional, Sequence
 from data_hub_api.config import (
-    DOI_ROOT_URL,
     ELECTRONIC_ARTICLE_IDENTIFIER_PREFIX,
     ELIFE_FIRST_PUBLICATION_YEAR
 )
@@ -14,7 +13,6 @@ from data_hub_api.kotahi_docmaps.v1.docmap_typing import (
     DocmapContent,
     DocmapElifeManuscriptInput,
     DocmapElifeManuscriptOutput,
-    DocmapElifeManuscriptVorOutput,
     DocmapPublishedElifeManuscriptOutput,
     DocmapPublishedElifeManuscriptPartOf
 )
@@ -142,29 +140,6 @@ def get_docmap_elife_manuscript_output_content_for_vor(
         'type': 'web-page',
         'url': 'https://elifesciences.org/articles/' + query_result_item['manuscript_id']
     }]
-
-
-def get_docmap_elife_manuscript_output_for_vor(
-    query_result_item: ApiInput,
-    manuscript_version: ApiManuscriptVersionInput
-) -> DocmapElifeManuscriptVorOutput:
-    manuscript_version_doi = get_elife_manuscript_version_doi(
-        elife_doi=query_result_item['elife_doi'],
-        elife_doi_version_str=manuscript_version['elife_doi_version_str']
-    )
-    return {
-        'type': 'version-of-record',
-        'doi': manuscript_version_doi,
-        'published': (
-            manuscript_version['vor_publication_date'].isoformat()
-            if manuscript_version['vor_publication_date']
-            else None
-        ),
-        'url': f'{DOI_ROOT_URL}' + manuscript_version_doi,
-        'content': get_docmap_elife_manuscript_output_content_for_vor(
-            query_result_item=query_result_item
-        )
-    }
 
 
 def get_docmap_elife_manuscript_input(
