@@ -2,8 +2,8 @@
   "@context": "https://w3id.org/docmaps/context.jsonld",
   "type": "docmap",
   "id": "https://data-hub-api.elifesciences.org/kotahi/docmaps/v1/by-publisher/elife/get-by-manuscript-id?manuscript_id=86628",
-  "created": "2023-02-02T07:04:33+00:00",
-  "updated": "2023-02-02T07:04:33+00:00",
+  "created": "2023-02-02T12:04:33+00:00",
+  "updated": "2023-02-02T12:04:33+00:00",
   "publisher": {
     "account": {
       "id": "https://sciety.org/groups/elife",
@@ -89,17 +89,32 @@
           "participants": [
             {
               "actor": {
-                "name": "Gary Yellen",
                 "type": "person",
-                "_relatesToOrganization": "Harvard Medical School, United States of America"
+                "name": "Gary Yellen",
+                "firstName": "Gary",
+                "surname": "Yellen",
+                "_relatesToOrganization": "Harvard Medical School, United States of America",
+                "affiliation": {
+                  "type": "organization",
+                  "name": "Harvard Medical School",
+                  "location": "Boston, United States of America"
+                }
               },
               "role": "editor"
             },
             {
               "actor": {
-                "name": "David James",
                 "type": "person",
-                "_relatesToOrganization": "University of Sydney, Australia"
+                "name": "David James",
+                "firstName": "David",
+                "_middleName": "E",
+                "surname": "James",
+                "_relatesToOrganization": "University of Sydney, Australia",
+                "affiliation": {
+                  "type": "organization",
+                  "name": "University of Sydney",
+                  "location": "Sydney, Australia"
+                }
               },
               "role": "senior-editor"
             }
@@ -226,17 +241,32 @@
           "participants": [
             {
               "actor": {
-                "name": "Gary Yellen",
                 "type": "person",
-                "_relatesToOrganization": "Harvard Medical School, United States of America"
+                "name": "Gary Yellen",
+                "firstName": "Gary",
+                "surname": "Yellen",
+                "_relatesToOrganization": "Harvard Medical School, United States of America",
+                "affiliation": {
+                  "type": "organization",
+                  "name": "Harvard Medical School",
+                  "location": "Boston, United States of America"
+                }
               },
               "role": "editor"
             },
             {
               "actor": {
-                "name": "David James",
                 "type": "person",
-                "_relatesToOrganization": "University of Sydney, Australia"
+                "name": "David James",
+                "firstName": "David",
+                "_middleName": "E",
+                "surname": "James",
+                "_relatesToOrganization": "University of Sydney, Australia",
+                "affiliation": {
+                  "type": "organization",
+                  "name": "University of Sydney",
+                  "location": "Sydney, Australia"
+                }
               },
               "role": "senior-editor"
             }
@@ -272,7 +302,7 @@
           "versionIdentifier": "3"
         }
       ],
-      "previous-step": "_:b3"
+      "previous-step": "_:b2"
     }
   }
 }

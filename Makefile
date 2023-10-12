@@ -28,8 +28,8 @@ venv-activate:
 
 
 dev-install:
+	$(PIP) install --disable-pip-version-check -r requirements.build.txt
 	$(PIP) install --disable-pip-version-check \
-		-r requirements.build.txt \
 		-r requirements.txt \
 		-r requirements.dev.txt
 
