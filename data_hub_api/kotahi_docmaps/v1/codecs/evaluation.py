@@ -226,11 +226,7 @@ def get_docmap_evaluation_participants(
 
 
 def get_docmap_actions_for_evaluations(
-    query_result_item: ApiInput,
     manuscript_version: ApiManuscriptVersionInput,
-    hypothesis_id: str,
-    evaluation_suffix: str,
-    annotation_created_timestamp: datetime,
     docmap_evaluation_type: str
 ) -> DocmapAction:
     return {
@@ -268,24 +264,16 @@ def iter_evaluation_and_type_for_related_preprint_url(
 
 
 def iter_docmap_actions_for_evaluations(
-    query_result_item: ApiInput,
     manuscript_version: ApiManuscriptVersionInput
 ) -> Iterable[DocmapAction]:
     evaluations = manuscript_version['evaluations']
     preprint_url = manuscript_version['preprint_url']
-    for evaluation, docmap_evaluation_type in iter_evaluation_and_type_for_related_preprint_url(
+    for _evaluation, docmap_evaluation_type in iter_evaluation_and_type_for_related_preprint_url(
         evaluations,
         preprint_url
     ):
-        hypothesis_id = evaluation['hypothesis_id']
-        annotation_created_timestamp = evaluation['annotation_created_timestamp']
-        evaluation_suffix = evaluation['evaluation_suffix']
         yield get_docmap_actions_for_evaluations(
-            query_result_item=query_result_item,
             manuscript_version=manuscript_version,
-            hypothesis_id=hypothesis_id,
-            annotation_created_timestamp=annotation_created_timestamp,
-            evaluation_suffix=evaluation_suffix,
             docmap_evaluation_type=docmap_evaluation_type
         )
 

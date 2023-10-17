@@ -105,12 +105,10 @@ def get_docmap_assertions_for_peer_reviewed_step(
 
 
 def get_docmaps_step_for_peer_reviewed_status(
-    query_result_item: ApiInput,
     manuscript_version: ApiManuscriptVersionInput
 ):
     return {
         'actions': list(iter_docmap_actions_for_evaluations(
-            query_result_item=query_result_item,
             manuscript_version=manuscript_version
             )
         ),
@@ -131,12 +129,10 @@ def get_docmap_assertions_for_revised_step(
 
 
 def get_docmaps_step_for_revised_status(
-    query_result_item: ApiInput,
     manuscript_version: ApiManuscriptVersionInput
 ):
     return {
         'actions': list(iter_docmap_actions_for_evaluations(
-            query_result_item=query_result_item,
             manuscript_version=manuscript_version
             )
         ),
@@ -171,12 +167,9 @@ def iter_docmap_steps_for_query_result_item(query_result_item: ApiInput) -> Iter
             yield get_docmaps_step_for_under_review_status(query_result_item, manuscript_version)
             if manuscript_version['evaluations']:
                 if manuscript_version['position_in_overall_stage'] == 1:
-                    yield get_docmaps_step_for_peer_reviewed_status(
-                        query_result_item,
-                        manuscript_version
-                    )
+                    yield get_docmaps_step_for_peer_reviewed_status(manuscript_version)
                 else:
-                    yield get_docmaps_step_for_revised_status(query_result_item, manuscript_version)
+                    yield get_docmaps_step_for_revised_status(manuscript_version)
 
 
 def generate_docmap_steps(step_iterable: Iterable[DocmapStep]) -> DocmapSteps:
