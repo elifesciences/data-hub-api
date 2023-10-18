@@ -1,7 +1,6 @@
 from data_hub_api.kotahi_docmaps.v1.api_input_typing import ApiManuscriptVersionInput
 from data_hub_api.kotahi_docmaps.v1.docmap_typing import (
     DocmapAssertionItem,
-    DocmapContent,
     DocmapPreprintInput,
     DocmapPreprintInputWithPublishedMecaPath
 )

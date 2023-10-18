@@ -1,4 +1,3 @@
-from datetime import datetime
 import logging
 from typing import Iterable, Optional, Sequence, cast, Tuple
 from data_hub_api.config import DOI_ROOT_URL
@@ -6,7 +5,7 @@ from data_hub_api.config import DOI_ROOT_URL
 from data_hub_api.kotahi_docmaps.v1.codecs.elife_manuscript import get_elife_manuscript_version_doi
 from data_hub_api.kotahi_docmaps.v1.api_input_typing import (
     ApiEditorDetailInput,
-    ApiEvaluationInput,
+    ApiEvaluationEmailInput,
     ApiInput,
     ApiManuscriptVersionInput
 )
@@ -243,9 +242,9 @@ def get_docmap_actions_for_evaluations(
 
 
 def iter_evaluation_and_type_for_related_preprint_url(
-    evaluations: Sequence[ApiEvaluationInput],
+    evaluations: Sequence[ApiEvaluationEmailInput],
     preprint_url: str
-) -> Iterable[Tuple[ApiEvaluationInput, str]]:
+) -> Iterable[Tuple[ApiEvaluationEmailInput, str]]:
     for evaluation in evaluations:
         docmap_evaluation_type = get_docmap_evaluation_type_form_tags(evaluation['tags'])
         evaluation_preprint_url = evaluation['uri']
