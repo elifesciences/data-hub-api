@@ -2,7 +2,6 @@ from data_hub_api.kotahi_docmaps.v1.codecs.preprint import (
     get_docmap_preprint_assertion_item,
     get_docmap_preprint_input,
     get_docmap_preprint_input_with_published,
-    get_meca_path_content
 )
 from tests.unit_tests.kotahi_docmaps.v1.test_data import (
     DOI_1,
@@ -23,15 +22,6 @@ class TestGetDocmapPreprintInput:
             'doi': DOI_1,
             'url': PREPRINT_LINK_1,
             'versionIdentifier': PREPRINT_VERSION_1,
-        }
-
-
-class TestGetMecaPathContent:
-    def test_should_populate_meca_path_content(self):
-        result = get_meca_path_content(MECA_PATH_1)
-        assert result == {
-            'type': 'computer-file',
-            'url': MECA_PATH_1
         }
 
 
