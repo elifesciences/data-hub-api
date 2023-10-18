@@ -2,7 +2,7 @@ from datetime import date, datetime
 
 from data_hub_api.kotahi_docmaps.v1.api_input_typing import (
     ApiEditorDetailInput,
-    ApiEvaluationInput,
+    ApiEvaluationEmailInput,
     ApiInput,
     ApiManuscriptVersionInput
 )
@@ -33,9 +33,6 @@ ELIFE_DOI_VERSION_STR_1 = 'elife_doi_version_str_1'
 ELIFE_DOI_VERSION_STR_2 = 'elife_doi_version_str_2'
 ELIFE_DOI_VERSION_STR_3 = 'elife_doi_version_str_3'
 
-MECA_PATH_1 = 'meca_path_1'
-MECA_PATH_2 = 'meca_path_2'
-
 LICENSE_1 = 'license_1'
 
 RP_PUBLICATION_TIMESTAMP_1 = datetime.fromisoformat('2022-05-05T01:02:03+00:00')
@@ -58,7 +55,6 @@ MANUSCRIPT_VERSION_1: ApiManuscriptVersionInput = {
     'preprint_doi': DOI_1,
     'preprint_version': PREPRINT_VERSION_1,
     'preprint_published_at_date': date.fromisoformat('2021-01-01'),
-    'meca_path': MECA_PATH_1,
     'evaluations': [],
     'rp_publication_timestamp': RP_PUBLICATION_TIMESTAMP_1,
     'vor_publication_date': None,
@@ -81,7 +77,6 @@ MANUSCRIPT_VERSION_2: ApiManuscriptVersionInput = {
     'preprint_doi': DOI_2,
     'preprint_version': PREPRINT_VERSION_2,
     'preprint_published_at_date': date.fromisoformat('2021-02-02'),
-    'meca_path': MECA_PATH_2,
     'evaluations': [],
     'rp_publication_timestamp': RP_PUBLICATION_TIMESTAMP_2,
     'vor_publication_date': None,
@@ -103,7 +98,6 @@ MANUSCRIPT_VOR_VERSION_1: ApiManuscriptVersionInput = {
     'preprint_doi': DOI_2,
     'preprint_version': None,
     'preprint_published_at_date': None,
-    'meca_path': None,
     'evaluations': [],
     'rp_publication_timestamp': None,
     'vor_publication_date': VOR_PUBLICATION_DATE_1,
@@ -146,7 +140,7 @@ ANNOTATION_CREATED_TIMESTAMP_1 = datetime.fromisoformat('2020-01-01T01:02:03+00:
 ANNOTATION_CREATED_TIMESTAMP_2 = datetime.fromisoformat('2021-01-01T01:02:03+00:00')
 ANNOTATION_CREATED_TIMESTAMP_3 = datetime.fromisoformat('2022-01-01T01:02:03+00:00')
 
-DOCMAPS_QUERY_RESULT_EVALUATION_1: ApiEvaluationInput = {
+DOCMAPS_QUERY_RESULT_EVALUATION_1: ApiEvaluationEmailInput = {
     'hypothesis_id': HYPOTHESIS_ID_1,
     'annotation_created_timestamp': ANNOTATION_CREATED_TIMESTAMP_1,
     'tags': [],
@@ -155,7 +149,7 @@ DOCMAPS_QUERY_RESULT_EVALUATION_1: ApiEvaluationInput = {
     'evaluation_suffix': EVALUATION_SUFFIX_1
 }
 
-DOCMAPS_QUERY_RESULT_EVALUATION_2: ApiEvaluationInput = {
+DOCMAPS_QUERY_RESULT_EVALUATION_2: ApiEvaluationEmailInput = {
     'hypothesis_id': HYPOTHESIS_ID_2,
     'annotation_created_timestamp': ANNOTATION_CREATED_TIMESTAMP_2,
     'tags': [],
