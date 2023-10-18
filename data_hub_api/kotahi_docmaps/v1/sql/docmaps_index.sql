@@ -17,10 +17,76 @@ WITH t_reviewed_preprints AS (
   WHERE preprint_doi IS NOT NULL
 ),
 
+t_latest_evaluation_emails AS(
+  SELECT
+    * EXCEPT(rn)
+  FROM (
+    SELECT 
+      *,
+      ROW_NUMBER() OVER (
+        PARTITION BY email.email_id
+        ORDER BY email.imported_timestamp DESC
+      ) AS rn,
+    FROM `elife-data-pipeline.prod.rp_reviews_and_elife_assessment_emails` AS email
+    WHERE (
+      converted_subject LIKE "Update from eLife:%"
+      OR
+      converted_subject LIKE "Reviews for your submission to eLife:%"
+    )
+  )
+  WHERE rn=1
+),
+
+t_manuscript_version_with_rp_site_data AS (
+  SELECT
+    Version.long_manuscript_identifier
+  FROM `elife-data-pipeline.prod.mv_Editorial_All_Manuscript_Version` AS Version
+  WHERE Version.Is_Research_Content
+    -- only include manuscripts that went through QC
+    AND Version.QC_Complete_Timestamp IS NOT NULL
+    AND COALESCE(Version.Decision, '') != 'Decline to Review'
+    AND Is_Reviewed_Preprint_Type
+),
+
+t_latest_evaluation_emails_by_long_manuscript_identifier AS (
+  SELECT 
+    * 
+  FROM (
+    SELECT
+      *,
+      ROW_NUMBER() OVER (
+        PARTITION BY email.long_manuscript_identifier
+        ORDER BY email.create_dt DESC
+      ) AS rn,
+    FROM t_latest_evaluation_emails AS email
+  )
+  WHERE rn=1
+),
+
+t_emails_for_not_declined_to_review_manuscripts AS (
+  SELECT
+    email.*
+  FROM t_latest_evaluation_emails_by_long_manuscript_identifier AS email
+  INNER JOIN t_manuscript_version_with_rp_site_data AS version
+    ON email.long_manuscript_identifier = version.long_manuscript_identifier
+),
+
 t_reviewed_preprints_for_docmaps AS (
   SELECT * 
   FROM t_reviewed_preprints
   WHERE should_provide_docmaps_for
+),
+
+t_result_with_evaluation_emails AS (
+  SELECT 
+    *,
+    ARRAY(
+      SELECT AS STRUCT
+        *
+      FROM t_emails_for_not_declined_to_review_manuscripts AS evaluation_emails
+      WHERE evaluation_emails.long_manuscript_identifier = reviewed_preprints.long_manuscript_identifier
+    ) AS evaluation_emails,
+  FROM t_reviewed_preprints_for_docmaps AS reviewed_preprints
 ),
 
 t_latest_biorxiv_medrxiv_api_response_version_by_doi AS (
@@ -39,7 +105,7 @@ t_latest_biorxiv_medrxiv_api_response_version_by_doi AS (
   WHERE rn = 1
 ),
 
-t_result_with_preprint_url AS (
+t_result_with_preprint_url_and_evaluation_emails AS (
   SELECT
     result.*,
     CONCAT('https://doi.org/', result.preprint_doi) AS preprint_doi_url,
@@ -55,7 +121,7 @@ t_result_with_preprint_url AS (
     END AS preprint_url_source,
 
 
-  FROM t_reviewed_preprints_for_docmaps AS result
+  FROM t_result_with_evaluation_emails AS result
   LEFT JOIN t_latest_biorxiv_medrxiv_api_response_version_by_doi AS latest_biorxiv_medrxiv_version
     ON latest_biorxiv_medrxiv_version.doi = result.preprint_doi
 ),
@@ -89,7 +155,7 @@ t_result_with_preprint_version AS (
         THEN REGEXP_EXTRACT(preprint_doi, r'(.+)\/\w+') 
       ELSE preprint_doi
     END AS preprint_doi_without_version,
-  FROM t_result_with_preprint_url AS result
+  FROM t_result_with_preprint_url_and_evaluation_emails AS result
 ),
 
 t_manual_preprint_match_for_published_date AS (
@@ -187,7 +253,8 @@ t_result_with_sorted_manuscript_versions_array AS (
           '%Y-%m-%d %H:%M:%S',
           CONCAT(publication.publication_date, ' ', publication.utc_publication_time)
         ) AS rp_publication_timestamp,
-        vor_date.vor_publication_date
+        vor_date.vor_publication_date,
+        result.evaluation_emails,
       )
     ORDER BY result.position_in_overall_stage
     ) AS manuscript_versions 
