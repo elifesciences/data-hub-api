@@ -1,152 +1,4 @@
-WITH t_hypothesis_annotation_with_cleaned_uri AS (
-  SELECT
-    * EXCEPT (id, created, uri),
-    annotation.id AS hypothesis_id,
-    annotation.created AS annotation_created_timestamp,
-    DATE(annotation.created) AS annotation_created_date,
-    REGEXP_REPLACE(uri, r'/$', '') AS uri
-  FROM `elife-data-pipeline.prod.v_hypothesis_annotation` AS annotation
-  WHERE annotation.group = 'q5X6RWJ6'
-    AND created >= '2022-09-01' -- to ignore any public reviews posted before Sep 2022
-),
-
-t_hypothesis_annotation_with_doi AS (
-  SELECT
-    *,
-    CASE
-      WHEN annotation.uri LIKE '%10.1101/%'
-        THEN REGEXP_EXTRACT(annotation.uri, r'(10\.\d{3,}[^v]*)v?')
-      WHEN annotation.uri LIKE '%researchsquare.com/article/rs-%'
-        -- 'https://www.researchsquare.com/article/rs-2848731/v1' --> 'rs-2848731/v1'
-        THEN CONCAT('10.21203/rs.3.', REGEXP_EXTRACT(annotation.uri, r'\/(\w+-\d+\/\w+)'))
-      WHEN annotation.uri LIKE '%arxiv.org/abs/%'
-        -- 'https://arxiv.org/abs/2305.01403v1' -->  '2305.01403'
-        THEN CONCAT('10.48550/arXiv.', REGEXP_EXTRACT(annotation.uri, r'\/(\d+\.\d+)'))
-      ELSE NULL
-    END AS source_doi,
-    CASE 
-      WHEN annotation.uri LIKE '%10.1101/%'
-        THEN REGEXP_EXTRACT(annotation.uri, r'(10\.\d{3,}[^v]*)v?')
-      WHEN annotation.uri LIKE '%researchsquare.com/article/rs-%'
-        -- 'https://www.researchsquare.com/article/rs-2848731/v1' --> 'rs-2848731/v1'
-        THEN CONCAT('10.21203/rs.3.', REGEXP_EXTRACT(annotation.uri, r'\/(\w+-\d+)\/\w+'))
-      WHEN annotation.uri LIKE '%arxiv.org/abs/%'
-        -- 'https://arxiv.org/abs/2305.01403v1' -->  '2305.01403'
-        THEN CONCAT('10.48550/arXiv.', REGEXP_EXTRACT(annotation.uri, r'\/(\d+\.\d+)'))
-      ELSE NULL
-    END AS source_doi_without_version,
-    CASE 
-      WHEN annotation.uri LIKE '%10.1101/%'
-        THEN REGEXP_EXTRACT(annotation.uri, r'10\.\d{3,}.*v([1-9])')
-      WHEN annotation.uri LIKE '%researchsquare.com/article/rs-%' OR annotation.uri LIKE '%arxiv.org/abs/%'
-        THEN REGEXP_EXTRACT(annotation.uri, r'v(\d+)$') 
-      ELSE NULL
-    END AS source_doi_version
-  FROM t_hypothesis_annotation_with_cleaned_uri AS annotation
-),
-
-t_manual_osf_preprint_match AS (
-  SELECT
-    * EXCEPT(rn),
-    DENSE_RANK() OVER (PARTITION BY osf_preprint_url ORDER BY preprint_doi_version) AS osf_preprint_version_rank
-  FROM
-  (
-    SELECT 
-      *,
-      ROW_NUMBER() OVER(PARTITION BY long_manuscript_identifier ORDER BY imported_timestamp DESC) AS rn
-    FROM `elife-data-pipeline.prod.unmatched_manuscripts`
-    WHERE osf_preprint_url IS NOT NULL
-  )
-  WHERE rn=1
-),
-
-t_hypothesis_annotation_for_osf_preprints AS (
-  SELECT 
-    *,
-    DENSE_RANK() OVER (PARTITION BY uri ORDER BY annotation_created_date DESC) AS osf_preprint_version_rank
-  FROM t_hypothesis_annotation_with_doi
-  WHERE uri LIKE 'https://psyarxiv.com/%'
-),
-
-t_hypothesis_annotation_with_osf_doi AS (
-  SELECT 
-    hypothesis.* EXCEPT(source_doi, source_doi_without_version, source_doi_version),
-    IFNULL(hypothesis.source_doi, osf.preprint_doi) AS source_doi,
-    IFNULL(hypothesis.source_doi_without_version, osf.preprint_doi) AS source_doi_without_version,
-    IFNULL(hypothesis.source_doi_version, osf.preprint_doi_version) AS source_doi_version,
-    osf_hypothesis.osf_preprint_version_rank
-  FROM t_hypothesis_annotation_with_doi AS hypothesis
-  LEFT JOIN t_hypothesis_annotation_for_osf_preprints AS osf_hypothesis
-    ON hypothesis.hypothesis_id = osf_hypothesis.hypothesis_id
-  LEFT JOIN t_manual_osf_preprint_match AS osf
-    ON osf_hypothesis.uri = osf.osf_preprint_url
-    AND osf_hypothesis.osf_preprint_version_rank = osf.osf_preprint_version_rank
-),
-
-t_distinct_hypothesis_uri_doi_version AS (
-  SELECT 
-    DISTINCT
-    uri,
-    source_doi_without_version,
-    source_doi_version
-  FROM t_hypothesis_annotation_with_osf_doi
-),
-
-t_hypothesis_with_source_doi_rank AS (
-  SELECT
-    *,
-    ROW_NUMBER() OVER(
-      PARTITION BY source_doi_without_version
-      ORDER BY source_doi_version
-    ) AS source_doi_rank
-  FROM t_distinct_hypothesis_uri_doi_version
-),
-
-t_hypothesis_uri_id_and_timestamp AS (
-  SELECT
-    uri,
-    source_doi,
-    source_doi_version,
-    annotation_created_timestamp,
-    hypothesis_id
-  FROM t_hypothesis_annotation_with_osf_doi
-),
-
-t_distinct_hypothesis_with_evaluation_suffix_number AS (
-  SELECT
-    *,
-    ROW_NUMBER() OVER(
-      PARTITION BY source_doi, source_doi_version
-      ORDER BY annotation_created_timestamp, hypothesis_id
-    ) AS evaluation_suffix_number
-  FROM t_hypothesis_uri_id_and_timestamp
-),
-
-t_hypothesis_annotation_with_evaluation_suffix AS (
-  SELECT 
-    annotation.hypothesis_id,
-    annotation.annotation_created_timestamp,
-    annotation.uri,
-    annotation.tags,
-    annotation.normalized_tags,
-    annotation.source_doi,
-    annotation.source_doi_version,
-    doi_rank.source_doi_without_version,
-    doi_rank.source_doi_rank,
-    CONCAT('sa',CAST(t_evaluation_suffix.evaluation_suffix_number - 1 AS STRING)) AS evaluation_suffix
-  FROM t_hypothesis_annotation_with_osf_doi AS annotation
-  INNER JOIN t_hypothesis_with_source_doi_rank AS doi_rank
-    ON annotation.uri = doi_rank.uri
-    AND (
-      annotation.osf_preprint_version_rank IS NULL
-      OR annotation.osf_preprint_version_rank = doi_rank.source_doi_rank
-    )
-  INNER JOIN t_distinct_hypothesis_with_evaluation_suffix_number AS t_evaluation_suffix
-    ON annotation.uri = t_evaluation_suffix.uri 
-    AND annotation.hypothesis_id = t_evaluation_suffix.hypothesis_id
-),
-
-t_reviewed_preprints AS (
+WITH t_reviewed_preprints AS (
   SELECT 
     * EXCEPT(
       source_site_id,
@@ -171,32 +23,6 @@ t_reviewed_preprints_for_docmaps AS (
   WHERE should_provide_docmaps_for
 ),
 
-t_result_with_evaluations AS (
-  SELECT 
-    *,
-    ARRAY(
-      SELECT AS STRUCT
-        *
-      FROM t_hypothesis_annotation_with_evaluation_suffix AS annotation
-      WHERE annotation.source_doi = t_reviewed_preprints_for_docmaps.preprint_doi
-        AND annotation.source_doi_rank = t_reviewed_preprints_for_docmaps.position_in_overall_stage
-    ) AS evaluations,
-  FROM t_reviewed_preprints_for_docmaps
-),
-
-t_result_with_sorted_evaluations AS (
-  SELECT
-    result.* EXCEPT(evaluations),
-
-    ARRAY(
-      SELECT AS STRUCT evaluation.*
-      FROM result.evaluations AS evaluation
-      ORDER BY evaluation.annotation_created_timestamp
-    ) AS evaluations
-
-  FROM t_result_with_evaluations AS result
-),
-
 t_latest_biorxiv_medrxiv_api_response_version_by_doi AS (
   SELECT
     doi,
@@ -213,26 +39,23 @@ t_latest_biorxiv_medrxiv_api_response_version_by_doi AS (
   WHERE rn = 1
 ),
 
-t_result_with_preprint_url_and_has_evaluations AS (
+t_result_with_preprint_url AS (
   SELECT
     result.*,
     CONCAT('https://doi.org/', result.preprint_doi) AS preprint_doi_url,
 
     COALESCE(
-      result.evaluations[SAFE_OFFSET(0)].uri,
       result.ejp_validated_preprint_url,
       latest_biorxiv_medrxiv_version.preprint_url
     ) AS preprint_url,
 
     CASE
-      WHEN result.evaluations[SAFE_OFFSET(0)].uri IS NOT NULL THEN 'evaluations'
       WHEN result.ejp_validated_preprint_url IS NOT NULL THEN 'ejp_preprint_url'
       WHEN latest_biorxiv_medrxiv_version.preprint_url IS NOT NULL THEN 'latest_biorxiv_medrxiv_version'
     END AS preprint_url_source,
 
-    (ARRAY_LENGTH(result.evaluations) > 0) AS has_evaluations,
 
-  FROM t_result_with_sorted_evaluations AS result
+  FROM t_reviewed_preprints_for_docmaps AS result
   LEFT JOIN t_latest_biorxiv_medrxiv_api_response_version_by_doi AS latest_biorxiv_medrxiv_version
     ON latest_biorxiv_medrxiv_version.doi = result.preprint_doi
 ),
@@ -259,8 +82,6 @@ t_result_with_preprint_version AS (
         THEN REGEXP_EXTRACT(preprint_url, r'v(\d+)$')
       WHEN REGEXP_CONTAINS(preprint_doi_url, r'(.*v\d+)$')
         THEN REGEXP_EXTRACT(preprint_doi_url, r'v(\d+)$')
-      WHEN REGEXP_CONTAINS(preprint_doi_url, r'osf')
-        THEN result.evaluations[SAFE_OFFSET(0)].source_doi_version
       ELSE NULL
     END AS preprint_version,
     CASE 
@@ -268,7 +89,7 @@ t_result_with_preprint_version AS (
         THEN REGEXP_EXTRACT(preprint_doi, r'(.+)\/\w+') 
       ELSE preprint_doi
     END AS preprint_doi_without_version,
-  FROM t_result_with_preprint_url_and_has_evaluations AS result
+  FROM t_result_with_preprint_url AS result
 ),
 
 t_latest_biorxiv_medrxiv_tdm_path_by_doi_and_version AS (
@@ -404,7 +225,6 @@ t_result_with_sorted_manuscript_versions_array AS (
         result.is_or_was_under_review,
         TIMESTAMP(DATETIME(result.qc_complete_timestamp), 'US/Eastern') AS qc_complete_timestamp,
         TIMESTAMP(DATETIME(result.under_review_timestamp), 'US/Eastern') AS under_review_timestamp,
-        result.has_evaluations,
         result.manuscript_title,
         result.preprint_url,
         result.elife_doi_version_str,
@@ -419,7 +239,6 @@ t_result_with_sorted_manuscript_versions_array AS (
         result.senior_editor_details,
         result.author_names_csv,
         result.subject_areas,
-        result.evaluations,
         PARSE_TIMESTAMP(
           '%Y-%m-%d %H:%M:%S',
           CONCAT(publication.publication_date, ' ', publication.utc_publication_time)
