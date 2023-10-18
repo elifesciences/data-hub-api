@@ -2,15 +2,13 @@ from datetime import date, datetime
 from typing import Optional, Sequence, TypedDict
 
 
-ApiEvaluationInput = TypedDict(
-    'ApiEvaluationInput',
+ApiEvaluationEmailInput = TypedDict(
+    'ApiEvaluationEmailInput',
     {
-        'hypothesis_id': str,
-        'annotation_created_timestamp': datetime,
-        'tags': list,
-        'uri': str,
-        'source_version': str,
-        'evaluation_suffix': str
+        'long_manuscript_identifier': str,
+        'email_subject': list,
+        'converted_body': str,
+        'email_timestamp': datetime,
     }
 )
 
@@ -49,8 +47,7 @@ ApiManuscriptVersionInput = TypedDict(
         'preprint_doi': str,
         'preprint_version': Optional[str],
         'preprint_published_at_date': Optional[date],
-        'meca_path': Optional[str],
-        'evaluations': Sequence[ApiEvaluationInput],
+        'evaluation_emails': Sequence[ApiEvaluationEmailInput],
         'rp_publication_timestamp': Optional[datetime],
         'vor_publication_date': Optional[date],
         'subject_areas': Sequence[ApiSubjectAreaInput]
