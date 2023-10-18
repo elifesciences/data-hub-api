@@ -82,7 +82,10 @@ t_result_with_evaluation_emails AS (
     *,
     ARRAY(
       SELECT AS STRUCT
-        *
+        long_manuscript_identifier,
+        converted_subject AS email_subject,
+        converted_body AS email_body,
+        create_dt AS email_timestamp
       FROM t_emails_for_not_declined_to_review_manuscripts AS evaluation_emails
       WHERE evaluation_emails.long_manuscript_identifier = reviewed_preprints.long_manuscript_identifier
     ) AS evaluation_emails,
