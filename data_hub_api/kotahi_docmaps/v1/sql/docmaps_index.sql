@@ -92,37 +92,6 @@ t_result_with_preprint_version AS (
   FROM t_result_with_preprint_url AS result
 ),
 
-t_latest_biorxiv_medrxiv_tdm_path_by_doi_and_version AS (
-  SELECT 
-    * EXCEPT(rn) 
-  FROM (
-    SELECT
-      ROW_NUMBER() OVER (
-        PARTITION BY t_results.tdm_doi, t_results.ms_version
-        ORDER BY imported_timestamp DESC
-      ) AS rn,
-      t_results.tdm_doi,
-      t_results.tdm_path,
-      t_results.ms_version AS tdm_ms_version,
-    FROM `elife-data-pipeline.prod.biorxiv_medrxiv_meca_path_metadata`
-    LEFT JOIN UNNEST(results) AS t_results
-  )
-  WHERE rn=1
-),
-
-t_rp_meca_path_update AS (
-  SELECT
-    * EXCEPT(rn)
-  FROM
-  (
-    SELECT 
-      *,
-      ROW_NUMBER() OVER(PARTITION BY manuscript_id, long_manuscript_identifier ORDER BY imported_timestamp DESC) AS rn
-    FROM `elife-data-pipeline.prod.reviewed_preprint_meca_path_update`
-  )
-  WHERE rn=1
-),
-
 t_manual_preprint_match_for_published_date AS (
   SELECT
     * EXCEPT(rn),
@@ -147,7 +116,7 @@ t_europepmc_preprint_publication_date AS (
   WHERE REGEXP_EXTRACT(doi, r'v(\d+)$') IS NOT NULL
 ),
 
-t_preprint_published_at_date_and_meca_path AS (
+t_preprint_published_at_date AS (
   SELECT 
     result.manuscript_id,
     result.long_manuscript_identifier,
@@ -156,34 +125,10 @@ t_preprint_published_at_date_and_meca_path AS (
       CAST(manual_preprint_published_date.preprint_published_at_date AS DATE),
       europepmc_pub_date.firstPublicationDate
     ) AS preprint_published_at_date,
-    CASE
-      WHEN meca_path_update.meca_path IS NOT NULL
-        THEN meca_path_update.meca_path
-      WHEN result.preprint_doi LIKE '10.1101/%'
-        THEN tdm.tdm_path 
-      WHEN (
-        result.preprint_doi LIKE '10.21203/rs%' 
-        OR result.preprint_doi LIKE '%arXiv%' 
-        OR result.preprint_doi LIKE '%/osf.io/%'
-      )
-        THEN CONCAT(
-          's3://prod-elife-epp-meca/',
-          result.manuscript_id,
-          '-v',
-          elife_doi_version_str,
-          '-meca.zip'
-        )
-      ELSE NULL
-    END AS meca_path
   FROM t_result_with_preprint_version AS result
-  LEFT JOIN t_rp_meca_path_update AS meca_path_update
-    ON result.long_manuscript_identifier = meca_path_update.long_manuscript_identifier
   LEFT JOIN `elife-data-pipeline.prod.mv_latest_biorxiv_medrxiv_api_response` AS biorxiv_medrxiv_api_response
     ON biorxiv_medrxiv_api_response.doi = result.preprint_doi
     AND CAST(biorxiv_medrxiv_api_response.version AS STRING) = result.preprint_version
-  LEFT JOIN t_latest_biorxiv_medrxiv_tdm_path_by_doi_and_version AS tdm
-    ON tdm.tdm_doi = result.preprint_doi
-    AND CAST(tdm.tdm_ms_version AS STRING) = result.preprint_version
   LEFT JOIN t_manual_preprint_match_for_published_date AS manual_preprint_published_date
     ON result.long_manuscript_identifier = manual_preprint_published_date.long_manuscript_identifier
   LEFT JOIN t_europepmc_preprint_publication_date AS europepmc_pub_date
@@ -234,7 +179,6 @@ t_result_with_sorted_manuscript_versions_array AS (
         result.preprint_doi_source,
         result.preprint_doi_url,
         preprint.preprint_published_at_date,
-        preprint.meca_path,
         result.editor_details,
         result.senior_editor_details,
         result.author_names_csv,
@@ -248,7 +192,7 @@ t_result_with_sorted_manuscript_versions_array AS (
     ORDER BY result.position_in_overall_stage
     ) AS manuscript_versions 
   FROM t_result_with_preprint_version AS result
-  LEFT JOIN t_preprint_published_at_date_and_meca_path AS preprint
+  LEFT JOIN t_preprint_published_at_date AS preprint
     ON result.long_manuscript_identifier = preprint.long_manuscript_identifier
   LEFT JOIN t_rp_publication_date AS publication
     ON result.elife_doi = publication.elife_doi
