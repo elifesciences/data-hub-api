@@ -7,8 +7,7 @@ from tests.unit_tests.kotahi_docmaps.v1.test_data import (
     DOI_1,
     MANUSCRIPT_VERSION_1,
     PREPRINT_LINK_1,
-    PREPRINT_VERSION_1,
-    MECA_PATH_1
+    PREPRINT_VERSION_1
 )
 
 
