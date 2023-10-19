@@ -118,14 +118,6 @@ DocmapPreprintInputWithPublishedMecaPath = TypedDict(
     total=False
 )
 
-DocmapEvaluationInput = TypedDict(
-    'DocmapEvaluationInput',
-    {
-        'type': str,
-        'doi': Optional[str]
-    }
-)
-
 DocmapAssertionItem = TypedDict(
     'DocmapAssertionItem',
     {
@@ -163,10 +155,7 @@ DocmapStep = TypedDict(
     {
         'actions': Sequence[DocmapAction],
         'assertions': Sequence[DocmapAssertion],
-        'inputs': Sequence[Union[
-            DocmapPreprintInput,
-            DocmapEvaluationInput
-        ]],
+        'inputs': Sequence[DocmapPreprintInput],
         'next-step': NotRequired[str],
         'previous-step': NotRequired[str]
     },

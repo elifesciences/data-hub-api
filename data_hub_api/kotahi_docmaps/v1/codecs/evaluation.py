@@ -1,4 +1,3 @@
-import re
 import logging
 from typing import Iterable, Optional, Sequence, cast, Tuple
 from data_hub_api.config import DOI_ROOT_URL
