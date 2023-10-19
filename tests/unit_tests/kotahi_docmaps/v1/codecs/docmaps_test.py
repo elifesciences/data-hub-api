@@ -30,7 +30,7 @@ from data_hub_api.kotahi_docmaps.v1.codecs.docmaps import (
     generate_docmap_steps,
 )
 
-from tests.unit_tests.docmaps.v2.test_data import (
+from tests.unit_tests.kotahi_docmaps.v1.test_data import (
     ANNOTATION_CREATED_TIMESTAMP_2,
     ANNOTATION_CREATED_TIMESTAMP_3,
     DOCMAPS_QUERY_RESULT_EVALUATION_1,
