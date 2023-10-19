@@ -257,7 +257,7 @@ t_result_with_sorted_manuscript_versions_array AS (
           CONCAT(publication.publication_date, ' ', publication.utc_publication_time)
         ) AS rp_publication_timestamp,
         vor_date.vor_publication_date,
-        result.evaluation_emails,
+        result.evaluation_emails
       )
     ORDER BY result.position_in_overall_stage
     ) AS manuscript_versions 
