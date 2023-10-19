@@ -1,3 +1,4 @@
+import re
 import logging
 from typing import Iterable, Optional, Sequence, cast, Tuple
 from data_hub_api.config import DOI_ROOT_URL
@@ -6,7 +7,6 @@ from data_hub_api.kotahi_docmaps.v1.codecs.elife_manuscript import get_elife_man
 from data_hub_api.kotahi_docmaps.v1.api_input_typing import (
     ApiEditorDetailInput,
     ApiEvaluationEmailInput,
-    ApiInput,
     ApiManuscriptVersionInput
 )
 from data_hub_api.kotahi_docmaps.v1.docmap_typing import (
@@ -15,7 +15,6 @@ from data_hub_api.kotahi_docmaps.v1.docmap_typing import (
     DocmapEditorActor,
     DocmapAffiliation,
     DocmapContent,
-    DocmapEvaluationInput,
     DocmapEvaluationOutput,
     DocmapParticipant
 )
@@ -49,39 +48,6 @@ def get_elife_evaluation_doi_url(
     if not elife_evaluation_doi:
         return None
     return f'{DOI_ROOT_URL}' + elife_evaluation_doi
-
-
-def get_docmap_evaluation_input(
-    query_result_item: ApiInput,
-    manuscript_version: ApiManuscriptVersionInput,
-    evaluation_suffix: str,
-    docmap_evaluation_type: str
-) -> DocmapEvaluationInput:
-    elife_evaluation_doi = get_elife_evaluation_doi(
-        elife_doi_version_str=manuscript_version['elife_doi_version_str'],
-        elife_doi=query_result_item['elife_doi'],
-        evaluation_suffix=evaluation_suffix
-    )
-    return {
-        'type': docmap_evaluation_type,
-        'doi': elife_evaluation_doi
-    }
-
-
-def get_docmap_evaluation_output_content_url(
-    base_url: str,
-    hypothesis_id: str,
-    preprint_doi: Optional[str] = None
-) -> str:
-    assert base_url in [
-        HYPOTHESIS_URL, SCIETY_ARTICLES_ACTIVITY_URL, SCIETY_ARTICLES_EVALUATIONS_URL
-    ]
-    if base_url == HYPOTHESIS_URL:
-        return base_url + hypothesis_id
-    if base_url == SCIETY_ARTICLES_ACTIVITY_URL:
-        assert preprint_doi
-        return base_url + preprint_doi + '#hypothesis:' + hypothesis_id
-    return base_url + hypothesis_id + '/content'
 
 
 def get_docmap_evaluation_output_content() -> DocmapContent:
@@ -273,24 +239,5 @@ def iter_docmap_actions_for_evaluations(
     ):
         yield get_docmap_actions_for_evaluations(
             manuscript_version=manuscript_version,
-            docmap_evaluation_type=docmap_evaluation_type
-        )
-
-
-def iter_docmap_evaluation_input(
-    query_result_item: ApiInput,
-    manuscript_version: ApiManuscriptVersionInput
-):
-    evaluations = manuscript_version['evaluations']
-    preprint_url = manuscript_version['preprint_url']
-    for evaluation, docmap_evaluation_type in iter_evaluation_and_type_for_related_preprint_url(
-        evaluations,
-        preprint_url
-    ):
-        evaluation_suffix = evaluation['evaluation_suffix']
-        yield get_docmap_evaluation_input(
-            query_result_item=query_result_item,
-            manuscript_version=manuscript_version,
-            evaluation_suffix=evaluation_suffix,
             docmap_evaluation_type=docmap_evaluation_type
         )

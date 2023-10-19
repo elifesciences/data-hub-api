@@ -6,15 +6,10 @@ from data_hub_api.kotahi_docmaps.v1.codecs.evaluation import (
     DOCMAP_EVALUATION_TYPE_FOR_REPLY,
     DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE,
     DOI_ROOT_URL,
-    HYPOTHESIS_URL,
-    SCIETY_ARTICLES_ACTIVITY_URL,
-    SCIETY_ARTICLES_EVALUATIONS_URL,
     get_docmap_affiliation,
     get_docmap_affiliation_location,
-    get_docmap_evaluation_input,
     get_docmap_evaluation_output,
     get_docmap_evaluation_output_content,
-    get_docmap_evaluation_output_content_url,
     get_docmap_evaluation_participants,
     get_docmap_evaluation_participants_for_evaluation_summary_type,
     get_docmap_evaluation_participants_for_evalution_summary_type,
@@ -24,11 +19,7 @@ from data_hub_api.kotahi_docmaps.v1.codecs.evaluation import (
     get_related_organization_detail
 )
 from tests.unit_tests.kotahi_docmaps.v1.test_data import (
-    DOCMAPS_QUERY_RESULT_ITEM_1,
     EDITOR_DETAIL_1,
-    ELIFE_DOI_1,
-    ELIFE_DOI_VERSION_STR_1,
-    EVALUATION_SUFFIX_1,
     MANUSCRIPT_VERSION_1,
     SENIOR_EDITOR_DETAIL_1
 )
@@ -58,59 +49,6 @@ class TestGetElifeEvaluationDoiUrl:
             elife_evaluation_doi='elife_evaluation_doi_1',
         )
         assert result == f'{DOI_ROOT_URL}elife_evaluation_doi_1'
-
-
-class TestGetDocmapEvaluationInput:
-    def test_should_populate_evaluation_input(self):
-        result = get_docmap_evaluation_input(
-            query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1,
-            manuscript_version=MANUSCRIPT_VERSION_1,
-            evaluation_suffix=EVALUATION_SUFFIX_1,
-            docmap_evaluation_type='docmap_evaluation_type_1'
-        )
-        assert result == {
-            'type': 'docmap_evaluation_type_1',
-            'doi': get_elife_evaluation_doi(
-                elife_doi=ELIFE_DOI_1,
-                elife_doi_version_str=ELIFE_DOI_VERSION_STR_1,
-                evaluation_suffix=EVALUATION_SUFFIX_1
-            )
-        }
-
-
-class TestGetDocmapEvaluationOutputContentUrl:
-    def test_should_raise_error_if_base_url_not_one_expected(self):
-        base_url = 'base_url_1'
-        hypothesis_id = 'hypothesis_id_1'
-        with pytest.raises(AssertionError):
-            get_docmap_evaluation_output_content_url(base_url, hypothesis_id)
-
-    def test_should_populate_the_content_url_correctly_per_given_base_url(self):
-        hypothesis_id = 'hypothesis_id_1'
-        preprint_doi = 'preprint_doi_1'
-
-        result = get_docmap_evaluation_output_content_url(HYPOTHESIS_URL, hypothesis_id)
-        assert result == 'https://hypothes.is/a/hypothesis_id_1'
-
-        result = get_docmap_evaluation_output_content_url(
-            SCIETY_ARTICLES_ACTIVITY_URL, hypothesis_id, preprint_doi
-        )
-        assert result == (
-            'https://sciety.org/articles/activity/preprint_doi_1#hypothesis:hypothesis_id_1'
-        )
-        result = get_docmap_evaluation_output_content_url(
-            SCIETY_ARTICLES_EVALUATIONS_URL, hypothesis_id
-        )
-        assert result == 'https://sciety.org/evaluations/hypothesis:hypothesis_id_1/content'
-
-    def test_should_raise_error_with_activity_url_if_preprint_doi_not_defined(self):
-        hypothesis_id = 'hypothesis_id_1'
-        with pytest.raises(AssertionError):
-            get_docmap_evaluation_output_content_url(
-                base_url=SCIETY_ARTICLES_ACTIVITY_URL,
-                hypothesis_id=hypothesis_id,
-                preprint_doi=None
-            )
 
 
 class TestGetDocmapEvaluationOutputContent:
