@@ -15,12 +15,14 @@ from data_hub_api.kotahi_docmaps.v1.codecs.evaluation import (
     get_docmap_evaluation_participants_for_evaluation_summary_type,
     get_docmap_evaluation_participants_for_evalution_summary_type,
     get_docmap_evaluation_type_form_tags,
+    get_evaluation_and_type_list_from_email,
     get_related_organization_detail
 )
 from tests.unit_tests.kotahi_docmaps.v1.test_data import (
     EDITOR_DETAIL_1,
     ELIFE_ASSESSMENT_1,
     EMAIL_1,
+    EMAIL_WITH_ELIFE_ASSESSMENT_1,
     EMAIL_WITH_ELIFE_ASSESSMENT_AND_PUBLIC_REVIEWS_1,
     MANUSCRIPT_VERSION_1,
     SENIOR_EDITOR_DETAIL_1
@@ -30,12 +32,22 @@ from tests.unit_tests.kotahi_docmaps.v1.test_data import (
 class TestExtractElifeAssessmentsFromEmail:
     def test_should_extract_elife_assessment_from_email(self):
         result = extract_elife_assessments_from_email(
-            EMAIL_WITH_ELIFE_ASSESSMENT_AND_PUBLIC_REVIEWS_1
+            EMAIL_WITH_ELIFE_ASSESSMENT_1
         )
         assert result == ELIFE_ASSESSMENT_1.strip()
 
     def test_should_return_none_if_there_is_no_elife_assessment_in_email(self):
         assert not extract_elife_assessments_from_email(EMAIL_1)
+
+
+class TestGetEvaluationAndTypeListFromEmail:
+    def test_should_return_evaluation_and_type_from_email(self):
+        result = get_evaluation_and_type_list_from_email(
+            EMAIL_WITH_ELIFE_ASSESSMENT_1
+        )
+        assert len(result)>0
+        assert result[0]['evaluation_type'] == DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY
+        assert result[0]['evaluation_text'] == ELIFE_ASSESSMENT_1.strip()
 
 
 class TestGetDocmapEvaluationOutputContent:

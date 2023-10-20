@@ -39,6 +39,16 @@ def extract_elife_assessments_from_email(evaluation_email: str):
     return None
 
 
+def get_evaluation_and_type_list_from_email(evaluation_email: str):
+    evalution_list = []
+    evaluation_summary_dict = {
+        'evaluation_type': DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY,
+        'evaluation_text': extract_elife_assessments_from_email(evaluation_email)
+    }
+    evalution_list.append(evaluation_summary_dict)
+    return evalution_list
+
+
 def get_docmap_evaluation_output_content() -> DocmapContent:
     return {
         'type': 'web-page',
