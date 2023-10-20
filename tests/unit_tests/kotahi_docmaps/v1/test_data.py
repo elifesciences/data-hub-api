@@ -171,6 +171,18 @@ EMAIL_1 = '''
     ----------
 '''
 
+EMAIL_WITH_ELIFE_ASSESSMENT_1 = f'''
+    Dear Dr Huang,
+
+    Thank you for submitting your article.
+    ----------
+
+    {ELIFE_ASSESSMENT_1}
+
+    ----------
+
+'''
+
 EMAIL_WITH_ELIFE_ASSESSMENT_AND_PUBLIC_REVIEWS_1 = f'''
     Dear Dr Huang,
 
