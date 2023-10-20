@@ -65,13 +65,6 @@ def get_docmap_evaluation_output(
     }
 
 
-def has_tag_containing(tags: list, text: str) -> bool:
-    return any(
-        text in tag
-        for tag in tags
-    )
-
-
 def get_docmap_actor_for_review_article_type() -> DocmapAnonymousActor:
     return {
         'name': 'anonymous',
