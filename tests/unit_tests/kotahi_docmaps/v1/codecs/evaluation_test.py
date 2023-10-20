@@ -14,8 +14,6 @@ from data_hub_api.kotahi_docmaps.v1.codecs.evaluation import (
     get_docmap_evaluation_participants_for_evaluation_summary_type,
     get_docmap_evaluation_participants_for_evalution_summary_type,
     get_docmap_evaluation_type_form_tags,
-    get_elife_evaluation_doi,
-    get_elife_evaluation_doi_url,
     get_related_organization_detail
 )
 from tests.unit_tests.kotahi_docmaps.v1.test_data import (
@@ -23,32 +21,6 @@ from tests.unit_tests.kotahi_docmaps.v1.test_data import (
     MANUSCRIPT_VERSION_1,
     SENIOR_EDITOR_DETAIL_1
 )
-
-
-class TestGetElifeEvaluationDoi:
-    def test_should_return_evaluation_doi_with_suffix_if_defined(self):
-        elife_doi = 'elife_doi_1'
-        elife_doi_version_str = 'elife_doi_version_str_1'
-        evaluation_suffix = 'evaluation_suffix_1'
-        actual_result = get_elife_evaluation_doi(
-            elife_doi=elife_doi,
-            elife_doi_version_str=elife_doi_version_str,
-            evaluation_suffix=evaluation_suffix
-        )
-        assert actual_result == 'elife_doi_1.elife_doi_version_str_1.evaluation_suffix_1'
-
-
-class TestGetElifeEvaluationDoiUrl:
-    def test_should_return_none_if_elife_doi_is_none(self):
-        assert not get_elife_evaluation_doi_url(
-            elife_evaluation_doi=None,
-        )
-
-    def test_should_return_elife_evaluation_doi_url_when_defined(self):
-        result = get_elife_evaluation_doi_url(
-            elife_evaluation_doi='elife_evaluation_doi_1',
-        )
-        assert result == f'{DOI_ROOT_URL}elife_evaluation_doi_1'
 
 
 class TestGetDocmapEvaluationOutputContent:

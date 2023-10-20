@@ -55,7 +55,7 @@ MANUSCRIPT_VERSION_1: ApiManuscriptVersionInput = {
     'preprint_doi': DOI_1,
     'preprint_version': PREPRINT_VERSION_1,
     'preprint_published_at_date': date.fromisoformat('2021-01-01'),
-    'evaluations': [],
+    'evaluation_emails': [],
     'rp_publication_timestamp': RP_PUBLICATION_TIMESTAMP_1,
     'vor_publication_date': None,
     'subject_areas': [{
@@ -77,7 +77,7 @@ MANUSCRIPT_VERSION_2: ApiManuscriptVersionInput = {
     'preprint_doi': DOI_2,
     'preprint_version': PREPRINT_VERSION_2,
     'preprint_published_at_date': date.fromisoformat('2021-02-02'),
-    'evaluations': [],
+    'evaluation_emails': [],
     'rp_publication_timestamp': RP_PUBLICATION_TIMESTAMP_2,
     'vor_publication_date': None,
     'subject_areas': [
@@ -98,7 +98,7 @@ MANUSCRIPT_VOR_VERSION_1: ApiManuscriptVersionInput = {
     'preprint_doi': DOI_2,
     'preprint_version': None,
     'preprint_published_at_date': None,
-    'evaluations': [],
+    'evaluation_emails': [],
     'rp_publication_timestamp': None,
     'vor_publication_date': VOR_PUBLICATION_DATE_1,
     'subject_areas': [
@@ -128,55 +128,66 @@ DOCMAPS_QUERY_RESULT_ITEM_2: ApiInput = {
     'manuscript_versions': [MANUSCRIPT_VERSION_1, MANUSCRIPT_VERSION_2]
 }
 
-HYPOTHESIS_ID_1 = 'hypothesis_1'
-HYPOTHESIS_ID_2 = 'hypothesis_2'
-HYPOTHESIS_ID_3 = 'hypothesis_3'
+REVIEW_1 = '''
+    Reviewer #1 (Public Review):
 
-EVALUATION_SUFFIX_1 = 'evaluation_suffix_1'
-EVALUATION_SUFFIX_2 = 'evaluation_suffix_2'
-EVALUATION_SUFFIX_3 = 'evaluation_suffix_3'
+    This is review_1.
+'''
 
-ANNOTATION_CREATED_TIMESTAMP_1 = datetime.fromisoformat('2020-01-01T01:02:03+00:00')
-ANNOTATION_CREATED_TIMESTAMP_2 = datetime.fromisoformat('2021-01-01T01:02:03+00:00')
-ANNOTATION_CREATED_TIMESTAMP_3 = datetime.fromisoformat('2022-01-01T01:02:03+00:00')
+REVIEW_2 = '''
+    Reviewer #2 (Public Review):
 
-DOCMAPS_QUERY_RESULT_EVALUATION_1: ApiEvaluationEmailInput = {
-    'hypothesis_id': HYPOTHESIS_ID_1,
-    'annotation_created_timestamp': ANNOTATION_CREATED_TIMESTAMP_1,
-    'tags': [],
-    'uri': PREPRINT_LINK_1,
-    'source_version': PREPRINT_VERSION_1,
-    'evaluation_suffix': EVALUATION_SUFFIX_1
-}
+    This is review_2.
+'''
 
-DOCMAPS_QUERY_RESULT_EVALUATION_2: ApiEvaluationEmailInput = {
-    'hypothesis_id': HYPOTHESIS_ID_2,
-    'annotation_created_timestamp': ANNOTATION_CREATED_TIMESTAMP_2,
-    'tags': [],
-    'uri': PREPRINT_LINK_2,
-    'source_version': PREPRINT_VERSION_2,
-    'evaluation_suffix': EVALUATION_SUFFIX_2
-}
+REVIEW_3 = '''
+    Reviewer #3 (Public Review):
 
-MANUSCRIPT_VERSION_WITH_EVALUATIONS_1: ApiManuscriptVersionInput = {
-    **MANUSCRIPT_VERSION_1,  # type: ignore
-    'evaluations': [DOCMAPS_QUERY_RESULT_EVALUATION_1]
-}
+    This is review_3.
+'''
 
-MANUSCRIPT_VERSION_WITH_EVALUATIONS_2: ApiManuscriptVersionInput = {
-    **MANUSCRIPT_VERSION_2,  # type: ignore
-    'evaluations': [DOCMAPS_QUERY_RESULT_EVALUATION_2]
-}
+ELIFE_ASSESSMENT_1 = '''
+    eLife assessment
 
-DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS = {
-    **DOCMAPS_QUERY_RESULT_ITEM_1,  # type: ignore
-    'manuscript_versions': [MANUSCRIPT_VERSION_WITH_EVALUATIONS_1]
-}
+    This is eLife assessment.
+'''
 
-DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSION = {
-    **DOCMAPS_QUERY_RESULT_ITEM_1,  # type: ignore
-    'manuscript_versions': [MANUSCRIPT_VOR_VERSION_1]
-}
+PUBLIC_REVIEWS_1 = f'''
+    Public Reviews
+
+    {REVIEW_1}
+
+    {REVIEW_2}
+
+    {REVIEW_3}
+'''
+
+EMAIL_1 = '''
+    Dear Dr Huang,
+
+    Thank you for submitting your article.
+    ----------
+
+    ----------
+'''
+
+EMAIL_WITH_ELIFE_ASSESSMENT_AND_PUBLIC_REVIEWS_1 = f'''
+    Dear Dr Huang,
+
+    Thank you for submitting your article.
+    ----------
+
+    {ELIFE_ASSESSMENT_1}
+
+    ----------
+
+    {PUBLIC_REVIEWS_1}
+
+    ----------
+'''
+
+
+
 
 EDITOR_DETAIL_1: ApiEditorDetailInput = {
     'name': 'editor_name_1',

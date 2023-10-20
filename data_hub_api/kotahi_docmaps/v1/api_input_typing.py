@@ -5,8 +5,6 @@ from typing import Optional, Sequence, TypedDict
 ApiEvaluationEmailInput = TypedDict(
     'ApiEvaluationEmailInput',
     {
-        'long_manuscript_identifier': str,
-        'email_subject': list,
         'converted_body': str,
         'email_timestamp': datetime,
     }

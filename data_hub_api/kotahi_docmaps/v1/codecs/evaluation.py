@@ -29,26 +29,6 @@ DOCMAP_EVALUATION_TYPE_FOR_REPLY = 'reply'
 DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE = 'review-article'
 
 
-def get_elife_evaluation_doi(
-    elife_doi_version_str: str,
-    elife_doi: str,
-    evaluation_suffix: str
-) -> str:
-    elife_version_doi = get_elife_manuscript_version_doi(
-        elife_doi=elife_doi,
-        elife_doi_version_str=elife_doi_version_str
-    )
-    return elife_version_doi + '.' + evaluation_suffix
-
-
-def get_elife_evaluation_doi_url(
-    elife_evaluation_doi: Optional[str] = None
-) -> Optional[str]:
-    if not elife_evaluation_doi:
-        return None
-    return f'{DOI_ROOT_URL}' + elife_evaluation_doi
-
-
 def get_docmap_evaluation_output_content() -> DocmapContent:
     return {
         'type': 'web-page',
@@ -206,37 +186,13 @@ def get_docmap_actions_for_evaluations(
     }
 
 
-def iter_evaluation_and_type_for_related_preprint_url(
-    evaluations: Sequence[ApiEvaluationEmailInput],
-    preprint_url: str
-) -> Iterable[Tuple[ApiEvaluationEmailInput, str]]:
-    for evaluation in evaluations:
-        docmap_evaluation_type = get_docmap_evaluation_type_form_tags(evaluation['tags'])
-        evaluation_preprint_url = evaluation['uri']
-        if evaluation_preprint_url != preprint_url:
-            LOGGER.debug(
-                'ignoring evaluation on another version: %r != %r',
-                evaluation_preprint_url, preprint_url
-            )
-            continue
-        if docmap_evaluation_type in (
-            DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY,
-            DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE,
-            DOCMAP_EVALUATION_TYPE_FOR_REPLY
-        ):
-            yield evaluation, docmap_evaluation_type
-
 
 def iter_docmap_actions_for_evaluations(
     manuscript_version: ApiManuscriptVersionInput
 ) -> Iterable[DocmapAction]:
-    evaluations = manuscript_version['evaluations']
-    preprint_url = manuscript_version['preprint_url']
-    for _evaluation, docmap_evaluation_type in iter_evaluation_and_type_for_related_preprint_url(
-        evaluations,
-        preprint_url
-    ):
+    evaluation_emails = manuscript_version['evaluation_emails']
+    for _evaluation in evaluation_emails:
         yield get_docmap_actions_for_evaluations(
             manuscript_version=manuscript_version,
-            docmap_evaluation_type=docmap_evaluation_type
+            docmap_evaluation_type=DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY
         )
