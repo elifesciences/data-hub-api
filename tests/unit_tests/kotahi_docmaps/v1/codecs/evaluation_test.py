@@ -14,7 +14,6 @@ from data_hub_api.kotahi_docmaps.v1.codecs.evaluation import (
     get_docmap_evaluation_participants,
     get_docmap_evaluation_participants_for_evaluation_summary_type,
     get_docmap_evaluation_participants_for_evalution_summary_type,
-    get_docmap_evaluation_type_form_tags,
     get_evaluation_and_type_list_from_email,
     get_related_organization_detail
 )
@@ -73,48 +72,6 @@ class TestGetDocmapEvaluationOutput:
                 }
             ]
         }
-
-
-class TestGetEvaluationsTypeFromTags:
-    def test_should_return_evaluation_summary_when_summary_exist_in_tags_list(self):
-        tag_list_with_summary = ['PeerReview', 'evaluationSummary']
-        actual_result = get_docmap_evaluation_type_form_tags(tag_list_with_summary)
-        assert actual_result == DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY
-
-    def test_should_return_review_article_when_review_keyword_exists_in_tags_list(self):
-        tag_list_with_summary = ['PeerReview']
-        actual_result = get_docmap_evaluation_type_form_tags(tag_list_with_summary)
-        assert actual_result == DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE
-
-    def test_should_return_review_article_for_review_keyword_even_there_is_undefined_tag(self):
-        tag_list_with_summary = ['PeerReview', 'undefinedTag']
-        actual_result = get_docmap_evaluation_type_form_tags(tag_list_with_summary)
-        assert actual_result == DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE
-
-    def test_should_return_reply_when_author_response_keyword_exists_in_tags_list(self):
-        tag_list_with_summary = ['AuthorResponse']
-        actual_result = get_docmap_evaluation_type_form_tags(tag_list_with_summary)
-        assert actual_result == DOCMAP_EVALUATION_TYPE_FOR_REPLY
-
-    def test_should_return_reply_when_author_response_even_there_is_review_tag(self):
-        tag_list_with_summary = ['PeerReview', 'AuthorResponse']
-        actual_result = get_docmap_evaluation_type_form_tags(tag_list_with_summary)
-        assert actual_result == DOCMAP_EVALUATION_TYPE_FOR_REPLY
-
-    def test_should_return_none_when_empty_tags_list(self):
-        tag_list_with_summary = []
-        actual_result = get_docmap_evaluation_type_form_tags(tag_list_with_summary)
-        assert not actual_result
-
-    def test_should_return_none_when_there_is_not_any_defined_tag_in_tags_list(self):
-        tag_list_with_summary = ['undefinedTag']
-        actual_result = get_docmap_evaluation_type_form_tags(tag_list_with_summary)
-        assert not actual_result
-
-    def test_should_raise_error_when_summary_and_author_response_in_tag_list_at_same_time(self):
-        tag_list_with_summary = ['PeerReview', 'evaluationSummary', 'AuthorResponse']
-        with pytest.raises(AssertionError):
-            get_docmap_evaluation_type_form_tags(tag_list_with_summary)
 
 
 class TestGetRelatedOrganizationDetail:

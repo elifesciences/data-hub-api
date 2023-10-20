@@ -72,22 +72,6 @@ def has_tag_containing(tags: list, text: str) -> bool:
     )
 
 
-def get_docmap_evaluation_type_form_tags(
-    tags: list
-) -> Optional[str]:
-    has_author_response_tag = has_tag_containing(tags, 'AuthorResponse')
-    has_summary_tag = has_tag_containing(tags, 'Summary')
-    has_review_tag = has_tag_containing(tags, 'Review')
-    assert not (has_author_response_tag and has_summary_tag)
-    if has_author_response_tag:
-        return DOCMAP_EVALUATION_TYPE_FOR_REPLY
-    if has_summary_tag:
-        return DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY
-    if has_review_tag:
-        return DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE
-    return None
-
-
 def get_docmap_actor_for_review_article_type() -> DocmapAnonymousActor:
     return {
         'name': 'anonymous',
