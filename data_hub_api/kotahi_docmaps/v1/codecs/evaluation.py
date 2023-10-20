@@ -1,4 +1,5 @@
 import logging
+import re
 from typing import Iterable, Optional, Sequence, cast, Tuple
 from data_hub_api.config import DOI_ROOT_URL
 
@@ -27,6 +28,15 @@ SCIETY_ARTICLES_EVALUATIONS_URL = 'https://sciety.org/evaluations/hypothesis:'
 DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY = 'evaluation-summary'
 DOCMAP_EVALUATION_TYPE_FOR_REPLY = 'reply'
 DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE = 'review-article'
+
+
+def extract_elife_assessments_from_email(evaluation_email: str):
+    pattern = r'(?s)([eE][Ll]ife [aA]ssessment(.*?))-{10,}'
+    match = re.search(pattern, evaluation_email)
+    if match:
+        extracted_text = match.group(1).strip()
+        return extracted_text
+    return None
 
 
 def get_docmap_evaluation_output_content() -> DocmapContent:

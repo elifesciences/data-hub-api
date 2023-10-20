@@ -6,6 +6,7 @@ from data_hub_api.kotahi_docmaps.v1.codecs.evaluation import (
     DOCMAP_EVALUATION_TYPE_FOR_REPLY,
     DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE,
     DOI_ROOT_URL,
+    extract_elife_assessments_from_email,
     get_docmap_affiliation,
     get_docmap_affiliation_location,
     get_docmap_evaluation_output,
@@ -18,9 +19,23 @@ from data_hub_api.kotahi_docmaps.v1.codecs.evaluation import (
 )
 from tests.unit_tests.kotahi_docmaps.v1.test_data import (
     EDITOR_DETAIL_1,
+    ELIFE_ASSESSMENT_1,
+    EMAIL_1,
+    EMAIL_WITH_ELIFE_ASSESSMENT_AND_PUBLIC_REVIEWS_1,
     MANUSCRIPT_VERSION_1,
     SENIOR_EDITOR_DETAIL_1
 )
+
+
+class TestExtractElifeAssessmentsFromEmail:
+    def test_should_extract_elife_assessment_from_email(self):
+        result = extract_elife_assessments_from_email(
+            EMAIL_WITH_ELIFE_ASSESSMENT_AND_PUBLIC_REVIEWS_1
+        )
+        assert result == ELIFE_ASSESSMENT_1.strip()
+
+    def test_should_return_none_if_there_is_no_elife_assessment_in_email(self):
+        assert not extract_elife_assessments_from_email(EMAIL_1)
 
 
 class TestGetDocmapEvaluationOutputContent:
