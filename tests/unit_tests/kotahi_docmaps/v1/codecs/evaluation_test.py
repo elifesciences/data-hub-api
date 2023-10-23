@@ -21,11 +21,10 @@ from tests.unit_tests.kotahi_docmaps.v1.test_data import (
     EDITOR_DETAIL_1,
     ELIFE_ASSESSMENT_1,
     EMAIL_BODY_1,
-    EMAIL_BODY_WITH_ELIFE_ASSESSMENT_1,
     EMAIL_BODY_WITH_ELIFE_ASSESSMENT_AND_PUBLIC_REVIEWS_1,
     MANUSCRIPT_VERSION_1,
     PUBLIC_REVIEWS_1,
-    PUBLIC_REVIEWS_WITHOUT_REVIEW_1,
+    PUBLIC_REVIEWS_WITHOUT_EVALUATION_1,
     REVIEW_1,
     REVIEW_2,
     REVIEW_3,
@@ -36,7 +35,7 @@ from tests.unit_tests.kotahi_docmaps.v1.test_data import (
 class TestExtractElifeAssessmentsFromEmail:
     def test_should_extract_elife_assessment_from_email(self):
         result = extract_elife_assessments_from_email(
-            EMAIL_BODY_WITH_ELIFE_ASSESSMENT_1
+            EMAIL_BODY_WITH_ELIFE_ASSESSMENT_AND_PUBLIC_REVIEWS_1
         )
         assert result == ELIFE_ASSESSMENT_1.strip()
 
@@ -72,17 +71,23 @@ class TestExtractPublicReviewParts:
         assert not extract_public_review_parts(None)
 
     def test_should_return_none_when_there_is_review_extracted(self):
-        assert not extract_public_review_parts(PUBLIC_REVIEWS_WITHOUT_REVIEW_1)
+        assert not extract_public_review_parts(PUBLIC_REVIEWS_WITHOUT_EVALUATION_1)
 
 
 class TestGetEvaluationAndTypeListFromEmail:
-    def test_should_return_evaluation_and_type_from_email(self):
+    def test_should_return_elife_assessment_type_and_text_when_available(self):
         result = get_evaluation_and_type_list_from_email(
-            EMAIL_BODY_WITH_ELIFE_ASSESSMENT_1
+            EMAIL_BODY_WITH_ELIFE_ASSESSMENT_AND_PUBLIC_REVIEWS_1
         )
         assert len(result) > 0
         assert result[0]['evaluation_type'] == DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY
         assert result[0]['evaluation_text'] == ELIFE_ASSESSMENT_1.strip()
+        assert result[1]['evaluation_type'] == DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE
+        assert result[1]['evaluation_text'] == REVIEW_1.strip()
+        assert result[2]['evaluation_type'] == DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE
+        assert result[2]['evaluation_text'] == REVIEW_2.strip()
+        assert result[3]['evaluation_type'] == DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE
+        assert result[3]['evaluation_text'] == REVIEW_3.strip()
 
     def test_should_return_none_if_there_is_no_email_body(self):
         assert not get_evaluation_and_type_list_from_email(None)
