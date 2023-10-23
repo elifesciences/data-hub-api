@@ -8,7 +8,6 @@ from data_hub_api.kotahi_docmaps.v1.codecs.elife_manuscript import (
 )
 from data_hub_api.kotahi_docmaps.v1.codecs.evaluation import (
     DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY,
-    DOCMAP_EVALUATION_TYPE_FOR_REPLY,
     DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE,
     get_docmap_evaluation_output,
     get_docmap_evaluation_participants_for_evalution_summary_type,
