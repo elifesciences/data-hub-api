@@ -49,6 +49,18 @@ def extract_elife_public_reviews_from_email(email_body: str):
     return None
 
 
+def extract_public_review_parts(public_reviews: str):
+    if public_reviews:
+        pattern = r'(?=Reviewer #\d+ \(Public Review\):)'
+        parts = re.split(pattern, public_reviews)
+        parts = [part.strip() for part in parts if part.strip()]
+        if len(parts) > 1:
+            return parts[1:]
+        else:
+            return None
+    return None
+
+
 def get_evaluation_and_type_list_from_email(email_body: str):
     if email_body:
         evalution_list = []
@@ -59,6 +71,10 @@ def get_evaluation_and_type_list_from_email(email_body: str):
                 'evaluation_text': evaluation_summary_text
             }
             evalution_list.append(evaluation_summary_dict)
+        # public_reviews = extract_elife_public_reviews_from_email(email_body)
+        # if public_reviews:
+        #     for public_review in public_reviews:
+
         return evalution_list
 
 

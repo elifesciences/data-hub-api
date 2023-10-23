@@ -162,6 +162,13 @@ PUBLIC_REVIEWS_1 = f'''
     {REVIEW_3}
 '''
 
+PUBLIC_REVIEWS_WITHOUT_REVIEW_1 = '''
+    Public Reviews
+    some text here but not review
+
+----------
+'''
+
 EMAIL_BODY_1 = '''
     Dear Dr Huang,
 

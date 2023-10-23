@@ -6,6 +6,7 @@ from data_hub_api.kotahi_docmaps.v1.codecs.evaluation import (
     DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE,
     extract_elife_assessments_from_email,
     extract_elife_public_reviews_from_email,
+    extract_public_review_parts,
     get_docmap_affiliation,
     get_docmap_affiliation_location,
     get_docmap_evaluation_output,
@@ -24,6 +25,10 @@ from tests.unit_tests.kotahi_docmaps.v1.test_data import (
     EMAIL_BODY_WITH_ELIFE_ASSESSMENT_AND_PUBLIC_REVIEWS_1,
     MANUSCRIPT_VERSION_1,
     PUBLIC_REVIEWS_1,
+    PUBLIC_REVIEWS_WITHOUT_REVIEW_1,
+    REVIEW_1,
+    REVIEW_2,
+    REVIEW_3,
     SENIOR_EDITOR_DETAIL_1
 )
 
@@ -54,6 +59,20 @@ class TestExtractElifePublicReviewsFromEmail:
 
     def test_should_return_none_if_there_is_no_email_body(self):
         assert not extract_elife_public_reviews_from_email(None)
+
+
+class TestExtractPublicReviewParts:
+    def test_should_extract_all_public_reviews_individually(self):
+        result = extract_public_review_parts(PUBLIC_REVIEWS_1)
+        assert result[0] == REVIEW_1.strip()
+        assert result[1] == REVIEW_2.strip()
+        assert result[2] == REVIEW_3.strip()
+
+    def test_should_return_none_when_there_is_no_public_reviews(self):
+        assert not extract_public_review_parts(None)
+
+    def test_should_return_none_when_there_is_review_extracted(self):
+        assert not extract_public_review_parts(PUBLIC_REVIEWS_WITHOUT_REVIEW_1)
 
 
 class TestGetEvaluationAndTypeListFromEmail:
