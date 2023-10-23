@@ -30,23 +30,28 @@ DOCMAP_EVALUATION_TYPE_FOR_REPLY = 'reply'
 DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE = 'review-article'
 
 
-def extract_elife_assessments_from_email(evaluation_email: str):
-    pattern = r'(?s)([eE][Ll]ife [aA]ssessment(.*?))-{10,}'
-    match = re.search(pattern, evaluation_email)
-    if match:
-        extracted_text = match.group(1).strip()
-        return extracted_text
+def extract_elife_assessments_from_email(email_body: str):
+    if email_body:
+        pattern = r'(?s)([eE][Ll]ife [aA]ssessment(.*?))-{10,}'
+        match = re.search(pattern, email_body)
+        if match:
+            extracted_text = match.group(1).strip()
+            return extracted_text
+        return None
     return None
 
 
-def get_evaluation_and_type_list_from_email(evaluation_email: str):
-    evalution_list = []
-    evaluation_summary_dict = {
-        'evaluation_type': DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY,
-        'evaluation_text': extract_elife_assessments_from_email(evaluation_email)
-    }
-    evalution_list.append(evaluation_summary_dict)
-    return evalution_list
+def get_evaluation_and_type_list_from_email(email_body: str):
+    if email_body:
+        evalution_list = []
+        evaluation_summary_text = extract_elife_assessments_from_email(email_body)
+        if evaluation_summary_text:
+            evaluation_summary_dict = {
+                'evaluation_type': DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY,
+                'evaluation_text': evaluation_summary_text
+            }
+            evalution_list.append(evaluation_summary_dict)
+        return evalution_list
 
 
 def get_docmap_evaluation_output_content() -> DocmapContent:
@@ -183,13 +188,18 @@ def get_docmap_actions_for_evaluations(
     }
 
 
-
 def iter_docmap_actions_for_evaluations(
     manuscript_version: ApiManuscriptVersionInput
 ) -> Iterable[DocmapAction]:
     evaluation_emails = manuscript_version['evaluation_emails']
-    for _evaluation in evaluation_emails:
-        yield get_docmap_actions_for_evaluations(
-            manuscript_version=manuscript_version,
-            docmap_evaluation_type=DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY
-        )
+    if evaluation_emails:
+        for evaluation_email in evaluation_emails:
+            evaluation_list = get_evaluation_and_type_list_from_email(
+                evaluation_email['email_body']
+            )
+            if evaluation_list:
+                for evaluation_dict in evaluation_list:
+                    yield get_docmap_actions_for_evaluations(
+                        manuscript_version=manuscript_version,
+                        docmap_evaluation_type=evaluation_dict['evaluation_type']
+                    )

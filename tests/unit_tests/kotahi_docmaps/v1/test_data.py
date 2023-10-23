@@ -162,7 +162,7 @@ PUBLIC_REVIEWS_1 = f'''
     {REVIEW_3}
 '''
 
-EMAIL_1 = '''
+EMAIL_BODY_1 = '''
     Dear Dr Huang,
 
     Thank you for submitting your article.
@@ -171,7 +171,7 @@ EMAIL_1 = '''
     ----------
 '''
 
-EMAIL_WITH_ELIFE_ASSESSMENT_1 = f'''
+EMAIL_BODY_WITH_ELIFE_ASSESSMENT_1 = f'''
     Dear Dr Huang,
 
     Thank you for submitting your article.
@@ -183,7 +183,7 @@ EMAIL_WITH_ELIFE_ASSESSMENT_1 = f'''
 
 '''
 
-EMAIL_WITH_ELIFE_ASSESSMENT_AND_PUBLIC_REVIEWS_1 = f'''
+EMAIL_BODY_WITH_ELIFE_ASSESSMENT_AND_PUBLIC_REVIEWS_1 = f'''
     Dear Dr Huang,
 
     Thank you for submitting your article.
@@ -197,9 +197,6 @@ EMAIL_WITH_ELIFE_ASSESSMENT_AND_PUBLIC_REVIEWS_1 = f'''
 
     ----------
 '''
-
-
-
 
 EDITOR_DETAIL_1: ApiEditorDetailInput = {
     'name': 'editor_name_1',
@@ -221,4 +218,21 @@ SENIOR_EDITOR_DETAIL_1: ApiEditorDetailInput = {
     'middle_name': 'senior_editor_middle_name_1',
     'last_name': 'senior_editor_last_name_1',
     'city': 'senior_editor_city_1'
+}
+
+EMAIL_TIMESTAMP_1 = datetime.fromisoformat('2023-01-01T01:00:03+00:00')
+
+EVALUATION_EMAILS_WITH_ELIFE_ASSESSMENT_1: ApiEvaluationEmailInput = {
+    'email_body': EMAIL_BODY_WITH_ELIFE_ASSESSMENT_1,
+    'email_timestamp': EMAIL_TIMESTAMP_1
+}
+
+MANUSCRIPT_VERSION_WITH_EVALUATION_EMAILS_1: ApiManuscriptVersionInput = {
+    **MANUSCRIPT_VERSION_1,  # type: ignore
+    'evaluation_emails': [EVALUATION_EMAILS_WITH_ELIFE_ASSESSMENT_1]
+}
+
+DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATION_EMAILS_1 = {
+    **DOCMAPS_QUERY_RESULT_ITEM_1,  # type: ignore
+    'manuscript_versions': [MANUSCRIPT_VERSION_WITH_EVALUATION_EMAILS_1]
 }
