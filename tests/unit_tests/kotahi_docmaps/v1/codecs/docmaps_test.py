@@ -41,6 +41,7 @@ from tests.unit_tests.kotahi_docmaps.v1.test_data import (
     MANUSCRIPT_VERSION_1,
     MANUSCRIPT_VERSION_2,
     MANUSCRIPT_VERSION_WITH_EVALUATION_EMAILS_1,
+    MANUSCRIPT_VERSION_WITH_EVALUATION_EMAILS_2,
     PUBLISHER_DICT_1
 )
 
@@ -315,20 +316,20 @@ class TestGetDocmapsItemForQueryResultItem:
             get_docmap_assertions_for_under_review_step(query_result_item, MANUSCRIPT_VERSION_2)
         )
 
-    # def test_should_populate_assertions_revised_step(self):
-    #     query_result_item = {
-    #         **DOCMAPS_QUERY_RESULT_ITEM_1,
-    #         'manuscript_versions': [
-    #             MANUSCRIPT_VERSION_WITH_EVALUATIONS_1,
-    #             MANUSCRIPT_VERSION_WITH_EVALUATIONS_2
-    #         ]
-    #     }
-    #     docmaps_item = get_docmap_item_for_query_result_item(query_result_item)
-    #     peer_reviewed_step = docmaps_item['steps']['_:b3']
-    #     assert peer_reviewed_step['assertions'] == [{
-    #         'item': get_docmap_preprint_assertion_item(MANUSCRIPT_VERSION_WITH_EVALUATIONS_2),
-    #         'status': 'revised'
-    #     }]
+    def test_should_populate_assertions_revised_step(self):
+        query_result_item = {
+            **DOCMAPS_QUERY_RESULT_ITEM_1,
+            'manuscript_versions': [
+                MANUSCRIPT_VERSION_WITH_EVALUATION_EMAILS_1,
+                MANUSCRIPT_VERSION_WITH_EVALUATION_EMAILS_2
+            ]
+        }
+        docmaps_item = get_docmap_item_for_query_result_item(query_result_item)
+        revised_step = docmaps_item['steps']['_:b3']
+        assert revised_step['assertions'] == [{
+            'item': get_docmap_preprint_assertion_item(MANUSCRIPT_VERSION_WITH_EVALUATION_EMAILS_2),
+            'status': 'revised'
+        }]
 
     # def test_should_populate_inputs_revised_step(self):
     #     query_result_item = {
