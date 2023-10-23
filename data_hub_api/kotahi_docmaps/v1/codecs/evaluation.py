@@ -6,7 +6,6 @@ from data_hub_api.config import DOI_ROOT_URL
 from data_hub_api.kotahi_docmaps.v1.codecs.elife_manuscript import get_elife_manuscript_version_doi
 from data_hub_api.kotahi_docmaps.v1.api_input_typing import (
     ApiEditorDetailInput,
-    ApiEvaluationEmailInput,
     ApiManuscriptVersionInput
 )
 from data_hub_api.kotahi_docmaps.v1.docmap_typing import (
@@ -33,6 +32,17 @@ DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE = 'review-article'
 def extract_elife_assessments_from_email(email_body: str):
     if email_body:
         pattern = r'(?s)([eE][Ll]ife [aA]ssessment(.*?))-{10,}'
+        match = re.search(pattern, email_body)
+        if match:
+            extracted_text = match.group(1).strip()
+            return extracted_text
+        return None
+    return None
+
+
+def extract_elife_public_reviews_from_email(email_body: str):
+    if email_body:
+        pattern = r'(?s)([pP]ublic [rR]eview[s](.*?))-{10,}'
         match = re.search(pattern, email_body)
         if match:
             extracted_text = match.group(1).strip()
