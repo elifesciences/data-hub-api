@@ -271,40 +271,49 @@ class TestGetDocmapsItemForQueryResultItem:
             )
         )
 
-    # def test_should_populate_inputs_for_second_under_review_step(self):
-    #     query_result_item = {
-    #         **DOCMAPS_QUERY_RESULT_ITEM_1,
-    #         'manuscript_versions': [MANUSCRIPT_VERSION_WITH_EVALUATIONS_1, MANUSCRIPT_VERSION_2]
-    #     }
-    #     docmaps_item = get_docmap_item_for_query_result_item(query_result_item)
-    #     under_review_step = docmaps_item['steps']['_:b2']
-    #     assert under_review_step['inputs'] == [
-    #         get_docmap_preprint_input_with_published(
-    #             manuscript_version=MANUSCRIPT_VERSION_2
-    #         )
-    #     ]
+    def test_should_populate_inputs_for_second_under_review_step(self):
+        query_result_item = {
+            **DOCMAPS_QUERY_RESULT_ITEM_1,
+            'manuscript_versions': [
+                MANUSCRIPT_VERSION_WITH_EVALUATION_EMAILS_1,
+                MANUSCRIPT_VERSION_2
+            ]
+        }
+        docmaps_item = get_docmap_item_for_query_result_item(query_result_item)
+        under_review_step = docmaps_item['steps']['_:b2']
+        assert under_review_step['inputs'] == [
+            get_docmap_preprint_input_with_published(
+                manuscript_version=MANUSCRIPT_VERSION_2
+            )
+        ]
 
-    # def test_should_populate_actions_for_second_under_review_step(self):
-    #     query_result_item = {
-    #         **DOCMAPS_QUERY_RESULT_ITEM_1,
-    #         'manuscript_versions': [MANUSCRIPT_VERSION_WITH_EVALUATIONS_1, MANUSCRIPT_VERSION_2]
-    #     }
-    #     docmaps_item = get_docmap_item_for_query_result_item(query_result_item)
-    #     under_review_step = docmaps_item['steps']['_:b2']
-    #     assert under_review_step['actions'] == (
-    #         get_docmap_actions_for_under_review_step(query_result_item, MANUSCRIPT_VERSION_2)
-    #     )
+    def test_should_populate_actions_for_second_under_review_step(self):
+        query_result_item = {
+            **DOCMAPS_QUERY_RESULT_ITEM_1,
+            'manuscript_versions': [
+                MANUSCRIPT_VERSION_WITH_EVALUATION_EMAILS_1,
+                MANUSCRIPT_VERSION_2
+            ]
+        }
+        docmaps_item = get_docmap_item_for_query_result_item(query_result_item)
+        under_review_step = docmaps_item['steps']['_:b2']
+        assert under_review_step['actions'] == (
+            get_docmap_actions_for_under_review_step(query_result_item, MANUSCRIPT_VERSION_2)
+        )
 
-    # def test_should_populate_assertions_for_second_under_review_step(self):
-    #     query_result_item = {
-    #         **DOCMAPS_QUERY_RESULT_ITEM_1,
-    #         'manuscript_versions': [MANUSCRIPT_VERSION_WITH_EVALUATIONS_1, MANUSCRIPT_VERSION_2]
-    #     }
-    #     docmaps_item = get_docmap_item_for_query_result_item(query_result_item)
-    #     under_review_step = docmaps_item['steps']['_:b2']
-    #     assert under_review_step['assertions'] == (
-    #         get_docmap_assertions_for_under_review_step(query_result_item, MANUSCRIPT_VERSION_2)
-    #     )
+    def test_should_populate_assertions_for_second_under_review_step(self):
+        query_result_item = {
+            **DOCMAPS_QUERY_RESULT_ITEM_1,
+            'manuscript_versions': [
+                MANUSCRIPT_VERSION_WITH_EVALUATION_EMAILS_1,
+                MANUSCRIPT_VERSION_2
+            ]
+        }
+        docmaps_item = get_docmap_item_for_query_result_item(query_result_item)
+        under_review_step = docmaps_item['steps']['_:b2']
+        assert under_review_step['assertions'] == (
+            get_docmap_assertions_for_under_review_step(query_result_item, MANUSCRIPT_VERSION_2)
+        )
 
     # def test_should_populate_assertions_revised_step(self):
     #     query_result_item = {
