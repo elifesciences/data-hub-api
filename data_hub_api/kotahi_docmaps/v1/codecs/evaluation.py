@@ -1,9 +1,7 @@
 import logging
 import re
-from typing import Iterable, Optional, Sequence, cast, Tuple
-from data_hub_api.config import DOI_ROOT_URL
+from typing import Iterable, Optional, Sequence, cast
 
-from data_hub_api.kotahi_docmaps.v1.codecs.elife_manuscript import get_elife_manuscript_version_doi
 from data_hub_api.kotahi_docmaps.v1.api_input_typing import (
     ApiEditorDetailInput,
     ApiManuscriptVersionInput

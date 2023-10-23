@@ -3,9 +3,7 @@ import pytest
 from data_hub_api.kotahi_docmaps.v1.codecs import evaluation as evaluation_module
 from data_hub_api.kotahi_docmaps.v1.codecs.evaluation import (
     DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY,
-    DOCMAP_EVALUATION_TYPE_FOR_REPLY,
     DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE,
-    DOI_ROOT_URL,
     extract_elife_assessments_from_email,
     extract_elife_public_reviews_from_email,
     get_docmap_affiliation,
@@ -43,6 +41,7 @@ class TestExtractElifeAssessmentsFromEmail:
     def test_should_return_none_if_there_is_no_email_body(self):
         assert not extract_elife_assessments_from_email(None)
 
+
 class TestExtractElifePublicReviewsFromEmail:
     def test_should_extract_elife_public_reviews_from_email(self):
         result = extract_elife_public_reviews_from_email(
@@ -62,7 +61,7 @@ class TestGetEvaluationAndTypeListFromEmail:
         result = get_evaluation_and_type_list_from_email(
             EMAIL_BODY_WITH_ELIFE_ASSESSMENT_1
         )
-        assert len(result)>0
+        assert len(result) > 0
         assert result[0]['evaluation_type'] == DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY
         assert result[0]['evaluation_text'] == ELIFE_ASSESSMENT_1.strip()
 
@@ -247,8 +246,3 @@ class TestGetDocmapEvaluationParticipants:
                 docmap_evaluation_type=DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY
             )
             mock.assert_called_once()
-
-
-# class TestIterDocmapActionsForEvaluations:
-#     def test_should_return_
-# iter_docmap_actions_for_evaluations
