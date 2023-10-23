@@ -37,6 +37,7 @@ from tests.unit_tests.kotahi_docmaps.v1.test_data import (
     DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATION_EMAILS_1,
     EDITOR_DETAIL_1,
     EVALUATION_EMAILS_WITH_ELIFE_ASSESSMENT_1,
+    EVALUATION_EMAILS_WITH_ELIFE_ASSESSMENT_AND_PUBLIC_REVIEWS_1,
     EVALUATION_EMAILS_WITH_PUBLIC_REVIEWS_1,
     MANUSCRIPT_VERSION_1,
     MANUSCRIPT_VERSION_2,
@@ -211,7 +212,7 @@ class TestGetDocmapsItemForQueryResultItem:
             'manuscript_versions': [{
                 **MANUSCRIPT_VERSION_1,
                 'evaluation_emails': [{
-                    **EVALUATION_EMAILS_WITH_ELIFE_ASSESSMENT_1
+                    **EVALUATION_EMAILS_WITH_ELIFE_ASSESSMENT_AND_PUBLIC_REVIEWS_1
                 }]
             }]
         }
@@ -220,9 +221,12 @@ class TestGetDocmapsItemForQueryResultItem:
         )
         peer_reviewed_step = docmaps_item['steps']['_:b1']
         peer_reviewed_actions = peer_reviewed_step['actions']
-        assert len(peer_reviewed_actions) == 1
+        assert len(peer_reviewed_actions) > 0
         assert peer_reviewed_actions[0]['outputs'][0] == get_docmap_evaluation_output(
             docmap_evaluation_type=DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY
+        )
+        assert peer_reviewed_actions[1]['outputs'][0] == get_docmap_evaluation_output(
+            docmap_evaluation_type=DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE
         )
 
     def test_should_populate_participants_peer_reviewed_step_for_review_article_type(self):
