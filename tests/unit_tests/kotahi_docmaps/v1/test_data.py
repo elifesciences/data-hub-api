@@ -190,6 +190,17 @@ EMAIL_BODY_WITH_ELIFE_ASSESSMENT_1 = f'''
 
 '''
 
+EMAIL_BODY_WITH_PUBLIC_REVIEWS_1 = f'''
+    Dear Dr Huang,
+
+    Thank you for submitting your article.
+    ----------
+
+    {PUBLIC_REVIEWS_1}
+
+    ----------
+'''
+
 EMAIL_BODY_WITH_ELIFE_ASSESSMENT_AND_PUBLIC_REVIEWS_1 = f'''
     Dear Dr Huang,
 
@@ -242,4 +253,19 @@ MANUSCRIPT_VERSION_WITH_EVALUATION_EMAILS_1: ApiManuscriptVersionInput = {
 DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATION_EMAILS_1 = {
     **DOCMAPS_QUERY_RESULT_ITEM_1,  # type: ignore
     'manuscript_versions': [MANUSCRIPT_VERSION_WITH_EVALUATION_EMAILS_1]
+}
+
+EVALUATION_EMAILS_WITH_PUBLIC_REVIEWS_1: ApiEvaluationEmailInput = {
+    'email_body': EMAIL_BODY_WITH_PUBLIC_REVIEWS_1,
+    'email_timestamp': EMAIL_TIMESTAMP_1
+}
+
+MANUSCRIPT_VERSION_WITH_EVALUATION_EMAILS_2: ApiManuscriptVersionInput = {
+    **MANUSCRIPT_VERSION_1,  # type: ignore
+    'evaluation_emails': [EVALUATION_EMAILS_WITH_PUBLIC_REVIEWS_1]
+}
+
+DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATION_EMAILS_2 = {
+    **DOCMAPS_QUERY_RESULT_ITEM_1,  # type: ignore
+    'manuscript_versions': [MANUSCRIPT_VERSION_WITH_EVALUATION_EMAILS_2]
 }

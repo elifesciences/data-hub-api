@@ -37,6 +37,7 @@ from tests.unit_tests.kotahi_docmaps.v1.test_data import (
     DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATION_EMAILS_1,
     EDITOR_DETAIL_1,
     EVALUATION_EMAILS_WITH_ELIFE_ASSESSMENT_1,
+    EVALUATION_EMAILS_WITH_PUBLIC_REVIEWS_1,
     MANUSCRIPT_VERSION_1,
     MANUSCRIPT_VERSION_2,
     MANUSCRIPT_VERSION_WITH_EVALUATION_EMAILS_1,
@@ -223,27 +224,25 @@ class TestGetDocmapsItemForQueryResultItem:
             docmap_evaluation_type=DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY
         )
 
-
-    # def test_should_populate_participants_peer_reviewed_step_for_review_article_type(self):
-    #     query_result_with_evaluation = {
-    #         **DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATION_EMAILS_1,
-    #         'manuscript_versions': [{
-    #             **MANUSCRIPT_VERSION_1,
-    #             'evaluations': [{
-    #                 **DOCMAPS_QUERY_RESULT_EVALUATION_1,
-    #                 'tags': ['PeerReview']
-    #             }]
-    #         }]
-    #     }
-    #     docmaps_item = get_docmap_item_for_query_result_item(
-    #         query_result_with_evaluation
-    #     )
-    #     peer_reviewed_step = docmaps_item['steps']['_:b1']
-    #     peer_reviewed_actions = peer_reviewed_step['actions']
-    #     participants_for_review_article = peer_reviewed_actions[0]['participants']
-    #     assert participants_for_review_article == (
-    #         get_docmap_evaluation_participants_for_review_article_type()
-    #     )
+    def test_should_populate_participants_peer_reviewed_step_for_review_article_type(self):
+        query_result_with_evaluation = {
+            **DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATION_EMAILS_1,
+            'manuscript_versions': [{
+                **MANUSCRIPT_VERSION_1,
+                'evaluation_emails': [{
+                    **EVALUATION_EMAILS_WITH_PUBLIC_REVIEWS_1
+                }]
+            }]
+        }
+        docmaps_item = get_docmap_item_for_query_result_item(
+            query_result_with_evaluation
+        )
+        peer_reviewed_step = docmaps_item['steps']['_:b1']
+        peer_reviewed_actions = peer_reviewed_step['actions']
+        participants_for_review_article = peer_reviewed_actions[0]['participants']
+        assert participants_for_review_article == (
+            get_docmap_evaluation_participants_for_review_article_type()
+        )
 
     def test_should_populate_participants_peer_reviewed_step_for_evaluation_summary_type(self):
         editor_details = [EDITOR_DETAIL_1]
