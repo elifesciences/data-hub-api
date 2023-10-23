@@ -331,16 +331,16 @@ class TestGetDocmapsItemForQueryResultItem:
             'status': 'revised'
         }]
 
-    # def test_should_populate_inputs_revised_step(self):
-    #     query_result_item = {
-    #         **DOCMAPS_QUERY_RESULT_ITEM_1,
-    #         'manuscript_versions': [
-    #             MANUSCRIPT_VERSION_WITH_EVALUATIONS_1,
-    #             MANUSCRIPT_VERSION_WITH_EVALUATIONS_2
-    #         ]
-    #     }
-    #     docmaps_item = get_docmap_item_for_query_result_item(query_result_item)
-    #     peer_reviewed_step = docmaps_item['steps']['_:b3']
-    #     assert peer_reviewed_step['inputs'] == [
-    #         get_docmap_preprint_input(MANUSCRIPT_VERSION_WITH_EVALUATIONS_2)
-    #     ]
+    def test_should_populate_inputs_revised_step(self):
+        query_result_item = {
+            **DOCMAPS_QUERY_RESULT_ITEM_1,
+            'manuscript_versions': [
+                MANUSCRIPT_VERSION_WITH_EVALUATION_EMAILS_1,
+                MANUSCRIPT_VERSION_WITH_EVALUATION_EMAILS_2
+            ]
+        }
+        docmaps_item = get_docmap_item_for_query_result_item(query_result_item)
+        peer_reviewed_step = docmaps_item['steps']['_:b3']
+        assert peer_reviewed_step['inputs'] == [
+            get_docmap_preprint_input(MANUSCRIPT_VERSION_WITH_EVALUATION_EMAILS_2)
+        ]
