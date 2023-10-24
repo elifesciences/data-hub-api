@@ -89,8 +89,11 @@ class TestGetEvaluationAndTypeListFromEmail:
         assert result[3]['evaluation_type'] == DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE
         assert result[3]['evaluation_text'] == REVIEW_3.strip()
 
-    def test_should_return_none_if_there_is_no_email_body(self):
-        assert not get_evaluation_and_type_list_from_email(None)
+    def test_should_return_empty_list_if_there_is_no_email_body(self):
+        assert get_evaluation_and_type_list_from_email(None) == []
+
+    def test_should_return_empty_list_if_there_is_no_evalutaion_in_email_body(self):
+        assert get_evaluation_and_type_list_from_email(EMAIL_BODY_1) == []
 
 
 class TestGetDocmapEvaluationOutputContent:
