@@ -19,9 +19,10 @@ from data_hub_api.kotahi_docmaps.v1.docmap_typing import (
 
 LOGGER = logging.getLogger(__name__)
 
-HYPOTHESIS_URL = 'https://hypothes.is/a/'
-SCIETY_ARTICLES_ACTIVITY_URL = 'https://sciety.org/articles/activity/'
-SCIETY_ARTICLES_EVALUATIONS_URL = 'https://sciety.org/evaluations/hypothesis:'
+EVALUATION_URL_PREFIX = (
+    'https://data-hub-api.elifesciences.org/kotahi/docmaps/v1/'
+    'evaluation/get-by-evaluation-id?evaluation_id='
+)
 
 DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY = 'evaluation-summary'
 DOCMAP_EVALUATION_TYPE_FOR_REPLY = 'reply'
@@ -89,21 +90,21 @@ def get_evaluation_and_type_list_from_email_body(
 
 
 def get_docmap_evaluation_output_content(
-    evaluation_id: str
+    evaluation_url: str
 ) -> DocmapContent:
     return {
         'type': 'web-page',
-        'url': evaluation_id
+        'url': evaluation_url
     }
 
 
 def get_docmap_evaluation_output(
     docmap_evaluation_type: str,
-    evaluation_id: str
+    evaluation_url: str
 ) -> DocmapEvaluationOutput:
     return {
         'type': docmap_evaluation_type,
-        'content': [get_docmap_evaluation_output_content(evaluation_id)]
+        'content': [get_docmap_evaluation_output_content(evaluation_url)]
     }
 
 
@@ -211,7 +212,7 @@ def get_docmap_evaluation_participants(
 def get_docmap_actions_for_evaluations(
     manuscript_version: ApiManuscriptVersionInput,
     docmap_evaluation_type: str,
-    evaluation_id: str
+    evaluation_url: str
 ) -> DocmapAction:
     return {
         'participants': get_docmap_evaluation_participants(
@@ -221,7 +222,7 @@ def get_docmap_actions_for_evaluations(
         'outputs': [
             get_docmap_evaluation_output(
                 docmap_evaluation_type=docmap_evaluation_type,
-                evaluation_id=evaluation_id
+                evaluation_url=evaluation_url
             )
         ]
     }
@@ -230,10 +231,15 @@ def get_docmap_actions_for_evaluations(
 def generate_evaluation_id(
     long_manuscript_identifier: str,
     evaluation_type: str,
-    evaluation_index: str,
+    evaluation_index: int,
 ) -> str:
-    return f'{long_manuscript_identifier}:{evaluation_type}:{evaluation_index}'
-
+    assert long_manuscript_identifier
+    assert evaluation_type
+    assert evaluation_index
+    return (
+        f'{long_manuscript_identifier}:'
+        f'{evaluation_type}:{evaluation_index}'
+    )
 
 def iter_docmap_actions_for_evaluations(
     manuscript_version: ApiManuscriptVersionInput
@@ -255,8 +261,9 @@ def iter_docmap_actions_for_evaluations(
                     evaluation_type,
                     evaluation_index
                 )
+                evaluation_url = f'{EVALUATION_URL_PREFIX}{evaluation_id}'
                 yield get_docmap_actions_for_evaluations(
                     manuscript_version=manuscript_version,
                     docmap_evaluation_type=evaluation_type,
-                    evaluation_id=evaluation_id
+                    evaluation_url=evaluation_url
                 )

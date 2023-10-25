@@ -9,6 +9,7 @@ from data_hub_api.kotahi_docmaps.v1.codecs.elife_manuscript import (
 from data_hub_api.kotahi_docmaps.v1.codecs.evaluation import (
     DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY,
     DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE,
+    EVALUATION_URL_PREFIX,
     generate_evaluation_id,
     get_docmap_evaluation_output,
     get_docmap_evaluation_participants_for_evalution_summary_type,
@@ -222,21 +223,25 @@ class TestGetDocmapsItemForQueryResultItem:
         peer_reviewed_step = docmaps_item['steps']['_:b1']
         peer_reviewed_actions = peer_reviewed_step['actions']
         assert len(peer_reviewed_actions) > 0
+        evaluation_id_for_summary = generate_evaluation_id(
+            LONG_MANUSCRIPT_ID_2,
+            DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY,
+            1
+        )
+        evaluation_url_for_summary = f'{EVALUATION_URL_PREFIX}{evaluation_id_for_summary}'
         assert peer_reviewed_actions[0]['outputs'][0] == get_docmap_evaluation_output(
             docmap_evaluation_type=DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY,
-            evaluation_id=generate_evaluation_id(
-                LONG_MANUSCRIPT_ID_2,
-                DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY,
-                1
-            )
+            evaluation_url=evaluation_url_for_summary
         )
+        evaluation_id_for_review = generate_evaluation_id(
+            LONG_MANUSCRIPT_ID_2,
+            DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE,
+            1
+        )
+        evaluation_url_for_review = f'{EVALUATION_URL_PREFIX}{evaluation_id_for_review}'
         assert peer_reviewed_actions[1]['outputs'][0] == get_docmap_evaluation_output(
             docmap_evaluation_type=DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE,
-            evaluation_id=generate_evaluation_id(
-                LONG_MANUSCRIPT_ID_2,
-                DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE,
-                1
-            )
+            evaluation_url=evaluation_url_for_review
         )
 
     def test_should_populate_participants_peer_reviewed_step_for_review_article_type(self):

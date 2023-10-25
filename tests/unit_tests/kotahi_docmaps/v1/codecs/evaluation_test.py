@@ -7,6 +7,7 @@ from data_hub_api.kotahi_docmaps.v1.codecs.evaluation import (
     extract_elife_assessments_from_email,
     extract_elife_public_reviews_from_email,
     extract_public_review_parts,
+    generate_evaluation_id,
     get_docmap_affiliation,
     get_docmap_affiliation_location,
     get_docmap_evaluation_output,
@@ -98,10 +99,10 @@ class TestGetEvaluationAndTypeListFromEmail:
 
 class TestGetDocmapEvaluationOutputContent:
     def test_should_populate_evaluation_output_content(self):
-        result = get_docmap_evaluation_output_content('evaluation_id_1')
+        result = get_docmap_evaluation_output_content('evaluation_url_1')
         assert result == {
             'type': 'web-page',
-            'url': 'evaluation_id_1'
+            'url': 'evaluation_url_1'
         }
 
 
@@ -109,14 +110,14 @@ class TestGetDocmapEvaluationOutput:
     def test_should_populate_evaluation_output(self):
         result = get_docmap_evaluation_output(
             docmap_evaluation_type='docmap_evaluation_type_1',
-            evaluation_id = 'evaluation_id_1'
+            evaluation_url = 'evaluation_url_1'
         )
         assert result == {
             'type': 'docmap_evaluation_type_1',
             'content': [
                 {
                     'type': 'web-page',
-                    'url': 'evaluation_id_1'
+                    'url': 'evaluation_url_1'
                 }
             ]
         }
@@ -274,3 +275,33 @@ class TestGetDocmapEvaluationParticipants:
                 docmap_evaluation_type=DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY
             )
             mock.assert_called_once()
+
+
+class TestGenerateEvaluationId:
+    def test_should_raise_assertion_error_even_one_of_the_param_not_provided(self):
+        with pytest.raises(AssertionError):
+            generate_evaluation_id(
+                long_manuscript_identifier=None,
+                evaluation_type='evaluation_type_1',
+                evaluation_index=1
+            )
+        with pytest.raises(AssertionError):
+            generate_evaluation_id(
+                long_manuscript_identifier='long_manuscript_identifier_1',
+                evaluation_type=None,
+                evaluation_index=1
+            )
+        with pytest.raises(AssertionError):
+            generate_evaluation_id(
+                long_manuscript_identifier='long_manuscript_identifier_1',
+                evaluation_type='evaluation_type_1',
+                evaluation_index=None
+            )
+
+    def test_should_return_if_with_given_params(self):
+        result = generate_evaluation_id(
+            long_manuscript_identifier='long_manuscript_identifier_1',
+            evaluation_type='evaluation_type_1',
+            evaluation_index=1
+        )
+        assert result == 'long_manuscript_identifier_1:evaluation_type_1:1'
