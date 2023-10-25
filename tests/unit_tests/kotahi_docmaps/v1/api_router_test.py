@@ -90,4 +90,3 @@ class TestGetKotahiDocmapsIndex:
             params={'evaluation_id': 'valid_id'}
         )
         assert response.text == 'text_1'
-

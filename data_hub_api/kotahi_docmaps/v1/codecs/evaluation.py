@@ -1,4 +1,3 @@
-from itertools import groupby
 import logging
 import re
 from typing import Iterable, Optional, Sequence, cast
@@ -51,7 +50,7 @@ def extract_elife_public_reviews_from_email(email_body: Optional[str]) -> Option
     return None
 
 
-def extract_public_review_parts(public_reviews: Optional[str]) -> Optional[str]:
+def extract_public_review_parts(public_reviews: Optional[str]):
     if public_reviews:
         pattern = r'(?=Reviewer #\d+ \(Public Review\):)'
         parts = re.split(pattern, public_reviews)
@@ -240,6 +239,7 @@ def generate_evaluation_id(
         f'{long_manuscript_identifier}:'
         f'{evaluation_type}:{evaluation_index}'
     )
+
 
 def iter_docmap_actions_for_evaluations(
     manuscript_version: ApiManuscriptVersionInput

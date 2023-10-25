@@ -50,10 +50,12 @@ class DocmapsProvider:
         )
         return result
 
-    def create_map_from_bq_result(self, bq_results: Sequence[ApiInput]) -> Mapping[str, Docmap]:
+    def create_map_from_bq_result(self, bq_results) -> Mapping[str, Docmap]:
         return {
-            bq_result['manuscript_id']: get_docmap_item_for_query_result_item(cast(ApiInput, bq_result))
-            for bq_result in bq_results 
+            bq_result['manuscript_id']: get_docmap_item_for_query_result_item(
+                cast(ApiInput, bq_result)
+            )
+            for bq_result in bq_results
         }
 
     def iter_docmaps_by_manuscript_id(

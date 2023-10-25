@@ -110,7 +110,7 @@ class TestGetDocmapEvaluationOutput:
     def test_should_populate_evaluation_output(self):
         result = get_docmap_evaluation_output(
             docmap_evaluation_type='docmap_evaluation_type_1',
-            evaluation_url = 'evaluation_url_1'
+            evaluation_url='evaluation_url_1'
         )
         assert result == {
             'type': 'docmap_evaluation_type_1',
