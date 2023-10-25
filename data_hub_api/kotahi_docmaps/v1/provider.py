@@ -1,7 +1,7 @@
 import logging
 from pathlib import Path
 from time import monotonic
-from typing import Iterable, Optional, Sequence, cast
+from typing import Iterable, Mapping, Optional, Sequence, cast
 
 import objsize
 from data_hub_api.kotahi_docmaps.v1.codecs.docmaps import get_docmap_item_for_query_result_item
@@ -50,6 +50,12 @@ class DocmapsProvider:
         )
         return result
 
+    def create_map_from_bq_result(self, bq_results: Sequence[ApiInput]) -> Mapping[str, Docmap]:
+        return {
+            bq_result['manuscript_id']: get_docmap_item_for_query_result_item(cast(ApiInput, bq_result))
+            for bq_result in bq_results 
+        }
+
     def iter_docmaps_by_manuscript_id(
         self,
         manuscript_id: Optional[str] = None
@@ -57,14 +63,13 @@ class DocmapsProvider:
         bq_result_list = self._query_results_cache.get_or_load(
             load_fn=self._load_query_results_from_bq
         )
+        docmap_by_manuscript_id_map = self.create_map_from_bq_result(bq_result_list)
         if manuscript_id:
-            bq_result_list = [
-                bq_result
-                for bq_result in bq_result_list
-                if bq_result['manuscript_id'] == manuscript_id
-            ]
-        for bq_result in bq_result_list:
-            yield get_docmap_item_for_query_result_item(cast(ApiInput, bq_result))
+            docmap = docmap_by_manuscript_id_map.get(manuscript_id)
+            if not docmap:
+                return []
+            return [docmap]
+        return docmap_by_manuscript_id_map.values()
 
     def get_docmaps_by_manuscript_id(self, manuscript_id: str) -> Sequence[Docmap]:
         return list(self.iter_docmaps_by_manuscript_id(manuscript_id))
@@ -74,4 +79,5 @@ class DocmapsProvider:
         return {'docmaps': article_docmaps_list}
 
     def get_evaluation_text_by_evaluation_id(self, evaluation_id: str) -> Optional[str]:
-        return None
+        assert evaluation_id
+
