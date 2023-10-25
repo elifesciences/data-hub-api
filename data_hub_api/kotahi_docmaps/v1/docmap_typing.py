@@ -31,32 +31,6 @@ DocmapElifeManuscriptOutput = TypedDict(
     }
 )
 
-DocmapPublishedElifeManuscriptPartOf = TypedDict(
-    'DocmapPublishedElifeManuscriptPartOf',
-    {
-        'type': str,
-        'doi': str,
-        'identifier': str,
-        'subjectDisciplines': Optional[Sequence[str]],
-        'published': timestamp_str,
-        'volumeIdentifier': Optional[str],
-        'electronicArticleIdentifier': str
-    }
-)
-
-DocmapPublishedElifeManuscriptOutput = TypedDict(
-    'DocmapPublishedElifeManuscriptOutput',
-    {
-        'type': str,
-        'published': timestamp_str,
-        'doi': str,
-        'identifier': str,
-        'versionIdentifier': str,
-        'license': str,
-        'partOf': DocmapPublishedElifeManuscriptPartOf
-    }
-)
-
 DocmapAnonymousActor = TypedDict(
     'DocmapAnonymousActor',
     {

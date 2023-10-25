@@ -11,8 +11,6 @@ MANUSCRIPT_ID_1 = 'manuscript_id_1'
 LONG_MANUSCRIPT_ID_1 = 'long_manuscript_id'
 LONG_MANUSCRIPT_ID_2 = 'long_manuscript_id_R1'
 
-LONG_MANUSCRIPT_VOR_ID_1 = 'long_manuscript-VOR-id'
-
 DOI_1 = '10.1101.test/doi1'
 DOI_2 = '10.1101.test/doi2'
 
@@ -34,11 +32,6 @@ ELIFE_DOI_VERSION_STR_3 = 'elife_doi_version_str_3'
 
 LICENSE_1 = 'license_1'
 
-RP_PUBLICATION_TIMESTAMP_1 = datetime.fromisoformat('2022-05-05T01:02:03+00:00')
-RP_PUBLICATION_TIMESTAMP_2 = datetime.fromisoformat('2023-06-05T01:02:03+00:00')
-
-VOR_PUBLICATION_DATE_1 = date.fromisoformat('2023-08-03')
-
 SUBJECT_AREA_NAME_1 = 'subject_area_name_1'
 SUBJECT_AREA_NAME_2 = 'subject_area_name_2'
 
@@ -55,14 +48,7 @@ MANUSCRIPT_VERSION_1: ApiManuscriptVersionInput = {
     'preprint_version': PREPRINT_VERSION_1,
     'preprint_published_at_date': date.fromisoformat('2021-01-01'),
     'email_body': '',
-    'email_timestamp': None,
-    'rp_publication_timestamp': RP_PUBLICATION_TIMESTAMP_1,
-    'vor_publication_date': None,
-    'subject_areas': [{
-        'subject_area_name': SUBJECT_AREA_NAME_1
-    }, {
-        'subject_area_name': SUBJECT_AREA_NAME_2
-    }]
+    'email_timestamp': None
 }
 
 MANUSCRIPT_VERSION_2: ApiManuscriptVersionInput = {
@@ -78,13 +64,7 @@ MANUSCRIPT_VERSION_2: ApiManuscriptVersionInput = {
     'preprint_version': PREPRINT_VERSION_2,
     'preprint_published_at_date': date.fromisoformat('2021-02-02'),
     'email_body': '',
-    'email_timestamp': None,
-    'rp_publication_timestamp': RP_PUBLICATION_TIMESTAMP_2,
-    'vor_publication_date': None,
-    'subject_areas': [
-        {'subject_area_name': SUBJECT_AREA_NAME_1},
-        {'subject_area_name': SUBJECT_AREA_NAME_2}
-    ]
+    'email_timestamp': None
 }
 
 PUBLISHER_DICT_1 = {"id": "publisher_1"}

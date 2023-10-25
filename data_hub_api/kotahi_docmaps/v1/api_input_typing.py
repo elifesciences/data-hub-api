@@ -16,13 +16,6 @@ ApiEditorDetailInput = TypedDict(
     }
 )
 
-ApiSubjectAreaInput = TypedDict(
-    'ApiSubjectAreaInput',
-    {
-        'subject_area_name': str
-    }
-)
-
 ApiManuscriptVersionInput = TypedDict(
     'ApiManuscriptVersionInput',
     {
@@ -38,10 +31,7 @@ ApiManuscriptVersionInput = TypedDict(
         'preprint_version': Optional[str],
         'preprint_published_at_date': Optional[date],
         'email_body': Optional[str],
-        'email_timestamp': Optional[datetime],
-        'rp_publication_timestamp': Optional[datetime],
-        'vor_publication_date': Optional[date],
-        'subject_areas': Sequence[ApiSubjectAreaInput]
+        'email_timestamp': Optional[datetime]
     }
 )
 

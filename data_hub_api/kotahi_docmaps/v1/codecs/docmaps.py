@@ -5,7 +5,6 @@ import urllib
 
 from data_hub_api.kotahi_docmaps.v1.codecs.elife_manuscript import (
     get_docmap_elife_manuscript_doi_assertion_item,
-    get_docmap_elife_manuscript_doi_assertion_item_for_vor,
     get_docmap_elife_manuscript_output,
 )
 from data_hub_api.kotahi_docmaps.v1.codecs.evaluation import (
@@ -143,33 +142,15 @@ def get_docmaps_step_for_revised_status(
     }
 
 
-def get_docmap_assertions_for_vor_published_step(
-    query_result_item: ApiInput,
-    manuscript_version: ApiManuscriptVersionInput
-) -> Sequence[DocmapAssertion]:
-    return [{
-        'item': get_docmap_elife_manuscript_doi_assertion_item_for_vor(
-            query_result_item=query_result_item,
-            manuscript_version=manuscript_version
-        ),
-        'status': 'vor-published'
-    }]
-
-
-def is_manuscript_vor(long_manuscript_identifier: str) -> bool:
-    return ('-VOR-' in long_manuscript_identifier)
-
-
 def iter_docmap_steps_for_query_result_item(query_result_item: ApiInput) -> Iterable[DocmapStep]:
     manuscript_versions = query_result_item['manuscript_versions']
-    for index, manuscript_version in enumerate(manuscript_versions):
-        if not is_manuscript_vor(manuscript_version['long_manuscript_identifier']):
-            yield get_docmaps_step_for_under_review_status(query_result_item, manuscript_version)
-            if manuscript_version['email_body']:
-                if manuscript_version['position_in_overall_stage'] == 1:
-                    yield get_docmaps_step_for_peer_reviewed_status(manuscript_version)
-                else:
-                    yield get_docmaps_step_for_revised_status(manuscript_version)
+    for manuscript_version in manuscript_versions:
+        yield get_docmaps_step_for_under_review_status(query_result_item, manuscript_version)
+        if manuscript_version['email_body']:
+            if manuscript_version['position_in_overall_stage'] == 1:
+                yield get_docmaps_step_for_peer_reviewed_status(manuscript_version)
+            else:
+                yield get_docmaps_step_for_revised_status(manuscript_version)
 
 
 def generate_docmap_steps(step_iterable: Iterable[DocmapStep]) -> DocmapSteps:
