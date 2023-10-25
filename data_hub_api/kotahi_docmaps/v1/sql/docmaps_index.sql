@@ -4,17 +4,12 @@ WITH t_reviewed_preprints AS (
       source_site_id,
       preprint_url_from_ejp,
       ejp_normalized_title,
-      biorxiv_medrxiv_normalized_title),
-    (
-      under_review_timestamp IS NOT NULL
-      OR 
-      (
-        is_reviewed_preprint_type
-        AND long_manuscript_identifier LIKE '%-VOR-%'
-      )
-    ) AS should_provide_docmaps_for,
+      biorxiv_medrxiv_normalized_title)
   FROM `elife-data-pipeline.prod.v_manuscript_with_matching_preprint_server_doi`
-  WHERE preprint_doi IS NOT NULL
+  WHERE is_reviewed_preprint_type
+    AND under_review_timestamp IS NOT NULL
+    AND preprint_doi IS NOT NULL
+    AND long_manuscript_identifier NOT LIKE '%-VOR-%'
 ),
 
 t_latest_evaluation_emails AS(
@@ -71,18 +66,12 @@ t_emails_for_not_declined_to_review_manuscripts AS (
     ON email.long_manuscript_identifier = version.long_manuscript_identifier
 ),
 
-t_reviewed_preprints_for_docmaps AS (
-  SELECT * 
-  FROM t_reviewed_preprints
-  WHERE should_provide_docmaps_for
-),
-
 t_result_with_evaluation_emails AS (
   SELECT 
     reviewed_preprints.*,
     evaluation_emails.converted_body AS email_body,
     evaluation_emails.create_dt AS email_timestamp
-  FROM t_reviewed_preprints_for_docmaps AS reviewed_preprints
+  FROM t_reviewed_preprints AS reviewed_preprints
   LEFT JOIN t_emails_for_not_declined_to_review_manuscripts AS evaluation_emails
   ON evaluation_emails.long_manuscript_identifier = reviewed_preprints.long_manuscript_identifier
 ),
@@ -200,19 +189,6 @@ t_preprint_published_at_date AS (
     AND result.preprint_version = europepmc_pub_date.doi_version
 ),
 
-t_rp_publication_date AS (
-  SELECT
-    * EXCEPT(rn)
-  FROM
-  (
-    SELECT 
-      *,
-      ROW_NUMBER() OVER(PARTITION BY elife_doi, elife_doi_version ORDER BY imported_timestamp DESC) AS rn
-    FROM `elife-data-pipeline.prod.reviewed_preprint_publication_date`
-  )
-  WHERE rn=1
-),
-
 t_vor_publication_date AS (
   SELECT 
     article_id,
@@ -246,12 +222,6 @@ t_result_with_sorted_manuscript_versions_array AS (
         result.editor_details,
         result.senior_editor_details,
         result.author_names_csv,
-        result.subject_areas,
-        PARSE_TIMESTAMP(
-          '%Y-%m-%d %H:%M:%S',
-          CONCAT(publication.publication_date, ' ', publication.utc_publication_time)
-        ) AS rp_publication_timestamp,
-        vor_date.vor_publication_date,
         result.email_body,
         result.email_timestamp
       )
@@ -260,11 +230,6 @@ t_result_with_sorted_manuscript_versions_array AS (
   FROM t_result_with_preprint_version AS result
   LEFT JOIN t_preprint_published_at_date AS preprint
     ON result.long_manuscript_identifier = preprint.long_manuscript_identifier
-  LEFT JOIN t_rp_publication_date AS publication
-    ON result.elife_doi = publication.elife_doi
-    AND result.position_in_overall_stage = publication.elife_doi_version
-  LEFT JOIN t_vor_publication_date AS vor_date
-    ON result.manuscript_id = vor_date.article_id
   GROUP BY result.manuscript_id, result.is_reviewed_preprint_type, result.elife_doi
 ),
 
