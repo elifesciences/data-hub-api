@@ -22,8 +22,8 @@ def create_test_client(docmaps_provider_mock: MagicMock):
     return client
 
 
-class TestGetEnhancedPreprintsDocmapsIndex:
-    def test_should_return_json_with_docmaps_list_from_enhanced_preprint_provider(
+class TestGetKotahiDocmapsIndex:
+    def test_should_return_json_with_docmaps_list_from_kotahi_provider(
         self,
         docmaps_provider_mock: MagicMock
     ):
@@ -66,3 +66,15 @@ class TestGetEnhancedPreprintsDocmapsIndex:
         )
         assert response.status_code == 200
         assert response.json() == article_docmap_list[0]
+
+    def test_should_return_404_for_invalid_evaluation_id(
+        self,
+        docmaps_provider_mock: MagicMock
+    ):
+        docmaps_provider_mock.get_evaluation_text_by_evaluation_id.return_value = None
+        client = create_test_client(docmaps_provider_mock)
+        response = client.get(
+            '/v1/evaluation/get-by-evaluation-id',
+            params={'evaluation_id': 'invalid_id'}
+        )
+        assert response.status_code == 404

@@ -72,3 +72,6 @@ class DocmapsProvider:
     def get_docmaps_index(self) -> dict:
         article_docmaps_list = list(self.iter_docmaps_by_manuscript_id())
         return {'docmaps': article_docmaps_list}
+
+    def get_evaluation_text_by_evaluation_id(self, evaluation_id: str) -> Optional[str]:
+        return None
