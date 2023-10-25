@@ -78,3 +78,16 @@ class TestGetKotahiDocmapsIndex:
             params={'evaluation_id': 'invalid_id'}
         )
         assert response.status_code == 404
+
+    def test_should_return_evaluation_text_by_evaluation_id(
+        self,
+        docmaps_provider_mock: MagicMock
+    ):
+        docmaps_provider_mock.get_evaluation_text_by_evaluation_id.return_value = 'text_1'
+        client = create_test_client(docmaps_provider_mock)
+        response = client.get(
+            '/v1/evaluation/get-by-evaluation-id',
+            params={'evaluation_id': 'valid_id'}
+        )
+        assert response.text == 'text_1'
+
