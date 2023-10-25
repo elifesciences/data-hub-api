@@ -290,16 +290,14 @@ t_latest_biorxiv_medrxiv_tdm_path_by_doi_and_version AS (
 ),
 
 t_rp_meca_path_update AS (
-  SELECT
-    * EXCEPT(rn)
-  FROM
-  (
-    SELECT 
-      *,
-      ROW_NUMBER() OVER(PARTITION BY manuscript_id, long_manuscript_identifier ORDER BY imported_timestamp DESC) AS rn
+  SELECT 
+    *
+  FROM `elife-data-pipeline.prod.reviewed_preprint_meca_path_update`
+  WHERE imported_timestamp = (
+    SELECT
+      MAX(imported_timestamp)
     FROM `elife-data-pipeline.prod.reviewed_preprint_meca_path_update`
   )
-  WHERE rn=1
 ),
 
 t_manual_preprint_match_for_published_date AS (
@@ -353,7 +351,20 @@ t_preprint_published_at_date_and_meca_path AS (
           '-meca.zip'
         )
       ELSE NULL
-    END AS meca_path
+    END AS meca_path,
+    CASE
+      WHEN meca_path_update.meca_path IS NOT NULL
+        THEN 'gsheet manual match'
+      WHEN result.preprint_doi LIKE '10.1101/%'
+        THEN 'biorxiv meca path api'
+      WHEN (
+        result.preprint_doi LIKE '10.21203/rs%' 
+        OR result.preprint_doi LIKE '%arXiv%' 
+        OR result.preprint_doi LIKE '%/osf.io/%'
+      )
+        THEN 'generated from manuscript_id and version'
+      ELSE NULL
+    END AS meca_path_source
   FROM t_result_with_preprint_version AS result
   LEFT JOIN t_rp_meca_path_update AS meca_path_update
     ON result.long_manuscript_identifier = meca_path_update.long_manuscript_identifier
@@ -415,6 +426,7 @@ t_result_with_sorted_manuscript_versions_array AS (
         result.preprint_doi_url,
         preprint.preprint_published_at_date,
         preprint.meca_path,
+        preprint.meca_path_source,
         result.editor_details,
         result.senior_editor_details,
         result.author_names_csv,
