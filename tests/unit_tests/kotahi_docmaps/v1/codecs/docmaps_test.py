@@ -186,21 +186,12 @@ class TestGetDocmapsItemForQueryResultItem:
             )
         ]
 
-    # def test_should_not_populate_actions_peer_reviewed_step_if_there_is_no_email_body(self):
-    #     query_result_with_evaluation = {
-    #         **DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATION_EMAILS_1,
-    #         'manuscript_versions': [{
-    #             **MANUSCRIPT_VERSION_1,
-    #             'email_body':''
-    #         }]
-    #     }
-    #     docmaps_item = get_docmap_item_for_query_result_item(
-    #         query_result_with_evaluation
-    #     )
-    #     peer_reviewed_step = docmaps_item['steps']['_:b1']
-    #     peer_reviewed_actions = peer_reviewed_step['actions']
-    #     assert len(peer_reviewed_actions) == 0
-    #     assert peer_reviewed_actions == []
+    def test_should_not_have_peer_reviewed_step_if_there_is_no_email_body(self):
+        query_result_with_evaluation = DOCMAPS_QUERY_RESULT_ITEM_1
+        docmaps_item = get_docmap_item_for_query_result_item(
+            query_result_with_evaluation
+        )
+        assert '_b1' not in docmaps_item['steps']
 
     def test_should_populate_actions_outputs_peer_reviewed_step_for_each_evaluation(self):
         query_result_with_evaluation = {
