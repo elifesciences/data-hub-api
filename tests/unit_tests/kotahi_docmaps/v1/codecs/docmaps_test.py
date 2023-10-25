@@ -35,6 +35,7 @@ from tests.unit_tests.kotahi_docmaps.v1.test_data import (
     DOCMAPS_QUERY_RESULT_ITEM_2,
     DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATION_EMAILS_1,
     EDITOR_DETAIL_1,
+    EMAIL_BODY_1,
     EMAIL_BODY_WITH_ELIFE_ASSESSMENT_1,
     EMAIL_BODY_WITH_PUBLIC_REVIEWS_1,
     MANUSCRIPT_VERSION_1,
@@ -185,6 +186,21 @@ class TestGetDocmapsItemForQueryResultItem:
                 manuscript_version=MANUSCRIPT_VERSION_WITH_EVALUATION_EMAILS_1
             )
         ]
+
+    def test_should_not_populate_actions_peer_reviewed_step_if_there_is_no_evaluations_in_email_body(self):
+        query_result_with_evaluation = {
+            **DOCMAPS_QUERY_RESULT_ITEM_1,
+            'manuscript_versions': [{
+                **MANUSCRIPT_VERSION_1,
+                'email_body': EMAIL_BODY_1
+            }]
+        }
+        docmaps_item = get_docmap_item_for_query_result_item(
+            query_result_with_evaluation
+        )
+        peer_reviewed_step = docmaps_item['steps']['_:b1']
+        peer_reviewed_actions = peer_reviewed_step['actions']
+        assert not peer_reviewed_actions
 
     def test_should_not_have_peer_reviewed_step_if_there_is_no_email_body(self):
         query_result_with_evaluation = DOCMAPS_QUERY_RESULT_ITEM_1
