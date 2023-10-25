@@ -14,7 +14,7 @@ from data_hub_api.kotahi_docmaps.v1.codecs.evaluation import (
     get_docmap_evaluation_participants,
     get_docmap_evaluation_participants_for_evaluation_summary_type,
     get_docmap_evaluation_participants_for_evalution_summary_type,
-    get_evaluation_and_type_list_from_email,
+    get_evaluation_and_type_list_from_email_body,
     get_related_organization_detail
 )
 from tests.unit_tests.kotahi_docmaps.v1.test_data import (
@@ -76,7 +76,7 @@ class TestExtractPublicReviewParts:
 
 class TestGetEvaluationAndTypeListFromEmail:
     def test_should_return_elife_assessment_type_and_text_when_available(self):
-        result = get_evaluation_and_type_list_from_email(
+        result = get_evaluation_and_type_list_from_email_body(
             EMAIL_BODY_WITH_ELIFE_ASSESSMENT_AND_PUBLIC_REVIEWS_1
         )
         assert len(result) > 0
@@ -90,32 +90,33 @@ class TestGetEvaluationAndTypeListFromEmail:
         assert result[3]['evaluation_text'] == REVIEW_3.strip()
 
     def test_should_return_empty_list_if_there_is_no_email_body(self):
-        assert not get_evaluation_and_type_list_from_email(None)
+        assert not get_evaluation_and_type_list_from_email_body(None)
 
     def test_should_return_empty_list_if_there_is_no_evalutaion_in_email_body(self):
-        assert not get_evaluation_and_type_list_from_email(EMAIL_BODY_1)
+        assert not get_evaluation_and_type_list_from_email_body(EMAIL_BODY_1)
 
 
 class TestGetDocmapEvaluationOutputContent:
     def test_should_populate_evaluation_output_content(self):
-        result = get_docmap_evaluation_output_content()
+        result = get_docmap_evaluation_output_content('evaluation_id_1')
         assert result == {
             'type': 'web-page',
-            'url': 'TODO'
+            'url': 'evaluation_id_1'
         }
 
 
 class TestGetDocmapEvaluationOutput:
     def test_should_populate_evaluation_output(self):
         result = get_docmap_evaluation_output(
-            docmap_evaluation_type='docmap_evaluation_type_1'
+            docmap_evaluation_type='docmap_evaluation_type_1',
+            evaluation_id = 'evaluation_id_1'
         )
         assert result == {
             'type': 'docmap_evaluation_type_1',
             'content': [
                 {
                     'type': 'web-page',
-                    'url': 'TODO'
+                    'url': 'evaluation_id_1'
                 }
             ]
         }

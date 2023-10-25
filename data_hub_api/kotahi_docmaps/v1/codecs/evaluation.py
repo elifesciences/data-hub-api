@@ -1,3 +1,4 @@
+from itertools import groupby
 import logging
 import re
 from typing import Iterable, Optional, Sequence, cast
@@ -27,7 +28,7 @@ DOCMAP_EVALUATION_TYPE_FOR_REPLY = 'reply'
 DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE = 'review-article'
 
 
-def extract_elife_assessments_from_email(email_body: str):
+def extract_elife_assessments_from_email(email_body: Optional[str]) -> Optional[str]:
     if email_body:
         pattern = r'(?s)([eE][Ll]ife [aA]ssessment(.*?))-{10,}'
         match = re.search(pattern, email_body)
@@ -38,7 +39,7 @@ def extract_elife_assessments_from_email(email_body: str):
     return None
 
 
-def extract_elife_public_reviews_from_email(email_body: str):
+def extract_elife_public_reviews_from_email(email_body: Optional[str]) -> Optional[str]:
     if email_body:
         pattern = r'(?s)([pP]ublic [rR]eview[s](.*?))-{10,}'
         match = re.search(pattern, email_body)
@@ -49,7 +50,7 @@ def extract_elife_public_reviews_from_email(email_body: str):
     return None
 
 
-def extract_public_review_parts(public_reviews: str):
+def extract_public_review_parts(public_reviews: Optional[str]) -> Optional[str]:
     if public_reviews:
         pattern = r'(?=Reviewer #\d+ \(Public Review\):)'
         parts = re.split(pattern, public_reviews)
@@ -61,7 +62,9 @@ def extract_public_review_parts(public_reviews: str):
     return None
 
 
-def get_evaluation_and_type_list_from_email(email_body: str):
+def get_evaluation_and_type_list_from_email_body(
+    email_body: Optional[str]
+) -> Optional[Sequence[dict]]:
     if email_body:
         evalution_list = []
         evaluation_summary_text = extract_elife_assessments_from_email(email_body)
@@ -85,19 +88,22 @@ def get_evaluation_and_type_list_from_email(email_body: str):
     return []
 
 
-def get_docmap_evaluation_output_content() -> DocmapContent:
+def get_docmap_evaluation_output_content(
+    evaluation_id: str
+) -> DocmapContent:
     return {
         'type': 'web-page',
-        'url': 'TODO'
+        'url': evaluation_id
     }
 
 
 def get_docmap_evaluation_output(
-    docmap_evaluation_type: str
+    docmap_evaluation_type: str,
+    evaluation_id: str
 ) -> DocmapEvaluationOutput:
     return {
         'type': docmap_evaluation_type,
-        'content': [get_docmap_evaluation_output_content()]
+        'content': [get_docmap_evaluation_output_content(evaluation_id)]
     }
 
 
@@ -204,7 +210,8 @@ def get_docmap_evaluation_participants(
 
 def get_docmap_actions_for_evaluations(
     manuscript_version: ApiManuscriptVersionInput,
-    docmap_evaluation_type: str
+    docmap_evaluation_type: str,
+    evaluation_id: str
 ) -> DocmapAction:
     return {
         'participants': get_docmap_evaluation_participants(
@@ -213,10 +220,19 @@ def get_docmap_actions_for_evaluations(
         ),
         'outputs': [
             get_docmap_evaluation_output(
-                docmap_evaluation_type=docmap_evaluation_type
+                docmap_evaluation_type=docmap_evaluation_type,
+                evaluation_id=evaluation_id
             )
         ]
     }
+
+
+def generate_evaluation_id(
+    long_manuscript_identifier: str,
+    evaluation_type: str,
+    evaluation_index: str,
+) -> str:
+    return f'{long_manuscript_identifier}:{evaluation_type}:{evaluation_index}'
 
 
 def iter_docmap_actions_for_evaluations(
@@ -224,10 +240,23 @@ def iter_docmap_actions_for_evaluations(
 ) -> Iterable[DocmapAction]:
     email_body = manuscript_version['email_body']
     if email_body:
-        evaluation_list = get_evaluation_and_type_list_from_email(email_body)
+        evaluation_list = get_evaluation_and_type_list_from_email_body(email_body)
         if evaluation_list:
+            type_indices = {}
             for evaluation_dict in evaluation_list:
+                evaluation_type = evaluation_dict['evaluation_type']
+                if evaluation_type not in type_indices:
+                    type_indices[evaluation_type] = 1
+                else:
+                    type_indices[evaluation_type] += 1
+                evaluation_index = type_indices[evaluation_type]
+                evaluation_id = generate_evaluation_id(
+                    manuscript_version['long_manuscript_identifier'],
+                    evaluation_type,
+                    evaluation_index
+                )
                 yield get_docmap_actions_for_evaluations(
                     manuscript_version=manuscript_version,
-                    docmap_evaluation_type=evaluation_dict['evaluation_type']
+                    docmap_evaluation_type=evaluation_type,
+                    evaluation_id=evaluation_id
                 )

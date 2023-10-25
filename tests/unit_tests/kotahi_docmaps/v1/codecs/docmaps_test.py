@@ -9,6 +9,7 @@ from data_hub_api.kotahi_docmaps.v1.codecs.elife_manuscript import (
 from data_hub_api.kotahi_docmaps.v1.codecs.evaluation import (
     DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY,
     DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE,
+    generate_evaluation_id,
     get_docmap_evaluation_output,
     get_docmap_evaluation_participants_for_evalution_summary_type,
     get_docmap_evaluation_participants_for_review_article_type
@@ -38,6 +39,7 @@ from tests.unit_tests.kotahi_docmaps.v1.test_data import (
     EMAIL_BODY_1,
     EMAIL_BODY_WITH_ELIFE_ASSESSMENT_1,
     EMAIL_BODY_WITH_PUBLIC_REVIEWS_1,
+    LONG_MANUSCRIPT_ID_2,
     MANUSCRIPT_VERSION_1,
     MANUSCRIPT_VERSION_2,
     MANUSCRIPT_VERSION_WITH_ELIFE_ASSESSMENT_AND_PUBLIC_REVIEWS_1,
@@ -221,10 +223,20 @@ class TestGetDocmapsItemForQueryResultItem:
         peer_reviewed_actions = peer_reviewed_step['actions']
         assert len(peer_reviewed_actions) > 0
         assert peer_reviewed_actions[0]['outputs'][0] == get_docmap_evaluation_output(
-            docmap_evaluation_type=DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY
+            docmap_evaluation_type=DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY,
+            evaluation_id=generate_evaluation_id(
+                LONG_MANUSCRIPT_ID_2,
+                DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY,
+                1
+            )
         )
         assert peer_reviewed_actions[1]['outputs'][0] == get_docmap_evaluation_output(
-            docmap_evaluation_type=DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE
+            docmap_evaluation_type=DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE,
+            evaluation_id=generate_evaluation_id(
+                LONG_MANUSCRIPT_ID_2,
+                DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE,
+                1
+            )
         )
 
     def test_should_populate_participants_peer_reviewed_step_for_review_article_type(self):
