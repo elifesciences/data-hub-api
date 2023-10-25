@@ -79,17 +79,12 @@ t_reviewed_preprints_for_docmaps AS (
 
 t_result_with_evaluation_emails AS (
   SELECT 
-    *,
-    ARRAY(
-      SELECT AS STRUCT
-        long_manuscript_identifier,
-        converted_subject AS email_subject,
-        converted_body AS email_body,
-        create_dt AS email_timestamp
-      FROM t_emails_for_not_declined_to_review_manuscripts AS evaluation_emails
-      WHERE evaluation_emails.long_manuscript_identifier = reviewed_preprints.long_manuscript_identifier
-    ) AS evaluation_emails,
+    reviewed_preprints.*,
+    evaluation_emails.converted_body AS email_body,
+    evaluation_emails.create_dt AS email_timestamp
   FROM t_reviewed_preprints_for_docmaps AS reviewed_preprints
+  LEFT JOIN t_emails_for_not_declined_to_review_manuscripts AS evaluation_emails
+  ON evaluation_emails.long_manuscript_identifier = reviewed_preprints.long_manuscript_identifier
 ),
 
 t_latest_biorxiv_medrxiv_api_response_version_by_doi AS (
@@ -257,7 +252,8 @@ t_result_with_sorted_manuscript_versions_array AS (
           CONCAT(publication.publication_date, ' ', publication.utc_publication_time)
         ) AS rp_publication_timestamp,
         vor_date.vor_publication_date,
-        result.evaluation_emails
+        result.email_body,
+        result.email_timestamp
       )
     ORDER BY result.position_in_overall_stage
     ) AS manuscript_versions 

@@ -165,7 +165,7 @@ def iter_docmap_steps_for_query_result_item(query_result_item: ApiInput) -> Iter
     for index, manuscript_version in enumerate(manuscript_versions):
         if not is_manuscript_vor(manuscript_version['long_manuscript_identifier']):
             yield get_docmaps_step_for_under_review_status(query_result_item, manuscript_version)
-            if manuscript_version['evaluation_emails']:
+            if manuscript_version['email_body']:
                 if manuscript_version['position_in_overall_stage'] == 1:
                     yield get_docmaps_step_for_peer_reviewed_status(manuscript_version)
                 else:

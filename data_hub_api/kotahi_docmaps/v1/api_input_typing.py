@@ -2,14 +2,6 @@ from datetime import date, datetime
 from typing import Optional, Sequence, TypedDict
 
 
-ApiEvaluationEmailInput = TypedDict(
-    'ApiEvaluationEmailInput',
-    {
-        'email_body': str,
-        'email_timestamp': datetime,
-    }
-)
-
 ApiEditorDetailInput = TypedDict(
     'ApiEditorDetailInput',
     {
@@ -45,7 +37,8 @@ ApiManuscriptVersionInput = TypedDict(
         'preprint_doi': str,
         'preprint_version': Optional[str],
         'preprint_published_at_date': Optional[date],
-        'evaluation_emails': Sequence[ApiEvaluationEmailInput],
+        'email_body': Optional[str],
+        'email_timestamp': Optional[datetime],
         'rp_publication_timestamp': Optional[datetime],
         'vor_publication_date': Optional[date],
         'subject_areas': Sequence[ApiSubjectAreaInput]

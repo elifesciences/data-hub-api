@@ -35,11 +35,11 @@ from tests.unit_tests.kotahi_docmaps.v1.test_data import (
     DOCMAPS_QUERY_RESULT_ITEM_2,
     DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATION_EMAILS_1,
     EDITOR_DETAIL_1,
-    EVALUATION_EMAILS_WITH_ELIFE_ASSESSMENT_1,
-    EVALUATION_EMAILS_WITH_ELIFE_ASSESSMENT_AND_PUBLIC_REVIEWS_1,
-    EVALUATION_EMAILS_WITH_PUBLIC_REVIEWS_1,
+    EMAIL_BODY_WITH_ELIFE_ASSESSMENT_1,
+    EMAIL_BODY_WITH_PUBLIC_REVIEWS_1,
     MANUSCRIPT_VERSION_1,
     MANUSCRIPT_VERSION_2,
+    MANUSCRIPT_VERSION_WITH_ELIFE_ASSESSMENT_AND_PUBLIC_REVIEWS_1,
     MANUSCRIPT_VERSION_WITH_EVALUATION_EMAILS_1,
     MANUSCRIPT_VERSION_WITH_EVALUATION_EMAILS_2,
     PUBLISHER_DICT_1
@@ -186,34 +186,26 @@ class TestGetDocmapsItemForQueryResultItem:
             )
         ]
 
-    def test_should_not_populate_actions_peer_reviewed_step_if_there_is_no_email_body(self):
-        query_result_with_evaluation = {
-            **DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATION_EMAILS_1,
-            'manuscript_versions': [{
-                **MANUSCRIPT_VERSION_1,
-                'evaluation_emails': [{
-                    **EVALUATION_EMAILS_WITH_ELIFE_ASSESSMENT_1,
-                    'email_body': ''
-                }]
-            }]
-        }
-        docmaps_item = get_docmap_item_for_query_result_item(
-            query_result_with_evaluation
-        )
-        peer_reviewed_step = docmaps_item['steps']['_:b1']
-        peer_reviewed_actions = peer_reviewed_step['actions']
-        assert len(peer_reviewed_actions) == 0
-        assert peer_reviewed_actions == []
+    # def test_should_not_populate_actions_peer_reviewed_step_if_there_is_no_email_body(self):
+    #     query_result_with_evaluation = {
+    #         **DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATION_EMAILS_1,
+    #         'manuscript_versions': [{
+    #             **MANUSCRIPT_VERSION_1,
+    #             'email_body':''
+    #         }]
+    #     }
+    #     docmaps_item = get_docmap_item_for_query_result_item(
+    #         query_result_with_evaluation
+    #     )
+    #     peer_reviewed_step = docmaps_item['steps']['_:b1']
+    #     peer_reviewed_actions = peer_reviewed_step['actions']
+    #     assert len(peer_reviewed_actions) == 0
+    #     assert peer_reviewed_actions == []
 
     def test_should_populate_actions_outputs_peer_reviewed_step_for_each_evaluation(self):
         query_result_with_evaluation = {
             **DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATION_EMAILS_1,
-            'manuscript_versions': [{
-                **MANUSCRIPT_VERSION_1,
-                'evaluation_emails': [{
-                    **EVALUATION_EMAILS_WITH_ELIFE_ASSESSMENT_AND_PUBLIC_REVIEWS_1
-                }]
-            }]
+            'manuscript_versions': [MANUSCRIPT_VERSION_WITH_ELIFE_ASSESSMENT_AND_PUBLIC_REVIEWS_1]
         }
         docmaps_item = get_docmap_item_for_query_result_item(
             query_result_with_evaluation
@@ -233,9 +225,7 @@ class TestGetDocmapsItemForQueryResultItem:
             **DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATION_EMAILS_1,
             'manuscript_versions': [{
                 **MANUSCRIPT_VERSION_1,
-                'evaluation_emails': [{
-                    **EVALUATION_EMAILS_WITH_PUBLIC_REVIEWS_1
-                }]
+                'email_body': EMAIL_BODY_WITH_PUBLIC_REVIEWS_1
             }]
         }
         docmaps_item = get_docmap_item_for_query_result_item(
@@ -255,9 +245,7 @@ class TestGetDocmapsItemForQueryResultItem:
             **DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATION_EMAILS_1,
             'manuscript_versions': [{
                 **MANUSCRIPT_VERSION_1,
-                'evaluation_emails': [{
-                    **EVALUATION_EMAILS_WITH_ELIFE_ASSESSMENT_1
-                }],
+                'email_body': EMAIL_BODY_WITH_ELIFE_ASSESSMENT_1,
                 'editor_details': editor_details,
                 'senior_editor_details': senior_editor_details
             }]

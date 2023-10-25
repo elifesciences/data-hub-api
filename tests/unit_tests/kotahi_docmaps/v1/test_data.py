@@ -2,7 +2,6 @@ from datetime import date, datetime
 
 from data_hub_api.kotahi_docmaps.v1.api_input_typing import (
     ApiEditorDetailInput,
-    ApiEvaluationEmailInput,
     ApiInput,
     ApiManuscriptVersionInput
 )
@@ -55,7 +54,8 @@ MANUSCRIPT_VERSION_1: ApiManuscriptVersionInput = {
     'preprint_doi': DOI_1,
     'preprint_version': PREPRINT_VERSION_1,
     'preprint_published_at_date': date.fromisoformat('2021-01-01'),
-    'evaluation_emails': [],
+    'email_body': '',
+    'email_timestamp': None,
     'rp_publication_timestamp': RP_PUBLICATION_TIMESTAMP_1,
     'vor_publication_date': None,
     'subject_areas': [{
@@ -77,30 +77,10 @@ MANUSCRIPT_VERSION_2: ApiManuscriptVersionInput = {
     'preprint_doi': DOI_2,
     'preprint_version': PREPRINT_VERSION_2,
     'preprint_published_at_date': date.fromisoformat('2021-02-02'),
-    'evaluation_emails': [],
+    'email_body': '',
+    'email_timestamp': None,
     'rp_publication_timestamp': RP_PUBLICATION_TIMESTAMP_2,
     'vor_publication_date': None,
-    'subject_areas': [
-        {'subject_area_name': SUBJECT_AREA_NAME_1},
-        {'subject_area_name': SUBJECT_AREA_NAME_2}
-    ]
-}
-
-MANUSCRIPT_VOR_VERSION_1: ApiManuscriptVersionInput = {
-    'long_manuscript_identifier': LONG_MANUSCRIPT_VOR_ID_1,
-    'position_in_overall_stage': 2,
-    'qc_complete_timestamp': datetime.fromisoformat('2022-04-02T02:02:02+00:00'),
-    'under_review_timestamp': None,
-    'editor_details': [],
-    'senior_editor_details': [],
-    'preprint_url': PREPRINT_LINK_3,
-    'elife_doi_version_str': ELIFE_DOI_VERSION_STR_3,
-    'preprint_doi': DOI_2,
-    'preprint_version': None,
-    'preprint_published_at_date': None,
-    'evaluation_emails': [],
-    'rp_publication_timestamp': None,
-    'vor_publication_date': VOR_PUBLICATION_DATE_1,
     'subject_areas': [
         {'subject_area_name': SUBJECT_AREA_NAME_1},
         {'subject_area_name': SUBJECT_AREA_NAME_2}
@@ -240,14 +220,10 @@ SENIOR_EDITOR_DETAIL_1: ApiEditorDetailInput = {
 
 EMAIL_TIMESTAMP_1 = datetime.fromisoformat('2023-01-01T01:00:03+00:00')
 
-EVALUATION_EMAILS_WITH_ELIFE_ASSESSMENT_1: ApiEvaluationEmailInput = {
-    'email_body': EMAIL_BODY_WITH_ELIFE_ASSESSMENT_1,
-    'email_timestamp': EMAIL_TIMESTAMP_1
-}
-
 MANUSCRIPT_VERSION_WITH_EVALUATION_EMAILS_1: ApiManuscriptVersionInput = {
     **MANUSCRIPT_VERSION_1,  # type: ignore
-    'evaluation_emails': [EVALUATION_EMAILS_WITH_ELIFE_ASSESSMENT_1]
+    'email_body': EMAIL_BODY_WITH_ELIFE_ASSESSMENT_1,
+    'email_timestamp': EMAIL_TIMESTAMP_1,
 }
 
 DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATION_EMAILS_1 = {
@@ -255,17 +231,14 @@ DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATION_EMAILS_1 = {
     'manuscript_versions': [MANUSCRIPT_VERSION_WITH_EVALUATION_EMAILS_1]
 }
 
-EVALUATION_EMAILS_WITH_PUBLIC_REVIEWS_1: ApiEvaluationEmailInput = {
-    'email_body': EMAIL_BODY_WITH_PUBLIC_REVIEWS_1,
-    'email_timestamp': EMAIL_TIMESTAMP_1
-}
-
 MANUSCRIPT_VERSION_WITH_EVALUATION_EMAILS_2: ApiManuscriptVersionInput = {
     **MANUSCRIPT_VERSION_2,  # type: ignore
-    'evaluation_emails': [EVALUATION_EMAILS_WITH_PUBLIC_REVIEWS_1]
+    'email_body': EMAIL_BODY_WITH_PUBLIC_REVIEWS_1,
+    'email_timestamp': EMAIL_TIMESTAMP_1,
 }
 
-EVALUATION_EMAILS_WITH_ELIFE_ASSESSMENT_AND_PUBLIC_REVIEWS_1: ApiEvaluationEmailInput = {
+MANUSCRIPT_VERSION_WITH_ELIFE_ASSESSMENT_AND_PUBLIC_REVIEWS_1: ApiManuscriptVersionInput = {
+    **MANUSCRIPT_VERSION_2,  # type: ignore
     'email_body': EMAIL_BODY_WITH_ELIFE_ASSESSMENT_AND_PUBLIC_REVIEWS_1,
-    'email_timestamp': EMAIL_TIMESTAMP_1
+    'email_timestamp': EMAIL_TIMESTAMP_1,
 }

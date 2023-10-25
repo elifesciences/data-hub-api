@@ -222,15 +222,12 @@ def get_docmap_actions_for_evaluations(
 def iter_docmap_actions_for_evaluations(
     manuscript_version: ApiManuscriptVersionInput
 ) -> Iterable[DocmapAction]:
-    evaluation_emails = manuscript_version['evaluation_emails']
-    if evaluation_emails:
-        for evaluation_email in evaluation_emails:
-            evaluation_list = get_evaluation_and_type_list_from_email(
-                evaluation_email['email_body']
-            )
-            if evaluation_list:
-                for evaluation_dict in evaluation_list:
-                    yield get_docmap_actions_for_evaluations(
-                        manuscript_version=manuscript_version,
-                        docmap_evaluation_type=evaluation_dict['evaluation_type']
-                    )
+    email_body = manuscript_version['email_body']
+    if email_body:
+        evaluation_list = get_evaluation_and_type_list_from_email(email_body)
+        if evaluation_list:
+            for evaluation_dict in evaluation_list:
+                yield get_docmap_actions_for_evaluations(
+                    manuscript_version=manuscript_version,
+                    docmap_evaluation_type=evaluation_dict['evaluation_type']
+                )
