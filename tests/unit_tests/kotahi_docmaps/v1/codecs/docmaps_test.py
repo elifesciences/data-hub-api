@@ -187,7 +187,7 @@ class TestGetDocmapsItemForQueryResultItem:
             )
         ]
 
-    def test_should_not_populate_actions_peer_reviewed_step_if_there_is_no_evaluations_in_email_body(self):
+    def test_should_not_populate_actions_peer_reviewed_step_if_no_evaluations_in_email_body(self):
         query_result_with_evaluation = {
             **DOCMAPS_QUERY_RESULT_ITEM_1,
             'manuscript_versions': [{
