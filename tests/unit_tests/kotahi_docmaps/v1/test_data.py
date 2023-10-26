@@ -122,6 +122,22 @@ PUBLIC_REVIEWS_1 = f'''
     {REVIEW_3}
 '''
 
+JOINT_PUBLIC_REVIEW_1 = '''
+    Public Review:
+
+    Text for public review
+
+'''
+
+EMAIL_BODY_WITH_JOINT_PUBLIC_REVIEW_1 = f'''
+    Dear Dr Huang,
+
+    Thank you for submitting your article.
+
+    {JOINT_PUBLIC_REVIEW_1}
+    ----------
+'''
+
 PUBLIC_REVIEWS_WITHOUT_EVALUATION_1 = '''
     Public Reviews
     some text here but not review

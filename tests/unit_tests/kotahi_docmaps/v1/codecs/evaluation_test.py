@@ -22,11 +22,11 @@ from tests.unit_tests.kotahi_docmaps.v1.test_data import (
     EDITOR_DETAIL_1,
     ELIFE_ASSESSMENT_1,
     EMAIL_BODY_1,
-    EMAIL_BODY_2,
     EMAIL_BODY_WITH_ELIFE_ASSESSMENT_AND_PUBLIC_REVIEWS_1,
     EMAIL_BODY_WITH_ELIFE_ASSESSMENT_WITHOUT_EXPECTED_END,
+    EMAIL_BODY_WITH_JOINT_PUBLIC_REVIEW_1,
+    JOINT_PUBLIC_REVIEW_1,
     MANUSCRIPT_VERSION_1,
-    PUBLIC_REVIEW_2,
     PUBLIC_REVIEWS_1,
     PUBLIC_REVIEWS_WITHOUT_EVALUATION_1,
     REVIEW_1,
@@ -69,11 +69,11 @@ class TestExtractElifePublicReviewsFromEmail:
     def test_should_return_none_if_there_is_no_email_body(self):
         assert not extract_elife_public_reviews_from_email(None)
 
-    def test_should_extract_public_review_even_there_is_individual_reviews(self):
+    def test_should_extract_joint_public_reviews(self):
         result = extract_elife_public_reviews_from_email(
-            EMAIL_BODY_2
+            EMAIL_BODY_WITH_JOINT_PUBLIC_REVIEW_1
         ).strip()
-        assert result == PUBLIC_REVIEW_2.strip()
+        assert result == JOINT_PUBLIC_REVIEW_1.strip()
 
 
 class TestExtractPublicReviewParts:
