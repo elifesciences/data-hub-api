@@ -176,6 +176,17 @@ EMAIL_BODY_WITH_ELIFE_ASSESSMENT_AND_PUBLIC_REVIEWS_1 = f'''
     ----------
 '''
 
+EMAIL_BODY_WITH_ELIFE_ASSESSMENT_WITHOUT_EXPECTED_END = f'''
+    Dear Dr Huang,
+
+    Thank you for submitting your article.
+    ----------
+
+    {ELIFE_ASSESSMENT_1}
+
+    Public Review
+'''
+
 EDITOR_DETAIL_1: ApiEditorDetailInput = {
     'name': 'editor_name_1',
     'institution': 'editor_institution_1',

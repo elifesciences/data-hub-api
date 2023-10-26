@@ -23,6 +23,7 @@ from tests.unit_tests.kotahi_docmaps.v1.test_data import (
     ELIFE_ASSESSMENT_1,
     EMAIL_BODY_1,
     EMAIL_BODY_WITH_ELIFE_ASSESSMENT_AND_PUBLIC_REVIEWS_1,
+    EMAIL_BODY_WITH_ELIFE_ASSESSMENT_WITHOUT_EXPECTED_END,
     MANUSCRIPT_VERSION_1,
     PUBLIC_REVIEWS_1,
     PUBLIC_REVIEWS_WITHOUT_EVALUATION_1,
@@ -45,6 +46,12 @@ class TestExtractElifeAssessmentsFromEmail:
 
     def test_should_return_none_if_there_is_no_email_body(self):
         assert not extract_elife_assessments_from_email(None)
+
+    def test_should_extract_elife_assessment_from_email_until_public_review(self):
+        result = extract_elife_assessments_from_email(
+            EMAIL_BODY_WITH_ELIFE_ASSESSMENT_WITHOUT_EXPECTED_END
+        )
+        assert result == ELIFE_ASSESSMENT_1.strip()
 
 
 class TestExtractElifePublicReviewsFromEmail:

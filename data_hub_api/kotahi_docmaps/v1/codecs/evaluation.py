@@ -30,10 +30,10 @@ DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE = 'review-article'
 
 def extract_elife_assessments_from_email(email_body: Optional[str]) -> Optional[str]:
     if email_body:
-        pattern = r'(?s)([eE][Ll]ife [aA]ssessment(.*?))-{10,}'
-        match = re.search(pattern, email_body)
+        pattern = r'[eE][Ll]ife [aA]ssessment(.*?)(?=(?:[Pp]ublic [Rr]eview|-{10,}|\Z))'
+        match = re.search(pattern, email_body, re.S)
         if match:
-            extracted_text = match.group(1).strip()
+            extracted_text = match.group().strip()
             return extracted_text
         return None
     return None
