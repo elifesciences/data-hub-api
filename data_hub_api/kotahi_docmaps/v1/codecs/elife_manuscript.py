@@ -24,8 +24,7 @@ def get_docmap_elife_manuscript_doi_assertion_item(
         'doi': get_elife_manuscript_version_doi(
             elife_doi=query_result_item['elife_doi'],
             elife_doi_version_str=manuscript_version['elife_doi_version_str']
-        ),
-        'versionIdentifier': manuscript_version['elife_doi_version_str']
+        )
     }
 
 
