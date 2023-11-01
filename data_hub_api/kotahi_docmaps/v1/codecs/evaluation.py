@@ -1,6 +1,6 @@
 import logging
 import re
-from typing import Iterable, Optional, Sequence, cast
+from typing import Iterable, Optional, Sequence, Tuple, cast
 
 from data_hub_api.kotahi_docmaps.v1.api_input_typing import (
     ApiEditorDetailInput,
@@ -267,3 +267,26 @@ def iter_docmap_actions_for_evaluations(
                     docmap_evaluation_type=evaluation_type,
                     evaluation_url=evaluation_url
                 )
+
+
+def iter_evaluation_id_and_text(
+    manuscript_version: ApiManuscriptVersionInput
+) -> Iterable[Tuple[str, str]]:
+    email_body = manuscript_version['email_body']
+    if email_body:
+        evaluation_list = get_evaluation_and_type_list_from_email_body(email_body)
+        if evaluation_list:
+            type_indices = {}
+            for evaluation_dict in evaluation_list:
+                evaluation_type = evaluation_dict['evaluation_type']
+                if evaluation_type not in type_indices:
+                    type_indices[evaluation_type] = 1
+                else:
+                    type_indices[evaluation_type] += 1
+                evaluation_index = type_indices[evaluation_type]
+                evaluation_id = generate_evaluation_id(
+                    manuscript_version['long_manuscript_identifier'],
+                    evaluation_type,
+                    evaluation_index
+                )
+                yield evaluation_id, evaluation_dict['evaluation_text']

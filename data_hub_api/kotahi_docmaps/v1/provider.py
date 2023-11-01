@@ -6,6 +6,7 @@ from typing import Iterable, Mapping, Optional, Sequence, cast
 import objsize
 from data_hub_api.kotahi_docmaps.v1.codecs.docmaps import get_docmap_item_for_query_result_item
 from data_hub_api.kotahi_docmaps.v1.api_input_typing import ApiInput
+from data_hub_api.kotahi_docmaps.v1.codecs.evaluation import iter_evaluation_id_and_text
 from data_hub_api.kotahi_docmaps.v1.docmap_typing import (
     Docmap
 )
@@ -50,13 +51,30 @@ class DocmapsProvider:
         )
         return result
 
-    def create_map_from_bq_result(self, bq_results) -> Mapping[str, Docmap]:
+    def create_docmap_by_manuscript_id_map(
+        self,
+        bq_results: Iterable[ApiInput]
+    ) -> Mapping[str, Docmap]:
         return {
             bq_result['manuscript_id']: get_docmap_item_for_query_result_item(
                 cast(ApiInput, bq_result)
             )
             for bq_result in bq_results
         }
+
+    def create_evaluation_text_by_evaluation_id_map(
+        self,
+        bq_results: Iterable[ApiInput]
+    ) -> Mapping[str, str]:
+        evaluation_map = {}
+        for bq_result in bq_results:
+            manuscript_versions = bq_result['manuscript_versions']
+            for manuscript_version in manuscript_versions:
+                for evaluation_id, evaluation_text in iter_evaluation_id_and_text(
+                    manuscript_version
+                ):
+                    evaluation_map[evaluation_id] = evaluation_text
+        return evaluation_map
 
     def iter_docmaps_by_manuscript_id(
         self,
@@ -65,7 +83,9 @@ class DocmapsProvider:
         bq_result_list = self._query_results_cache.get_or_load(
             load_fn=self._load_query_results_from_bq
         )
-        docmap_by_manuscript_id_map = self.create_map_from_bq_result(bq_result_list)
+        docmap_by_manuscript_id_map = self.create_docmap_by_manuscript_id_map(
+            cast(Iterable[ApiInput], bq_result_list)
+        )
         if manuscript_id:
             docmap = docmap_by_manuscript_id_map.get(manuscript_id)
             if not docmap:
@@ -82,4 +102,10 @@ class DocmapsProvider:
 
     def get_evaluation_text_by_evaluation_id(self, evaluation_id: str) -> Optional[str]:
         assert evaluation_id
-        return None
+        bq_result_list = self._query_results_cache.get_or_load(
+            load_fn=self._load_query_results_from_bq
+        )
+        evaluation_text_by_evaluation_id_map = self.create_evaluation_text_by_evaluation_id_map(
+            cast(Iterable[ApiInput], bq_result_list)
+        )
+        return evaluation_text_by_evaluation_id_map.get(evaluation_id)
