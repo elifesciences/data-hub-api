@@ -32,15 +32,15 @@ class DocmapsProvider:
     def __init__(
         self,
         gcp_project_name: str = 'elife-data-pipeline',
-        query_results_cache: Optional[SingleObjectCache[DocmapsProviderData]] = None,
+        data_cache: Optional[SingleObjectCache[DocmapsProviderData]] = None,
     ) -> None:
         self.gcp_project_name = gcp_project_name
         self.docmaps_index_query = (
             Path(get_sql_path('docmaps_index.sql')).read_text(encoding='utf-8')
         )
-        if query_results_cache is None:
-            query_results_cache = DummySingleObjectCache[DocmapsProviderData]()
-        self._query_results_cache = query_results_cache
+        if data_cache is None:
+            data_cache = DummySingleObjectCache[DocmapsProviderData]()
+        self._data_cache = data_cache
 
     def _load_query_results_from_bq(self) -> Sequence[ApiInput]:
         LOGGER.info('Loading query results from BigQuery...')
@@ -79,7 +79,7 @@ class DocmapsProvider:
         return data
 
     def _get_data(self) -> DocmapsProviderData:
-        return self._query_results_cache.get_or_load(load_fn=self._load_data)
+        return self._data_cache.get_or_load(load_fn=self._load_data)
 
     def create_docmap_by_manuscript_id_map(
         self,
