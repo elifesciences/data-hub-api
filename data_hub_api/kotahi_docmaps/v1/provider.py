@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 import logging
 from pathlib import Path
 from time import monotonic
@@ -21,21 +22,27 @@ from data_hub_api.kotahi_docmaps.v1.sql import get_sql_path
 LOGGER = logging.getLogger(__name__)
 
 
+@dataclass(frozen=True)
+class DocmapsProviderData:
+    docmap_by_manuscript_id_map: Mapping[str, Docmap]
+    evaluation_text_by_evaluation_id_map: Mapping[str, str]
+
+
 class DocmapsProvider:
     def __init__(
         self,
         gcp_project_name: str = 'elife-data-pipeline',
-        query_results_cache: Optional[SingleObjectCache[Sequence[dict]]] = None,
+        query_results_cache: Optional[SingleObjectCache[DocmapsProviderData]] = None,
     ) -> None:
         self.gcp_project_name = gcp_project_name
         self.docmaps_index_query = (
             Path(get_sql_path('docmaps_index.sql')).read_text(encoding='utf-8')
         )
         if query_results_cache is None:
-            query_results_cache = DummySingleObjectCache[Sequence[dict]]()
+            query_results_cache = DummySingleObjectCache[DocmapsProviderData]()
         self._query_results_cache = query_results_cache
 
-    def _load_query_results_from_bq(self) -> Sequence[dict]:
+    def _load_query_results_from_bq(self) -> Sequence[ApiInput]:
         LOGGER.info('Loading query results from BigQuery...')
         start_time = monotonic()
         result = list(iter_dict_from_bq_query(
@@ -49,7 +56,30 @@ class DocmapsProvider:
             objsize.get_deep_size(result) / 1024 / 1024,
             (end_time - start_time)
         )
-        return result
+        return cast(Sequence[ApiInput], result)
+
+    def _load_data(self) -> DocmapsProviderData:
+        bq_result_list = self._load_query_results_from_bq()
+        LOGGER.info('Preparing data from query results...')
+        start_time = monotonic()
+        data = DocmapsProviderData(
+            docmap_by_manuscript_id_map=self.create_docmap_by_manuscript_id_map(
+                bq_result_list
+            ),
+            evaluation_text_by_evaluation_id_map=self.create_evaluation_text_by_evaluation_id_map(
+                bq_result_list
+            )
+        )
+        end_time = monotonic()
+        LOGGER.info(
+            'Prepared data from query results, approx_size=%.3fMB, time=%.3f seconds',
+            objsize.get_deep_size(data) / 1024 / 1024,
+            (end_time - start_time)
+        )
+        return data
+
+    def _get_data(self) -> DocmapsProviderData:
+        return self._query_results_cache.get_or_load(load_fn=self._load_data)
 
     def create_docmap_by_manuscript_id_map(
         self,
@@ -80,12 +110,7 @@ class DocmapsProvider:
         self,
         manuscript_id: Optional[str] = None
     ) -> Iterable[Docmap]:
-        bq_result_list = self._query_results_cache.get_or_load(
-            load_fn=self._load_query_results_from_bq
-        )
-        docmap_by_manuscript_id_map = self.create_docmap_by_manuscript_id_map(
-            cast(Iterable[ApiInput], bq_result_list)
-        )
+        docmap_by_manuscript_id_map = self._get_data().docmap_by_manuscript_id_map
         if manuscript_id:
             docmap = docmap_by_manuscript_id_map.get(manuscript_id)
             if not docmap:
@@ -102,10 +127,4 @@ class DocmapsProvider:
 
     def get_evaluation_text_by_evaluation_id(self, evaluation_id: str) -> Optional[str]:
         assert evaluation_id
-        bq_result_list = self._query_results_cache.get_or_load(
-            load_fn=self._load_query_results_from_bq
-        )
-        evaluation_text_by_evaluation_id_map = self.create_evaluation_text_by_evaluation_id_map(
-            cast(Iterable[ApiInput], bq_result_list)
-        )
-        return evaluation_text_by_evaluation_id_map.get(evaluation_id)
+        return self._get_data().evaluation_text_by_evaluation_id_map.get(evaluation_id)
