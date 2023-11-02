@@ -35,7 +35,7 @@ def create_app():
     )
 
     kotahi_docmaps_provider = KotahiDocmapsProvider(
-        query_results_cache=InMemorySingleObjectCache(max_age_in_seconds=max_age_in_seconds)
+        data_cache=InMemorySingleObjectCache(max_age_in_seconds=max_age_in_seconds)
     )
 
     public_reviews_docmaps_provider = DocmapsProviderV1(

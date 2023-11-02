@@ -31,32 +31,6 @@ DocmapElifeManuscriptOutput = TypedDict(
     }
 )
 
-DocmapPublishedElifeManuscriptPartOf = TypedDict(
-    'DocmapPublishedElifeManuscriptPartOf',
-    {
-        'type': str,
-        'doi': str,
-        'identifier': str,
-        'subjectDisciplines': Optional[Sequence[str]],
-        'published': timestamp_str,
-        'volumeIdentifier': Optional[str],
-        'electronicArticleIdentifier': str
-    }
-)
-
-DocmapPublishedElifeManuscriptOutput = TypedDict(
-    'DocmapPublishedElifeManuscriptOutput',
-    {
-        'type': str,
-        'published': timestamp_str,
-        'doi': str,
-        'identifier': str,
-        'versionIdentifier': str,
-        'license': str,
-        'partOf': DocmapPublishedElifeManuscriptPartOf
-    }
-)
-
 DocmapAnonymousActor = TypedDict(
     'DocmapAnonymousActor',
     {
@@ -100,9 +74,7 @@ DocmapPreprintInput = TypedDict(
     'DocmapPreprintInput',
     {
         'type': str,
-        'doi': str,
-        'url': Optional[str],
-        'versionIdentifier': Optional[str]
+        'doi': str
     }
 )
 
@@ -118,20 +90,11 @@ DocmapPreprintInputWithPublishedMecaPath = TypedDict(
     total=False
 )
 
-DocmapEvaluationInput = TypedDict(
-    'DocmapEvaluationInput',
-    {
-        'type': str,
-        'doi': Optional[str]
-    }
-)
-
 DocmapAssertionItem = TypedDict(
     'DocmapAssertionItem',
     {
         'type': str,
-        'doi': Optional[str],
-        'versionIdentifier': Optional[str]
+        'doi': Optional[str]
     }
 )
 
@@ -163,10 +126,7 @@ DocmapStep = TypedDict(
     {
         'actions': Sequence[DocmapAction],
         'assertions': Sequence[DocmapAssertion],
-        'inputs': Sequence[Union[
-            DocmapPreprintInput,
-            DocmapEvaluationInput
-        ]],
+        'inputs': Sequence[DocmapPreprintInput],
         'next-step': NotRequired[str],
         'previous-step': NotRequired[str]
     },

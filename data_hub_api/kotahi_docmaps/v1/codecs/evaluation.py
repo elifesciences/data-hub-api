@@ -1,13 +1,9 @@
-from datetime import datetime
 import logging
-from typing import Iterable, Optional, Sequence, cast, Tuple
-from data_hub_api.config import DOI_ROOT_URL
+import re
+from typing import Iterable, Optional, Sequence, Tuple, cast
 
-from data_hub_api.kotahi_docmaps.v1.codecs.elife_manuscript import get_elife_manuscript_version_doi
 from data_hub_api.kotahi_docmaps.v1.api_input_typing import (
     ApiEditorDetailInput,
-    ApiEvaluationInput,
-    ApiInput,
     ApiManuscriptVersionInput
 )
 from data_hub_api.kotahi_docmaps.v1.docmap_typing import (
@@ -16,112 +12,99 @@ from data_hub_api.kotahi_docmaps.v1.docmap_typing import (
     DocmapEditorActor,
     DocmapAffiliation,
     DocmapContent,
-    DocmapEvaluationInput,
     DocmapEvaluationOutput,
     DocmapParticipant
 )
 
 LOGGER = logging.getLogger(__name__)
 
-HYPOTHESIS_URL = 'https://hypothes.is/a/'
-SCIETY_ARTICLES_ACTIVITY_URL = 'https://sciety.org/articles/activity/'
-SCIETY_ARTICLES_EVALUATIONS_URL = 'https://sciety.org/evaluations/hypothesis:'
+EVALUATION_URL_PREFIX = (
+    'https://data-hub-api.elifesciences.org/kotahi/docmaps/v1/'
+    'evaluation/get-by-evaluation-id?evaluation_id='
+)
 
 DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY = 'evaluation-summary'
 DOCMAP_EVALUATION_TYPE_FOR_REPLY = 'reply'
 DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE = 'review-article'
 
 
-def get_elife_evaluation_doi(
-    elife_doi_version_str: str,
-    elife_doi: str,
-    evaluation_suffix: str
-) -> str:
-    elife_version_doi = get_elife_manuscript_version_doi(
-        elife_doi=elife_doi,
-        elife_doi_version_str=elife_doi_version_str
-    )
-    return elife_version_doi + '.' + evaluation_suffix
-
-
-def get_elife_evaluation_doi_url(
-    elife_evaluation_doi: Optional[str] = None
-) -> Optional[str]:
-    if not elife_evaluation_doi:
+def extract_elife_assessments_from_email(email_body: Optional[str]) -> Optional[str]:
+    if email_body:
+        pattern = r'[eE][Ll]ife [aA]ssessment(.*?)(?=(?:[Pp]ublic [Rr]eview|-{10,}|\Z))'
+        match = re.search(pattern, email_body, re.S)
+        if match:
+            extracted_text = match.group().strip()
+            return extracted_text
         return None
-    return f'{DOI_ROOT_URL}' + elife_evaluation_doi
+    return None
 
 
-def get_docmap_evaluation_input(
-    query_result_item: ApiInput,
-    manuscript_version: ApiManuscriptVersionInput,
-    evaluation_suffix: str,
-    docmap_evaluation_type: str
-) -> DocmapEvaluationInput:
-    elife_evaluation_doi = get_elife_evaluation_doi(
-        elife_doi_version_str=manuscript_version['elife_doi_version_str'],
-        elife_doi=query_result_item['elife_doi'],
-        evaluation_suffix=evaluation_suffix
-    )
-    return {
-        'type': docmap_evaluation_type,
-        'doi': elife_evaluation_doi
-    }
+def extract_elife_public_reviews_from_email(email_body: Optional[str]) -> Optional[str]:
+    if email_body:
+        pattern = r'(?s)([pP]ublic [rR]eview(.*?))-{10,}'
+        match = re.search(pattern, email_body)
+        if match:
+            extracted_text = match.group(1).strip()
+            return extracted_text
+        return None
+    return None
 
 
-def get_docmap_evaluation_output_content_url(
-    base_url: str,
-    hypothesis_id: str,
-    preprint_doi: Optional[str] = None
-) -> str:
-    assert base_url in [
-        HYPOTHESIS_URL, SCIETY_ARTICLES_ACTIVITY_URL, SCIETY_ARTICLES_EVALUATIONS_URL
-    ]
-    if base_url == HYPOTHESIS_URL:
-        return base_url + hypothesis_id
-    if base_url == SCIETY_ARTICLES_ACTIVITY_URL:
-        assert preprint_doi
-        return base_url + preprint_doi + '#hypothesis:' + hypothesis_id
-    return base_url + hypothesis_id + '/content'
+def extract_public_review_parts(public_reviews: Optional[str]):
+    if public_reviews:
+        pattern = r'(?=Reviewer #\d+ \(Public Review\):)'
+        parts = re.split(pattern, public_reviews)
+        parts = [part.strip() for part in parts if part.strip()]
+        if len(parts) > 1:
+            return parts[1:]
+        else:
+            return None
+    return None
 
 
-def get_docmap_evaluation_output_content() -> DocmapContent:
+def get_evaluation_and_type_list_from_email_body(
+    email_body: Optional[str]
+) -> Optional[Sequence[dict]]:
+    if email_body:
+        evalution_list = []
+        evaluation_summary_text = extract_elife_assessments_from_email(email_body)
+        if evaluation_summary_text:
+            evaluation_summary_dict = {
+                'evaluation_type': DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY,
+                'evaluation_text': evaluation_summary_text
+            }
+            evalution_list.append(evaluation_summary_dict)
+        public_reviews = extract_elife_public_reviews_from_email(email_body)
+        if public_reviews:
+            public_review_parts = extract_public_review_parts(public_reviews)
+            if public_review_parts:
+                for public_review in public_review_parts:
+                    review_dict = {
+                        'evaluation_type': DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE,
+                        'evaluation_text': public_review
+                    }
+                    evalution_list.append(review_dict)
+        return evalution_list
+    return []
+
+
+def get_docmap_evaluation_output_content(
+    evaluation_url: str
+) -> DocmapContent:
     return {
         'type': 'web-page',
-        'url': 'TODO'
+        'url': evaluation_url
     }
 
 
 def get_docmap_evaluation_output(
-    docmap_evaluation_type: str
+    docmap_evaluation_type: str,
+    evaluation_url: str
 ) -> DocmapEvaluationOutput:
     return {
         'type': docmap_evaluation_type,
-        'content': [get_docmap_evaluation_output_content()]
+        'content': [get_docmap_evaluation_output_content(evaluation_url)]
     }
-
-
-def has_tag_containing(tags: list, text: str) -> bool:
-    return any(
-        text in tag
-        for tag in tags
-    )
-
-
-def get_docmap_evaluation_type_form_tags(
-    tags: list
-) -> Optional[str]:
-    has_author_response_tag = has_tag_containing(tags, 'AuthorResponse')
-    has_summary_tag = has_tag_containing(tags, 'Summary')
-    has_review_tag = has_tag_containing(tags, 'Review')
-    assert not (has_author_response_tag and has_summary_tag)
-    if has_author_response_tag:
-        return DOCMAP_EVALUATION_TYPE_FOR_REPLY
-    if has_summary_tag:
-        return DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY
-    if has_review_tag:
-        return DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE
-    return None
 
 
 def get_docmap_actor_for_review_article_type() -> DocmapAnonymousActor:
@@ -226,12 +209,9 @@ def get_docmap_evaluation_participants(
 
 
 def get_docmap_actions_for_evaluations(
-    query_result_item: ApiInput,
     manuscript_version: ApiManuscriptVersionInput,
-    hypothesis_id: str,
-    evaluation_suffix: str,
-    annotation_created_timestamp: datetime,
-    docmap_evaluation_type: str
+    docmap_evaluation_type: str,
+    evaluation_url: str
 ) -> DocmapAction:
     return {
         'participants': get_docmap_evaluation_participants(
@@ -240,70 +220,73 @@ def get_docmap_actions_for_evaluations(
         ),
         'outputs': [
             get_docmap_evaluation_output(
-                docmap_evaluation_type=docmap_evaluation_type
+                docmap_evaluation_type=docmap_evaluation_type,
+                evaluation_url=evaluation_url
             )
         ]
     }
 
 
-def iter_evaluation_and_type_for_related_preprint_url(
-    evaluations: Sequence[ApiEvaluationInput],
-    preprint_url: str
-) -> Iterable[Tuple[ApiEvaluationInput, str]]:
-    for evaluation in evaluations:
-        docmap_evaluation_type = get_docmap_evaluation_type_form_tags(evaluation['tags'])
-        evaluation_preprint_url = evaluation['uri']
-        if evaluation_preprint_url != preprint_url:
-            LOGGER.debug(
-                'ignoring evaluation on another version: %r != %r',
-                evaluation_preprint_url, preprint_url
-            )
-            continue
-        if docmap_evaluation_type in (
-            DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY,
-            DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE,
-            DOCMAP_EVALUATION_TYPE_FOR_REPLY
-        ):
-            yield evaluation, docmap_evaluation_type
+def generate_evaluation_id(
+    long_manuscript_identifier: str,
+    evaluation_type: str,
+    evaluation_index: int,
+) -> str:
+    assert long_manuscript_identifier
+    assert evaluation_type
+    assert evaluation_index
+    return (
+        f'{long_manuscript_identifier}:'
+        f'{evaluation_type}:{evaluation_index}'
+    )
 
 
 def iter_docmap_actions_for_evaluations(
-    query_result_item: ApiInput,
     manuscript_version: ApiManuscriptVersionInput
 ) -> Iterable[DocmapAction]:
-    evaluations = manuscript_version['evaluations']
-    preprint_url = manuscript_version['preprint_url']
-    for evaluation, docmap_evaluation_type in iter_evaluation_and_type_for_related_preprint_url(
-        evaluations,
-        preprint_url
-    ):
-        hypothesis_id = evaluation['hypothesis_id']
-        annotation_created_timestamp = evaluation['annotation_created_timestamp']
-        evaluation_suffix = evaluation['evaluation_suffix']
-        yield get_docmap_actions_for_evaluations(
-            query_result_item=query_result_item,
-            manuscript_version=manuscript_version,
-            hypothesis_id=hypothesis_id,
-            annotation_created_timestamp=annotation_created_timestamp,
-            evaluation_suffix=evaluation_suffix,
-            docmap_evaluation_type=docmap_evaluation_type
-        )
+    email_body = manuscript_version['email_body']
+    if email_body:
+        evaluation_list = get_evaluation_and_type_list_from_email_body(email_body)
+        if evaluation_list:
+            type_indices = {}
+            for evaluation_dict in evaluation_list:
+                evaluation_type = evaluation_dict['evaluation_type']
+                if evaluation_type not in type_indices:
+                    type_indices[evaluation_type] = 1
+                else:
+                    type_indices[evaluation_type] += 1
+                evaluation_index = type_indices[evaluation_type]
+                evaluation_id = generate_evaluation_id(
+                    manuscript_version['long_manuscript_identifier'],
+                    evaluation_type,
+                    evaluation_index
+                )
+                evaluation_url = f'{EVALUATION_URL_PREFIX}{evaluation_id}'
+                yield get_docmap_actions_for_evaluations(
+                    manuscript_version=manuscript_version,
+                    docmap_evaluation_type=evaluation_type,
+                    evaluation_url=evaluation_url
+                )
 
 
-def iter_docmap_evaluation_input(
-    query_result_item: ApiInput,
+def iter_evaluation_id_and_text(
     manuscript_version: ApiManuscriptVersionInput
-):
-    evaluations = manuscript_version['evaluations']
-    preprint_url = manuscript_version['preprint_url']
-    for evaluation, docmap_evaluation_type in iter_evaluation_and_type_for_related_preprint_url(
-        evaluations,
-        preprint_url
-    ):
-        evaluation_suffix = evaluation['evaluation_suffix']
-        yield get_docmap_evaluation_input(
-            query_result_item=query_result_item,
-            manuscript_version=manuscript_version,
-            evaluation_suffix=evaluation_suffix,
-            docmap_evaluation_type=docmap_evaluation_type
-        )
+) -> Iterable[Tuple[str, str]]:
+    email_body = manuscript_version['email_body']
+    if email_body:
+        evaluation_list = get_evaluation_and_type_list_from_email_body(email_body)
+        if evaluation_list:
+            type_indices = {}
+            for evaluation_dict in evaluation_list:
+                evaluation_type = evaluation_dict['evaluation_type']
+                if evaluation_type not in type_indices:
+                    type_indices[evaluation_type] = 1
+                else:
+                    type_indices[evaluation_type] += 1
+                evaluation_index = type_indices[evaluation_type]
+                evaluation_id = generate_evaluation_id(
+                    manuscript_version['long_manuscript_identifier'],
+                    evaluation_type,
+                    evaluation_index
+                )
+                yield evaluation_id, evaluation_dict['evaluation_text']

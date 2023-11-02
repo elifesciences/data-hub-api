@@ -3,181 +3,139 @@ import pytest
 from data_hub_api.kotahi_docmaps.v1.codecs import evaluation as evaluation_module
 from data_hub_api.kotahi_docmaps.v1.codecs.evaluation import (
     DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY,
-    DOCMAP_EVALUATION_TYPE_FOR_REPLY,
     DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE,
-    DOI_ROOT_URL,
-    HYPOTHESIS_URL,
-    SCIETY_ARTICLES_ACTIVITY_URL,
-    SCIETY_ARTICLES_EVALUATIONS_URL,
+    extract_elife_assessments_from_email,
+    extract_elife_public_reviews_from_email,
+    extract_public_review_parts,
+    generate_evaluation_id,
     get_docmap_affiliation,
     get_docmap_affiliation_location,
-    get_docmap_evaluation_input,
     get_docmap_evaluation_output,
     get_docmap_evaluation_output_content,
-    get_docmap_evaluation_output_content_url,
     get_docmap_evaluation_participants,
     get_docmap_evaluation_participants_for_evaluation_summary_type,
     get_docmap_evaluation_participants_for_evalution_summary_type,
-    get_docmap_evaluation_type_form_tags,
-    get_elife_evaluation_doi,
-    get_elife_evaluation_doi_url,
+    get_evaluation_and_type_list_from_email_body,
     get_related_organization_detail
 )
 from tests.unit_tests.kotahi_docmaps.v1.test_data import (
-    DOCMAPS_QUERY_RESULT_ITEM_1,
     EDITOR_DETAIL_1,
-    ELIFE_DOI_1,
-    ELIFE_DOI_VERSION_STR_1,
-    EVALUATION_SUFFIX_1,
+    ELIFE_ASSESSMENT_1,
+    EMAIL_BODY_1,
+    EMAIL_BODY_WITH_ELIFE_ASSESSMENT_AND_PUBLIC_REVIEWS_1,
+    EMAIL_BODY_WITH_ELIFE_ASSESSMENT_WITHOUT_EXPECTED_END,
+    EMAIL_BODY_WITH_JOINT_PUBLIC_REVIEW_1,
+    JOINT_PUBLIC_REVIEW_1,
     MANUSCRIPT_VERSION_1,
+    PUBLIC_REVIEWS_1,
+    PUBLIC_REVIEWS_WITHOUT_EVALUATION_1,
+    REVIEW_1,
+    REVIEW_2,
+    REVIEW_3,
     SENIOR_EDITOR_DETAIL_1
 )
 
 
-class TestGetElifeEvaluationDoi:
-    def test_should_return_evaluation_doi_with_suffix_if_defined(self):
-        elife_doi = 'elife_doi_1'
-        elife_doi_version_str = 'elife_doi_version_str_1'
-        evaluation_suffix = 'evaluation_suffix_1'
-        actual_result = get_elife_evaluation_doi(
-            elife_doi=elife_doi,
-            elife_doi_version_str=elife_doi_version_str,
-            evaluation_suffix=evaluation_suffix
+class TestExtractElifeAssessmentsFromEmail:
+    def test_should_extract_elife_assessment_from_email(self):
+        result = extract_elife_assessments_from_email(
+            EMAIL_BODY_WITH_ELIFE_ASSESSMENT_AND_PUBLIC_REVIEWS_1
         )
-        assert actual_result == 'elife_doi_1.elife_doi_version_str_1.evaluation_suffix_1'
+        assert result == ELIFE_ASSESSMENT_1.strip()
 
+    def test_should_return_none_if_there_is_no_elife_assessment_in_email(self):
+        assert not extract_elife_assessments_from_email(EMAIL_BODY_1)
 
-class TestGetElifeEvaluationDoiUrl:
-    def test_should_return_none_if_elife_doi_is_none(self):
-        assert not get_elife_evaluation_doi_url(
-            elife_evaluation_doi=None,
+    def test_should_return_none_if_there_is_no_email_body(self):
+        assert not extract_elife_assessments_from_email(None)
+
+    def test_should_extract_elife_assessment_from_email_until_public_review(self):
+        result = extract_elife_assessments_from_email(
+            EMAIL_BODY_WITH_ELIFE_ASSESSMENT_WITHOUT_EXPECTED_END
         )
+        assert result == ELIFE_ASSESSMENT_1.strip()
 
-    def test_should_return_elife_evaluation_doi_url_when_defined(self):
-        result = get_elife_evaluation_doi_url(
-            elife_evaluation_doi='elife_evaluation_doi_1',
+
+class TestExtractElifePublicReviewsFromEmail:
+    def test_should_extract_elife_public_reviews_from_email(self):
+        result = extract_elife_public_reviews_from_email(
+            EMAIL_BODY_WITH_ELIFE_ASSESSMENT_AND_PUBLIC_REVIEWS_1
+        ).strip()
+        assert result == PUBLIC_REVIEWS_1.strip()
+
+    def test_should_return_none_if_there_is_no_public_reviews_available(self):
+        assert not extract_elife_public_reviews_from_email(EMAIL_BODY_1)
+
+    def test_should_return_none_if_there_is_no_email_body(self):
+        assert not extract_elife_public_reviews_from_email(None)
+
+    def test_should_extract_joint_public_reviews(self):
+        result = extract_elife_public_reviews_from_email(
+            EMAIL_BODY_WITH_JOINT_PUBLIC_REVIEW_1
+        ).strip()
+        assert result == JOINT_PUBLIC_REVIEW_1.strip()
+
+
+class TestExtractPublicReviewParts:
+    def test_should_extract_all_public_reviews_individually(self):
+        result = extract_public_review_parts(PUBLIC_REVIEWS_1)
+        assert result[0] == REVIEW_1.strip()
+        assert result[1] == REVIEW_2.strip()
+        assert result[2] == REVIEW_3.strip()
+
+    def test_should_return_none_when_there_is_no_public_reviews(self):
+        assert not extract_public_review_parts(None)
+
+    def test_should_return_none_when_there_is_review_extracted(self):
+        assert not extract_public_review_parts(PUBLIC_REVIEWS_WITHOUT_EVALUATION_1)
+
+
+class TestGetEvaluationAndTypeListFromEmail:
+    def test_should_return_elife_assessment_type_and_text_when_available(self):
+        result = get_evaluation_and_type_list_from_email_body(
+            EMAIL_BODY_WITH_ELIFE_ASSESSMENT_AND_PUBLIC_REVIEWS_1
         )
-        assert result == f'{DOI_ROOT_URL}elife_evaluation_doi_1'
+        assert len(result) > 0
+        assert result[0]['evaluation_type'] == DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY
+        assert result[0]['evaluation_text'] == ELIFE_ASSESSMENT_1.strip()
+        assert result[1]['evaluation_type'] == DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE
+        assert result[1]['evaluation_text'] == REVIEW_1.strip()
+        assert result[2]['evaluation_type'] == DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE
+        assert result[2]['evaluation_text'] == REVIEW_2.strip()
+        assert result[3]['evaluation_type'] == DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE
+        assert result[3]['evaluation_text'] == REVIEW_3.strip()
 
+    def test_should_return_empty_list_if_there_is_no_email_body(self):
+        assert not get_evaluation_and_type_list_from_email_body(None)
 
-class TestGetDocmapEvaluationInput:
-    def test_should_populate_evaluation_input(self):
-        result = get_docmap_evaluation_input(
-            query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1,
-            manuscript_version=MANUSCRIPT_VERSION_1,
-            evaluation_suffix=EVALUATION_SUFFIX_1,
-            docmap_evaluation_type='docmap_evaluation_type_1'
-        )
-        assert result == {
-            'type': 'docmap_evaluation_type_1',
-            'doi': get_elife_evaluation_doi(
-                elife_doi=ELIFE_DOI_1,
-                elife_doi_version_str=ELIFE_DOI_VERSION_STR_1,
-                evaluation_suffix=EVALUATION_SUFFIX_1
-            )
-        }
-
-
-class TestGetDocmapEvaluationOutputContentUrl:
-    def test_should_raise_error_if_base_url_not_one_expected(self):
-        base_url = 'base_url_1'
-        hypothesis_id = 'hypothesis_id_1'
-        with pytest.raises(AssertionError):
-            get_docmap_evaluation_output_content_url(base_url, hypothesis_id)
-
-    def test_should_populate_the_content_url_correctly_per_given_base_url(self):
-        hypothesis_id = 'hypothesis_id_1'
-        preprint_doi = 'preprint_doi_1'
-
-        result = get_docmap_evaluation_output_content_url(HYPOTHESIS_URL, hypothesis_id)
-        assert result == 'https://hypothes.is/a/hypothesis_id_1'
-
-        result = get_docmap_evaluation_output_content_url(
-            SCIETY_ARTICLES_ACTIVITY_URL, hypothesis_id, preprint_doi
-        )
-        assert result == (
-            'https://sciety.org/articles/activity/preprint_doi_1#hypothesis:hypothesis_id_1'
-        )
-        result = get_docmap_evaluation_output_content_url(
-            SCIETY_ARTICLES_EVALUATIONS_URL, hypothesis_id
-        )
-        assert result == 'https://sciety.org/evaluations/hypothesis:hypothesis_id_1/content'
-
-    def test_should_raise_error_with_activity_url_if_preprint_doi_not_defined(self):
-        hypothesis_id = 'hypothesis_id_1'
-        with pytest.raises(AssertionError):
-            get_docmap_evaluation_output_content_url(
-                base_url=SCIETY_ARTICLES_ACTIVITY_URL,
-                hypothesis_id=hypothesis_id,
-                preprint_doi=None
-            )
+    def test_should_return_empty_list_if_there_is_no_evalutaion_in_email_body(self):
+        assert not get_evaluation_and_type_list_from_email_body(EMAIL_BODY_1)
 
 
 class TestGetDocmapEvaluationOutputContent:
     def test_should_populate_evaluation_output_content(self):
-        result = get_docmap_evaluation_output_content()
+        result = get_docmap_evaluation_output_content('evaluation_url_1')
         assert result == {
             'type': 'web-page',
-            'url': 'TODO'
+            'url': 'evaluation_url_1'
         }
 
 
 class TestGetDocmapEvaluationOutput:
     def test_should_populate_evaluation_output(self):
         result = get_docmap_evaluation_output(
-            docmap_evaluation_type='docmap_evaluation_type_1'
+            docmap_evaluation_type='docmap_evaluation_type_1',
+            evaluation_url='evaluation_url_1'
         )
         assert result == {
             'type': 'docmap_evaluation_type_1',
             'content': [
                 {
                     'type': 'web-page',
-                    'url': 'TODO'
+                    'url': 'evaluation_url_1'
                 }
             ]
         }
-
-
-class TestGetEvaluationsTypeFromTags:
-    def test_should_return_evaluation_summary_when_summary_exist_in_tags_list(self):
-        tag_list_with_summary = ['PeerReview', 'evaluationSummary']
-        actual_result = get_docmap_evaluation_type_form_tags(tag_list_with_summary)
-        assert actual_result == DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY
-
-    def test_should_return_review_article_when_review_keyword_exists_in_tags_list(self):
-        tag_list_with_summary = ['PeerReview']
-        actual_result = get_docmap_evaluation_type_form_tags(tag_list_with_summary)
-        assert actual_result == DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE
-
-    def test_should_return_review_article_for_review_keyword_even_there_is_undefined_tag(self):
-        tag_list_with_summary = ['PeerReview', 'undefinedTag']
-        actual_result = get_docmap_evaluation_type_form_tags(tag_list_with_summary)
-        assert actual_result == DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE
-
-    def test_should_return_reply_when_author_response_keyword_exists_in_tags_list(self):
-        tag_list_with_summary = ['AuthorResponse']
-        actual_result = get_docmap_evaluation_type_form_tags(tag_list_with_summary)
-        assert actual_result == DOCMAP_EVALUATION_TYPE_FOR_REPLY
-
-    def test_should_return_reply_when_author_response_even_there_is_review_tag(self):
-        tag_list_with_summary = ['PeerReview', 'AuthorResponse']
-        actual_result = get_docmap_evaluation_type_form_tags(tag_list_with_summary)
-        assert actual_result == DOCMAP_EVALUATION_TYPE_FOR_REPLY
-
-    def test_should_return_none_when_empty_tags_list(self):
-        tag_list_with_summary = []
-        actual_result = get_docmap_evaluation_type_form_tags(tag_list_with_summary)
-        assert not actual_result
-
-    def test_should_return_none_when_there_is_not_any_defined_tag_in_tags_list(self):
-        tag_list_with_summary = ['undefinedTag']
-        actual_result = get_docmap_evaluation_type_form_tags(tag_list_with_summary)
-        assert not actual_result
-
-    def test_should_raise_error_when_summary_and_author_response_in_tag_list_at_same_time(self):
-        tag_list_with_summary = ['PeerReview', 'evaluationSummary', 'AuthorResponse']
-        with pytest.raises(AssertionError):
-            get_docmap_evaluation_type_form_tags(tag_list_with_summary)
 
 
 class TestGetRelatedOrganizationDetail:
@@ -332,3 +290,33 @@ class TestGetDocmapEvaluationParticipants:
                 docmap_evaluation_type=DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY
             )
             mock.assert_called_once()
+
+
+class TestGenerateEvaluationId:
+    def test_should_raise_assertion_error_even_one_of_the_param_not_provided(self):
+        with pytest.raises(AssertionError):
+            generate_evaluation_id(
+                long_manuscript_identifier=None,
+                evaluation_type='evaluation_type_1',
+                evaluation_index=1
+            )
+        with pytest.raises(AssertionError):
+            generate_evaluation_id(
+                long_manuscript_identifier='long_manuscript_identifier_1',
+                evaluation_type=None,
+                evaluation_index=1
+            )
+        with pytest.raises(AssertionError):
+            generate_evaluation_id(
+                long_manuscript_identifier='long_manuscript_identifier_1',
+                evaluation_type='evaluation_type_1',
+                evaluation_index=None
+            )
+
+    def test_should_return_if_with_given_params(self):
+        result = generate_evaluation_id(
+            long_manuscript_identifier='long_manuscript_identifier_1',
+            evaluation_type='evaluation_type_1',
+            evaluation_index=1
+        )
+        assert result == 'long_manuscript_identifier_1:evaluation_type_1:1'
