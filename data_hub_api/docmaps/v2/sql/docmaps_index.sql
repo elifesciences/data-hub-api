@@ -338,33 +338,16 @@ t_preprint_published_at_date_and_meca_path AS (
         THEN meca_path_update.meca_path
       WHEN result.preprint_doi LIKE '10.1101/%'
         THEN tdm.tdm_path 
-      WHEN (
-        result.preprint_doi LIKE '10.21203/rs%' 
-        OR result.preprint_doi LIKE '%arXiv%' 
-        OR result.preprint_doi LIKE '%/osf.io/%'
-      )
-        THEN CONCAT(
-          's3://prod-elife-epp-meca/',
-          result.manuscript_id,
-          '-v',
-          elife_doi_version_str,
-          '-meca.zip'
-        )
       ELSE NULL
     END AS meca_path,
     CASE
       WHEN meca_path_update.meca_path IS NOT NULL
         THEN 'gsheet manual match'
-      WHEN result.preprint_doi LIKE '10.1101/%'
+      WHEN result.preprint_doi LIKE '10.1101/%' AND tdm.tdm_path IS NOT NULL
         THEN 'biorxiv meca path api'
-      WHEN (
-        result.preprint_doi LIKE '10.21203/rs%' 
-        OR result.preprint_doi LIKE '%arXiv%' 
-        OR result.preprint_doi LIKE '%/osf.io/%'
-      )
-        THEN 'generated from manuscript_id and version'
       ELSE NULL
-    END AS meca_path_source
+    END AS meca_path_source,
+    elife_doi_version_str
   FROM t_result_with_preprint_version AS result
   LEFT JOIN t_rp_meca_path_update AS meca_path_update
     ON result.long_manuscript_identifier = meca_path_update.long_manuscript_identifier
@@ -379,6 +362,28 @@ t_preprint_published_at_date_and_meca_path AS (
   LEFT JOIN t_europepmc_preprint_publication_date AS europepmc_pub_date
     ON result.preprint_doi = europepmc_pub_date.doi
     AND result.preprint_version = europepmc_pub_date.doi_version
+),
+
+t_preprint_with_generated_meca_path AS(
+  SELECT
+    * EXCEPT(meca_path, meca_path_source, elife_doi_version_str),
+    CASE 
+      WHEN meca_path IS NULL
+        THEN CONCAT(
+          's3://prod-elife-epp-meca/',
+          manuscript_id,
+          '-v',
+          elife_doi_version_str,
+          '-meca.zip'
+        )
+      ELSE meca_path
+    END AS meca_path,
+    CASE
+      WHEN meca_path_source IS NULL
+        THEN 'generated from manuscript_id and version'
+      ELSE meca_path_source
+    END AS meca_path_source,
+  FROM t_preprint_published_at_date_and_meca_path
 ),
 
 t_rp_publication_date AS (
@@ -441,7 +446,7 @@ t_result_with_sorted_manuscript_versions_array AS (
     ORDER BY result.position_in_overall_stage
     ) AS manuscript_versions 
   FROM t_result_with_preprint_version AS result
-  LEFT JOIN t_preprint_published_at_date_and_meca_path AS preprint
+  LEFT JOIN t_preprint_with_generated_meca_path AS preprint
     ON result.long_manuscript_identifier = preprint.long_manuscript_identifier
   LEFT JOIN t_rp_publication_date AS publication
     ON result.elife_doi = publication.elife_doi
