@@ -237,7 +237,7 @@ t_result_with_preprint_url_and_has_evaluations AS (
     ON latest_biorxiv_medrxiv_version.doi = result.preprint_doi
 ),
 
-t_result_with_preprint_version AS (
+t_result_with_initial_preprint_version AS (
   SELECT
     * EXCEPT(elife_doi),
 
@@ -269,6 +269,33 @@ t_result_with_preprint_version AS (
       ELSE preprint_doi
     END AS preprint_doi_without_version,
   FROM t_result_with_preprint_url_and_has_evaluations AS result
+),
+
+# created to eliminate the same preprint version for different version of RP
+t_result_with_preprint_preprint_version AS (
+  SELECT
+    manuscript_id,
+    position_in_overall_stage,
+    long_manuscript_identifier,
+    preprint_version,
+    LAG(preprint_version) OVER (PARTITION BY manuscript_id ORDER BY position_in_overall_stage) AS previous_preprint_version
+  FROM t_result_with_initial_preprint_version
+  WHERE long_manuscript_identifier NOT LIKE '%-VOR-%'
+),
+
+t_result_with_preprint_version AS (
+  SELECT
+    *
+  FROM t_result_with_initial_preprint_version
+  WHERE position_in_overall_stage < COALESCE(
+    (
+      SELECT 
+        MIN(position_in_overall_stage)
+      FROM t_result_with_preprint_preprint_version
+      WHERE preprint_version = previous_preprint_version
+    ),
+    100 -- assuming we never reach version 100 for a RP
+  )
 ),
 
 t_latest_biorxiv_medrxiv_tdm_path_by_doi_and_version AS (
