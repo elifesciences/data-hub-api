@@ -410,19 +410,6 @@ t_preprint_published_at_date_and_meca_path AS (
     AND result.preprint_version = europepmc_pub_date.doi_version
 ),
 
-t_rp_publication_date AS (
-  SELECT
-    * EXCEPT(rn)
-  FROM
-  (
-    SELECT 
-      *,
-      ROW_NUMBER() OVER(PARTITION BY elife_doi, elife_doi_version ORDER BY imported_timestamp DESC) AS rn
-    FROM `elife-data-pipeline.prod.reviewed_preprint_publication_date`
-  )
-  WHERE rn=1
-),
-
 t_vor_publication_date AS (
   SELECT 
     article_id,
@@ -472,7 +459,7 @@ t_result_with_sorted_manuscript_versions_array AS (
   FROM t_result_with_preprint_version AS result
   LEFT JOIN t_preprint_published_at_date_and_meca_path AS preprint
     ON result.long_manuscript_identifier = preprint.long_manuscript_identifier
-  LEFT JOIN t_rp_publication_date AS publication
+  LEFT JOIN `elife-data-pipeline.prod.v_latest_reviewed_preprint_publication_date` AS publication
     ON result.elife_doi = publication.elife_doi
     AND result.position_in_overall_stage = publication.elife_doi_version
   LEFT JOIN t_vor_publication_date AS vor_date
