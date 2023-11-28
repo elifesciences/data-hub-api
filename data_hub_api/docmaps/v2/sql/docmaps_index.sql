@@ -52,7 +52,8 @@ t_manual_osf_preprint_match AS (
   FROM
   (
     SELECT 
-      *,
+      * EXCEPT(osf_preprint_url),
+      REGEXP_REPLACE(osf_preprint_url, r'/$', '') AS osf_preprint_url,
       ROW_NUMBER() OVER(PARTITION BY long_manuscript_identifier ORDER BY imported_timestamp DESC) AS rn
     FROM `elife-data-pipeline.prod.unmatched_manuscripts`
     WHERE osf_preprint_url IS NOT NULL
@@ -65,7 +66,7 @@ t_hypothesis_annotation_for_osf_preprints AS (
     *,
     DENSE_RANK() OVER (PARTITION BY uri ORDER BY annotation_created_date DESC) AS osf_preprint_version_rank
   FROM t_hypothesis_annotation_with_doi
-  WHERE uri LIKE 'https://psyarxiv.com/%'
+  WHERE uri LIKE '%psyarxiv%'
 ),
 
 t_hypothesis_annotation_with_osf_doi AS (
