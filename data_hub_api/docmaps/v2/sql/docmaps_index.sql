@@ -8,6 +8,7 @@ WITH t_hypothesis_annotation_with_cleaned_uri AS (
   FROM `elife-data-pipeline.prod.v_hypothesis_annotation` AS annotation
   WHERE annotation.group = 'q5X6RWJ6'
     AND created >= '2022-09-01' -- to ignore any public reviews posted before Sep 2022
+    AND NOT is_deleted_annotation
 ),
 
 t_hypothesis_annotation_with_doi AS (
