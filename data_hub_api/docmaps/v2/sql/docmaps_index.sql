@@ -49,15 +49,15 @@ t_hypothesis_annotation_with_doi AS (
 t_manual_osf_preprint_match AS (
   SELECT
     * EXCEPT(rn),
-    DENSE_RANK() OVER (PARTITION BY osf_preprint_url ORDER BY preprint_doi_version) AS osf_preprint_version_rank
+    DENSE_RANK() OVER (PARTITION BY osf_preprint_id ORDER BY preprint_doi_version) AS osf_preprint_version_rank
   FROM
   (
     SELECT 
-      * EXCEPT(osf_preprint_url),
-      REGEXP_REPLACE(osf_preprint_url, r'/$', '') AS osf_preprint_url,
+      * EXCEPT(osf_preprint_id),
+      TRIM(osf_preprint_id) AS osf_preprint_id,
       ROW_NUMBER() OVER(PARTITION BY long_manuscript_identifier ORDER BY imported_timestamp DESC) AS rn
     FROM `elife-data-pipeline.prod.unmatched_manuscripts`
-    WHERE osf_preprint_url IS NOT NULL
+    WHERE osf_preprint_id IS NOT NULL
   )
   WHERE rn=1
 ),
@@ -65,6 +65,7 @@ t_manual_osf_preprint_match AS (
 t_hypothesis_annotation_for_osf_preprints AS (
   SELECT 
     *,
+    REGEXP_EXTRACT(uri, r'/([a-zA-Z0-9]{5})$') AS extracted_osf_id,
     DENSE_RANK() OVER (PARTITION BY uri ORDER BY annotation_created_date DESC) AS osf_preprint_version_rank
   FROM t_hypothesis_annotation_with_doi
   WHERE uri LIKE '%psyarxiv%'
@@ -81,7 +82,7 @@ t_hypothesis_annotation_with_osf_doi AS (
   LEFT JOIN t_hypothesis_annotation_for_osf_preprints AS osf_hypothesis
     ON hypothesis.hypothesis_id = osf_hypothesis.hypothesis_id
   LEFT JOIN t_manual_osf_preprint_match AS osf
-    ON osf_hypothesis.uri = osf.osf_preprint_url
+    ON osf_hypothesis.extracted_osf_id = osf.osf_preprint_id
     AND osf_hypothesis.osf_preprint_version_rank = osf.osf_preprint_version_rank
 ),
 
