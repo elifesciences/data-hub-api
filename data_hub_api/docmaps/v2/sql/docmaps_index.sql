@@ -42,7 +42,8 @@ t_hypothesis_annotation_with_doi AS (
       WHEN annotation.uri LIKE '%researchsquare.com/article/rs-%' OR annotation.uri LIKE '%arxiv.org/abs/%'
         THEN REGEXP_EXTRACT(annotation.uri, r'v(\d+)$') 
       ELSE NULL
-    END AS source_doi_version
+    END AS source_doi_version,
+    IF(uri LIKE '%psyarxiv%', REGEXP_EXTRACT(uri, r'/([a-zA-Z0-9]{5})$'), NULL) AS extracted_osf_id
   FROM t_hypothesis_annotation_with_cleaned_uri AS annotation
 ),
 
@@ -65,8 +66,7 @@ t_manual_osf_preprint_match AS (
 t_hypothesis_annotation_for_osf_preprints AS (
   SELECT 
     *,
-    REGEXP_EXTRACT(uri, r'/([a-zA-Z0-9]{5})$') AS extracted_osf_id,
-    DENSE_RANK() OVER (PARTITION BY uri ORDER BY annotation_created_date DESC) AS osf_preprint_version_rank
+    DENSE_RANK() OVER (PARTITION BY extracted_osf_id ORDER BY annotation_created_date DESC) AS osf_preprint_version_rank
   FROM t_hypothesis_annotation_with_doi
   WHERE uri LIKE '%psyarxiv%'
 ),
