@@ -105,6 +105,13 @@ class TestGetEvaluationAndTypeListFromEmail:
         assert result[3]['evaluation_type'] == DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE
         assert result[3]['evaluation_text'] == REVIEW_3.strip()
 
+    def test_should_return_joint_review(self):
+        result = get_evaluation_and_type_list_from_email_body(
+            EMAIL_BODY_WITH_JOINT_PUBLIC_REVIEW_1
+        )
+        assert result[0]['evaluation_type'] == DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE
+        assert result[0]['evaluation_text'] == JOINT_PUBLIC_REVIEW_1.strip()
+
     def test_should_return_empty_list_if_there_is_no_email_body(self):
         assert not get_evaluation_and_type_list_from_email_body(None)
 
