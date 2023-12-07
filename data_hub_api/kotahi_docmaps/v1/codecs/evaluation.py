@@ -67,6 +67,7 @@ def get_evaluation_and_type_list_from_email_body(
 ) -> Optional[Sequence[dict]]:
     if email_body:
         evalution_list = []
+
         evaluation_summary_text = extract_elife_assessments_from_email(email_body)
         if evaluation_summary_text:
             evaluation_summary_dict = {
@@ -74,9 +75,10 @@ def get_evaluation_and_type_list_from_email_body(
                 'evaluation_text': evaluation_summary_text
             }
             evalution_list.append(evaluation_summary_dict)
-        public_reviews = extract_elife_public_reviews_from_email(email_body)
-        if public_reviews:
-            public_review_parts = extract_public_review_parts(public_reviews)
+
+        joint_review_or_public_reviews = extract_elife_public_reviews_from_email(email_body)
+        if joint_review_or_public_reviews:
+            public_review_parts = extract_public_review_parts(joint_review_or_public_reviews)
             if public_review_parts:
                 for public_review in public_review_parts:
                     review_dict = {
@@ -84,6 +86,14 @@ def get_evaluation_and_type_list_from_email_body(
                         'evaluation_text': public_review
                     }
                     evalution_list.append(review_dict)
+            else:
+                joint_review = joint_review_or_public_reviews
+                review_dict = {
+                    'evaluation_type': DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE,
+                    'evaluation_text': joint_review
+                }
+                evalution_list.append(review_dict)
+
         return evalution_list
     return []
 

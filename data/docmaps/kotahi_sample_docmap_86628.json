@@ -35,8 +35,7 @@
         {
           "item": {
             "type": "preprint",
-            "doi": "10.1101/2023.02.14.528498",
-            "versionIdentifier": "2"
+            "doi": "10.1101/2023.02.14.528498"
           },
           "status": "under-review",
           "happened": "2023-02-14T15:44:21+00:00"
@@ -44,8 +43,7 @@
         {
           "item": {
             "type": "preprint",
-            "doi": "10.7554/eLife.86628.1",
-            "versionIdentifier": "1"
+            "doi": "10.7554/eLife.86628.1"
           },
           "status": "draft"
         }
@@ -53,38 +51,13 @@
       "inputs": [
         {
           "type": "preprint",
-          "doi": "10.1101/2023.02.14.528498",
-          "url": "https://www.biorxiv.org/content/10.1101/2023.02.14.528498v2",
-          "versionIdentifier": "2",
-          "published": "2023-02-21"
+          "doi": "10.1101/2023.02.14.528498"
         }
       ],
       "next-step": "_:b1"
     },
     "_:b1": {
       "actions": [
-        {
-          "participants": [
-            {
-              "actor": {
-                "name": "anonymous",
-                "type": "person"
-              },
-              "role": "peer-reviewer"
-            }
-          ],
-          "outputs": [
-            {
-              "type": "review-article",
-              "content": [
-                {
-                  "type": "web-page",
-                  "url": "https://data-hub-api.elifesciences.org/kotahi/docmaps/v1/evaluation/get-by-evaluation-id?evaluation_id=id_1"
-                }
-              ]
-            }
-          ]
-        },
         {
           "participants": [
             {
@@ -125,7 +98,29 @@
               "content": [
                 {
                   "type": "web-page",
-                  "url": "https://data-hub-api.elifesciences.org/kotahi/docmaps/v1/evaluation/get-by-evaluation-id?evaluation_id=id_2"
+                  "url": "https://data-hub-api.elifesciences.org/kotahi/docmaps/v1/evaluation/get-by-evaluation-id?evaluation_id=eLife-RP-TR-2023-86628:evaluation-summary:1"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "participants": [
+            {
+              "actor": {
+                "name": "anonymous",
+                "type": "person"
+              },
+              "role": "peer-reviewer"
+            }
+          ],
+          "outputs": [
+            {
+              "type": "review-article",
+              "content": [
+                {
+                  "type": "web-page",
+                  "url": "https://data-hub-api.elifesciences.org/kotahi/docmaps/v1/evaluation/get-by-evaluation-id?evaluation_id=eLife-RP-TR-2023-86628:review-article:1"
                 }
               ]
             }
@@ -136,8 +131,7 @@
         {
           "item": {
             "type": "preprint",
-            "doi": "10.1101/2023.02.14.528498",
-            "versionIdentifier": "2"
+            "doi": "10.1101/2023.02.14.528498"
           },
           "status": "peer-reviewed"
         }
@@ -145,9 +139,7 @@
       "inputs": [
         {
           "type": "preprint",
-          "doi": "10.1101/2023.02.14.528498",
-          "url": "https://www.biorxiv.org/content/10.1101/2023.02.14.528498v2",
-          "versionIdentifier": "2"
+          "doi": "10.1101/2023.02.14.528498"
         }
       ],
       "next-step": "_:b2",
@@ -172,8 +164,7 @@
         {
           "item": {
             "type": "preprint",
-            "doi": "10.1101/2023.02.14.528498",
-            "versionIdentifier": "3"
+            "doi": "10.1101/2023.02.14.528498"
           },
           "status": "under-review",
           "happened": "2023-04-11T13:15:26+00:00"
@@ -181,8 +172,7 @@
         {
           "item": {
             "type": "preprint",
-            "doi": "10.7554/eLife.86628.2",
-            "versionIdentifier": "2"
+            "doi": "10.7554/eLife.86628.2"
           },
           "status": "draft"
         }
@@ -190,10 +180,7 @@
       "inputs": [
         {
           "type": "preprint",
-          "doi": "10.1101/2023.02.14.528498",
-          "url": "https://www.biorxiv.org/content/10.1101/2023.02.14.528498v3",
-          "versionIdentifier": "3",
-          "published": "2023-04-24"
+          "doi": "10.1101/2023.02.14.528498"
         }
       ],
       "next-step": "_:b3",
@@ -201,42 +188,6 @@
     },
     "_:b3": {
       "actions": [
-        {
-          "participants": [],
-          "outputs": [
-            {
-              "type": "reply",
-              "content": [
-                {
-                  "type": "web-page",
-                  "url": "https://data-hub-api.elifesciences.org/kotahi/docmaps/v1/evaluation/get-by-evaluation-id?evaluation_id=id_3"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "participants": [
-            {
-              "actor": {
-                "name": "anonymous",
-                "type": "person"
-              },
-              "role": "peer-reviewer"
-            }
-          ],
-          "outputs": [
-            {
-              "type": "review-article",
-              "content": [
-                {
-                  "type": "web-page",
-                  "url": "https://data-hub-api.elifesciences.org/kotahi/docmaps/v1/evaluation/get-by-evaluation-id?evaluation_id=id_4"
-                }
-              ]
-            }
-          ]
-        },
         {
           "participants": [
             {
@@ -277,7 +228,29 @@
               "content": [
                 {
                   "type": "web-page",
-                  "url": "https://data-hub-api.elifesciences.org/kotahi/docmaps/v1/evaluation/get-by-evaluation-id?evaluation_id=id_5"
+                  "url": "https://data-hub-api.elifesciences.org/kotahi/docmaps/v1/evaluation/get-by-evaluation-id?evaluation_id=eLife-RP-TR-2023-86628R1:evaluation-summary:1"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "participants": [
+            {
+              "actor": {
+                "name": "anonymous",
+                "type": "person"
+              },
+              "role": "peer-reviewer"
+            }
+          ],
+          "outputs": [
+            {
+              "type": "review-article",
+              "content": [
+                {
+                  "type": "web-page",
+                  "url": "https://data-hub-api.elifesciences.org/kotahi/docmaps/v1/evaluation/get-by-evaluation-id?evaluation_id=eLife-RP-TR-2023-86628R1:review-article:1"
                 }
               ]
             }
@@ -288,8 +261,7 @@
         {
           "item": {
             "type": "preprint",
-            "doi": "10.1101/2023.02.14.528498",
-            "versionIdentifier": "3"
+            "doi": "10.1101/2023.02.14.528498"
           },
           "status": "revised"
         }
@@ -297,9 +269,7 @@
       "inputs": [
         {
           "type": "preprint",
-          "doi": "10.1101/2023.02.14.528498",
-          "url": "https://www.biorxiv.org/content/10.1101/2023.02.14.528498v3",
-          "versionIdentifier": "3"
+          "doi": "10.1101/2023.02.14.528498"
         }
       ],
       "previous-step": "_:b2"
