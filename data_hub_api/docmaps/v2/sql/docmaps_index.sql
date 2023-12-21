@@ -66,7 +66,7 @@ t_manual_osf_preprint_match AS (
 t_hypothesis_annotation_for_osf_preprints AS (
   SELECT 
     *,
-    DENSE_RANK() OVER (PARTITION BY extracted_osf_id ORDER BY annotation_created_date DESC) AS osf_preprint_version_rank
+    DENSE_RANK() OVER (PARTITION BY extracted_osf_id ORDER BY annotation_created_date) AS osf_preprint_version_rank
   FROM t_hypothesis_annotation_with_doi
   WHERE uri LIKE '%psyarxiv%'
 ),
