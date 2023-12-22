@@ -43,7 +43,7 @@ t_hypothesis_annotation_with_doi AS (
         THEN REGEXP_EXTRACT(annotation.uri, r'v(\d+)$') 
       ELSE NULL
     END AS source_doi_version,
-    IF(uri LIKE '%psyarxiv%', REGEXP_EXTRACT(uri, r'/([a-zA-Z0-9]{5})$'), NULL) AS extracted_osf_id
+    IF(uri LIKE '%psyarxiv%' OR uri LIKE '%/osf%', REGEXP_EXTRACT(uri, r'/([a-zA-Z0-9]{5})$'), NULL) AS extracted_osf_id
   FROM t_hypothesis_annotation_with_cleaned_uri AS annotation
 ),
 
@@ -69,6 +69,7 @@ t_hypothesis_annotation_for_osf_preprints AS (
     DENSE_RANK() OVER (PARTITION BY extracted_osf_id ORDER BY annotation_created_date) AS osf_preprint_version_rank
   FROM t_hypothesis_annotation_with_doi
   WHERE uri LIKE '%psyarxiv%'
+    OR uri LIKE '%/osf%'
 ),
 
 t_hypothesis_annotation_with_osf_doi AS (
