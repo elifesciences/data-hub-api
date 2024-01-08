@@ -10,6 +10,7 @@ WITH t_reviewed_preprints AS (
     AND under_review_timestamp IS NOT NULL
     AND preprint_doi IS NOT NULL
     AND long_manuscript_identifier NOT LIKE '%-VOR-%'
+    AND qc_complete_timestamp >= '2023-10-01'
 ),
 
 t_latest_evaluation_emails AS(
