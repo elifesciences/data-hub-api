@@ -158,7 +158,10 @@ t_reviewed_preprints AS (
       ejp_normalized_title,
       biorxiv_medrxiv_normalized_title),
     (
-      under_review_timestamp IS NOT NULL
+      (
+        under_review_timestamp IS NOT NULL
+        AND preprint_doi IS NOT NULL
+      )
       OR 
       (
         is_reviewed_preprint_type
@@ -166,7 +169,6 @@ t_reviewed_preprints AS (
       )
     ) AS should_provide_docmaps_for,
   FROM `elife-data-pipeline.prod.v_manuscript_with_matching_preprint_server_doi`
-  WHERE preprint_doi IS NOT NULL
 ),
 
 t_reviewed_preprints_for_docmaps AS (
