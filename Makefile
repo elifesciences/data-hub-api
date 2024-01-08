@@ -56,6 +56,9 @@ dev-unittest:
 dev-watch:
 	$(PYTHON) -m pytest_watch -- -p no:cacheprovider $(ARGS) $(PYTEST_WATCH_MODULES)
 
+dev-regression-test:
+	$(PYTHON) -m pytest -p no:cacheprovider $(ARGS) tests/regression_tests
+
 dev-test: dev-lint dev-unittest
 
 
