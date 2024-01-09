@@ -36,13 +36,7 @@ t_hypothesis_annotation_with_doi AS (
         THEN CONCAT('10.48550/arXiv.', REGEXP_EXTRACT(annotation.uri, r'\/(\d+\.\d+)'))
       ELSE NULL
     END AS source_doi_without_version,
-    CASE 
-      WHEN annotation.uri LIKE '%10.1101/%'
-        THEN REGEXP_EXTRACT(annotation.uri, r'10\.\d{3,}.*v([1-9])')
-      WHEN annotation.uri LIKE '%researchsquare.com/article/rs-%' OR annotation.uri LIKE '%arxiv.org/abs/%'
-        THEN REGEXP_EXTRACT(annotation.uri, r'v(\d+)$') 
-      ELSE NULL
-    END AS source_doi_version,
+    REGEXP_EXTRACT(annotation.uri , r'v(\d+)$') source_doi_version,
     IF(uri LIKE '%psyarxiv%' OR uri LIKE '%/osf%', REGEXP_EXTRACT(uri, r'/([a-zA-Z0-9]{5})$'), NULL) AS extracted_osf_id
   FROM t_hypothesis_annotation_with_cleaned_uri AS annotation
 ),
