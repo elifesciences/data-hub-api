@@ -42,19 +42,11 @@ t_hypothesis_annotation_with_doi AS (
 ),
 
 t_manual_osf_preprint_match AS (
-  SELECT
-    * EXCEPT(rn),
+  SELECT 
+    *,
     DENSE_RANK() OVER (PARTITION BY osf_preprint_id ORDER BY preprint_doi_version) AS osf_preprint_version_rank
-  FROM
-  (
-    SELECT 
-      * EXCEPT(osf_preprint_id),
-      TRIM(osf_preprint_id) AS osf_preprint_id,
-      ROW_NUMBER() OVER(PARTITION BY long_manuscript_identifier ORDER BY imported_timestamp DESC) AS rn
-    FROM `elife-data-pipeline.prod.unmatched_manuscripts`
-    WHERE osf_preprint_id IS NOT NULL
-  )
-  WHERE rn=1
+  FROM `elife-data-pipeline.prod.v_latest_unmatched_manuscripts`
+  WHERE osf_preprint_id IS NOT NULL
 ),
 
 t_hypothesis_annotation_for_osf_preprints AS (
@@ -330,18 +322,11 @@ t_rp_meca_path_update AS (
 ),
 
 t_manual_preprint_match_for_published_date AS (
-  SELECT
-    * EXCEPT(rn),
-  FROM
-  (
-    SELECT 
-      *,
-      ROW_NUMBER() OVER(PARTITION BY long_manuscript_identifier ORDER BY imported_timestamp DESC) AS rn
-    FROM `elife-data-pipeline.prod.unmatched_manuscripts`
-    WHERE preprint_published_at_date IS NOT NULL 
-      AND preprint_published_at_date != ''
-  )
-  WHERE rn = 1
+  SELECT 
+    *
+  FROM `elife-data-pipeline.prod.v_latest_unmatched_manuscripts`
+  WHERE preprint_published_at_date IS NOT NULL 
+    AND preprint_published_at_date != ''
 ),
 
 t_europepmc_preprint_publication_date AS (
