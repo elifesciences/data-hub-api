@@ -10,7 +10,8 @@ DOCMAP_BY_MANUSCRIPT_PATH = (
     '/enhanced-preprints/docmaps/v2/by-publisher/elife/get-by-manuscript-id'
 )
 MANUSCRIPT_ID_LIST = [
-    '86628',  # first complete docmaps
+    '86628',  # bioRxiv preprint server
+    '89891',  # medRxiv preprint server
     '86873',  # arXiv preprint server
     '87193',  # OSF preprint server
     '87198'  # Research Square preprint server
