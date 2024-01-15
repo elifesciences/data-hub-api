@@ -12,7 +12,8 @@ DOCMAP_BY_MANUSCRIPT_PATH = (
 MANUSCRIPT_ID_LIST = [
     '86628',  # first complete docmaps
     '86873',  # arXiv preprint server
-    '87193'  # OSF preprint server
+    '87193',  # OSF preprint server
+    '87198'  # Research Square preprint server
 ]
 
 
