@@ -1,6 +1,10 @@
+import os
 import pytest
 import requests
 import json
+
+DEFAULT_DATA_HUB_API_REGRESSION_TEST_URL_PREFIX = 'http://localhost:8000'
+DATA_HUB_API_REGRESSION_TEST_URL_PREFIX_ENV='DATA_HUB_API_REGRESSION_TEST_URL_PREFIX'
 
 DOCMAP_BY_MANUSCRIPT_PATH = (
     '/enhanced-preprints/docmaps/v2/by-publisher/elife/get-by-manuscript-id'
@@ -9,7 +13,10 @@ DOCMAP_BY_MANUSCRIPT_PATH = (
 
 @pytest.fixture(name='regression_test_url_prefix')
 def _regression_test_url_prefix() -> str:
-    return 'http://localhost:8000'
+    return os.getenv(
+        DATA_HUB_API_REGRESSION_TEST_URL_PREFIX_ENV,
+        DEFAULT_DATA_HUB_API_REGRESSION_TEST_URL_PREFIX
+    )
 
 
 @pytest.fixture(name='regression_test_docmap_by_manuscript_url')
