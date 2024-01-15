@@ -9,7 +9,10 @@ DATA_HUB_API_REGRESSION_TEST_URL_PREFIX_ENV = 'DATA_HUB_API_REGRESSION_TEST_URL_
 DOCMAP_BY_MANUSCRIPT_PATH = (
     '/enhanced-preprints/docmaps/v2/by-publisher/elife/get-by-manuscript-id'
 )
-MANUSCRIPT_ID_LIST = ['86628']
+MANUSCRIPT_ID_LIST = [
+    '86628',  # first complete docmaps
+    '86873'  # arXiv preprint server
+]
 
 
 @pytest.fixture(name='regression_test_url_prefix')
