@@ -4,11 +4,12 @@ import requests
 import json
 
 DEFAULT_DATA_HUB_API_REGRESSION_TEST_URL_PREFIX = 'http://localhost:8000'
-DATA_HUB_API_REGRESSION_TEST_URL_PREFIX_ENV='DATA_HUB_API_REGRESSION_TEST_URL_PREFIX'
+DATA_HUB_API_REGRESSION_TEST_URL_PREFIX_ENV = 'DATA_HUB_API_REGRESSION_TEST_URL_PREFIX'
 
 DOCMAP_BY_MANUSCRIPT_PATH = (
     '/enhanced-preprints/docmaps/v2/by-publisher/elife/get-by-manuscript-id'
 )
+MANUSCRIPT_ID_LIST = ['86628']
 
 
 @pytest.fixture(name='regression_test_url_prefix')
@@ -26,14 +27,19 @@ def _regression_test_docmap_by_manuscript_url(
     return regression_test_url_prefix + DOCMAP_BY_MANUSCRIPT_PATH
 
 
-def test_should_match_example_response_for_86628(
-    regression_test_docmap_by_manuscript_url: str
+@pytest.mark.parametrize('manuscript_id', MANUSCRIPT_ID_LIST)
+def test_should_match_example_response(
+    regression_test_docmap_by_manuscript_url: str,
+    manuscript_id: str
 ):
     response = requests.get(
         url=regression_test_docmap_by_manuscript_url,
-        params={'manuscript_id': '86628'}
+        params={'manuscript_id': manuscript_id}
     )
     response.raise_for_status()
-    with open('data/docmaps/sample_docmap_for_86628.json', 'r') as file:
+    with open(
+        f'data/docmaps/regression_test/docmap_by_manuscript_id/{manuscript_id}.json',
+        'r'
+    ) as file:
         example_response = json.load(file)
     assert response.json() == example_response
