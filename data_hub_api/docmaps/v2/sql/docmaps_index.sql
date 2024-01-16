@@ -212,13 +212,13 @@ t_result_with_preprint_url_and_has_evaluations AS (
 
     COALESCE(
       result.evaluations[SAFE_OFFSET(0)].uri,
-      result.ejp_validated_preprint_url,
+      result.preprint_url_and_preprint_url_source.preprint_url,
       latest_biorxiv_medrxiv_version.preprint_url
     ) AS preprint_url,
 
     CASE
       WHEN result.evaluations[SAFE_OFFSET(0)].uri IS NOT NULL THEN 'evaluations'
-      WHEN result.ejp_validated_preprint_url IS NOT NULL THEN 'ejp_preprint_url'
+      WHEN result.preprint_url_and_preprint_url_source.preprint_url IS NOT NULL THEN result.preprint_url_and_preprint_url_source.preprint_url_source
       WHEN latest_biorxiv_medrxiv_version.preprint_url IS NOT NULL THEN 'latest_biorxiv_medrxiv_version'
     END AS preprint_url_source,
 
@@ -231,30 +231,22 @@ t_result_with_preprint_url_and_has_evaluations AS (
 
 t_result_with_initial_preprint_version AS (
   SELECT
-    * EXCEPT(elife_doi),
-
-    CASE 
-      WHEN elife_doi IS NULL
-        THEN CONCAT('10.7554/eLife.',manuscript_id)
-      ELSE 
-        elife_doi
-    END AS elife_doi,
+    *,
 
     CAST(result.position_in_overall_stage AS STRING) AS elife_doi_version_str,
 
     CASE
       WHEN manual_preprint_version IS NOT NULL
         THEN manual_preprint_version
-      WHEN preprint_url LIKE '%10.1101/%v%'
-        THEN REGEXP_EXTRACT(preprint_url, r'10\.\d{3,}.*v([1-9])')
-      WHEN preprint_url LIKE '%researchsquare.com/article/rs-%v%' OR preprint_url LIKE '%arxiv.org/abs/%v%'
+      WHEN REGEXP_CONTAINS(preprint_doi_url, r'osf')
+        THEN result.evaluations[SAFE_OFFSET(0)].source_doi_version
+      WHEN REGEXP_CONTAINS(preprint_url, r'(.*v\d+)$')
         THEN REGEXP_EXTRACT(preprint_url, r'v(\d+)$')
       WHEN REGEXP_CONTAINS(preprint_doi_url, r'(.*v\d+)$')
         THEN REGEXP_EXTRACT(preprint_doi_url, r'v(\d+)$')
-      WHEN REGEXP_CONTAINS(preprint_doi_url, r'osf')
-        THEN result.evaluations[SAFE_OFFSET(0)].source_doi_version
       ELSE NULL
     END AS preprint_version,
+
     CASE 
       WHEN preprint_doi LIKE '%/rs%rs-%'
         THEN REGEXP_EXTRACT(preprint_doi, r'(.+)\/\w+') 
