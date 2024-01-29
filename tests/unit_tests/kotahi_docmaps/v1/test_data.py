@@ -145,6 +145,14 @@ PUBLIC_REVIEWS_WITHOUT_EVALUATION_1 = '''
 ----------
 '''
 
+EMAIL_BODY_INTRO_FOR_ELIFE_ASSESSMENT_AND_PUBLIC_REVIEWS_1 = '''
+    Dear Dr Huang,
+
+    Thank you for submitting your article.
+    Please note that the reviews are in two parts: public reviews are near the top and recommendations to the authors follow further down. 
+
+'''
+
 EMAIL_BODY_1 = '''
     Dear Dr Huang,
 
@@ -167,9 +175,7 @@ EMAIL_BODY_WITH_ELIFE_ASSESSMENT_1 = f'''
 '''
 
 EMAIL_BODY_WITH_PUBLIC_REVIEWS_1 = f'''
-    Dear Dr Huang,
-
-    Thank you for submitting your article.
+    {EMAIL_BODY_INTRO_FOR_ELIFE_ASSESSMENT_AND_PUBLIC_REVIEWS_1}
     ----------
 
     {PUBLIC_REVIEWS_1}
@@ -178,9 +184,7 @@ EMAIL_BODY_WITH_PUBLIC_REVIEWS_1 = f'''
 '''
 
 EMAIL_BODY_WITH_ELIFE_ASSESSMENT_AND_PUBLIC_REVIEWS_1 = f'''
-    Dear Dr Huang,
-
-    Thank you for submitting your article.
+    {EMAIL_BODY_INTRO_FOR_ELIFE_ASSESSMENT_AND_PUBLIC_REVIEWS_1}
     ----------
 
     {ELIFE_ASSESSMENT_1}

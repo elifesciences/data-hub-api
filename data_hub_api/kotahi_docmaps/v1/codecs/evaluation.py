@@ -41,7 +41,7 @@ def extract_elife_assessments_from_email(email_body: Optional[str]) -> Optional[
 
 def extract_elife_public_reviews_from_email(email_body: Optional[str]) -> Optional[str]:
     if email_body:
-        pattern = r'(?s)([pP]ublic [rR]eview(.*?))-{10,}'
+        pattern = r'(?s)([pP]ublic [rR]eviews?:?\n.*)-{10,}'
         match = re.search(pattern, email_body)
         if match:
             extracted_text = match.group(1).strip()
