@@ -88,17 +88,17 @@ DOCMAPS_QUERY_RESULT_ITEM_2: ApiInput = {
     'manuscript_versions': [MANUSCRIPT_VERSION_1, MANUSCRIPT_VERSION_2]
 }
 
-SPACE_1 = ' '
-COLON_1 = ':'
+SPACE = ' '
+COLON = ':'
 
 REVIEW_1 = f'''
-    Reviewer #1 (Public Review){COLON_1}{SPACE_1}
+    Reviewer #1 (Public Review){COLON}{SPACE}
 
     This is review_1.
 '''
 
 REVIEW_2 = f'''
-    Reviewer #2 (Public Review){COLON_1}
+    Reviewer #2 (Public Review){COLON}
 
     This is review_2.
 '''
