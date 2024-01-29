@@ -1,0 +1,719 @@
+{
+    "@context": "https://w3id.org/docmaps/context.jsonld",
+    "type": "docmap",
+    "id": "https://data-hub-api.elifesciences.org/enhanced-preprints/docmaps/v2/by-publisher/elife/get-by-manuscript-id?manuscript_id=89891",
+    "created": "2023-06-12T07:51:42+00:00",
+    "updated": "2023-06-12T07:51:42+00:00",
+    "publisher": {
+        "account": {
+            "id": "https://sciety.org/groups/elife",
+            "service": "https://sciety.org"
+        },
+        "homepage": "https://elifesciences.org/",
+        "id": "https://elifesciences.org/",
+        "logo": "https://sciety.org/static/groups/elife--b560187e-f2fb-4ff9-a861-a204f3fc0fb0.png",
+        "name": "eLife"
+    },
+    "first-step": "_:b0",
+    "steps": {
+        "_:b0": {
+            "actions": [
+                {
+                    "participants": [],
+                    "outputs": [
+                        {
+                            "type": "preprint",
+                            "identifier": "89891",
+                            "doi": "10.7554/eLife.89891.1",
+                            "versionIdentifier": "1",
+                            "license": "https://creativecommons.org/publicdomain/zero/1.0/"
+                        }
+                    ]
+                }
+            ],
+            "assertions": [
+                {
+                    "item": {
+                        "type": "preprint",
+                        "doi": "10.1101/2023.07.17.23292782",
+                        "versionIdentifier": "1"
+                    },
+                    "status": "under-review",
+                    "happened": "2023-06-18T09:57:24+00:00"
+                },
+                {
+                    "item": {
+                        "type": "preprint",
+                        "doi": "10.7554/eLife.89891.1",
+                        "versionIdentifier": "1"
+                    },
+                    "status": "draft"
+                }
+            ],
+            "inputs": [
+                {
+                    "type": "preprint",
+                    "doi": "10.1101/2023.07.17.23292782",
+                    "url": "https://www.medrxiv.org/content/10.1101/2023.07.17.23292782v1",
+                    "versionIdentifier": "1",
+                    "published": "2023-07-23",
+                    "content": [
+                        {
+                            "type": "computer-file",
+                            "url": "s3://transfers-elife/medrxiv_Current_Content/July_2023/24_Jul_23_Batch_998/4927b1c3-6fa1-1014-a905-ad2288a9aaa8.meca"
+                        }
+                    ]
+                }
+            ],
+            "next-step": "_:b1"
+        },
+        "_:b1": {
+            "actions": [
+                {
+                    "participants": [
+                        {
+                            "actor": {
+                                "name": "anonymous",
+                                "type": "person"
+                            },
+                            "role": "peer-reviewer"
+                        }
+                    ],
+                    "outputs": [
+                        {
+                            "type": "review-article",
+                            "published": "2023-08-07T09:15:45.526119+00:00",
+                            "doi": "10.7554/eLife.89891.1.sa0",
+                            "license": "https://creativecommons.org/publicdomain/zero/1.0/",
+                            "url": "https://doi.org/10.7554/eLife.89891.1.sa0",
+                            "content": [
+                                {
+                                    "type": "web-page",
+                                    "url": "https://hypothes.is/a/_ZHitjUCEe6vYLOaErt_TA"
+                                },
+                                {
+                                    "type": "web-page",
+                                    "url": "https://sciety.org/articles/activity/10.1101/2023.07.17.23292782#hypothesis:_ZHitjUCEe6vYLOaErt_TA"
+                                },
+                                {
+                                    "type": "web-page",
+                                    "url": "https://sciety.org/evaluations/hypothesis:_ZHitjUCEe6vYLOaErt_TA/content"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "participants": [
+                        {
+                            "actor": {
+                                "name": "anonymous",
+                                "type": "person"
+                            },
+                            "role": "peer-reviewer"
+                        }
+                    ],
+                    "outputs": [
+                        {
+                            "type": "review-article",
+                            "published": "2023-08-07T09:15:46.259756+00:00",
+                            "doi": "10.7554/eLife.89891.1.sa1",
+                            "license": "https://creativecommons.org/publicdomain/zero/1.0/",
+                            "url": "https://doi.org/10.7554/eLife.89891.1.sa1",
+                            "content": [
+                                {
+                                    "type": "web-page",
+                                    "url": "https://hypothes.is/a/_gDbbDUCEe64P_u8w12jFg"
+                                },
+                                {
+                                    "type": "web-page",
+                                    "url": "https://sciety.org/articles/activity/10.1101/2023.07.17.23292782#hypothesis:_gDbbDUCEe64P_u8w12jFg"
+                                },
+                                {
+                                    "type": "web-page",
+                                    "url": "https://sciety.org/evaluations/hypothesis:_gDbbDUCEe64P_u8w12jFg/content"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "participants": [
+                        {
+                            "actor": {
+                                "name": "anonymous",
+                                "type": "person"
+                            },
+                            "role": "peer-reviewer"
+                        }
+                    ],
+                    "outputs": [
+                        {
+                            "type": "review-article",
+                            "published": "2023-08-07T09:15:47.049874+00:00",
+                            "doi": "10.7554/eLife.89891.1.sa2",
+                            "license": "https://creativecommons.org/publicdomain/zero/1.0/",
+                            "url": "https://doi.org/10.7554/eLife.89891.1.sa2",
+                            "content": [
+                                {
+                                    "type": "web-page",
+                                    "url": "https://hypothes.is/a/_nqRUDUCEe6zCksSmqElEQ"
+                                },
+                                {
+                                    "type": "web-page",
+                                    "url": "https://sciety.org/articles/activity/10.1101/2023.07.17.23292782#hypothesis:_nqRUDUCEe6zCksSmqElEQ"
+                                },
+                                {
+                                    "type": "web-page",
+                                    "url": "https://sciety.org/evaluations/hypothesis:_nqRUDUCEe6zCksSmqElEQ/content"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "participants": [
+                        {
+                            "actor": {
+                                "type": "person",
+                                "name": "Murim Choi",
+                                "firstName": "Murim",
+                                "surname": "Choi",
+                                "_relatesToOrganization": "Seoul National University, Korea, the Republic of",
+                                "affiliation": {
+                                    "type": "organization",
+                                    "name": "Seoul National University",
+                                    "location": "Seoul, Korea, the Republic of"
+                                }
+                            },
+                            "role": "editor"
+                        },
+                        {
+                            "actor": {
+                                "type": "person",
+                                "name": "Murim Choi",
+                                "firstName": "Murim",
+                                "surname": "Choi",
+                                "_relatesToOrganization": "Seoul National University, Korea, the Republic of",
+                                "affiliation": {
+                                    "type": "organization",
+                                    "name": "Seoul National University",
+                                    "location": "Seoul, Korea, the Republic of"
+                                }
+                            },
+                            "role": "senior-editor"
+                        }
+                    ],
+                    "outputs": [
+                        {
+                            "type": "evaluation-summary",
+                            "published": "2023-08-07T09:15:47.845762+00:00",
+                            "doi": "10.7554/eLife.89891.1.sa3",
+                            "license": "https://creativecommons.org/publicdomain/zero/1.0/",
+                            "url": "https://doi.org/10.7554/eLife.89891.1.sa3",
+                            "content": [
+                                {
+                                    "type": "web-page",
+                                    "url": "https://hypothes.is/a/_vOOmDUCEe6XPseWc4xpqQ"
+                                },
+                                {
+                                    "type": "web-page",
+                                    "url": "https://sciety.org/articles/activity/10.1101/2023.07.17.23292782#hypothesis:_vOOmDUCEe6XPseWc4xpqQ"
+                                },
+                                {
+                                    "type": "web-page",
+                                    "url": "https://sciety.org/evaluations/hypothesis:_vOOmDUCEe6XPseWc4xpqQ/content"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "participants": [],
+                    "outputs": [
+                        {
+                            "type": "reply",
+                            "published": "2023-08-07T15:08:33.983640+00:00",
+                            "doi": "10.7554/eLife.89891.1.sa4",
+                            "license": "https://creativecommons.org/publicdomain/zero/1.0/",
+                            "url": "https://doi.org/10.7554/eLife.89891.1.sa4",
+                            "content": [
+                                {
+                                    "type": "web-page",
+                                    "url": "https://hypothes.is/a/RvZ1xjU0Ee6yJc-LOFsyvw"
+                                },
+                                {
+                                    "type": "web-page",
+                                    "url": "https://sciety.org/articles/activity/10.1101/2023.07.17.23292782#hypothesis:RvZ1xjU0Ee6yJc-LOFsyvw"
+                                },
+                                {
+                                    "type": "web-page",
+                                    "url": "https://sciety.org/evaluations/hypothesis:RvZ1xjU0Ee6yJc-LOFsyvw/content"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "assertions": [
+                {
+                    "item": {
+                        "type": "preprint",
+                        "doi": "10.1101/2023.07.17.23292782",
+                        "versionIdentifier": "1"
+                    },
+                    "status": "peer-reviewed"
+                }
+            ],
+            "inputs": [
+                {
+                    "type": "preprint",
+                    "doi": "10.1101/2023.07.17.23292782",
+                    "url": "https://www.medrxiv.org/content/10.1101/2023.07.17.23292782v1",
+                    "versionIdentifier": "1"
+                }
+            ],
+            "next-step": "_:b2",
+            "previous-step": "_:b0"
+        },
+        "_:b2": {
+            "actions": [
+                {
+                    "participants": [],
+                    "outputs": [
+                        {
+                            "type": "preprint",
+                            "identifier": "89891",
+                            "doi": "10.7554/eLife.89891.1",
+                            "versionIdentifier": "1",
+                            "license": "https://creativecommons.org/publicdomain/zero/1.0/",
+                            "published": "2023-08-08T14:00:00+00:00",
+                            "partOf": {
+                                "type": "manuscript",
+                                "doi": "10.7554/eLife.89891",
+                                "identifier": "89891",
+                                "subjectDisciplines": [
+                                    "Genetics and Genomics",
+                                    "Medicine"
+                                ],
+                                "published": "2023-08-08T14:00:00+00:00",
+                                "volumeIdentifier": "12",
+                                "electronicArticleIdentifier": "RP89891"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "assertions": [
+                {
+                    "item": {
+                        "type": "preprint",
+                        "doi": "10.7554/eLife.89891.1",
+                        "versionIdentifier": "1"
+                    },
+                    "status": "manuscript-published"
+                }
+            ],
+            "inputs": [
+                {
+                    "type": "preprint",
+                    "doi": "10.1101/2023.07.17.23292782",
+                    "url": "https://www.medrxiv.org/content/10.1101/2023.07.17.23292782v1",
+                    "versionIdentifier": "1"
+                },
+                {
+                    "type": "review-article",
+                    "doi": "10.7554/eLife.89891.1.sa0"
+                },
+                {
+                    "type": "review-article",
+                    "doi": "10.7554/eLife.89891.1.sa1"
+                },
+                {
+                    "type": "review-article",
+                    "doi": "10.7554/eLife.89891.1.sa2"
+                },
+                {
+                    "type": "evaluation-summary",
+                    "doi": "10.7554/eLife.89891.1.sa3"
+                },
+                {
+                    "type": "reply",
+                    "doi": "10.7554/eLife.89891.1.sa4"
+                }
+            ],
+            "next-step": "_:b3",
+            "previous-step": "_:b1"
+        },
+        "_:b3": {
+            "actions": [
+                {
+                    "participants": [],
+                    "outputs": [
+                        {
+                            "type": "preprint",
+                            "identifier": "89891",
+                            "doi": "10.7554/eLife.89891.2",
+                            "versionIdentifier": "2",
+                            "license": "https://creativecommons.org/publicdomain/zero/1.0/"
+                        }
+                    ]
+                }
+            ],
+            "assertions": [
+                {
+                    "item": {
+                        "type": "preprint",
+                        "doi": "10.1101/2023.07.17.23292782",
+                        "versionIdentifier": "2"
+                    },
+                    "status": "under-review",
+                    "happened": "2023-10-02T16:17:35+00:00"
+                },
+                {
+                    "item": {
+                        "type": "preprint",
+                        "doi": "10.7554/eLife.89891.2",
+                        "versionIdentifier": "2"
+                    },
+                    "status": "draft"
+                }
+            ],
+            "inputs": [
+                {
+                    "type": "preprint",
+                    "doi": "10.1101/2023.07.17.23292782",
+                    "url": "https://www.medrxiv.org/content/10.1101/2023.07.17.23292782v2",
+                    "versionIdentifier": "2",
+                    "published": "2023-10-02",
+                    "content": [
+                        {
+                            "type": "computer-file",
+                            "url": "s3://transfers-elife/medrxiv_Current_Content/October_2023/04_Oct_23_Batch_1070/afbff6df-6c85-1014-8b5b-a48e914d7782.meca"
+                        }
+                    ]
+                }
+            ],
+            "next-step": "_:b4",
+            "previous-step": "_:b2"
+        },
+        "_:b4": {
+            "actions": [
+                {
+                    "participants": [
+                        {
+                            "actor": {
+                                "name": "anonymous",
+                                "type": "person"
+                            },
+                            "role": "peer-reviewer"
+                        }
+                    ],
+                    "outputs": [
+                        {
+                            "type": "review-article",
+                            "published": "2023-11-03T09:14:10.617291+00:00",
+                            "doi": "10.7554/eLife.89891.2.sa0",
+                            "license": "https://creativecommons.org/publicdomain/zero/1.0/",
+                            "url": "https://doi.org/10.7554/eLife.89891.2.sa0",
+                            "content": [
+                                {
+                                    "type": "web-page",
+                                    "url": "https://hypothes.is/a/WVuZCnopEe65EAuevZmF2Q"
+                                },
+                                {
+                                    "type": "web-page",
+                                    "url": "https://sciety.org/articles/activity/10.1101/2023.07.17.23292782#hypothesis:WVuZCnopEe65EAuevZmF2Q"
+                                },
+                                {
+                                    "type": "web-page",
+                                    "url": "https://sciety.org/evaluations/hypothesis:WVuZCnopEe65EAuevZmF2Q/content"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "participants": [
+                        {
+                            "actor": {
+                                "name": "anonymous",
+                                "type": "person"
+                            },
+                            "role": "peer-reviewer"
+                        }
+                    ],
+                    "outputs": [
+                        {
+                            "type": "review-article",
+                            "published": "2023-11-03T09:14:11.376384+00:00",
+                            "doi": "10.7554/eLife.89891.2.sa1",
+                            "license": "https://creativecommons.org/publicdomain/zero/1.0/",
+                            "url": "https://doi.org/10.7554/eLife.89891.2.sa1",
+                            "content": [
+                                {
+                                    "type": "web-page",
+                                    "url": "https://hypothes.is/a/Wc6HsnopEe61N8fnbtN1Sw"
+                                },
+                                {
+                                    "type": "web-page",
+                                    "url": "https://sciety.org/articles/activity/10.1101/2023.07.17.23292782#hypothesis:Wc6HsnopEe61N8fnbtN1Sw"
+                                },
+                                {
+                                    "type": "web-page",
+                                    "url": "https://sciety.org/evaluations/hypothesis:Wc6HsnopEe61N8fnbtN1Sw/content"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "participants": [
+                        {
+                            "actor": {
+                                "name": "anonymous",
+                                "type": "person"
+                            },
+                            "role": "peer-reviewer"
+                        }
+                    ],
+                    "outputs": [
+                        {
+                            "type": "review-article",
+                            "published": "2023-11-03T09:14:12.103172+00:00",
+                            "doi": "10.7554/eLife.89891.2.sa2",
+                            "license": "https://creativecommons.org/publicdomain/zero/1.0/",
+                            "url": "https://doi.org/10.7554/eLife.89891.2.sa2",
+                            "content": [
+                                {
+                                    "type": "web-page",
+                                    "url": "https://hypothes.is/a/WjukMnopEe6XHDvRkZTq9w"
+                                },
+                                {
+                                    "type": "web-page",
+                                    "url": "https://sciety.org/articles/activity/10.1101/2023.07.17.23292782#hypothesis:WjukMnopEe6XHDvRkZTq9w"
+                                },
+                                {
+                                    "type": "web-page",
+                                    "url": "https://sciety.org/evaluations/hypothesis:WjukMnopEe6XHDvRkZTq9w/content"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "participants": [
+                        {
+                            "actor": {
+                                "type": "person",
+                                "name": "Murim Choi",
+                                "firstName": "Murim",
+                                "surname": "Choi",
+                                "_relatesToOrganization": "Seoul National University, Korea, the Republic of",
+                                "affiliation": {
+                                    "type": "organization",
+                                    "name": "Seoul National University",
+                                    "location": "Seoul, Korea, the Republic of"
+                                }
+                            },
+                            "role": "editor"
+                        },
+                        {
+                            "actor": {
+                                "type": "person",
+                                "name": "Murim Choi",
+                                "firstName": "Murim",
+                                "surname": "Choi",
+                                "_relatesToOrganization": "Seoul National University, Korea, the Republic of",
+                                "affiliation": {
+                                    "type": "organization",
+                                    "name": "Seoul National University",
+                                    "location": "Seoul, Korea, the Republic of"
+                                }
+                            },
+                            "role": "senior-editor"
+                        }
+                    ],
+                    "outputs": [
+                        {
+                            "type": "evaluation-summary",
+                            "published": "2023-11-03T09:14:12.828646+00:00",
+                            "doi": "10.7554/eLife.89891.2.sa3",
+                            "license": "https://creativecommons.org/publicdomain/zero/1.0/",
+                            "url": "https://doi.org/10.7554/eLife.89891.2.sa3",
+                            "content": [
+                                {
+                                    "type": "web-page",
+                                    "url": "https://hypothes.is/a/WqvaDnopEe65ESvMkNLbmA"
+                                },
+                                {
+                                    "type": "web-page",
+                                    "url": "https://sciety.org/articles/activity/10.1101/2023.07.17.23292782#hypothesis:WqvaDnopEe65ESvMkNLbmA"
+                                },
+                                {
+                                    "type": "web-page",
+                                    "url": "https://sciety.org/evaluations/hypothesis:WqvaDnopEe65ESvMkNLbmA/content"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "participants": [],
+                    "outputs": [
+                        {
+                            "type": "reply",
+                            "published": "2023-11-03T10:07:00.721059+00:00",
+                            "doi": "10.7554/eLife.89891.2.sa4",
+                            "license": "https://creativecommons.org/publicdomain/zero/1.0/",
+                            "url": "https://doi.org/10.7554/eLife.89891.2.sa4",
+                            "content": [
+                                {
+                                    "type": "web-page",
+                                    "url": "https://hypothes.is/a/uwZHFnowEe6GMsM8erHVaQ"
+                                },
+                                {
+                                    "type": "web-page",
+                                    "url": "https://sciety.org/articles/activity/10.1101/2023.07.17.23292782#hypothesis:uwZHFnowEe6GMsM8erHVaQ"
+                                },
+                                {
+                                    "type": "web-page",
+                                    "url": "https://sciety.org/evaluations/hypothesis:uwZHFnowEe6GMsM8erHVaQ/content"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "assertions": [
+                {
+                    "item": {
+                        "type": "preprint",
+                        "doi": "10.1101/2023.07.17.23292782",
+                        "versionIdentifier": "2"
+                    },
+                    "status": "revised"
+                }
+            ],
+            "inputs": [
+                {
+                    "type": "preprint",
+                    "doi": "10.1101/2023.07.17.23292782",
+                    "url": "https://www.medrxiv.org/content/10.1101/2023.07.17.23292782v2",
+                    "versionIdentifier": "2"
+                }
+            ],
+            "next-step": "_:b5",
+            "previous-step": "_:b3"
+        },
+        "_:b5": {
+            "actions": [
+                {
+                    "participants": [],
+                    "outputs": [
+                        {
+                            "type": "preprint",
+                            "identifier": "89891",
+                            "doi": "10.7554/eLife.89891.2",
+                            "versionIdentifier": "2",
+                            "license": "https://creativecommons.org/publicdomain/zero/1.0/",
+                            "published": "2023-11-06T14:00:00+00:00",
+                            "partOf": {
+                                "type": "manuscript",
+                                "doi": "10.7554/eLife.89891",
+                                "identifier": "89891",
+                                "subjectDisciplines": [
+                                    "Genetics and Genomics",
+                                    "Medicine"
+                                ],
+                                "published": "2023-08-08T14:00:00+00:00",
+                                "volumeIdentifier": "12",
+                                "electronicArticleIdentifier": "RP89891"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "assertions": [
+                {
+                    "item": {
+                        "type": "preprint",
+                        "doi": "10.7554/eLife.89891.2",
+                        "versionIdentifier": "2"
+                    },
+                    "status": "manuscript-published"
+                }
+            ],
+            "inputs": [
+                {
+                    "type": "preprint",
+                    "doi": "10.1101/2023.07.17.23292782",
+                    "url": "https://www.medrxiv.org/content/10.1101/2023.07.17.23292782v2",
+                    "versionIdentifier": "2"
+                },
+                {
+                    "type": "review-article",
+                    "doi": "10.7554/eLife.89891.2.sa0"
+                },
+                {
+                    "type": "review-article",
+                    "doi": "10.7554/eLife.89891.2.sa1"
+                },
+                {
+                    "type": "review-article",
+                    "doi": "10.7554/eLife.89891.2.sa2"
+                },
+                {
+                    "type": "evaluation-summary",
+                    "doi": "10.7554/eLife.89891.2.sa3"
+                },
+                {
+                    "type": "reply",
+                    "doi": "10.7554/eLife.89891.2.sa4"
+                }
+            ],
+            "next-step": "_:b6",
+            "previous-step": "_:b4"
+        },
+        "_:b6": {
+            "actions": [
+                {
+                    "participants": [],
+                    "outputs": [
+                        {
+                            "type": "version-of-record",
+                            "doi": "10.7554/eLife.89891.3",
+                            "published": "2023-12-11",
+                            "url": "https://doi.org/10.7554/eLife.89891.3",
+                            "content": [
+                                {
+                                    "type": "web-page",
+                                    "url": "https://elifesciences.org/articles/89891"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "assertions": [
+                {
+                    "item": {
+                        "type": "version-of-record",
+                        "doi": "10.7554/eLife.89891.3",
+                        "versionIdentifier": "3"
+                    },
+                    "status": "vor-published"
+                }
+            ],
+            "inputs": [
+                {
+                    "type": "preprint",
+                    "doi": "10.7554/eLife.89891.2",
+                    "identifier": "89891",
+                    "versionIdentifier": "2"
+                }
+            ],
+            "previous-step": "_:b5"
+        }
+    }
+}
