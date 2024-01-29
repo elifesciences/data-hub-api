@@ -89,7 +89,7 @@ DOCMAPS_QUERY_RESULT_ITEM_2: ApiInput = {
 }
 
 SPACE_1 = ' '
-COLON_1 = ' '
+COLON_1 = ':'
 
 REVIEW_1 = f'''
     Reviewer #1 (Public Review){COLON_1}{SPACE_1}
