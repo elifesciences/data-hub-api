@@ -88,14 +88,17 @@ DOCMAPS_QUERY_RESULT_ITEM_2: ApiInput = {
     'manuscript_versions': [MANUSCRIPT_VERSION_1, MANUSCRIPT_VERSION_2]
 }
 
-REVIEW_1 = '''
-    Reviewer #1 (Public Review):
+SPACE = ' '
+COLON = ':'
+
+REVIEW_1 = f'''
+    Reviewer #1 (Public Review){COLON}{SPACE}
 
     This is review_1.
 '''
 
-REVIEW_2 = '''
-    Reviewer #2 (Public Review):
+REVIEW_2 = f'''
+    Reviewer #2 (Public Review){COLON}
 
     This is review_2.
 '''
@@ -145,6 +148,14 @@ PUBLIC_REVIEWS_WITHOUT_EVALUATION_1 = '''
 ----------
 '''
 
+EMAIL_BODY_INTRO_FOR_ELIFE_ASSESSMENT_AND_PUBLIC_REVIEWS_1 = '''
+    Dear Dr Huang,
+
+    Thank you for submitting your article.
+    Note: public reviews are near the top and recommendations to the authors follow further down.
+
+'''
+
 EMAIL_BODY_1 = '''
     Dear Dr Huang,
 
@@ -167,9 +178,7 @@ EMAIL_BODY_WITH_ELIFE_ASSESSMENT_1 = f'''
 '''
 
 EMAIL_BODY_WITH_PUBLIC_REVIEWS_1 = f'''
-    Dear Dr Huang,
-
-    Thank you for submitting your article.
+    {EMAIL_BODY_INTRO_FOR_ELIFE_ASSESSMENT_AND_PUBLIC_REVIEWS_1}
     ----------
 
     {PUBLIC_REVIEWS_1}
@@ -178,9 +187,7 @@ EMAIL_BODY_WITH_PUBLIC_REVIEWS_1 = f'''
 '''
 
 EMAIL_BODY_WITH_ELIFE_ASSESSMENT_AND_PUBLIC_REVIEWS_1 = f'''
-    Dear Dr Huang,
-
-    Thank you for submitting your article.
+    {EMAIL_BODY_INTRO_FOR_ELIFE_ASSESSMENT_AND_PUBLIC_REVIEWS_1}
     ----------
 
     {ELIFE_ASSESSMENT_1}
