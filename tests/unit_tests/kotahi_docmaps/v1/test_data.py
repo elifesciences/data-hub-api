@@ -152,7 +152,7 @@ EMAIL_BODY_INTRO_FOR_ELIFE_ASSESSMENT_AND_PUBLIC_REVIEWS_1 = '''
     Dear Dr Huang,
 
     Thank you for submitting your article.
-    Please note that the reviews are in two parts: public reviews are near the top and recommendations to the authors follow further down. 
+    Note: public reviews are near the top and recommendations to the authors follow further down.
 
 '''
 

@@ -35,6 +35,7 @@ from tests.unit_tests.kotahi_docmaps.v1.test_data import (
     SENIOR_EDITOR_DETAIL_1
 )
 
+
 class TestExtractElifeAssessmentsFromEmail:
     def test_should_extract_elife_assessment_from_email(self):
         result = extract_elife_assessments_from_email(
