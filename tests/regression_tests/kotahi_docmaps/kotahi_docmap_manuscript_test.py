@@ -14,10 +14,6 @@ MANUSCRIPT_ID_LIST = [
     '93934'  # evaluations for 2 versions of manuscript
 ]
 
-NOT_AVAILABLE_DOCMAP_JSON = {
-  "detail": "No Docmaps available for requested manuscript from the publisher eLife"
-}
-
 
 @pytest.fixture(name='regression_test_url_prefix')
 def _regression_test_url_prefix() -> str:
@@ -42,7 +38,7 @@ def test_docmaps_should_not_be_available_for_86628(
         url=regression_test_docmap_by_manuscript_url,
         params={'manuscript_id': '86628'}
     )
-    assert response.json() == NOT_AVAILABLE_DOCMAP_JSON
+    assert response.status_code == 404
 
 
 #  qc_complete_timestamp > '2023-10-01' for only first manuscript version
@@ -53,7 +49,7 @@ def test_docmaps_should_not_be_available_for_86764(
         url=regression_test_docmap_by_manuscript_url,
         params={'manuscript_id': '86764'}
     )
-    assert response.json() == NOT_AVAILABLE_DOCMAP_JSON
+    assert response.status_code == 404
 
 
 @pytest.mark.parametrize('manuscript_id', MANUSCRIPT_ID_LIST)
