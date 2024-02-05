@@ -9,13 +9,15 @@ DATA_HUB_API_REGRESSION_TEST_URL_PREFIX_ENV = 'DATA_HUB_API_REGRESSION_TEST_URL_
 DOCMAP_BY_MANUSCRIPT_PATH = (
     '/kotahi/docmaps/v1/by-publisher/elife/get-by-manuscript-id'
 )
+
 MANUSCRIPT_ID_LIST = [
-    '93934' #  evaluations for 2 versions of manuscript
+    '93934'  # evaluations for 2 versions of manuscript
 ]
 
 NOT_AVAILABLE_DOCMAP_JSON = {
   "detail": "No Docmaps available for requested manuscript from the publisher eLife"
 }
+
 
 @pytest.fixture(name='regression_test_url_prefix')
 def _regression_test_url_prefix() -> str:
