@@ -30,8 +30,7 @@ def _regression_test_docmap_by_manuscript_url(
     return regression_test_url_prefix + DOCMAP_BY_MANUSCRIPT_PATH
 
 
-#  qc_complete_timestamp > '2023-10-01' for each manuscript version
-def test_docmaps_should_not_be_available_for_86628(
+def test_docmaps_should_not_be_available_for_manuscript_with_all_versions_before_cutoff_date(
     regression_test_docmap_by_manuscript_url: str
 ):
     response = requests.get(
@@ -41,8 +40,7 @@ def test_docmaps_should_not_be_available_for_86628(
     assert response.status_code == 404
 
 
-#  qc_complete_timestamp > '2023-10-01' for only first manuscript version
-def test_docmaps_should_not_be_available_for_86764(
+def test_docmaps_should_not_be_available_for_manuscript_with_only_first_version_before_cutoff_date(
     regression_test_docmap_by_manuscript_url: str
 ):
     response = requests.get(
