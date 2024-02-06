@@ -10,7 +10,13 @@ WITH t_reviewed_preprints AS (
     AND under_review_timestamp IS NOT NULL
     AND preprint_doi IS NOT NULL
     AND long_manuscript_identifier NOT LIKE '%-VOR-%'
-    AND qc_complete_timestamp >= '2023-10-01'
+    AND manuscript_id IN (
+      SELECT 
+        manuscript_id
+      FROM `elife-data-pipeline.prod.v_manuscript_with_matching_preprint_server_doi`
+      WHERE position_in_overall_stage = 1
+        AND qc_complete_timestamp >= '2023-10-01'
+    )
 ),
 
 t_latest_evaluation_emails AS(
