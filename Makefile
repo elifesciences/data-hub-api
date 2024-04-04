@@ -53,6 +53,9 @@ dev-lint: dev-flake8 dev-pylint dev-mypy
 dev-unittest:
 	$(PYTHON) -m pytest -p no:cacheprovider $(ARGS) tests/unit_tests
 
+dev-unittest-detailed-view:
+	$(PYTHON) -m pytest -p no:cacheprovider -vv $(ARGS) tests/unit_tests
+
 dev-watch:
 	$(PYTHON) -m pytest_watch -- -p no:cacheprovider $(ARGS) $(PYTEST_WATCH_MODULES)
 
