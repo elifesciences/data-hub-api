@@ -239,7 +239,15 @@
                                 ],
                                 "published": "2023-06-20T14:00:00+00:00",
                                 "volumeIdentifier": "12",
-                                "electronicArticleIdentifier": "RP87198"
+                                "electronicArticleIdentifier": "RP87198",
+                                "complement": [
+                                    {
+                                        "type": "Insight",
+                                        "url": "90216",
+                                        "title": "Deep-sea Adaptation: Surviving under pressure",
+                                        "description": "Ying Wang, Liandong Yang"
+                                    }
+                                ]
                             }
                         }
                     ]
