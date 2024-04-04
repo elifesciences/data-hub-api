@@ -114,10 +114,17 @@ MANUSCRIPT_VOR_VERSION_1: ApiManuscriptVersionInput = {
 }
 
 RELATED_CONTENT_1 = {
-    'manuscript_id': '',
-    'manuscript_type': '',
-    'manuscript_title': '',
-    'manuscript_authors_csv': ''
+    'manuscript_id': None,
+    'manuscript_type': None,
+    'manuscript_title': None,
+    'manuscript_authors_csv': None
+}
+
+RELATED_CONTENT_2 = {
+    'manuscript_id': 'manuscript_id_1',
+    'manuscript_type': 'manuscript_type_1',
+    'manuscript_title': 'manuscript_title_1',
+    'manuscript_authors_csv': 'manuscript_authors_csv_1'
 }
 
 PUBLISHER_DICT_1 = {"id": "publisher_1"}
@@ -130,7 +137,7 @@ DOCMAPS_QUERY_RESULT_ITEM_1: ApiInput = {
     'license': LICENSE_1,
     'is_reviewed_preprint_type': True,
     'manuscript_versions': [MANUSCRIPT_VERSION_1],
-    'related_content': []
+    'related_content': [RELATED_CONTENT_1]
 }
 
 DOCMAPS_QUERY_RESULT_ITEM_2: ApiInput = {
@@ -140,7 +147,7 @@ DOCMAPS_QUERY_RESULT_ITEM_2: ApiInput = {
     'license': LICENSE_1,
     'is_reviewed_preprint_type': True,
     'manuscript_versions': [MANUSCRIPT_VERSION_1, MANUSCRIPT_VERSION_2],
-    'related_content': []
+    'related_content': [RELATED_CONTENT_2]
 }
 
 HYPOTHESIS_ID_1 = 'hypothesis_1'
