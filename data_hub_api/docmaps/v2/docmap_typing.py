@@ -45,6 +45,16 @@ DocmapElifeManuscriptOutput = TypedDict(
     }
 )
 
+DocmapPartOfComplement = TypedDict(
+    'DocmapPartOfComplement',
+    {
+        'type': str,
+        'url': str,
+        'title': str,
+        'description': str
+    }
+)
+
 DocmapPublishedElifeManuscriptPartOf = TypedDict(
     'DocmapPublishedElifeManuscriptPartOf',
     {
@@ -54,7 +64,8 @@ DocmapPublishedElifeManuscriptPartOf = TypedDict(
         'subjectDisciplines': Optional[Sequence[str]],
         'published': timestamp_str,
         'volumeIdentifier': Optional[str],
-        'electronicArticleIdentifier': str
+        'electronicArticleIdentifier': str,
+        'complement': Optional[Sequence[DocmapPartOfComplement]]
     }
 )
 
