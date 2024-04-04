@@ -2,6 +2,9 @@ from typing import Iterable
 import urllib
 
 import pytest
+
+from data_hub_api.utils.json import remove_key_with_none_value_only
+
 from data_hub_api.docmaps.v2.codecs.elife_manuscript import (
     get_docmap_elife_manuscript_doi_assertion_item,
     get_docmap_elife_manuscript_input,
@@ -436,10 +439,14 @@ class TestGetDocmapsItemForQueryResultItem:
         manuscript_published_step = docmaps_item['steps']['_:b2']
         assert manuscript_published_step['actions'] == [{
             'participants': [],
-            'outputs': [get_docmap_elife_manuscript_output_for_published_step(
-                query_result_item=DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS,
-                manuscript_version=MANUSCRIPT_VERSION_WITH_EVALUATIONS_1
-            )]
+            'outputs': [
+                remove_key_with_none_value_only(
+                    get_docmap_elife_manuscript_output_for_published_step(
+                        query_result_item=DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS,
+                        manuscript_version=MANUSCRIPT_VERSION_WITH_EVALUATIONS_1
+                    )
+                )
+            ]
         }]
 
     def test_should_populate_inputs_for_first_manuscript_published_step(self):

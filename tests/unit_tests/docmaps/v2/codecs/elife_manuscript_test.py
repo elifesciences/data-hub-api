@@ -13,6 +13,7 @@ from data_hub_api.docmaps.v2.codecs.elife_manuscript import (
     get_docmap_elife_manuscript_output_for_vor,
     get_elife_manuscript_electronic_article_identifier,
     get_elife_manuscript_part_of_section,
+    get_elife_manuscript_part_of_section_complement,
     get_elife_manuscript_subject_disciplines,
     get_elife_manuscript_version_doi,
     get_elife_manuscript_volume
@@ -23,6 +24,8 @@ from tests.unit_tests.docmaps.v2.test_data import (
     DOCMAPS_QUERY_RESULT_ITEM_2,
     DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSION,
     MANUSCRIPT_VOR_VERSION_1,
+    RELATED_CONTENT_1,
+    RELATED_CONTENT_2,
     RP_PUBLICATION_TIMESTAMP_1,
     MANUSCRIPT_VERSION_1,
     SUBJECT_AREA_NAME_1,
@@ -135,6 +138,25 @@ class TestGetElifeManuscriptSubjectDisciplines:
         assert not result
 
 
+class TestGetElifeManuscriptPartOfSectionComplement:
+    def test_should_have_complement_none_if_related_content_is_not_available(self):
+        result_without_related_content = get_elife_manuscript_part_of_section_complement(
+            RELATED_CONTENT_1
+        )
+        assert not result_without_related_content
+
+    def test_should_populate_complement_if_related_content_is_available(self):
+        result_with_related_content = get_elife_manuscript_part_of_section_complement(
+            RELATED_CONTENT_2
+        )
+        assert result_with_related_content == {
+            'type': 'manuscript_type_1',
+            'url': 'manuscript_id_1',
+            'title': 'manuscript_title_1',
+            'description': 'manuscript_authors_csv_1'
+        }
+
+
 class TestGetElifeManuscriptPartOfSection:
     def test_should_populate_elife_manuscript_part_of_section(self):
         result = get_elife_manuscript_part_of_section(
@@ -151,6 +173,9 @@ class TestGetElifeManuscriptPartOfSection:
             'volumeIdentifier': get_elife_manuscript_volume(MANUSCRIPT_VERSION_1),
             'electronicArticleIdentifier': get_elife_manuscript_electronic_article_identifier(
                 DOCMAPS_QUERY_RESULT_ITEM_1
+            ),
+            'complement': get_elife_manuscript_part_of_section_complement(
+                RELATED_CONTENT_1
             )
         }
 
@@ -174,6 +199,20 @@ class TestGetElifeManuscriptPartOfSection:
         )['published']
         assert published_for_first_version == RP_PUBLICATION_TIMESTAMP_1.isoformat()
         assert published_for_second_version == RP_PUBLICATION_TIMESTAMP_1.isoformat()
+
+    def test_should_not_have_complement_if_related_content_is_not_available(self):
+        result_without_related_content = get_elife_manuscript_part_of_section(
+            query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1
+        )
+        assert not result_without_related_content['complement']
+
+    def test_should_populate_complement_if_related_content_is_available(self):
+        result_with_related_content = get_elife_manuscript_part_of_section(
+            query_result_item=DOCMAPS_QUERY_RESULT_ITEM_2
+        )
+        assert result_with_related_content['complement'] == (
+            [get_elife_manuscript_part_of_section_complement(RELATED_CONTENT_2)]
+        )
 
 
 class TestGetDocmapElifeManuscriptOutputForPublishedStep:
