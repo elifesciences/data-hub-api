@@ -1,4 +1,3 @@
-import logging
 from typing import Optional, Sequence
 from data_hub_api.config import (
     DOI_ROOT_URL,
