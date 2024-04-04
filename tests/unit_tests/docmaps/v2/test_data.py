@@ -113,6 +113,13 @@ MANUSCRIPT_VOR_VERSION_1: ApiManuscriptVersionInput = {
     ]
 }
 
+RELATED_CONTENT_1 = {
+    'manuscript_id': '',
+    'manuscript_type': '',
+    'manuscript_title': '',
+    'manuscript_authors_csv': ''
+}
+
 PUBLISHER_DICT_1 = {"id": "publisher_1"}
 PUBLISHER_DICT_STR_1 = f'{PUBLISHER_DICT_1}'
 
@@ -122,7 +129,8 @@ DOCMAPS_QUERY_RESULT_ITEM_1: ApiInput = {
     'elife_doi': ELIFE_DOI_1,
     'license': LICENSE_1,
     'is_reviewed_preprint_type': True,
-    'manuscript_versions': [MANUSCRIPT_VERSION_1]
+    'manuscript_versions': [MANUSCRIPT_VERSION_1],
+    'related_content': []
 }
 
 DOCMAPS_QUERY_RESULT_ITEM_2: ApiInput = {
@@ -131,7 +139,8 @@ DOCMAPS_QUERY_RESULT_ITEM_2: ApiInput = {
     'elife_doi': ELIFE_DOI_1,
     'license': LICENSE_1,
     'is_reviewed_preprint_type': True,
-    'manuscript_versions': [MANUSCRIPT_VERSION_1, MANUSCRIPT_VERSION_2]
+    'manuscript_versions': [MANUSCRIPT_VERSION_1, MANUSCRIPT_VERSION_2],
+    'related_content': []
 }
 
 HYPOTHESIS_ID_1 = 'hypothesis_1'
