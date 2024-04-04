@@ -4,7 +4,8 @@ from data_hub_api.docmaps.v2.api_input_typing import (
     ApiEditorDetailInput,
     ApiEvaluationInput,
     ApiInput,
-    ApiManuscriptVersionInput
+    ApiManuscriptVersionInput,
+    ApiRelatedContentInput
 )
 
 MANUSCRIPT_ID_1 = 'manuscript_id_1'
@@ -62,11 +63,10 @@ MANUSCRIPT_VERSION_1: ApiManuscriptVersionInput = {
     'evaluations': [],
     'rp_publication_timestamp': RP_PUBLICATION_TIMESTAMP_1,
     'vor_publication_date': None,
-    'subject_areas': [{
-        'subject_area_name': SUBJECT_AREA_NAME_1
-    }, {
-        'subject_area_name': SUBJECT_AREA_NAME_2
-    }]
+    'subject_areas': [
+        {'subject_area_name': SUBJECT_AREA_NAME_1},
+        {'subject_area_name': SUBJECT_AREA_NAME_2}
+    ]
 }
 
 MANUSCRIPT_VERSION_2: ApiManuscriptVersionInput = {
@@ -113,14 +113,14 @@ MANUSCRIPT_VOR_VERSION_1: ApiManuscriptVersionInput = {
     ]
 }
 
-RELATED_CONTENT_1 = {
+RELATED_CONTENT_1: ApiRelatedContentInput = {
     'manuscript_id': None,
     'manuscript_type': None,
     'manuscript_title': None,
     'manuscript_authors_csv': None
 }
 
-RELATED_CONTENT_2 = {
+RELATED_CONTENT_2: ApiRelatedContentInput = {
     'manuscript_id': 'manuscript_id_1',
     'manuscript_type': 'manuscript_type_1',
     'manuscript_title': 'manuscript_title_1',
