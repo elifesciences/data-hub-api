@@ -60,10 +60,10 @@ ApiManuscriptVersionInput = TypedDict(
 ApiRelatedContentInput = TypedDict(
     'ApiRelatedContentInput',
     {
-        'manuscript_id': str,
-        'manuscript_type': str,
-        'manuscript_title': str,
-        'manuscript_authors_csv': str
+        'manuscript_id': Optional[str],
+        'manuscript_type': Optional[str],
+        'manuscript_title': Optional[str],
+        'manuscript_authors_csv': Optional[str]
     }
 )
 
