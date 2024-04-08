@@ -7,6 +7,7 @@ from data_hub_api.config import (
 from data_hub_api.docmaps.v2.api_input_typing import (
     ApiInput,
     ApiManuscriptVersionInput,
+    ApiRelatedContentInput,
     ApiSubjectAreaInput
 )
 from data_hub_api.docmaps.v2.docmap_typing import (
@@ -15,6 +16,7 @@ from data_hub_api.docmaps.v2.docmap_typing import (
     DocmapElifeManuscriptInput,
     DocmapElifeManuscriptOutput,
     DocmapElifeManuscriptVorOutput,
+    DocmapPartOfComplement,
     DocmapPublishedElifeManuscriptOutput,
     DocmapPublishedElifeManuscriptPartOf
 )
@@ -97,11 +99,29 @@ def get_elife_manuscript_subject_disciplines(
     return None
 
 
+def get_elife_manuscript_part_of_section_complement(
+    related_content: Optional[ApiRelatedContentInput]
+) -> Optional[Sequence[DocmapPartOfComplement]]:
+    if related_content and any(related_content.values()):
+        return [{
+            'type': related_content['manuscript_type'],
+            'url': related_content['manuscript_id'],
+            'title': related_content['manuscript_title'],
+            'description': related_content['manuscript_authors_csv']
+        }]
+    return None
+
+
 def get_elife_manuscript_part_of_section(
     query_result_item: ApiInput
 ) -> DocmapPublishedElifeManuscriptPartOf:
     first_manuscript_version = query_result_item['manuscript_versions'][0]
     assert first_manuscript_version['rp_publication_timestamp']
+    related_content = (
+        query_result_item['related_content'][0]
+        if query_result_item['related_content']
+        else None
+    )
     return {
         'type': 'manuscript',
         'doi': query_result_item['elife_doi'],
@@ -113,7 +133,8 @@ def get_elife_manuscript_part_of_section(
         'volumeIdentifier': get_elife_manuscript_volume(first_manuscript_version),
         'electronicArticleIdentifier': get_elife_manuscript_electronic_article_identifier(
             query_result_item
-        )
+        ),
+        'complement': get_elife_manuscript_part_of_section_complement(related_content)
     }
 
 

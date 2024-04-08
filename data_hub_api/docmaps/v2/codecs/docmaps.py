@@ -294,7 +294,9 @@ def iter_docmap_steps_for_query_result_item(query_result_item: ApiInput) -> Iter
             )
 
 
-def generate_docmap_steps(step_iterable: Iterable[DocmapStep]) -> DocmapSteps:
+def generate_docmap_steps_and_remove_none_value_keys(
+    step_iterable: Iterable[DocmapStep]
+) -> DocmapSteps:
     steps_dict: Dict[str, DocmapStep] = {}
     step_list = list(step_iterable)
     for step_index, step in enumerate(step_list):
@@ -321,5 +323,7 @@ def get_docmap_item_for_query_result_item(query_result_item: ApiInput) -> Docmap
         'updated': qc_complete_timestamp_str,
         'publisher': publisher_json,
         'first-step': '_:b0',
-        'steps': generate_docmap_steps(iter_docmap_steps_for_query_result_item(query_result_item))
+        'steps': generate_docmap_steps_and_remove_none_value_keys(
+            iter_docmap_steps_for_query_result_item(query_result_item)
+        )
     }

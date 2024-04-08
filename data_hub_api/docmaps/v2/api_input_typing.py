@@ -57,6 +57,16 @@ ApiManuscriptVersionInput = TypedDict(
     }
 )
 
+ApiRelatedContentInput = TypedDict(
+    'ApiRelatedContentInput',
+    {
+        'manuscript_id': Optional[str],
+        'manuscript_type': Optional[str],
+        'manuscript_title': Optional[str],
+        'manuscript_authors_csv': Optional[str]
+    }
+)
+
 ApiInput = TypedDict(
     'ApiInput',
     {
@@ -65,6 +75,7 @@ ApiInput = TypedDict(
         'elife_doi': str,
         'license': str,
         'is_reviewed_preprint_type': bool,
-        'manuscript_versions': Sequence[ApiManuscriptVersionInput]
+        'manuscript_versions': Sequence[ApiManuscriptVersionInput],
+        'related_content': Sequence[ApiRelatedContentInput]
     }
 )
