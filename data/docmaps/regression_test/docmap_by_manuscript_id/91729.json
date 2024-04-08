@@ -1,0 +1,595 @@
+{
+    "@context": "https://w3id.org/docmaps/context.jsonld",
+    "type": "docmap",
+    "id": "https://data-hub-api.elifesciences.org/enhanced-preprints/docmaps/v2/by-publisher/elife/get-by-manuscript-id?manuscript_id=91729",
+    "created": "2023-08-14T11:26:51+00:00",
+    "updated": "2023-08-14T11:26:51+00:00",
+    "publisher": {
+      "account": {
+        "id": "https://sciety.org/groups/elife",
+        "service": "https://sciety.org"
+      },
+      "homepage": "https://elifesciences.org/",
+      "id": "https://elifesciences.org/",
+      "logo": "https://sciety.org/static/groups/elife--b560187e-f2fb-4ff9-a861-a204f3fc0fb0.png",
+      "name": "eLife"
+    },
+    "first-step": "_:b0",
+    "steps": {
+      "_:b0": {
+        "actions": [
+          {
+            "participants": [],
+            "outputs": [
+              {
+                "type": "preprint",
+                "identifier": "91729",
+                "doi": "10.7554/eLife.91729.1",
+                "versionIdentifier": "1",
+                "license": "http://creativecommons.org/licenses/by/4.0/"
+              }
+            ]
+          }
+        ],
+        "assertions": [
+          {
+            "item": {
+              "type": "preprint",
+              "doi": "10.1101/2023.04.03.535495",
+              "versionIdentifier": "2"
+            },
+            "status": "under-review",
+            "happened": "2023-08-22T02:43:04+00:00"
+          },
+          {
+            "item": {
+              "type": "preprint",
+              "doi": "10.7554/eLife.91729.1",
+              "versionIdentifier": "1"
+            },
+            "status": "draft"
+          }
+        ],
+        "inputs": [
+          {
+            "type": "preprint",
+            "doi": "10.1101/2023.04.03.535495",
+            "url": "https://www.biorxiv.org/content/10.1101/2023.04.03.535495v2",
+            "versionIdentifier": "2",
+            "published": "2023-08-10",
+            "content": [
+              {
+                "type": "computer-file",
+                "url": "s3://transfers-elife/biorxiv_Current_Content/August_2023/11_Aug_23_Batch_1700/7958d804-6c56-1014-8674-c49f42869aff.meca"
+              }
+            ]
+          }
+        ],
+        "next-step": "_:b1"
+      },
+      "_:b1": {
+        "actions": [
+          {
+            "participants": [
+              {
+                "actor": {
+                  "name": "anonymous",
+                  "type": "person"
+                },
+                "role": "peer-reviewer"
+              }
+            ],
+            "outputs": [
+              {
+                "type": "review-article",
+                "published": "2023-11-27T10:30:19.904618+00:00",
+                "doi": "10.7554/eLife.91729.1.sa0",
+                "license": "http://creativecommons.org/licenses/by/4.0/",
+                "url": "https://doi.org/10.7554/eLife.91729.1.sa0",
+                "content": [
+                  {
+                    "type": "web-page",
+                    "url": "https://hypothes.is/a/9sYBoI0PEe6mwY8sENNLhg"
+                  },
+                  {
+                    "type": "web-page",
+                    "url": "https://sciety.org/articles/activity/10.1101/2023.04.03.535495#hypothesis:9sYBoI0PEe6mwY8sENNLhg"
+                  },
+                  {
+                    "type": "web-page",
+                    "url": "https://sciety.org/evaluations/hypothesis:9sYBoI0PEe6mwY8sENNLhg/content"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "participants": [
+              {
+                "actor": {
+                  "name": "anonymous",
+                  "type": "person"
+                },
+                "role": "peer-reviewer"
+              }
+            ],
+            "outputs": [
+              {
+                "type": "review-article",
+                "published": "2023-11-27T10:30:20.699198+00:00",
+                "doi": "10.7554/eLife.91729.1.sa1",
+                "license": "http://creativecommons.org/licenses/by/4.0/",
+                "url": "https://doi.org/10.7554/eLife.91729.1.sa1",
+                "content": [
+                  {
+                    "type": "web-page",
+                    "url": "https://hypothes.is/a/9z4WuI0PEe6z1fNX0UgbVw"
+                  },
+                  {
+                    "type": "web-page",
+                    "url": "https://sciety.org/articles/activity/10.1101/2023.04.03.535495#hypothesis:9z4WuI0PEe6z1fNX0UgbVw"
+                  },
+                  {
+                    "type": "web-page",
+                    "url": "https://sciety.org/evaluations/hypothesis:9z4WuI0PEe6z1fNX0UgbVw/content"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "participants": [
+              {
+                "actor": {
+                  "type": "person",
+                  "name": "Marcus Seldin",
+                  "firstName": "Marcus",
+                  "_middleName": "M",
+                  "surname": "Seldin",
+                  "_relatesToOrganization": "University of California, Irvine, United States of America",
+                  "affiliation": {
+                    "type": "organization",
+                    "name": "University of California, Irvine",
+                    "location": "Irvine, United States of America"
+                  }
+                },
+                "role": "editor"
+              },
+              {
+                "actor": {
+                  "type": "person",
+                  "name": "Olujimi Ajijola",
+                  "firstName": "Olujimi",
+                  "_middleName": "A",
+                  "surname": "Ajijola",
+                  "_relatesToOrganization": "University of California, Los Angeles, United States of America",
+                  "affiliation": {
+                    "type": "organization",
+                    "name": "University of California, Los Angeles",
+                    "location": "Los Angeles, United States of America"
+                  }
+                },
+                "role": "senior-editor"
+              }
+            ],
+            "outputs": [
+              {
+                "type": "evaluation-summary",
+                "published": "2023-11-27T10:30:21.467627+00:00",
+                "doi": "10.7554/eLife.91729.1.sa2",
+                "license": "http://creativecommons.org/licenses/by/4.0/",
+                "url": "https://doi.org/10.7554/eLife.91729.1.sa2",
+                "content": [
+                  {
+                    "type": "web-page",
+                    "url": "https://hypothes.is/a/97NROo0PEe6eqKOTcQoaaw"
+                  },
+                  {
+                    "type": "web-page",
+                    "url": "https://sciety.org/articles/activity/10.1101/2023.04.03.535495#hypothesis:97NROo0PEe6eqKOTcQoaaw"
+                  },
+                  {
+                    "type": "web-page",
+                    "url": "https://sciety.org/evaluations/hypothesis:97NROo0PEe6eqKOTcQoaaw/content"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "assertions": [
+          {
+            "item": {
+              "type": "preprint",
+              "doi": "10.1101/2023.04.03.535495",
+              "versionIdentifier": "2"
+            },
+            "status": "peer-reviewed"
+          }
+        ],
+        "inputs": [
+          {
+            "type": "preprint",
+            "doi": "10.1101/2023.04.03.535495",
+            "url": "https://www.biorxiv.org/content/10.1101/2023.04.03.535495v2",
+            "versionIdentifier": "2"
+          }
+        ],
+        "next-step": "_:b2",
+        "previous-step": "_:b0"
+      },
+      "_:b2": {
+        "actions": [
+          {
+            "participants": [],
+            "outputs": [
+              {
+                "type": "preprint",
+                "identifier": "91729",
+                "doi": "10.7554/eLife.91729.1",
+                "versionIdentifier": "1",
+                "license": "http://creativecommons.org/licenses/by/4.0/",
+                "published": "2023-12-04T14:00:00+00:00",
+                "partOf": {
+                  "type": "manuscript",
+                  "doi": "10.7554/eLife.91729",
+                  "identifier": "91729",
+                  "subjectDisciplines": [
+                    "Chromosomes and Gene Expression",
+                    "Genetics and Genomics"
+                  ],
+                  "published": "2023-12-04T14:00:00+00:00",
+                  "volumeIdentifier": "12",
+                  "electronicArticleIdentifier": "RP91729",
+                  "complement": [
+                    {
+                      "type": "Insight",
+                      "url": "https://elifesciences.org/articles/97247",
+                      "title": "Vascular Endothelium: More than just a simple barrier",
+                      "description": "Erandi Velazquez-Miranda, Ming He"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ],
+        "assertions": [
+          {
+            "item": {
+              "type": "preprint",
+              "doi": "10.7554/eLife.91729.1",
+              "versionIdentifier": "1"
+            },
+            "status": "manuscript-published"
+          }
+        ],
+        "inputs": [
+          {
+            "type": "preprint",
+            "doi": "10.1101/2023.04.03.535495",
+            "url": "https://www.biorxiv.org/content/10.1101/2023.04.03.535495v2",
+            "versionIdentifier": "2"
+          },
+          {
+            "type": "review-article",
+            "doi": "10.7554/eLife.91729.1.sa0"
+          },
+          {
+            "type": "review-article",
+            "doi": "10.7554/eLife.91729.1.sa1"
+          },
+          {
+            "type": "evaluation-summary",
+            "doi": "10.7554/eLife.91729.1.sa2"
+          }
+        ],
+        "next-step": "_:b3",
+        "previous-step": "_:b1"
+      },
+      "_:b3": {
+        "actions": [
+          {
+            "participants": [],
+            "outputs": [
+              {
+                "type": "preprint",
+                "identifier": "91729",
+                "doi": "10.7554/eLife.91729.2",
+                "versionIdentifier": "2",
+                "license": "http://creativecommons.org/licenses/by/4.0/"
+              }
+            ]
+          }
+        ],
+        "assertions": [
+          {
+            "item": {
+              "type": "preprint",
+              "doi": "10.1101/2023.04.03.535495",
+              "versionIdentifier": "3"
+            },
+            "status": "under-review",
+            "happened": "2024-01-17T11:28:27+00:00"
+          },
+          {
+            "item": {
+              "type": "preprint",
+              "doi": "10.7554/eLife.91729.2",
+              "versionIdentifier": "2"
+            },
+            "status": "draft"
+          }
+        ],
+        "inputs": [
+          {
+            "type": "preprint",
+            "doi": "10.1101/2023.04.03.535495",
+            "url": "https://www.biorxiv.org/content/10.1101/2023.04.03.535495v3",
+            "versionIdentifier": "3",
+            "published": "2024-01-17",
+            "content": [
+              {
+                "type": "computer-file",
+                "url": "s3://transfers-elife/biorxiv_Current_Content/January_2024/18_Jan_24_Batch_1860/0ac0e016-6c80-1014-aae0-b3f0b2d5310c.meca"
+              }
+            ]
+          }
+        ],
+        "next-step": "_:b4",
+        "previous-step": "_:b2"
+      },
+      "_:b4": {
+        "actions": [
+          {
+            "participants": [
+              {
+                "actor": {
+                  "name": "anonymous",
+                  "type": "person"
+                },
+                "role": "peer-reviewer"
+              }
+            ],
+            "outputs": [
+              {
+                "type": "review-article",
+                "published": "2024-03-01T06:44:45.857198+00:00",
+                "doi": "10.7554/eLife.91729.2.sa0",
+                "license": "http://creativecommons.org/licenses/by/4.0/",
+                "url": "https://doi.org/10.7554/eLife.91729.2.sa0",
+                "content": [
+                  {
+                    "type": "web-page",
+                    "url": "https://hypothes.is/a/MRhb4teXEe6O0aMGUpzOqA"
+                  },
+                  {
+                    "type": "web-page",
+                    "url": "https://sciety.org/articles/activity/10.1101/2023.04.03.535495#hypothesis:MRhb4teXEe6O0aMGUpzOqA"
+                  },
+                  {
+                    "type": "web-page",
+                    "url": "https://sciety.org/evaluations/hypothesis:MRhb4teXEe6O0aMGUpzOqA/content"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "participants": [
+              {
+                "actor": {
+                  "type": "person",
+                  "name": "Marcus Seldin",
+                  "firstName": "Marcus",
+                  "_middleName": "M",
+                  "surname": "Seldin",
+                  "_relatesToOrganization": "University of California, Irvine, United States of America",
+                  "affiliation": {
+                    "type": "organization",
+                    "name": "University of California, Irvine",
+                    "location": "Irvine, United States of America"
+                  }
+                },
+                "role": "editor"
+              },
+              {
+                "actor": {
+                  "type": "person",
+                  "name": "Olujimi Ajijola",
+                  "firstName": "Olujimi",
+                  "_middleName": "A",
+                  "surname": "Ajijola",
+                  "_relatesToOrganization": "University of California, Los Angeles, United States of America",
+                  "affiliation": {
+                    "type": "organization",
+                    "name": "University of California, Los Angeles",
+                    "location": "Los Angeles, United States of America"
+                  }
+                },
+                "role": "senior-editor"
+              }
+            ],
+            "outputs": [
+              {
+                "type": "evaluation-summary",
+                "published": "2024-03-01T06:44:47.011786+00:00",
+                "doi": "10.7554/eLife.91729.2.sa1",
+                "license": "http://creativecommons.org/licenses/by/4.0/",
+                "url": "https://doi.org/10.7554/eLife.91729.2.sa1",
+                "content": [
+                  {
+                    "type": "web-page",
+                    "url": "https://hypothes.is/a/McdysteXEe6skDcHpwAucg"
+                  },
+                  {
+                    "type": "web-page",
+                    "url": "https://sciety.org/articles/activity/10.1101/2023.04.03.535495#hypothesis:McdysteXEe6skDcHpwAucg"
+                  },
+                  {
+                    "type": "web-page",
+                    "url": "https://sciety.org/evaluations/hypothesis:McdysteXEe6skDcHpwAucg/content"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "participants": [],
+            "outputs": [
+              {
+                "type": "reply",
+                "published": "2024-03-01T13:33:24.606418+00:00",
+                "doi": "10.7554/eLife.91729.2.sa2",
+                "license": "http://creativecommons.org/licenses/by/4.0/",
+                "url": "https://doi.org/10.7554/eLife.91729.2.sa2",
+                "content": [
+                  {
+                    "type": "web-page",
+                    "url": "https://hypothes.is/a/R5_exNfQEe63eIuJD69VLA"
+                  },
+                  {
+                    "type": "web-page",
+                    "url": "https://sciety.org/articles/activity/10.1101/2023.04.03.535495#hypothesis:R5_exNfQEe63eIuJD69VLA"
+                  },
+                  {
+                    "type": "web-page",
+                    "url": "https://sciety.org/evaluations/hypothesis:R5_exNfQEe63eIuJD69VLA/content"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "assertions": [
+          {
+            "item": {
+              "type": "preprint",
+              "doi": "10.1101/2023.04.03.535495",
+              "versionIdentifier": "3"
+            },
+            "status": "revised"
+          }
+        ],
+        "inputs": [
+          {
+            "type": "preprint",
+            "doi": "10.1101/2023.04.03.535495",
+            "url": "https://www.biorxiv.org/content/10.1101/2023.04.03.535495v3",
+            "versionIdentifier": "3"
+          }
+        ],
+        "next-step": "_:b5",
+        "previous-step": "_:b3"
+      },
+      "_:b5": {
+        "actions": [
+          {
+            "participants": [],
+            "outputs": [
+              {
+                "type": "preprint",
+                "identifier": "91729",
+                "doi": "10.7554/eLife.91729.2",
+                "versionIdentifier": "2",
+                "license": "http://creativecommons.org/licenses/by/4.0/",
+                "published": "2024-03-04T14:00:00+00:00",
+                "partOf": {
+                  "type": "manuscript",
+                  "doi": "10.7554/eLife.91729",
+                  "identifier": "91729",
+                  "subjectDisciplines": [
+                    "Chromosomes and Gene Expression",
+                    "Genetics and Genomics"
+                  ],
+                  "published": "2023-12-04T14:00:00+00:00",
+                  "volumeIdentifier": "12",
+                  "electronicArticleIdentifier": "RP91729",
+                  "complement": [
+                    {
+                      "type": "Insight",
+                      "url": "https://elifesciences.org/articles/97247",
+                      "title": "Vascular Endothelium: More than just a simple barrier",
+                      "description": "Erandi Velazquez-Miranda, Ming He"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ],
+        "assertions": [
+          {
+            "item": {
+              "type": "preprint",
+              "doi": "10.7554/eLife.91729.2",
+              "versionIdentifier": "2"
+            },
+            "status": "manuscript-published"
+          }
+        ],
+        "inputs": [
+          {
+            "type": "preprint",
+            "doi": "10.1101/2023.04.03.535495",
+            "url": "https://www.biorxiv.org/content/10.1101/2023.04.03.535495v3",
+            "versionIdentifier": "3"
+          },
+          {
+            "type": "review-article",
+            "doi": "10.7554/eLife.91729.2.sa0"
+          },
+          {
+            "type": "evaluation-summary",
+            "doi": "10.7554/eLife.91729.2.sa1"
+          },
+          {
+            "type": "reply",
+            "doi": "10.7554/eLife.91729.2.sa2"
+          }
+        ],
+        "next-step": "_:b6",
+        "previous-step": "_:b4"
+      },
+      "_:b6": {
+        "actions": [
+          {
+            "participants": [],
+            "outputs": [
+              {
+                "type": "version-of-record",
+                "doi": "10.7554/eLife.91729.3",
+                "published": "2024-04-05",
+                "url": "https://doi.org/10.7554/eLife.91729.3",
+                "content": [
+                  {
+                    "type": "web-page",
+                    "url": "https://elifesciences.org/articles/91729"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "assertions": [
+          {
+            "item": {
+              "type": "version-of-record",
+              "doi": "10.7554/eLife.91729.3",
+              "versionIdentifier": "3"
+            },
+            "status": "vor-published"
+          }
+        ],
+        "inputs": [
+          {
+            "type": "preprint",
+            "doi": "10.7554/eLife.91729.2",
+            "identifier": "91729",
+            "versionIdentifier": "2"
+          }
+        ],
+        "previous-step": "_:b5"
+      }
+    }
+}
