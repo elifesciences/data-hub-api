@@ -151,7 +151,7 @@ class TestGetElifeManuscriptPartOfSectionComplement:
         )
         assert result_with_related_content == [{
             'type': 'manuscript_type_1',
-            'url': 'manuscript_id_1',
+            'url': 'https://elifesciences.org/articles/manuscript_id_1',
             'title': 'manuscript_title_1',
             'description': 'manuscript_authors_csv_1'
         }]

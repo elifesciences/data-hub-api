@@ -105,7 +105,11 @@ def get_elife_manuscript_part_of_section_complement(
     if related_content and any(related_content.values()):
         return [{
             'type': related_content['manuscript_type'],
-            'url': related_content['manuscript_id'],
+            'url': (
+                'https://elifesciences.org/articles/' + related_content['manuscript_id']
+                if related_content['manuscript_id']
+                else None
+            ),
             'title': related_content['manuscript_title'],
             'description': related_content['manuscript_authors_csv']
         }]
