@@ -149,12 +149,16 @@ class TestGetElifeManuscriptPartOfSectionComplement:
         result_with_related_content = get_elife_manuscript_part_of_section_complement(
             RELATED_CONTENT_2
         )
-        assert result_with_related_content == {
+        assert result_with_related_content == [{
             'type': 'manuscript_type_1',
             'url': 'manuscript_id_1',
             'title': 'manuscript_title_1',
             'description': 'manuscript_authors_csv_1'
-        }
+        }]
+
+    def test_should_return_none_if_the_related_content_is_none(self):
+        result = get_elife_manuscript_part_of_section_complement(None)
+        assert not result
 
 
 class TestGetElifeManuscriptPartOfSection:
@@ -211,7 +215,7 @@ class TestGetElifeManuscriptPartOfSection:
             query_result_item=DOCMAPS_QUERY_RESULT_ITEM_2
         )
         assert result_with_related_content['complement'] == (
-            [get_elife_manuscript_part_of_section_complement(RELATED_CONTENT_2)]
+            get_elife_manuscript_part_of_section_complement(RELATED_CONTENT_2)
         )
 
 

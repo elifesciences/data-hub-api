@@ -14,7 +14,7 @@ MANUSCRIPT_ID_LIST = [
     '89891',  # medRxiv preprint server
     '86873',  # arXiv preprint server
     '87193',  # OSF preprint server
-    '87198',  # Research Square preprint server
+    '87198',  # Research Square preprint server and have related article
     '88984'  # hypothesis annotation links to v10 but we decided to use v11 for production process
 ]
 
