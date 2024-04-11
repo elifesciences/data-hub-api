@@ -271,7 +271,16 @@
                                 ],
                                 "published": "2023-07-03T14:00:00+00:00",
                                 "volumeIdentifier": "12",
-                                "electronicArticleIdentifier": "RP88984"
+                                "electronicArticleIdentifier": "RP88984",
+                                "complement": [
+                                    {
+                                      "type": "Collection",
+                                      "url":"https://elifesciences.org/collections/8d233d47/meta-research-a-collection-of-articles",
+                                      "title": "Meta-Research: A Collection of Articles",
+                                      "description": "Edited by Peter A Rodgers",
+                                      "thumbnail": "https://iiif.elifesciences.org/journal-cms/collection%2F2018-07%2Fmetadata_-_1_1.jpg"
+                                    }
+                                ]
                             }
                         }
                     ]
@@ -596,7 +605,16 @@
                                 ],
                                 "published": "2023-07-03T14:00:00+00:00",
                                 "volumeIdentifier": "12",
-                                "electronicArticleIdentifier": "RP88984"
+                                "electronicArticleIdentifier": "RP88984",
+                                "complement": [
+                                    {
+                                      "type": "Collection",
+                                      "url":"https://elifesciences.org/collections/8d233d47/meta-research-a-collection-of-articles",
+                                      "title": "Meta-Research: A Collection of Articles",
+                                      "description": "Edited by Peter A Rodgers",
+                                      "thumbnail": "https://iiif.elifesciences.org/journal-cms/collection%2F2018-07%2Fmetadata_-_1_1.jpg"
+                                    }
+                                ]
                             }
                         }
                     ]
@@ -925,7 +943,16 @@
                                 ],
                                 "published": "2023-07-03T14:00:00+00:00",
                                 "volumeIdentifier": "12",
-                                "electronicArticleIdentifier": "RP88984"
+                                "electronicArticleIdentifier": "RP88984",
+                                "complement": [
+                                    {
+                                      "type": "Collection",
+                                      "url":"https://elifesciences.org/collections/8d233d47/meta-research-a-collection-of-articles",
+                                      "title": "Meta-Research: A Collection of Articles",
+                                      "description": "Edited by Peter A Rodgers",
+                                      "thumbnail": "https://iiif.elifesciences.org/journal-cms/collection%2F2018-07%2Fmetadata_-_1_1.jpg"
+                                    }
+                                ]
                             }
                         }
                     ]

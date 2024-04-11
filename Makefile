@@ -62,6 +62,9 @@ dev-watch:
 dev-regression-test:
 	$(PYTHON) -m pytest -p no:cacheprovider $(ARGS) tests/regression_tests
 
+dev-regression-test-detailed-view:
+	$(PYTHON) -m pytest -p no:cacheprovider -vv $(ARGS) tests/regression_tests
+
 dev-test: dev-lint dev-unittest
 
 

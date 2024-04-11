@@ -116,7 +116,7 @@ def get_elife_manuscript_part_of_section_complement(
         if related_content['collection_id']:
             assert related_content['collection_curator_name']
             collection_dict = {
-                'type': 'collection',
+                'type': 'Collection',
                 'url': ('https://elifesciences.org/collections/'
                         + related_content['collection_id']
                         + '/meta-research-a-collection-of-articles'),

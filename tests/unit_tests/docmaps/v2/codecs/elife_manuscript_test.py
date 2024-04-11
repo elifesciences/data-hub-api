@@ -158,7 +158,7 @@ class TestGetElifeManuscriptPartOfSectionComplement:
             'title': 'manuscript_title_1',
             'description': 'manuscript_authors_csv_1'
         }, {
-            'type': 'collection',
+            'type': 'Collection',
             'url': (
                 'https://elifesciences.org/collections/'
                 + 'collection_id_1'
@@ -185,7 +185,7 @@ class TestGetElifeManuscriptPartOfSectionComplement:
             {**RELATED_CONTENT_WITH_NO_VALUE_1, **COLLECTIONS_DICT_1}
         )
         assert result_with_related_content == [{
-            'type': 'collection',
+            'type': 'Collection',
             'url': (
                 'https://elifesciences.org/collections/'
                 + 'collection_id_1'
