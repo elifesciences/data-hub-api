@@ -130,7 +130,7 @@ RELATED_ARTICLE_DICT_1: dict = {
 COLLECTIONS_DICT_WITH_NO_VALUE_1: dict = {
     'collection_id': None,
     'collection_title': None,
-    'collection_url': None,
+    'collection_thumbnail_url': None,
     'colection_curator_name': None,
     'is_colection_curator_et_al': None
 }
@@ -138,8 +138,8 @@ COLLECTIONS_DICT_WITH_NO_VALUE_1: dict = {
 COLLECTIONS_DICT_1: dict = {
     'collection_id': 'collection_id_1',
     'collection_title': 'collection_title_1',
-    'collection_url': 'collection_url_1',
-    'colection_curator_name': 'colection_curator_name',
+    'collection_thumbnail_url': 'collection_thumbnail_url_1',
+    'colection_curator_name': 'colection_curator_name_1',
     'is_colection_curator_et_al': True
 }
 
@@ -149,27 +149,8 @@ RELATED_CONTENT_WITH_NO_VALUE_1: ApiRelatedContentInput = {
 }
 
 RELATED_CONTENT_WITH_ALL_VALUE_1: ApiRelatedContentInput = {
-    'manuscript_id': 'manuscript_id_1',
-    'manuscript_type': 'manuscript_type_1',
-    'manuscript_title': 'manuscript_title_1',
-    'manuscript_authors_csv': 'manuscript_authors_csv_1',
-    'collection_id': 'collection_id_1',
-    'collection_title': 'collection_title_1',
-    'collection_url': 'collection_url_1',
-    'colection_curator_name': 'colection_curator_name',
-    'is_colection_curator_et_al': True
-}
-
-RELATED_CONTENT_WITH_COLLECTION_1: ApiRelatedContentInput = {
-    'manuscript_id': None,
-    'manuscript_type': None,
-    'manuscript_title': None,
-    'manuscript_authors_csv': None,
-    'collection_id': 'collection_id_1',
-    'collection_title': 'collection_title_1',
-    'collection_url': 'collection_url_1',
-    'colection_curator_name': 'colection_curator_name',
-    'is_colection_curator_et_al': True
+    **RELATED_ARTICLE_DICT_1,  # type: ignore
+    **COLLECTIONS_DICT_1  # type: ignore
 }
 
 PUBLISHER_DICT_1 = {"id": "publisher_1"}

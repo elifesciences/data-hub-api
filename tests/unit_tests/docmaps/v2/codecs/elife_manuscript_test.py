@@ -20,10 +20,13 @@ from data_hub_api.docmaps.v2.codecs.elife_manuscript import (
 )
 
 from tests.unit_tests.docmaps.v2.test_data import (
+    COLLECTIONS_DICT_1,
+    COLLECTIONS_DICT_WITH_NO_VALUE_1,
     DOCMAPS_QUERY_RESULT_ITEM_1,
     DOCMAPS_QUERY_RESULT_ITEM_2,
     DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSION,
     MANUSCRIPT_VOR_VERSION_1,
+    RELATED_ARTICLE_DICT_1,
     RELATED_CONTENT_WITH_NO_VALUE_1,
     RELATED_CONTENT_WITH_ALL_VALUE_1,
     RP_PUBLICATION_TIMESTAMP_1,
@@ -145,7 +148,7 @@ class TestGetElifeManuscriptPartOfSectionComplement:
         )
         assert not result_without_related_content
 
-    def test_should_populate_complement_if_related_content_is_available(self):
+    def test_should_populate_complement_if_related_content_for_all_value_is_available(self):
         result_with_related_content = get_elife_manuscript_part_of_section_complement(
             RELATED_CONTENT_WITH_ALL_VALUE_1
         )
@@ -154,6 +157,43 @@ class TestGetElifeManuscriptPartOfSectionComplement:
             'url': 'https://elifesciences.org/articles/manuscript_id_1',
             'title': 'manuscript_title_1',
             'description': 'manuscript_authors_csv_1'
+        }, {
+            'type': 'collection',
+            'url': (
+                'https://elifesciences.org/collections/'
+                + 'collection_id_1'
+                + '/meta-research-a-collection-of-articles'
+            ),
+            'title': 'collection_title_1',
+            'description': 'colection_curator_name_1',
+            'thumbnail': 'collection_thumbnail_url_1'
+        }]
+
+    def test_should_populate_complement_if_only_related_article_data_available(self):
+        result_with_related_content = get_elife_manuscript_part_of_section_complement(
+            {**RELATED_ARTICLE_DICT_1, **COLLECTIONS_DICT_WITH_NO_VALUE_1}
+        )
+        assert result_with_related_content == [{
+            'type': 'manuscript_type_1',
+            'url': 'https://elifesciences.org/articles/manuscript_id_1',
+            'title': 'manuscript_title_1',
+            'description': 'manuscript_authors_csv_1'
+        }]
+
+    def test_should_populate_complement_if_only_collections_data_available(self):
+        result_with_related_content = get_elife_manuscript_part_of_section_complement(
+            {**RELATED_CONTENT_WITH_NO_VALUE_1, **COLLECTIONS_DICT_1}
+        )
+        assert result_with_related_content == [{
+            'type': 'collection',
+            'url': (
+                'https://elifesciences.org/collections/'
+                + 'collection_id_1'
+                + '/meta-research-a-collection-of-articles'
+            ),
+            'title': 'collection_title_1',
+            'description': 'colection_curator_name_1',
+            'thumbnail': 'collection_thumbnail_url_1'
         }]
 
     def test_should_return_none_if_the_related_content_is_none(self):
