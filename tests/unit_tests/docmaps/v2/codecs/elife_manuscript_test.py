@@ -165,7 +165,7 @@ class TestGetElifeManuscriptPartOfSectionComplement:
                 + '/meta-research-a-collection-of-articles'
             ),
             'title': 'collection_title_1',
-            'description': 'colection_curator_name_1',
+            'description': 'Edited by colection_curator_name_1 et al',
             'thumbnail': 'collection_thumbnail_url_1'
         }]
 
@@ -192,9 +192,19 @@ class TestGetElifeManuscriptPartOfSectionComplement:
                 + '/meta-research-a-collection-of-articles'
             ),
             'title': 'collection_title_1',
-            'description': 'colection_curator_name_1',
+            'description': 'Edited by colection_curator_name_1 et al',
             'thumbnail': 'collection_thumbnail_url_1'
         }]
+
+    def test_should_populate_complement_collection_description_without_et_al_when_false(self):
+        result_with_related_content = get_elife_manuscript_part_of_section_complement(
+            {**RELATED_CONTENT_WITH_NO_VALUE_1,
+             **COLLECTIONS_DICT_1,
+             'is_colection_curator_et_al': False}
+        )
+        assert result_with_related_content[0]['description'] == (
+            'Edited by colection_curator_name_1'
+        )
 
     def test_should_return_none_if_the_related_content_is_none(self):
         result = get_elife_manuscript_part_of_section_complement(None)

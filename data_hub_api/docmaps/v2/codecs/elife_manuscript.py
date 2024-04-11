@@ -114,13 +114,18 @@ def get_elife_manuscript_part_of_section_complement(
                 'description': related_content['manuscript_authors_csv']
             }
         if related_content['collection_id']:
+            assert related_content['colection_curator_name']
             collection_dict = {
                 'type': 'collection',
                 'url': ('https://elifesciences.org/collections/'
                         + related_content['collection_id']
                         + '/meta-research-a-collection-of-articles'),
                 'title': related_content['collection_title'],
-                'description': related_content['colection_curator_name'],
+                'description': (
+                    'Edited by ' + related_content['colection_curator_name'] + ' et al'
+                    if related_content['is_colection_curator_et_al']
+                    else 'Edited by ' + related_content['colection_curator_name']
+                ),
                 'thumbnail': related_content['collection_thumbnail_url']
             }
         return remove_key_with_none_value_only(
