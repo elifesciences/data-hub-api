@@ -113,18 +113,63 @@ MANUSCRIPT_VOR_VERSION_1: ApiManuscriptVersionInput = {
     ]
 }
 
-RELATED_CONTENT_1: ApiRelatedContentInput = {
+RELATED_ARTICLE_DICT_WITH_NO_VALUE_1: dict = {
     'manuscript_id': None,
     'manuscript_type': None,
     'manuscript_title': None,
     'manuscript_authors_csv': None
 }
 
-RELATED_CONTENT_2: ApiRelatedContentInput = {
+RELATED_ARTICLE_DICT_1: dict = {
     'manuscript_id': 'manuscript_id_1',
     'manuscript_type': 'manuscript_type_1',
     'manuscript_title': 'manuscript_title_1',
     'manuscript_authors_csv': 'manuscript_authors_csv_1'
+}
+
+COLLECTIONS_DICT_WITH_NO_VALUE_1: dict = {
+    'collection_id': None,
+    'collection_title': None,
+    'collection_url': None,
+    'colection_curator_name': None,
+    'is_colection_curator_et_al': None
+}
+
+COLLECTIONS_DICT_1: dict = {
+    'collection_id': 'collection_id_1',
+    'collection_title': 'collection_title_1',
+    'collection_url': 'collection_url_1',
+    'colection_curator_name': 'colection_curator_name',
+    'is_colection_curator_et_al': True
+}
+
+RELATED_CONTENT_WITH_NO_VALUE_1: ApiRelatedContentInput = {
+    **RELATED_ARTICLE_DICT_WITH_NO_VALUE_1,  # type: ignore
+    **COLLECTIONS_DICT_WITH_NO_VALUE_1  # type: ignore
+}
+
+RELATED_CONTENT_WITH_ALL_VALUE_1: ApiRelatedContentInput = {
+    'manuscript_id': 'manuscript_id_1',
+    'manuscript_type': 'manuscript_type_1',
+    'manuscript_title': 'manuscript_title_1',
+    'manuscript_authors_csv': 'manuscript_authors_csv_1',
+    'collection_id': 'collection_id_1',
+    'collection_title': 'collection_title_1',
+    'collection_url': 'collection_url_1',
+    'colection_curator_name': 'colection_curator_name',
+    'is_colection_curator_et_al': True
+}
+
+RELATED_CONTENT_WITH_COLLECTION_1: ApiRelatedContentInput = {
+    'manuscript_id': None,
+    'manuscript_type': None,
+    'manuscript_title': None,
+    'manuscript_authors_csv': None,
+    'collection_id': 'collection_id_1',
+    'collection_title': 'collection_title_1',
+    'collection_url': 'collection_url_1',
+    'colection_curator_name': 'colection_curator_name',
+    'is_colection_curator_et_al': True
 }
 
 PUBLISHER_DICT_1 = {"id": "publisher_1"}
@@ -137,7 +182,7 @@ DOCMAPS_QUERY_RESULT_ITEM_1: ApiInput = {
     'license': LICENSE_1,
     'is_reviewed_preprint_type': True,
     'manuscript_versions': [MANUSCRIPT_VERSION_1],
-    'related_content': [RELATED_CONTENT_1]
+    'related_content': [RELATED_CONTENT_WITH_NO_VALUE_1]
 }
 
 DOCMAPS_QUERY_RESULT_ITEM_2: ApiInput = {
@@ -147,7 +192,7 @@ DOCMAPS_QUERY_RESULT_ITEM_2: ApiInput = {
     'license': LICENSE_1,
     'is_reviewed_preprint_type': True,
     'manuscript_versions': [MANUSCRIPT_VERSION_1, MANUSCRIPT_VERSION_2],
-    'related_content': [RELATED_CONTENT_2]
+    'related_content': [RELATED_CONTENT_WITH_ALL_VALUE_1]
 }
 
 HYPOTHESIS_ID_1 = 'hypothesis_1'

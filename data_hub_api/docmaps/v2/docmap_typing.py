@@ -51,7 +51,8 @@ DocmapPartOfComplement = TypedDict(
         'type': Optional[str],
         'url': Optional[str],
         'title': Optional[str],
-        'description': Optional[str]
+        'description': Optional[str],
+        'thumbnail': Optional[str]
     }
 )
 

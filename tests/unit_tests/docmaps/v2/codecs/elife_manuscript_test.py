@@ -24,8 +24,8 @@ from tests.unit_tests.docmaps.v2.test_data import (
     DOCMAPS_QUERY_RESULT_ITEM_2,
     DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSION,
     MANUSCRIPT_VOR_VERSION_1,
-    RELATED_CONTENT_1,
-    RELATED_CONTENT_2,
+    RELATED_CONTENT_WITH_NO_VALUE_1,
+    RELATED_CONTENT_WITH_ALL_VALUE_1,
     RP_PUBLICATION_TIMESTAMP_1,
     MANUSCRIPT_VERSION_1,
     SUBJECT_AREA_NAME_1,
@@ -141,13 +141,13 @@ class TestGetElifeManuscriptSubjectDisciplines:
 class TestGetElifeManuscriptPartOfSectionComplement:
     def test_should_have_complement_none_if_related_content_is_not_available(self):
         result_without_related_content = get_elife_manuscript_part_of_section_complement(
-            RELATED_CONTENT_1
+            RELATED_CONTENT_WITH_NO_VALUE_1
         )
         assert not result_without_related_content
 
     def test_should_populate_complement_if_related_content_is_available(self):
         result_with_related_content = get_elife_manuscript_part_of_section_complement(
-            RELATED_CONTENT_2
+            RELATED_CONTENT_WITH_ALL_VALUE_1
         )
         assert result_with_related_content == [{
             'type': 'manuscript_type_1',
@@ -179,7 +179,7 @@ class TestGetElifeManuscriptPartOfSection:
                 DOCMAPS_QUERY_RESULT_ITEM_1
             ),
             'complement': get_elife_manuscript_part_of_section_complement(
-                RELATED_CONTENT_1
+                RELATED_CONTENT_WITH_NO_VALUE_1
             )
         }
 
@@ -215,7 +215,7 @@ class TestGetElifeManuscriptPartOfSection:
             query_result_item=DOCMAPS_QUERY_RESULT_ITEM_2
         )
         assert result_with_related_content['complement'] == (
-            get_elife_manuscript_part_of_section_complement(RELATED_CONTENT_2)
+            get_elife_manuscript_part_of_section_complement(RELATED_CONTENT_WITH_ALL_VALUE_1)
         )
 
 
