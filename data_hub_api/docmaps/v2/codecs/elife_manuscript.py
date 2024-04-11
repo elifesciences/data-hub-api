@@ -20,6 +20,7 @@ from data_hub_api.docmaps.v2.docmap_typing import (
     DocmapPublishedElifeManuscriptOutput,
     DocmapPublishedElifeManuscriptPartOf
 )
+from data_hub_api.utils.json import remove_key_with_none_value_only
 
 
 def get_elife_manuscript_version_doi(
@@ -102,17 +103,34 @@ def get_elife_manuscript_subject_disciplines(
 def get_elife_manuscript_part_of_section_complement(
     related_content: Optional[ApiRelatedContentInput]
 ) -> Optional[Sequence[DocmapPartOfComplement]]:
+    related_article_dict: Optional[dict] = None
+    collection_dict: Optional[dict] = None
     if related_content and any(related_content.values()):
-        return [{
-            'type': related_content['manuscript_type'],
-            'url': (
-                'https://elifesciences.org/articles/' + related_content['manuscript_id']
-                if related_content['manuscript_id']
-                else None
-            ),
-            'title': related_content['manuscript_title'],
-            'description': related_content['manuscript_authors_csv']
-        }]
+        if related_content['manuscript_id']:
+            related_article_dict = {
+                'type': related_content['manuscript_type'],
+                'url': 'https://elifesciences.org/articles/' + related_content['manuscript_id'],
+                'title': related_content['manuscript_title'],
+                'description': related_content['manuscript_authors_csv']
+            }
+        if related_content['collection_id']:
+            assert related_content['collection_curator_name']
+            collection_dict = {
+                'type': 'Collection',
+                'url': ('https://elifesciences.org/collections/'
+                        + related_content['collection_id']
+                        + '/meta-research-a-collection-of-articles'),
+                'title': related_content['collection_title'],
+                'description': (
+                    'Edited by ' + related_content['collection_curator_name'] + ' et al'
+                    if related_content['is_collection_curator_et_al']
+                    else 'Edited by ' + related_content['collection_curator_name']
+                ),
+                'thumbnail': related_content['collection_thumbnail_url']
+            }
+        return remove_key_with_none_value_only(
+            [related_article_dict, collection_dict]
+        )  # type: ignore
     return None
 
 

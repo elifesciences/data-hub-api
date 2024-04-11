@@ -63,7 +63,12 @@ ApiRelatedContentInput = TypedDict(
         'manuscript_id': Optional[str],
         'manuscript_type': Optional[str],
         'manuscript_title': Optional[str],
-        'manuscript_authors_csv': Optional[str]
+        'manuscript_authors_csv': Optional[str],
+        'collection_id': Optional[str],
+        'collection_title': Optional[str],
+        'collection_curator_name': Optional[str],
+        'is_collection_curator_et_al': Optional[bool],
+        'collection_thumbnail_url': Optional[str],
     }
 )
 
