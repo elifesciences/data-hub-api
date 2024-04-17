@@ -105,6 +105,7 @@ def get_elife_manuscript_part_of_section_complement(
 ) -> Optional[Sequence[DocmapPartOfComplement]]:
     related_article_dict: Optional[dict] = None
     collection_dict: Optional[dict] = None
+    podcast_dict: Optional[dict] = None
     if related_content and any(related_content.values()):
         if related_content['manuscript_id']:
             related_article_dict = {
@@ -128,8 +129,15 @@ def get_elife_manuscript_part_of_section_complement(
                 ),
                 'thumbnail': related_content['collection_thumbnail_url']
             }
+        if related_content['podcast_id']:
+            podcast_dict = {
+                'type': 'Podcast',
+                'url': 'https://elifesciences.org/podcast/episode'+ related_content['podcast_id'],
+                'title': related_content['podcast_title'],
+                'description': related_content['podcast_desc']
+            }
         return remove_key_with_none_value_only(
-            [related_article_dict, collection_dict]
+            [related_article_dict, collection_dict, podcast_dict]
         )  # type: ignore
     return None
 
