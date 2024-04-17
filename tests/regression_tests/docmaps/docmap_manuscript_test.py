@@ -18,7 +18,8 @@ MANUSCRIPT_ID_LIST = [
     # for 88984 hypothesis annotation links to v10 but we decided to use v11 for production process
     # and it is also inside a collection:
     '88984',
-    '91729'  # have related article
+    '91729',  # have related article
+    '86824'  # have related podcast
 ]
 
 
