@@ -171,7 +171,7 @@ class TestGetElifeManuscriptPartOfSectionComplement:
             'thumbnail': 'collection_thumbnail_url_1'
         }, {
             'type': 'Podcast',
-            'url': 'https://elifesciences.org/podcast/episodepodcast_id_1',
+            'url': 'https://elifesciences.org/podcast/episode111',
             'title': 'podcast_title_1',
             'description': 'podcast_desc_1'
         }]
@@ -215,7 +215,7 @@ class TestGetElifeManuscriptPartOfSectionComplement:
         )
         assert result_with_related_content == [{
             'type': 'Podcast',
-            'url': 'https://elifesciences.org/podcast/episodepodcast_id_1',
+            'url': 'https://elifesciences.org/podcast/episode111',
             'title': 'podcast_title_1',
             'description': 'podcast_desc_1'
         }]

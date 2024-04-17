@@ -132,7 +132,7 @@ def get_elife_manuscript_part_of_section_complement(
         if related_content['podcast_id']:
             podcast_dict = {
                 'type': 'Podcast',
-                'url': 'https://elifesciences.org/podcast/episode' + related_content['podcast_id'],
+                'url': 'https://elifesciences.org/podcast/episode' + str(related_content['podcast_id']),
                 'title': related_content['podcast_title'],
                 'description': related_content['podcast_desc']
             }

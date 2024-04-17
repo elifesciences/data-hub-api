@@ -150,7 +150,7 @@ PODCAST_DICT_WITH_NO_VALUE_1: dict = {
 }
 
 PODCAST_DICT_1: dict = {
-    'podcast_id': 'podcast_id_1',
+    'podcast_id': 111,
     'podcast_title': 'podcast_title_1',
     'podcast_desc': 'podcast_desc_1'
 }
