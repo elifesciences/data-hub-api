@@ -53,7 +53,8 @@ DocmapPartOfComplement = TypedDict(
         'title': Optional[str],
         'description': Optional[str],
         'thumbnail': Optional[str]
-    }
+    },
+    total=False
 )
 
 DocmapPublishedElifeManuscriptPartOf = TypedDict(

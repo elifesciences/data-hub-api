@@ -26,6 +26,8 @@ from tests.unit_tests.docmaps.v2.test_data import (
     DOCMAPS_QUERY_RESULT_ITEM_2,
     DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSION,
     MANUSCRIPT_VOR_VERSION_1,
+    PODCAST_DICT_1,
+    PODCAST_DICT_WITH_NO_VALUE_1,
     RELATED_ARTICLE_DICT_1,
     RELATED_CONTENT_WITH_NO_VALUE_1,
     RELATED_CONTENT_WITH_ALL_VALUE_1,
@@ -167,11 +169,18 @@ class TestGetElifeManuscriptPartOfSectionComplement:
             'title': 'collection_title_1',
             'description': 'Edited by collection_curator_name_1 et al',
             'thumbnail': 'collection_thumbnail_url_1'
+        }, {
+            'type': 'Podcast',
+            'url': 'https://elifesciences.org/podcast/episode111',
+            'title': 'podcast_title_1',
+            'description': 'podcast_desc_1'
         }]
 
     def test_should_populate_complement_if_only_related_article_data_available(self):
         result_with_related_content = get_elife_manuscript_part_of_section_complement(
-            {**RELATED_ARTICLE_DICT_1, **COLLECTIONS_DICT_WITH_NO_VALUE_1}
+            {**RELATED_ARTICLE_DICT_1,
+             **COLLECTIONS_DICT_WITH_NO_VALUE_1,
+             **PODCAST_DICT_WITH_NO_VALUE_1}
         )
         assert result_with_related_content == [{
             'type': 'manuscript_type_1',
@@ -182,7 +191,9 @@ class TestGetElifeManuscriptPartOfSectionComplement:
 
     def test_should_populate_complement_if_only_collections_data_available(self):
         result_with_related_content = get_elife_manuscript_part_of_section_complement(
-            {**RELATED_CONTENT_WITH_NO_VALUE_1, **COLLECTIONS_DICT_1}
+            {**RELATED_CONTENT_WITH_NO_VALUE_1,
+             **PODCAST_DICT_WITH_NO_VALUE_1,
+             **COLLECTIONS_DICT_1}
         )
         assert result_with_related_content == [{
             'type': 'Collection',
@@ -196,9 +207,23 @@ class TestGetElifeManuscriptPartOfSectionComplement:
             'thumbnail': 'collection_thumbnail_url_1'
         }]
 
+    def test_should_populate_complement_if_only_podcast_data_available(self):
+        result_with_related_content = get_elife_manuscript_part_of_section_complement(
+            {**RELATED_CONTENT_WITH_NO_VALUE_1,
+             **COLLECTIONS_DICT_WITH_NO_VALUE_1,
+             **PODCAST_DICT_1}
+        )
+        assert result_with_related_content == [{
+            'type': 'Podcast',
+            'url': 'https://elifesciences.org/podcast/episode111',
+            'title': 'podcast_title_1',
+            'description': 'podcast_desc_1'
+        }]
+
     def test_should_populate_complement_collection_description_without_et_al_when_false(self):
         result_with_related_content = get_elife_manuscript_part_of_section_complement(
             {**RELATED_CONTENT_WITH_NO_VALUE_1,
+             **PODCAST_DICT_WITH_NO_VALUE_1,
              **COLLECTIONS_DICT_1,
              'is_collection_curator_et_al': False}
         )

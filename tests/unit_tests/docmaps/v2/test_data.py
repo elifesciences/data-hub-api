@@ -143,14 +143,28 @@ COLLECTIONS_DICT_1: dict = {
     'is_collection_curator_et_al': True
 }
 
+PODCAST_DICT_WITH_NO_VALUE_1: dict = {
+    'podcast_id': None,
+    'podcast_title': None,
+    'podcast_desc': None
+}
+
+PODCAST_DICT_1: dict = {
+    'podcast_id': 111,
+    'podcast_title': 'podcast_title_1',
+    'podcast_desc': 'podcast_desc_1'
+}
+
 RELATED_CONTENT_WITH_NO_VALUE_1: ApiRelatedContentInput = {
     **RELATED_ARTICLE_DICT_WITH_NO_VALUE_1,  # type: ignore
-    **COLLECTIONS_DICT_WITH_NO_VALUE_1  # type: ignore
+    **COLLECTIONS_DICT_WITH_NO_VALUE_1,  # type: ignore
+    **PODCAST_DICT_WITH_NO_VALUE_1  # type: ignore
 }
 
 RELATED_CONTENT_WITH_ALL_VALUE_1: ApiRelatedContentInput = {
     **RELATED_ARTICLE_DICT_1,  # type: ignore
-    **COLLECTIONS_DICT_1  # type: ignore
+    **COLLECTIONS_DICT_1,  # type: ignore
+    **PODCAST_DICT_1  # type: ignore
 }
 
 PUBLISHER_DICT_1 = {"id": "publisher_1"}

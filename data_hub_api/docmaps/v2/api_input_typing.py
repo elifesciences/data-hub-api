@@ -69,6 +69,9 @@ ApiRelatedContentInput = TypedDict(
         'collection_curator_name': Optional[str],
         'is_collection_curator_et_al': Optional[bool],
         'collection_thumbnail_url': Optional[str],
+        'podcast_id': Optional[int],
+        'podcast_title': Optional[str],
+        'podcast_desc': Optional[str],
     }
 )
 
