@@ -106,7 +106,7 @@ def get_elife_manuscript_part_of_section_complement(
     related_article_dict: Optional[dict] = None
     collection_dict: Optional[dict] = None
     podcast_dict: Optional[dict] = None
-    if related_content and any(related_content.values()):
+    if related_content:
         if related_content['manuscript_id']:
             related_article_dict = {
                 'type': related_content['manuscript_type'],
