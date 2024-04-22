@@ -7,6 +7,7 @@ from data_hub_api.docmaps.v2.api_input_typing import (
     ApiManuscriptVersionInput,
     ApiRelatedContentInput
 )
+from data_hub_api.docmaps.v2.docmap_typing import DocmapPartOfComplement
 
 MANUSCRIPT_ID_1 = 'manuscript_id_1'
 
@@ -155,16 +156,60 @@ PODCAST_DICT_1: dict = {
     'podcast_desc': 'podcast_desc_1'
 }
 
-RELATED_CONTENT_WITH_NO_VALUE_1: ApiRelatedContentInput = {
+RELATED_CONTENT_DICT_WITH_NO_VALUE_1: ApiRelatedContentInput = {
     **RELATED_ARTICLE_DICT_WITH_NO_VALUE_1,  # type: ignore
     **COLLECTIONS_DICT_WITH_NO_VALUE_1,  # type: ignore
     **PODCAST_DICT_WITH_NO_VALUE_1  # type: ignore
 }
 
-RELATED_CONTENT_WITH_ALL_VALUE_1: ApiRelatedContentInput = {
+RELATED_CONTENT_DICT_WITH_ALL_VALUE_1: ApiRelatedContentInput = {
     **RELATED_ARTICLE_DICT_1,  # type: ignore
     **COLLECTIONS_DICT_1,  # type: ignore
     **PODCAST_DICT_1  # type: ignore
+}
+
+RELATED_ARTICLE_CONTENT_INPUT_DICT_1: ApiRelatedContentInput = {
+    **RELATED_ARTICLE_DICT_1,  # type: ignore
+    **COLLECTIONS_DICT_WITH_NO_VALUE_1,  # type: ignore
+    **PODCAST_DICT_WITH_NO_VALUE_1  # type: ignore
+}
+
+RELATED_COLLECTION_CONTENT_INPUT_DICT_1: ApiRelatedContentInput = {
+    **RELATED_ARTICLE_DICT_WITH_NO_VALUE_1,  # type: ignore
+    **COLLECTIONS_DICT_1,  # type: ignore
+    **PODCAST_DICT_WITH_NO_VALUE_1  # type: ignore
+}
+
+RELATED_PODCAST_CONTENT_INPUT_DICT_1: ApiRelatedContentInput = {
+    **RELATED_ARTICLE_DICT_WITH_NO_VALUE_1,  # type: ignore
+    **COLLECTIONS_DICT_WITH_NO_VALUE_1,  # type: ignore
+    **PODCAST_DICT_1  # type: ignore
+}
+
+RELATED_ARTICLE_DOCMAP_OUTPUT_1: DocmapPartOfComplement = {
+    'type': 'manuscript_type_1',
+    'url': 'https://elifesciences.org/articles/manuscript_id_1',
+    'title': 'manuscript_title_1',
+    'description': 'manuscript_authors_csv_1'
+}
+
+RELATED_COLLECTION_DOCMAP_OUTPUT_1: DocmapPartOfComplement = {
+    'type': 'Collection',
+    'url': (
+        'https://elifesciences.org/collections/'
+        + 'collection_id_1'
+        + '/meta-research-a-collection-of-articles'
+    ),
+    'title': 'collection_title_1',
+    'description': 'Edited by collection_curator_name_1 et al',
+    'thumbnail': 'collection_thumbnail_url_1'
+}
+
+RELATED_PODACST_DOCMAP_OUTPUT_1: DocmapPartOfComplement = {
+    'type': 'Podcast',
+    'url': 'https://elifesciences.org/podcast/episode111',
+    'title': 'podcast_title_1',
+    'description': 'podcast_desc_1'
 }
 
 PUBLISHER_DICT_1 = {"id": "publisher_1"}
@@ -177,7 +222,7 @@ DOCMAPS_QUERY_RESULT_ITEM_1: ApiInput = {
     'license': LICENSE_1,
     'is_reviewed_preprint_type': True,
     'manuscript_versions': [MANUSCRIPT_VERSION_1],
-    'related_content': [RELATED_CONTENT_WITH_NO_VALUE_1]
+    'related_content': [RELATED_CONTENT_DICT_WITH_NO_VALUE_1]
 }
 
 DOCMAPS_QUERY_RESULT_ITEM_2: ApiInput = {
@@ -187,7 +232,7 @@ DOCMAPS_QUERY_RESULT_ITEM_2: ApiInput = {
     'license': LICENSE_1,
     'is_reviewed_preprint_type': True,
     'manuscript_versions': [MANUSCRIPT_VERSION_1, MANUSCRIPT_VERSION_2],
-    'related_content': [RELATED_CONTENT_WITH_ALL_VALUE_1]
+    'related_content': [RELATED_CONTENT_DICT_WITH_ALL_VALUE_1]
 }
 
 HYPOTHESIS_ID_1 = 'hypothesis_1'
