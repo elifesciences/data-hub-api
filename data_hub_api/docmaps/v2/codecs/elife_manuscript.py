@@ -148,15 +148,15 @@ def get_elife_manuscript_part_of_section_complement_for_one_record(
 def get_elife_manuscript_part_of_section_complement_for_each_record(
     related_content_array: Optional[Sequence[ApiRelatedContentInput]]
 ) -> Sequence[DocmapPartOfComplement]:
+    complement_list: list = []
     if related_content_array:
-        complement_list: list = []
         for related_content in related_content_array:
-            complement_list = (
-                complement_list
-                + get_elife_manuscript_part_of_section_complement_for_one_record(related_content)
+            complement = get_elife_manuscript_part_of_section_complement_for_one_record(
+                related_content
             )
-        return complement_list
-    return []
+            if complement:
+                complement_list.extend(complement)
+    return complement_list
 
 
 def get_elife_manuscript_part_of_section(
