@@ -4,4 +4,3 @@ pytest==8.1.1
 pytest-watch==4.2.0
 mypy==0.991
 httpx==0.23.1
-

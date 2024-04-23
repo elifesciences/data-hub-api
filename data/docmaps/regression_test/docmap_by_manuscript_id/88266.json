@@ -1,9 +1,9 @@
 {
     "@context": "https://w3id.org/docmaps/context.jsonld",
     "type": "docmap",
-    "id": "https://data-hub-api.elifesciences.org/enhanced-preprints/docmaps/v2/by-publisher/elife/get-by-manuscript-id?manuscript_id=87193",
-    "created": "2023-02-23T08:44:37+00:00",
-    "updated": "2023-02-23T08:44:37+00:00",
+    "id": "https://data-hub-api.elifesciences.org/enhanced-preprints/docmaps/v2/by-publisher/elife/get-by-manuscript-id?manuscript_id=88266",
+    "created": "2023-05-02T13:55:54+00:00",
+    "updated": "2023-05-02T13:55:54+00:00",
     "publisher": {
         "account": {
             "id": "https://sciety.org/groups/elife",
@@ -23,8 +23,8 @@
                     "outputs": [
                         {
                             "type": "preprint",
-                            "identifier": "87193",
-                            "doi": "10.7554/eLife.87193.1",
+                            "identifier": "88266",
+                            "doi": "10.7554/eLife.88266.1",
                             "versionIdentifier": "1",
                             "license": "http://creativecommons.org/licenses/by/4.0/"
                         }
@@ -35,16 +35,16 @@
                 {
                     "item": {
                         "type": "preprint",
-                        "doi": "10.31234/osf.io/uk7hr",
-                        "versionIdentifier": "3"
+                        "doi": "10.1101/2023.06.08.544148",
+                        "versionIdentifier": "1"
                     },
                     "status": "under-review",
-                    "happened": "2023-03-30T14:12:23+00:00"
+                    "happened": "2023-05-25T08:56:33+00:00"
                 },
                 {
                     "item": {
                         "type": "preprint",
-                        "doi": "10.7554/eLife.87193.1",
+                        "doi": "10.7554/eLife.88266.1",
                         "versionIdentifier": "1"
                     },
                     "status": "draft"
@@ -53,14 +53,14 @@
             "inputs": [
                 {
                     "type": "preprint",
-                    "doi": "10.31234/osf.io/uk7hr",
-                    "url": "https://psyarxiv.com/uk7hr",
-                    "versionIdentifier": "3",
-                    "published": "2023-02-23",
+                    "doi": "10.1101/2023.06.08.544148",
+                    "url": "https://www.biorxiv.org/content/10.1101/2023.06.08.544148v1",
+                    "versionIdentifier": "1",
+                    "published": "2023-06-11",
                     "content": [
                         {
                             "type": "computer-file",
-                            "url": "s3://prod-elife-epp-meca/87193-v1-meca.zip"
+                            "url": "s3://transfers-elife/biorxiv_Current_Content/June_2023/13_Jun_23_Batch_1641/30b983d1-6d04-1014-8954-d3d2452327b2.meca"
                         }
                     ]
                 }
@@ -70,26 +70,34 @@
         "_:b1": {
             "actions": [
                 {
-                    "participants": [],
+                    "participants": [
+                        {
+                            "actor": {
+                                "name": "anonymous",
+                                "type": "person"
+                            },
+                            "role": "peer-reviewer"
+                        }
+                    ],
                     "outputs": [
                         {
-                            "type": "reply",
-                            "published": "2023-06-30T08:37:24.723355+00:00",
-                            "doi": "10.7554/eLife.87193.1.sa0",
+                            "type": "review-article",
+                            "published": "2023-08-07T08:43:20.118486+00:00",
+                            "doi": "10.7554/eLife.88266.1.sa0",
                             "license": "http://creativecommons.org/licenses/by/4.0/",
-                            "url": "https://doi.org/10.7554/eLife.87193.1.sa0",
+                            "url": "https://doi.org/10.7554/eLife.88266.1.sa0",
                             "content": [
                                 {
                                     "type": "web-page",
-                                    "url": "https://hypothes.is/a/Vn1BmhchEe6V-38O6kQw4A"
+                                    "url": "https://hypothes.is/a/dgUvCjT-Ee6gD8eV0Jqaeg"
                                 },
                                 {
                                     "type": "web-page",
-                                    "url": "https://sciety.org/articles/activity/10.31234/osf.io/uk7hr#hypothesis:Vn1BmhchEe6V-38O6kQw4A"
+                                    "url": "https://sciety.org/articles/activity/10.1101/2023.06.08.544148#hypothesis:dgUvCjT-Ee6gD8eV0Jqaeg"
                                 },
                                 {
                                     "type": "web-page",
-                                    "url": "https://sciety.org/evaluations/hypothesis:Vn1BmhchEe6V-38O6kQw4A/content"
+                                    "url": "https://sciety.org/evaluations/hypothesis:dgUvCjT-Ee6gD8eV0Jqaeg/content"
                                 }
                             ]
                         }
@@ -108,90 +116,22 @@
                     "outputs": [
                         {
                             "type": "review-article",
-                            "published": "2023-06-30T08:37:25.485149+00:00",
-                            "doi": "10.7554/eLife.87193.1.sa1",
+                            "published": "2023-08-07T08:43:20.856744+00:00",
+                            "doi": "10.7554/eLife.88266.1.sa1",
                             "license": "http://creativecommons.org/licenses/by/4.0/",
-                            "url": "https://doi.org/10.7554/eLife.87193.1.sa1",
+                            "url": "https://doi.org/10.7554/eLife.88266.1.sa1",
                             "content": [
                                 {
                                     "type": "web-page",
-                                    "url": "https://hypothes.is/a/VvFdWhchEe6Zps9-br3YnQ"
+                                    "url": "https://hypothes.is/a/dnQfoDT-Ee6ZsdcZ_JrzEg"
                                 },
                                 {
                                     "type": "web-page",
-                                    "url": "https://sciety.org/articles/activity/10.31234/osf.io/uk7hr#hypothesis:VvFdWhchEe6Zps9-br3YnQ"
+                                    "url": "https://sciety.org/articles/activity/10.1101/2023.06.08.544148#hypothesis:dnQfoDT-Ee6ZsdcZ_JrzEg"
                                 },
                                 {
                                     "type": "web-page",
-                                    "url": "https://sciety.org/evaluations/hypothesis:VvFdWhchEe6Zps9-br3YnQ/content"
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "participants": [
-                        {
-                            "actor": {
-                                "name": "anonymous",
-                                "type": "person"
-                            },
-                            "role": "peer-reviewer"
-                        }
-                    ],
-                    "outputs": [
-                        {
-                            "type": "review-article",
-                            "published": "2023-06-30T08:37:26.290870+00:00",
-                            "doi": "10.7554/eLife.87193.1.sa2",
-                            "license": "http://creativecommons.org/licenses/by/4.0/",
-                            "url": "https://doi.org/10.7554/eLife.87193.1.sa2",
-                            "content": [
-                                {
-                                    "type": "web-page",
-                                    "url": "https://hypothes.is/a/V2sBjBchEe6j2MeoLYLwrw"
-                                },
-                                {
-                                    "type": "web-page",
-                                    "url": "https://sciety.org/articles/activity/10.31234/osf.io/uk7hr#hypothesis:V2sBjBchEe6j2MeoLYLwrw"
-                                },
-                                {
-                                    "type": "web-page",
-                                    "url": "https://sciety.org/evaluations/hypothesis:V2sBjBchEe6j2MeoLYLwrw/content"
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "participants": [
-                        {
-                            "actor": {
-                                "name": "anonymous",
-                                "type": "person"
-                            },
-                            "role": "peer-reviewer"
-                        }
-                    ],
-                    "outputs": [
-                        {
-                            "type": "review-article",
-                            "published": "2023-06-30T08:37:27.293396+00:00",
-                            "doi": "10.7554/eLife.87193.1.sa3",
-                            "license": "http://creativecommons.org/licenses/by/4.0/",
-                            "url": "https://doi.org/10.7554/eLife.87193.1.sa3",
-                            "content": [
-                                {
-                                    "type": "web-page",
-                                    "url": "https://hypothes.is/a/WATBPBchEe6NsFu4eib-8g"
-                                },
-                                {
-                                    "type": "web-page",
-                                    "url": "https://sciety.org/articles/activity/10.31234/osf.io/uk7hr#hypothesis:WATBPBchEe6NsFu4eib-8g"
-                                },
-                                {
-                                    "type": "web-page",
-                                    "url": "https://sciety.org/evaluations/hypothesis:WATBPBchEe6NsFu4eib-8g/content"
+                                    "url": "https://sciety.org/evaluations/hypothesis:dnQfoDT-Ee6ZsdcZ_JrzEg/content"
                                 }
                             ]
                         }
@@ -202,15 +142,14 @@
                         {
                             "actor": {
                                 "type": "person",
-                                "name": "Alexandra Pike",
-                                "firstName": "Alexandra",
-                                "_middleName": "C",
-                                "surname": "Pike",
-                                "_relatesToOrganization": "University of York, United Kingdom",
+                                "name": "Arya Mani",
+                                "firstName": "Arya",
+                                "surname": "Mani",
+                                "_relatesToOrganization": "Yale University School of Medicine, United States of America",
                                 "affiliation": {
                                     "type": "organization",
-                                    "name": "University of York",
-                                    "location": "York, United Kingdom"
+                                    "name": "Yale University School of Medicine",
+                                    "location": "New Haven, United States of America"
                                 }
                             },
                             "role": "editor"
@@ -218,14 +157,15 @@
                         {
                             "actor": {
                                 "type": "person",
-                                "name": "Jonathan Roiser",
-                                "firstName": "Jonathan",
-                                "surname": "Roiser",
-                                "_relatesToOrganization": "University College London, United Kingdom",
+                                "name": "David James",
+                                "firstName": "David",
+                                "_middleName": "E",
+                                "surname": "James",
+                                "_relatesToOrganization": "University of Sydney, Australia",
                                 "affiliation": {
                                     "type": "organization",
-                                    "name": "University College London",
-                                    "location": "London, United Kingdom"
+                                    "name": "University of Sydney",
+                                    "location": "Sydney, Australia"
                                 }
                             },
                             "role": "senior-editor"
@@ -234,22 +174,22 @@
                     "outputs": [
                         {
                             "type": "evaluation-summary",
-                            "published": "2023-06-30T08:37:28.306084+00:00",
-                            "doi": "10.7554/eLife.87193.1.sa4",
+                            "published": "2023-08-07T08:43:21.849863+00:00",
+                            "doi": "10.7554/eLife.88266.1.sa2",
                             "license": "http://creativecommons.org/licenses/by/4.0/",
-                            "url": "https://doi.org/10.7554/eLife.87193.1.sa4",
+                            "url": "https://doi.org/10.7554/eLife.88266.1.sa2",
                             "content": [
                                 {
                                     "type": "web-page",
-                                    "url": "https://hypothes.is/a/WJ5LBBchEe6tV2sCUbSvxg"
+                                    "url": "https://hypothes.is/a/dwtBtDT-Ee6k-WcTF3IfQA"
                                 },
                                 {
                                     "type": "web-page",
-                                    "url": "https://sciety.org/articles/activity/10.31234/osf.io/uk7hr#hypothesis:WJ5LBBchEe6tV2sCUbSvxg"
+                                    "url": "https://sciety.org/articles/activity/10.1101/2023.06.08.544148#hypothesis:dwtBtDT-Ee6k-WcTF3IfQA"
                                 },
                                 {
                                     "type": "web-page",
-                                    "url": "https://sciety.org/evaluations/hypothesis:WJ5LBBchEe6tV2sCUbSvxg/content"
+                                    "url": "https://sciety.org/evaluations/hypothesis:dwtBtDT-Ee6k-WcTF3IfQA/content"
                                 }
                             ]
                         }
@@ -260,8 +200,8 @@
                 {
                     "item": {
                         "type": "preprint",
-                        "doi": "10.31234/osf.io/uk7hr",
-                        "versionIdentifier": "3"
+                        "doi": "10.1101/2023.06.08.544148",
+                        "versionIdentifier": "1"
                     },
                     "status": "peer-reviewed"
                 }
@@ -269,9 +209,9 @@
             "inputs": [
                 {
                     "type": "preprint",
-                    "doi": "10.31234/osf.io/uk7hr",
-                    "url": "https://psyarxiv.com/uk7hr",
-                    "versionIdentifier": "3"
+                    "doi": "10.1101/2023.06.08.544148",
+                    "url": "https://www.biorxiv.org/content/10.1101/2023.06.08.544148v1",
+                    "versionIdentifier": "1"
                 }
             ],
             "next-step": "_:b2",
@@ -284,22 +224,36 @@
                     "outputs": [
                         {
                             "type": "preprint",
-                            "identifier": "87193",
-                            "doi": "10.7554/eLife.87193.1",
+                            "identifier": "88266",
+                            "doi": "10.7554/eLife.88266.1",
                             "versionIdentifier": "1",
                             "license": "http://creativecommons.org/licenses/by/4.0/",
-                            "published": "2023-07-13T14:00:00+00:00",
+                            "published": "2023-08-10T14:00:00+00:00",
                             "partOf": {
                                 "type": "manuscript",
-                                "doi": "10.7554/eLife.87193",
-                                "identifier": "87193",
+                                "doi": "10.7554/eLife.88266",
+                                "identifier": "88266",
                                 "subjectDisciplines": [
-                                    "Neuroscience"
+                                    "Computational and Systems Biology"
                                 ],
-                                "published": "2023-07-13T14:00:00+00:00",
+                                "published": "2023-08-10T14:00:00+00:00",
                                 "volumeIdentifier": "12",
-                                "electronicArticleIdentifier": "RP87193",
-                                "complement": []
+                                "electronicArticleIdentifier": "RP88266",
+                                "complement": [
+                                    {
+                                        "type": "Insight",
+                                        "url": "https://elifesciences.org/articles/94382",
+                                        "title": "Genetics: From mouse to human",
+                                        "description": "Arya Mani"
+                                    },
+                                    {
+                                        "type": "Collection",
+                                        "url": "https://elifesciences.org/collections/560cc395/meta-research-a-collection-of-articles",
+                                        "title": "Special Issue: Systems Genetics",
+                                        "description": "Edited by David James et al",
+                                        "thumbnail": "https://iiif.elifesciences.org/journal-cms/collection%2F2023-07%2Fsystems-genetics-illustration-1.png/full/full/0/default.jpg"
+                                    }
+                                ]
                             }
                         }
                     ]
@@ -309,7 +263,7 @@
                 {
                     "item": {
                         "type": "preprint",
-                        "doi": "10.7554/eLife.87193.1",
+                        "doi": "10.7554/eLife.88266.1",
                         "versionIdentifier": "1"
                     },
                     "status": "manuscript-published"
@@ -318,29 +272,21 @@
             "inputs": [
                 {
                     "type": "preprint",
-                    "doi": "10.31234/osf.io/uk7hr",
-                    "url": "https://psyarxiv.com/uk7hr",
-                    "versionIdentifier": "3"
-                },
-                {
-                    "type": "reply",
-                    "doi": "10.7554/eLife.87193.1.sa0"
+                    "doi": "10.1101/2023.06.08.544148",
+                    "url": "https://www.biorxiv.org/content/10.1101/2023.06.08.544148v1",
+                    "versionIdentifier": "1"
                 },
                 {
                     "type": "review-article",
-                    "doi": "10.7554/eLife.87193.1.sa1"
+                    "doi": "10.7554/eLife.88266.1.sa0"
                 },
                 {
                     "type": "review-article",
-                    "doi": "10.7554/eLife.87193.1.sa2"
-                },
-                {
-                    "type": "review-article",
-                    "doi": "10.7554/eLife.87193.1.sa3"
+                    "doi": "10.7554/eLife.88266.1.sa1"
                 },
                 {
                     "type": "evaluation-summary",
-                    "doi": "10.7554/eLife.87193.1.sa4"
+                    "doi": "10.7554/eLife.88266.1.sa2"
                 }
             ],
             "next-step": "_:b3",
@@ -353,8 +299,8 @@
                     "outputs": [
                         {
                             "type": "preprint",
-                            "identifier": "87193",
-                            "doi": "10.7554/eLife.87193.2",
+                            "identifier": "88266",
+                            "doi": "10.7554/eLife.88266.2",
                             "versionIdentifier": "2",
                             "license": "http://creativecommons.org/licenses/by/4.0/"
                         }
@@ -365,16 +311,16 @@
                 {
                     "item": {
                         "type": "preprint",
-                        "doi": "10.31234/osf.io/uk7hr",
-                        "versionIdentifier": "4"
+                        "doi": "10.1101/2023.06.08.544148",
+                        "versionIdentifier": "2"
                     },
                     "status": "under-review",
-                    "happened": "2023-07-18T12:20:02+00:00"
+                    "happened": "2023-09-21T09:20:02+00:00"
                 },
                 {
                     "item": {
                         "type": "preprint",
-                        "doi": "10.7554/eLife.87193.2",
+                        "doi": "10.7554/eLife.88266.2",
                         "versionIdentifier": "2"
                     },
                     "status": "draft"
@@ -383,14 +329,14 @@
             "inputs": [
                 {
                     "type": "preprint",
-                    "doi": "10.31234/osf.io/uk7hr",
-                    "url": "https://psyarxiv.com/uk7hr",
-                    "versionIdentifier": "4",
-                    "published": "2023-07-18",
+                    "doi": "10.1101/2023.06.08.544148",
+                    "url": "https://www.biorxiv.org/content/10.1101/2023.06.08.544148v2",
+                    "versionIdentifier": "2",
+                    "published": "2023-09-20",
                     "content": [
                         {
                             "type": "computer-file",
-                            "url": "s3://prod-elife-epp-meca/87193-v2-meca.zip"
+                            "url": "s3://transfers-elife/biorxiv_Current_Content/September_2023/22_Sep_23_Batch_1742/c008402b-714e-1014-b1da-9faabbc11cb1.meca"
                         }
                     ]
                 }
@@ -413,22 +359,22 @@
                     "outputs": [
                         {
                             "type": "review-article",
-                            "published": "2023-09-15T08:32:43.481809+00:00",
-                            "doi": "10.7554/eLife.87193.2.sa0",
+                            "published": "2023-10-31T09:39:25.063183+00:00",
+                            "doi": "10.7554/eLife.88266.2.sa0",
                             "license": "http://creativecommons.org/licenses/by/4.0/",
-                            "url": "https://doi.org/10.7554/eLife.87193.2.sa0",
+                            "url": "https://doi.org/10.7554/eLife.88266.2.sa0",
                             "content": [
                                 {
                                     "type": "web-page",
-                                    "url": "https://hypothes.is/a/cKo7eFOiEe6Xn6vIDnAcpw"
+                                    "url": "https://hypothes.is/a/YMv4pnfREe6v8yfbe85gBQ"
                                 },
                                 {
                                     "type": "web-page",
-                                    "url": "https://sciety.org/articles/activity/10.31234/osf.io/uk7hr#hypothesis:cKo7eFOiEe6Xn6vIDnAcpw"
+                                    "url": "https://sciety.org/articles/activity/10.1101/2023.06.08.544148#hypothesis:YMv4pnfREe6v8yfbe85gBQ"
                                 },
                                 {
                                     "type": "web-page",
-                                    "url": "https://sciety.org/evaluations/hypothesis:cKo7eFOiEe6Xn6vIDnAcpw/content"
+                                    "url": "https://sciety.org/evaluations/hypothesis:YMv4pnfREe6v8yfbe85gBQ/content"
                                 }
                             ]
                         }
@@ -447,56 +393,22 @@
                     "outputs": [
                         {
                             "type": "review-article",
-                            "published": "2023-09-15T08:32:44.252841+00:00",
-                            "doi": "10.7554/eLife.87193.2.sa1",
+                            "published": "2023-10-31T09:39:25.840466+00:00",
+                            "doi": "10.7554/eLife.88266.2.sa1",
                             "license": "http://creativecommons.org/licenses/by/4.0/",
-                            "url": "https://doi.org/10.7554/eLife.87193.2.sa1",
+                            "url": "https://doi.org/10.7554/eLife.88266.2.sa1",
                             "content": [
                                 {
                                     "type": "web-page",
-                                    "url": "https://hypothes.is/a/cR9WYFOiEe630A_cAxEeHw"
+                                    "url": "https://hypothes.is/a/YUC5DHfREe6H7_fr-6o-sQ"
                                 },
                                 {
                                     "type": "web-page",
-                                    "url": "https://sciety.org/articles/activity/10.31234/osf.io/uk7hr#hypothesis:cR9WYFOiEe630A_cAxEeHw"
+                                    "url": "https://sciety.org/articles/activity/10.1101/2023.06.08.544148#hypothesis:YUC5DHfREe6H7_fr-6o-sQ"
                                 },
                                 {
                                     "type": "web-page",
-                                    "url": "https://sciety.org/evaluations/hypothesis:cR9WYFOiEe630A_cAxEeHw/content"
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "participants": [
-                        {
-                            "actor": {
-                                "name": "anonymous",
-                                "type": "person"
-                            },
-                            "role": "peer-reviewer"
-                        }
-                    ],
-                    "outputs": [
-                        {
-                            "type": "review-article",
-                            "published": "2023-09-15T08:32:44.966858+00:00",
-                            "doi": "10.7554/eLife.87193.2.sa2",
-                            "license": "http://creativecommons.org/licenses/by/4.0/",
-                            "url": "https://doi.org/10.7554/eLife.87193.2.sa2",
-                            "content": [
-                                {
-                                    "type": "web-page",
-                                    "url": "https://hypothes.is/a/cYscOFOiEe6V3tuja8zxXA"
-                                },
-                                {
-                                    "type": "web-page",
-                                    "url": "https://sciety.org/articles/activity/10.31234/osf.io/uk7hr#hypothesis:cYscOFOiEe6V3tuja8zxXA"
-                                },
-                                {
-                                    "type": "web-page",
-                                    "url": "https://sciety.org/evaluations/hypothesis:cYscOFOiEe6V3tuja8zxXA/content"
+                                    "url": "https://sciety.org/evaluations/hypothesis:YUC5DHfREe6H7_fr-6o-sQ/content"
                                 }
                             ]
                         }
@@ -507,15 +419,14 @@
                         {
                             "actor": {
                                 "type": "person",
-                                "name": "Alexandra Pike",
-                                "firstName": "Alexandra",
-                                "_middleName": "C",
-                                "surname": "Pike",
-                                "_relatesToOrganization": "University of York, United Kingdom",
+                                "name": "Arya Mani",
+                                "firstName": "Arya",
+                                "surname": "Mani",
+                                "_relatesToOrganization": "Yale University School of Medicine, United States of America",
                                 "affiliation": {
                                     "type": "organization",
-                                    "name": "University of York",
-                                    "location": "York, United Kingdom"
+                                    "name": "Yale University School of Medicine",
+                                    "location": "New Haven, United States of America"
                                 }
                             },
                             "role": "editor"
@@ -523,14 +434,15 @@
                         {
                             "actor": {
                                 "type": "person",
-                                "name": "Jonathan Roiser",
-                                "firstName": "Jonathan",
-                                "surname": "Roiser",
-                                "_relatesToOrganization": "University College London, United Kingdom",
+                                "name": "David James",
+                                "firstName": "David",
+                                "_middleName": "E",
+                                "surname": "James",
+                                "_relatesToOrganization": "University of Sydney, Australia",
                                 "affiliation": {
                                     "type": "organization",
-                                    "name": "University College London",
-                                    "location": "London, United Kingdom"
+                                    "name": "University of Sydney",
+                                    "location": "Sydney, Australia"
                                 }
                             },
                             "role": "senior-editor"
@@ -539,22 +451,22 @@
                     "outputs": [
                         {
                             "type": "evaluation-summary",
-                            "published": "2023-09-15T08:32:45.720576+00:00",
-                            "doi": "10.7554/eLife.87193.2.sa3",
+                            "published": "2023-10-31T09:39:26.547305+00:00",
+                            "doi": "10.7554/eLife.88266.2.sa2",
                             "license": "http://creativecommons.org/licenses/by/4.0/",
-                            "url": "https://doi.org/10.7554/eLife.87193.2.sa3",
+                            "url": "https://doi.org/10.7554/eLife.88266.2.sa2",
                             "content": [
                                 {
                                     "type": "web-page",
-                                    "url": "https://hypothes.is/a/cf7YvFOiEe6E5zeST_-DOA"
+                                    "url": "https://hypothes.is/a/YayuvnfREe696cNNeJg8Vg"
                                 },
                                 {
                                     "type": "web-page",
-                                    "url": "https://sciety.org/articles/activity/10.31234/osf.io/uk7hr#hypothesis:cf7YvFOiEe6E5zeST_-DOA"
+                                    "url": "https://sciety.org/articles/activity/10.1101/2023.06.08.544148#hypothesis:YayuvnfREe696cNNeJg8Vg"
                                 },
                                 {
                                     "type": "web-page",
-                                    "url": "https://sciety.org/evaluations/hypothesis:cf7YvFOiEe6E5zeST_-DOA/content"
+                                    "url": "https://sciety.org/evaluations/hypothesis:YayuvnfREe696cNNeJg8Vg/content"
                                 }
                             ]
                         }
@@ -565,22 +477,22 @@
                     "outputs": [
                         {
                             "type": "reply",
-                            "published": "2023-09-15T10:34:55.267611+00:00",
-                            "doi": "10.7554/eLife.87193.2.sa4",
+                            "published": "2023-10-31T10:23:21.729390+00:00",
+                            "doi": "10.7554/eLife.88266.2.sa3",
                             "license": "http://creativecommons.org/licenses/by/4.0/",
-                            "url": "https://doi.org/10.7554/eLife.87193.2.sa4",
+                            "url": "https://doi.org/10.7554/eLife.88266.2.sa3",
                             "content": [
                                 {
                                     "type": "web-page",
-                                    "url": "https://hypothes.is/a/gstD9FOzEe69KCdkKCBOmA"
+                                    "url": "https://hypothes.is/a/hHXMkHfXEe6tVVva9HcV0g"
                                 },
                                 {
                                     "type": "web-page",
-                                    "url": "https://sciety.org/articles/activity/10.31234/osf.io/uk7hr#hypothesis:gstD9FOzEe69KCdkKCBOmA"
+                                    "url": "https://sciety.org/articles/activity/10.1101/2023.06.08.544148#hypothesis:hHXMkHfXEe6tVVva9HcV0g"
                                 },
                                 {
                                     "type": "web-page",
-                                    "url": "https://sciety.org/evaluations/hypothesis:gstD9FOzEe69KCdkKCBOmA/content"
+                                    "url": "https://sciety.org/evaluations/hypothesis:hHXMkHfXEe6tVVva9HcV0g/content"
                                 }
                             ]
                         }
@@ -591,8 +503,8 @@
                 {
                     "item": {
                         "type": "preprint",
-                        "doi": "10.31234/osf.io/uk7hr",
-                        "versionIdentifier": "4"
+                        "doi": "10.1101/2023.06.08.544148",
+                        "versionIdentifier": "2"
                     },
                     "status": "revised"
                 }
@@ -600,9 +512,9 @@
             "inputs": [
                 {
                     "type": "preprint",
-                    "doi": "10.31234/osf.io/uk7hr",
-                    "url": "https://psyarxiv.com/uk7hr",
-                    "versionIdentifier": "4"
+                    "doi": "10.1101/2023.06.08.544148",
+                    "url": "https://www.biorxiv.org/content/10.1101/2023.06.08.544148v2",
+                    "versionIdentifier": "2"
                 }
             ],
             "next-step": "_:b5",
@@ -615,22 +527,36 @@
                     "outputs": [
                         {
                             "type": "preprint",
-                            "identifier": "87193",
-                            "doi": "10.7554/eLife.87193.2",
+                            "identifier": "88266",
+                            "doi": "10.7554/eLife.88266.2",
                             "versionIdentifier": "2",
                             "license": "http://creativecommons.org/licenses/by/4.0/",
-                            "published": "2023-09-22T14:00:00+00:00",
+                            "published": "2023-11-02T14:00:00+00:00",
                             "partOf": {
                                 "type": "manuscript",
-                                "doi": "10.7554/eLife.87193",
-                                "identifier": "87193",
+                                "doi": "10.7554/eLife.88266",
+                                "identifier": "88266",
                                 "subjectDisciplines": [
-                                    "Neuroscience"
+                                    "Computational and Systems Biology"
                                 ],
-                                "published": "2023-07-13T14:00:00+00:00",
+                                "published": "2023-08-10T14:00:00+00:00",
                                 "volumeIdentifier": "12",
-                                "electronicArticleIdentifier": "RP87193",
-                                "complement": []
+                                "electronicArticleIdentifier": "RP88266",
+                                "complement": [
+                                    {
+                                        "type": "Insight",
+                                        "url": "https://elifesciences.org/articles/94382",
+                                        "title": "Genetics: From mouse to human",
+                                        "description": "Arya Mani"
+                                    },
+                                    {
+                                        "type": "Collection",
+                                        "url": "https://elifesciences.org/collections/560cc395/meta-research-a-collection-of-articles",
+                                        "title": "Special Issue: Systems Genetics",
+                                        "description": "Edited by David James et al",
+                                        "thumbnail": "https://iiif.elifesciences.org/journal-cms/collection%2F2023-07%2Fsystems-genetics-illustration-1.png/full/full/0/default.jpg"
+                                    }
+                                ]
                             }
                         }
                     ]
@@ -640,7 +566,7 @@
                 {
                     "item": {
                         "type": "preprint",
-                        "doi": "10.7554/eLife.87193.2",
+                        "doi": "10.7554/eLife.88266.2",
                         "versionIdentifier": "2"
                     },
                     "status": "manuscript-published"
@@ -649,29 +575,25 @@
             "inputs": [
                 {
                     "type": "preprint",
-                    "doi": "10.31234/osf.io/uk7hr",
-                    "url": "https://psyarxiv.com/uk7hr",
-                    "versionIdentifier": "4"
+                    "doi": "10.1101/2023.06.08.544148",
+                    "url": "https://www.biorxiv.org/content/10.1101/2023.06.08.544148v2",
+                    "versionIdentifier": "2"
                 },
                 {
                     "type": "review-article",
-                    "doi": "10.7554/eLife.87193.2.sa0"
+                    "doi": "10.7554/eLife.88266.2.sa0"
                 },
                 {
                     "type": "review-article",
-                    "doi": "10.7554/eLife.87193.2.sa1"
-                },
-                {
-                    "type": "review-article",
-                    "doi": "10.7554/eLife.87193.2.sa2"
+                    "doi": "10.7554/eLife.88266.2.sa1"
                 },
                 {
                     "type": "evaluation-summary",
-                    "doi": "10.7554/eLife.87193.2.sa3"
+                    "doi": "10.7554/eLife.88266.2.sa2"
                 },
                 {
                     "type": "reply",
-                    "doi": "10.7554/eLife.87193.2.sa4"
+                    "doi": "10.7554/eLife.88266.2.sa3"
                 }
             ],
             "next-step": "_:b6",
@@ -684,13 +606,13 @@
                     "outputs": [
                         {
                             "type": "version-of-record",
-                            "doi": "10.7554/eLife.87193.3",
-                            "published": "2023-10-11",
-                            "url": "https://doi.org/10.7554/eLife.87193.3",
+                            "doi": "10.7554/eLife.88266.3",
+                            "published": "2023-12-07",
+                            "url": "https://doi.org/10.7554/eLife.88266.3",
                             "content": [
                                 {
                                     "type": "web-page",
-                                    "url": "https://elifesciences.org/articles/87193"
+                                    "url": "https://elifesciences.org/articles/88266"
                                 }
                             ]
                         }
@@ -701,7 +623,7 @@
                 {
                     "item": {
                         "type": "version-of-record",
-                        "doi": "10.7554/eLife.87193.3",
+                        "doi": "10.7554/eLife.88266.3",
                         "versionIdentifier": "3"
                     },
                     "status": "vor-published"
@@ -710,8 +632,8 @@
             "inputs": [
                 {
                     "type": "preprint",
-                    "doi": "10.7554/eLife.87193.2",
-                    "identifier": "87193",
+                    "doi": "10.7554/eLife.88266.2",
+                    "identifier": "88266",
                     "versionIdentifier": "2"
                 }
             ],

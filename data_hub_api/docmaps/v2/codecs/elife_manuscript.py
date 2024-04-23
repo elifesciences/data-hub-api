@@ -100,7 +100,7 @@ def get_elife_manuscript_subject_disciplines(
     return None
 
 
-def get_elife_manuscript_part_of_section_complement(
+def get_elife_manuscript_part_of_section_complement_for_one_record(
     related_content: Optional[ApiRelatedContentInput]
 ) -> Optional[Sequence[DocmapPartOfComplement]]:
     related_article_dict: Optional[dict] = None
@@ -142,7 +142,21 @@ def get_elife_manuscript_part_of_section_complement(
         return remove_key_with_none_value_only(
             [related_article_dict, collection_dict, podcast_dict]
         )  # type: ignore
-    return None
+    return []
+
+
+def get_elife_manuscript_part_of_section_complement_for_each_record(
+    related_content_array: Optional[Sequence[ApiRelatedContentInput]]
+) -> Sequence[DocmapPartOfComplement]:
+    complement_list: list = []
+    if related_content_array:
+        for related_content in related_content_array:
+            complement = get_elife_manuscript_part_of_section_complement_for_one_record(
+                related_content
+            )
+            if complement:
+                complement_list.extend(complement)
+    return complement_list
 
 
 def get_elife_manuscript_part_of_section(
@@ -150,11 +164,6 @@ def get_elife_manuscript_part_of_section(
 ) -> DocmapPublishedElifeManuscriptPartOf:
     first_manuscript_version = query_result_item['manuscript_versions'][0]
     assert first_manuscript_version['rp_publication_timestamp']
-    related_content = (
-        query_result_item['related_content'][0]
-        if query_result_item['related_content']
-        else None
-    )
     return {
         'type': 'manuscript',
         'doi': query_result_item['elife_doi'],
@@ -167,7 +176,9 @@ def get_elife_manuscript_part_of_section(
         'electronicArticleIdentifier': get_elife_manuscript_electronic_article_identifier(
             query_result_item
         ),
-        'complement': get_elife_manuscript_part_of_section_complement(related_content)
+        'complement': get_elife_manuscript_part_of_section_complement_for_each_record(
+            query_result_item['related_content']
+        )
     }
 
 
