@@ -146,8 +146,6 @@ COLLECTIONS_DICT_1: dict = {
 
 PODCAST_DICT_WITH_NO_VALUE_1: dict = {
     'podcast_id': None,
-    'podcast_title': None,
-    'podcast_desc': None,
     'podcast_chapter_title': None,
     'podcast_chapter_time': None
 }
