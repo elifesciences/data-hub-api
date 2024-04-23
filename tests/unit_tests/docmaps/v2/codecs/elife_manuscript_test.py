@@ -14,7 +14,7 @@ from data_hub_api.docmaps.v2.codecs.elife_manuscript import (
     get_docmap_elife_manuscript_output_for_vor,
     get_elife_manuscript_electronic_article_identifier,
     get_elife_manuscript_part_of_section,
-    get_elife_manuscript_part_of_section_complement_for_each_record,
+    iter_elife_manuscript_part_of_section_complement_for_each_record,
     iter_elife_manuscript_part_of_section_complement_for_one_record,
     get_elife_manuscript_subject_disciplines,
     get_elife_manuscript_version_doi,
@@ -206,16 +206,12 @@ class TestIterElifeManuscriptPartOfSectionComplementForOneRecord:
             'Edited by collection_curator_name_1'
         )
 
-    def test_should_return_none_if_the_related_content_is_none(self):
-        result = list(iter_elife_manuscript_part_of_section_complement_for_one_record(None))
-        assert not result
-
 
 class TestGetElifeManuscriptPartOfSectionComplementForEachRecord:
     def test_should_return_related_content_for_values_of_all_types_in_same_row(self):
-        actual_result = get_elife_manuscript_part_of_section_complement_for_each_record([
-            RELATED_CONTENT_DICT_WITH_ALL_VALUE_1,
-        ])
+        actual_result = list(iter_elife_manuscript_part_of_section_complement_for_each_record(
+            [RELATED_CONTENT_DICT_WITH_ALL_VALUE_1]
+        ))
         assert actual_result == list(
             iter_elife_manuscript_part_of_section_complement_for_one_record(
                 RELATED_CONTENT_DICT_WITH_ALL_VALUE_1
@@ -223,11 +219,11 @@ class TestGetElifeManuscriptPartOfSectionComplementForEachRecord:
         )
 
     def test_should_return_related_content_for_values_of_all_types_in_separate_rows(self):
-        actual_result = get_elife_manuscript_part_of_section_complement_for_each_record([
+        actual_result = list(iter_elife_manuscript_part_of_section_complement_for_each_record([
             RELATED_ARTICLE_CONTENT_INPUT_DICT_1,
             RELATED_COLLECTION_CONTENT_INPUT_DICT_1,
             RELATED_PODCAST_CONTENT_INPUT_DICT_1
-        ])
+        ]))
         assert actual_result == (
             list(iter_elife_manuscript_part_of_section_complement_for_one_record(
                 RELATED_ARTICLE_CONTENT_INPUT_DICT_1
