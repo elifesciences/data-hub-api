@@ -48,7 +48,7 @@ DocmapElifeManuscriptOutput = TypedDict(
 DocmapPartOfComplement = TypedDict(
     'DocmapPartOfComplement',
     {
-        'type': Optional[str],
+        'type': str,
         'url': str,
         'title': Optional[str],
         'description': Optional[str],

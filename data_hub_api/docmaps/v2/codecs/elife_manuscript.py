@@ -103,6 +103,7 @@ def iter_elife_manuscript_part_of_section_complement_for_one_record(
     related_content: ApiRelatedContentInput
 ) -> Iterable[DocmapPartOfComplement]:
     if related_content['manuscript_id']:
+        assert related_content['manuscript_type']
         yield {
             'type': related_content['manuscript_type'],
             'url': 'https://elifesciences.org/articles/' + related_content['manuscript_id'],
