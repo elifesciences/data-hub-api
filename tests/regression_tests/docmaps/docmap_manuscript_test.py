@@ -19,7 +19,9 @@ MANUSCRIPT_ID_LIST = [
     # and it is also inside a collection:
     '88984',
     '91729',  # have related article
-    '86824'  # have related podcast
+    '86824',  # have related podcast
+    '80984',  # have both related article and podcast
+    '88266'  # have both related article and collection
 ]
 
 

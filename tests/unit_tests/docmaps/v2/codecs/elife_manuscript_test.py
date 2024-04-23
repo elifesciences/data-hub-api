@@ -1,4 +1,5 @@
 from datetime import datetime
+
 from data_hub_api.config import (
     DOI_ROOT_URL,
     ELECTRONIC_ARTICLE_IDENTIFIER_PREFIX,
@@ -13,7 +14,9 @@ from data_hub_api.docmaps.v2.codecs.elife_manuscript import (
     get_docmap_elife_manuscript_output_for_vor,
     get_elife_manuscript_electronic_article_identifier,
     get_elife_manuscript_part_of_section,
-    get_elife_manuscript_part_of_section_complement,
+    get_sorted_elife_manuscript_part_of_section_complement,
+    iter_elife_manuscript_part_of_section_complement_for_each_record,
+    iter_elife_manuscript_part_of_section_complement_for_one_record,
     get_elife_manuscript_subject_disciplines,
     get_elife_manuscript_version_doi,
     get_elife_manuscript_volume
@@ -21,16 +24,19 @@ from data_hub_api.docmaps.v2.codecs.elife_manuscript import (
 
 from tests.unit_tests.docmaps.v2.test_data import (
     COLLECTIONS_DICT_1,
-    COLLECTIONS_DICT_WITH_NO_VALUE_1,
     DOCMAPS_QUERY_RESULT_ITEM_1,
     DOCMAPS_QUERY_RESULT_ITEM_2,
     DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSION,
     MANUSCRIPT_VOR_VERSION_1,
-    PODCAST_DICT_1,
     PODCAST_DICT_WITH_NO_VALUE_1,
-    RELATED_ARTICLE_DICT_1,
-    RELATED_CONTENT_WITH_NO_VALUE_1,
-    RELATED_CONTENT_WITH_ALL_VALUE_1,
+    RELATED_ARTICLE_CONTENT_INPUT_DICT_1,
+    RELATED_ARTICLE_DOCMAP_OUTPUT_1,
+    RELATED_COLLECTION_CONTENT_INPUT_DICT_1,
+    RELATED_COLLECTION_DOCMAP_OUTPUT_1,
+    RELATED_CONTENT_DICT_WITH_NO_VALUE_1,
+    RELATED_CONTENT_DICT_WITH_ALL_VALUE_1,
+    RELATED_PODACST_DOCMAP_OUTPUT_1,
+    RELATED_PODCAST_CONTENT_INPUT_DICT_1,
     RP_PUBLICATION_TIMESTAMP_1,
     MANUSCRIPT_VERSION_1,
     SUBJECT_AREA_NAME_1,
@@ -143,100 +149,104 @@ class TestGetElifeManuscriptSubjectDisciplines:
         assert not result
 
 
-class TestGetElifeManuscriptPartOfSectionComplement:
+class TestIterElifeManuscriptPartOfSectionComplementForOneRecord:
     def test_should_have_complement_none_if_related_content_is_not_available(self):
-        result_without_related_content = get_elife_manuscript_part_of_section_complement(
-            RELATED_CONTENT_WITH_NO_VALUE_1
+        result_without_related_content = list(
+            iter_elife_manuscript_part_of_section_complement_for_one_record(
+                RELATED_CONTENT_DICT_WITH_NO_VALUE_1
+            )
         )
         assert not result_without_related_content
 
     def test_should_populate_complement_if_related_content_for_all_value_is_available(self):
-        result_with_related_content = get_elife_manuscript_part_of_section_complement(
-            RELATED_CONTENT_WITH_ALL_VALUE_1
+        result_with_related_content = list(
+            iter_elife_manuscript_part_of_section_complement_for_one_record(
+                RELATED_CONTENT_DICT_WITH_ALL_VALUE_1
+            )
         )
-        assert result_with_related_content == [{
-            'type': 'manuscript_type_1',
-            'url': 'https://elifesciences.org/articles/manuscript_id_1',
-            'title': 'manuscript_title_1',
-            'description': 'manuscript_authors_csv_1'
-        }, {
-            'type': 'Collection',
-            'url': (
-                'https://elifesciences.org/collections/'
-                + 'collection_id_1'
-                + '/meta-research-a-collection-of-articles'
-            ),
-            'title': 'collection_title_1',
-            'description': 'Edited by collection_curator_name_1 et al',
-            'thumbnail': 'collection_thumbnail_url_1'
-        }, {
-            'type': 'Podcast',
-            'url': 'https://elifesciences.org/podcast/episode111',
-            'title': 'podcast_title_1',
-            'description': 'podcast_desc_1'
-        }]
+        assert result_with_related_content == [
+            RELATED_ARTICLE_DOCMAP_OUTPUT_1,
+            RELATED_COLLECTION_DOCMAP_OUTPUT_1,
+            RELATED_PODACST_DOCMAP_OUTPUT_1
+        ]
 
     def test_should_populate_complement_if_only_related_article_data_available(self):
-        result_with_related_content = get_elife_manuscript_part_of_section_complement(
-            {**RELATED_ARTICLE_DICT_1,
-             **COLLECTIONS_DICT_WITH_NO_VALUE_1,
-             **PODCAST_DICT_WITH_NO_VALUE_1}
+        result_with_related_content = list(
+            iter_elife_manuscript_part_of_section_complement_for_one_record(
+                RELATED_ARTICLE_CONTENT_INPUT_DICT_1
+            )
         )
-        assert result_with_related_content == [{
-            'type': 'manuscript_type_1',
-            'url': 'https://elifesciences.org/articles/manuscript_id_1',
-            'title': 'manuscript_title_1',
-            'description': 'manuscript_authors_csv_1'
-        }]
+        assert result_with_related_content == [RELATED_ARTICLE_DOCMAP_OUTPUT_1]
 
     def test_should_populate_complement_if_only_collections_data_available(self):
-        result_with_related_content = get_elife_manuscript_part_of_section_complement(
-            {**RELATED_CONTENT_WITH_NO_VALUE_1,
-             **PODCAST_DICT_WITH_NO_VALUE_1,
-             **COLLECTIONS_DICT_1}
+        result_with_related_content = list(
+            iter_elife_manuscript_part_of_section_complement_for_one_record(
+                RELATED_COLLECTION_CONTENT_INPUT_DICT_1
+            )
         )
-        assert result_with_related_content == [{
-            'type': 'Collection',
-            'url': (
-                'https://elifesciences.org/collections/'
-                + 'collection_id_1'
-                + '/meta-research-a-collection-of-articles'
-            ),
-            'title': 'collection_title_1',
-            'description': 'Edited by collection_curator_name_1 et al',
-            'thumbnail': 'collection_thumbnail_url_1'
-        }]
+        assert result_with_related_content == [RELATED_COLLECTION_DOCMAP_OUTPUT_1]
 
     def test_should_populate_complement_if_only_podcast_data_available(self):
-        result_with_related_content = get_elife_manuscript_part_of_section_complement(
-            {**RELATED_CONTENT_WITH_NO_VALUE_1,
-             **COLLECTIONS_DICT_WITH_NO_VALUE_1,
-             **PODCAST_DICT_1}
+        result_with_related_content = list(
+            iter_elife_manuscript_part_of_section_complement_for_one_record(
+                RELATED_PODCAST_CONTENT_INPUT_DICT_1
+            )
         )
-        assert result_with_related_content == [{
-            'type': 'Podcast',
-            'url': 'https://elifesciences.org/podcast/episode111',
-            'title': 'podcast_title_1',
-            'description': 'podcast_desc_1'
-        }]
+        assert result_with_related_content == [RELATED_PODACST_DOCMAP_OUTPUT_1]
 
     def test_should_populate_complement_collection_description_without_et_al_when_false(self):
-        result_with_related_content = get_elife_manuscript_part_of_section_complement(
-            {**RELATED_CONTENT_WITH_NO_VALUE_1,
-             **PODCAST_DICT_WITH_NO_VALUE_1,
-             **COLLECTIONS_DICT_1,
-             'is_collection_curator_et_al': False}
+        result_with_related_content = list(
+            iter_elife_manuscript_part_of_section_complement_for_one_record(
+                {**RELATED_CONTENT_DICT_WITH_NO_VALUE_1,
+                 **PODCAST_DICT_WITH_NO_VALUE_1,
+                 **COLLECTIONS_DICT_1,
+                 'is_collection_curator_et_al': False}
+            )
         )
         assert result_with_related_content[0]['description'] == (
             'Edited by collection_curator_name_1'
         )
 
-    def test_should_return_none_if_the_related_content_is_none(self):
-        result = get_elife_manuscript_part_of_section_complement(None)
-        assert not result
+
+class TestGetElifeManuscriptPartOfSectionComplementForEachRecord:
+    def test_should_return_related_content_for_values_of_all_types_in_same_row(self):
+        actual_result = list(iter_elife_manuscript_part_of_section_complement_for_each_record(
+            [RELATED_CONTENT_DICT_WITH_ALL_VALUE_1]
+        ))
+        assert actual_result == list(
+            iter_elife_manuscript_part_of_section_complement_for_one_record(
+                RELATED_CONTENT_DICT_WITH_ALL_VALUE_1
+            )
+        )
+
+    def test_should_return_related_content_for_values_of_all_types_in_separate_rows(self):
+        actual_result = list(iter_elife_manuscript_part_of_section_complement_for_each_record([
+            RELATED_ARTICLE_CONTENT_INPUT_DICT_1,
+            RELATED_COLLECTION_CONTENT_INPUT_DICT_1,
+            RELATED_PODCAST_CONTENT_INPUT_DICT_1
+        ]))
+        assert actual_result == (
+            list(iter_elife_manuscript_part_of_section_complement_for_one_record(
+                RELATED_ARTICLE_CONTENT_INPUT_DICT_1
+            ))
+            + list(iter_elife_manuscript_part_of_section_complement_for_one_record(
+                RELATED_COLLECTION_CONTENT_INPUT_DICT_1
+            ))
+            + list(iter_elife_manuscript_part_of_section_complement_for_one_record(
+                RELATED_PODCAST_CONTENT_INPUT_DICT_1
+            ))
+        )
 
 
-class TestGetElifeManuscriptPartOfSection:
+class TestGetSortedElifeManuscriptPartOfSectionComplement:
+    def test_should_sort_itearble_by_url(self):
+        result = get_sorted_elife_manuscript_part_of_section_complement(
+            [{'url': 'url_3', 'title': 'title_3'}, {'url': 'url_2'}, {'url': 'url_1'}]
+        )
+        assert result == [{'url': 'url_1'}, {'url': 'url_2'}, {'url': 'url_3', 'title': 'title_3'}]
+
+
+class TestIterElifeManuscriptPartOfSection:
     def test_should_populate_elife_manuscript_part_of_section(self):
         result = get_elife_manuscript_part_of_section(
             query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1
@@ -253,9 +263,9 @@ class TestGetElifeManuscriptPartOfSection:
             'electronicArticleIdentifier': get_elife_manuscript_electronic_article_identifier(
                 DOCMAPS_QUERY_RESULT_ITEM_1
             ),
-            'complement': get_elife_manuscript_part_of_section_complement(
-                RELATED_CONTENT_WITH_NO_VALUE_1
-            )
+            'complement': list(iter_elife_manuscript_part_of_section_complement_for_one_record(
+                RELATED_CONTENT_DICT_WITH_NO_VALUE_1
+            ))
         }
 
     def test_should_populate_volume_id_caculated_by_first_publication_year_for_each_version(self):
@@ -289,8 +299,10 @@ class TestGetElifeManuscriptPartOfSection:
         result_with_related_content = get_elife_manuscript_part_of_section(
             query_result_item=DOCMAPS_QUERY_RESULT_ITEM_2
         )
-        assert result_with_related_content['complement'] == (
-            get_elife_manuscript_part_of_section_complement(RELATED_CONTENT_WITH_ALL_VALUE_1)
+        assert result_with_related_content['complement'] == list(
+            iter_elife_manuscript_part_of_section_complement_for_one_record(
+                RELATED_CONTENT_DICT_WITH_ALL_VALUE_1
+            )
         )
 
 

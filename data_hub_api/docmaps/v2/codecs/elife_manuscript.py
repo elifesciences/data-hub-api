@@ -1,4 +1,4 @@
-from typing import Optional, Sequence
+from typing import Iterable, Optional, Sequence
 from data_hub_api.config import (
     DOI_ROOT_URL,
     ELECTRONIC_ARTICLE_IDENTIFIER_PREFIX,
@@ -20,7 +20,6 @@ from data_hub_api.docmaps.v2.docmap_typing import (
     DocmapPublishedElifeManuscriptOutput,
     DocmapPublishedElifeManuscriptPartOf
 )
-from data_hub_api.utils.json import remove_key_with_none_value_only
 
 
 def get_elife_manuscript_version_doi(
@@ -100,49 +99,58 @@ def get_elife_manuscript_subject_disciplines(
     return None
 
 
-def get_elife_manuscript_part_of_section_complement(
-    related_content: Optional[ApiRelatedContentInput]
-) -> Optional[Sequence[DocmapPartOfComplement]]:
-    related_article_dict: Optional[dict] = None
-    collection_dict: Optional[dict] = None
-    podcast_dict: Optional[dict] = None
-    if related_content:
-        if related_content['manuscript_id']:
-            related_article_dict = {
-                'type': related_content['manuscript_type'],
-                'url': 'https://elifesciences.org/articles/' + related_content['manuscript_id'],
-                'title': related_content['manuscript_title'],
-                'description': related_content['manuscript_authors_csv']
-            }
-        if related_content['collection_id']:
-            assert related_content['collection_curator_name']
-            collection_dict = {
-                'type': 'Collection',
-                'url': ('https://elifesciences.org/collections/'
-                        + related_content['collection_id']
-                        + '/meta-research-a-collection-of-articles'),
-                'title': related_content['collection_title'],
-                'description': (
-                    'Edited by ' + related_content['collection_curator_name'] + ' et al'
-                    if related_content['is_collection_curator_et_al']
-                    else 'Edited by ' + related_content['collection_curator_name']
-                ),
-                'thumbnail': related_content['collection_thumbnail_url']
-            }
-        if related_content['podcast_id']:
-            podcast_dict = {
-                'type': 'Podcast',
-                'url': (
-                    'https://elifesciences.org/podcast/episode'
-                    + str(related_content['podcast_id'])
-                ),
-                'title': related_content['podcast_title'],
-                'description': related_content['podcast_desc']
-            }
-        return remove_key_with_none_value_only(
-            [related_article_dict, collection_dict, podcast_dict]
-        )  # type: ignore
-    return None
+def iter_elife_manuscript_part_of_section_complement_for_one_record(
+    related_content: ApiRelatedContentInput
+) -> Iterable[DocmapPartOfComplement]:
+    if related_content['manuscript_id']:
+        assert related_content['manuscript_type']
+        yield {
+            'type': related_content['manuscript_type'],
+            'url': 'https://elifesciences.org/articles/' + related_content['manuscript_id'],
+            'title': related_content['manuscript_title'],
+            'description': related_content['manuscript_authors_csv']
+        }
+    if related_content['collection_id']:
+        assert related_content['collection_curator_name']
+        yield {
+            'type': 'Collection',
+            'url': ('https://elifesciences.org/collections/'
+                    + related_content['collection_id']
+                    + '/meta-research-a-collection-of-articles'),
+            'title': related_content['collection_title'],
+            'description': (
+                'Edited by ' + related_content['collection_curator_name'] + ' et al'
+                if related_content['is_collection_curator_et_al']
+                else 'Edited by ' + related_content['collection_curator_name']
+            ),
+            'thumbnail': related_content['collection_thumbnail_url']
+        }
+    if related_content['podcast_id']:
+        yield {
+            'type': 'Podcast',
+            'url': (
+                'https://elifesciences.org/podcast/episode'
+                + str(related_content['podcast_id'])
+            ),
+            'title': related_content['podcast_title'],
+            'description': related_content['podcast_desc']
+        }
+
+
+def iter_elife_manuscript_part_of_section_complement_for_each_record(
+    related_content_array: Optional[Sequence[ApiRelatedContentInput]]
+) -> Iterable[DocmapPartOfComplement]:
+    if related_content_array:
+        for related_content in related_content_array:
+            yield from iter_elife_manuscript_part_of_section_complement_for_one_record(
+                related_content
+            )
+
+
+def get_sorted_elife_manuscript_part_of_section_complement(
+    complement_iterable: Iterable[DocmapPartOfComplement]
+) -> Sequence[DocmapPartOfComplement]:
+    return sorted(complement_iterable, key=lambda complement: complement['url'])
 
 
 def get_elife_manuscript_part_of_section(
@@ -150,11 +158,6 @@ def get_elife_manuscript_part_of_section(
 ) -> DocmapPublishedElifeManuscriptPartOf:
     first_manuscript_version = query_result_item['manuscript_versions'][0]
     assert first_manuscript_version['rp_publication_timestamp']
-    related_content = (
-        query_result_item['related_content'][0]
-        if query_result_item['related_content']
-        else None
-    )
     return {
         'type': 'manuscript',
         'doi': query_result_item['elife_doi'],
@@ -167,7 +170,11 @@ def get_elife_manuscript_part_of_section(
         'electronicArticleIdentifier': get_elife_manuscript_electronic_article_identifier(
             query_result_item
         ),
-        'complement': get_elife_manuscript_part_of_section_complement(related_content)
+        'complement': get_sorted_elife_manuscript_part_of_section_complement(
+            iter_elife_manuscript_part_of_section_complement_for_each_record(
+                query_result_item['related_content']
+            )
+        )
     }
 
 

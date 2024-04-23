@@ -265,7 +265,8 @@
                                 ],
                                 "published": "2023-07-13T14:00:00+00:00",
                                 "volumeIdentifier": "12",
-                                "electronicArticleIdentifier": "RP86873"
+                                "electronicArticleIdentifier": "RP86873",
+                                "complement": []
                             }
                         }
                     ]
@@ -532,7 +533,8 @@
                                 ],
                                 "published": "2023-07-13T14:00:00+00:00",
                                 "volumeIdentifier": "12",
-                                "electronicArticleIdentifier": "RP86873"
+                                "electronicArticleIdentifier": "RP86873",
+                                "complement": []
                             }
                         }
                     ]
