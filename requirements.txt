@@ -1,5 +1,5 @@
 fastapi==0.88.0
-objsize==0.6.1
+objsize==0.7.0
 uvicorn[standard]==0.20.0
 google-cloud-bigquery==3.4.1
 pandas==1.5.2
