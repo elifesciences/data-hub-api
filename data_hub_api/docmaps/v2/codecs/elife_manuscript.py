@@ -146,6 +146,12 @@ def iter_elife_manuscript_part_of_section_complement_for_each_record(
             )
 
 
+def get_sorted_elife_manuscript_part_of_section_complement(
+    complement_iterable: Iterable[DocmapPartOfComplement]
+) -> Sequence[DocmapPartOfComplement]:
+    return sorted(complement_iterable, key=lambda complement: complement['url'])
+
+
 def get_elife_manuscript_part_of_section(
     query_result_item: ApiInput
 ) -> DocmapPublishedElifeManuscriptPartOf:
@@ -163,9 +169,11 @@ def get_elife_manuscript_part_of_section(
         'electronicArticleIdentifier': get_elife_manuscript_electronic_article_identifier(
             query_result_item
         ),
-        'complement': list(iter_elife_manuscript_part_of_section_complement_for_each_record(
-            query_result_item['related_content']
-        ))
+        'complement': get_sorted_elife_manuscript_part_of_section_complement(
+            iter_elife_manuscript_part_of_section_complement_for_each_record(
+                query_result_item['related_content']
+            )
+        )
     }
 
 

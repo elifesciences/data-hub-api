@@ -14,6 +14,7 @@ from data_hub_api.docmaps.v2.codecs.elife_manuscript import (
     get_docmap_elife_manuscript_output_for_vor,
     get_elife_manuscript_electronic_article_identifier,
     get_elife_manuscript_part_of_section,
+    get_sorted_elife_manuscript_part_of_section_complement,
     iter_elife_manuscript_part_of_section_complement_for_each_record,
     iter_elife_manuscript_part_of_section_complement_for_one_record,
     get_elife_manuscript_subject_disciplines,
@@ -237,7 +238,15 @@ class TestGetElifeManuscriptPartOfSectionComplementForEachRecord:
         )
 
 
-class TestGetElifeManuscriptPartOfSection:
+class TestGetSortedElifeManuscriptPartOfSectionComplement:
+    def test_should_sort_itearble_by_url(self):
+        result = get_sorted_elife_manuscript_part_of_section_complement(
+            [{'url': 'url_3', 'title': 'title_3'}, {'url': 'url_2'}, {'url': 'url_1'}]
+        )
+        assert result == [{'url': 'url_1'}, {'url': 'url_2'}, {'url': 'url_3', 'title': 'title_3'}]
+
+
+class TestIterElifeManuscriptPartOfSection:
     def test_should_populate_elife_manuscript_part_of_section(self):
         result = get_elife_manuscript_part_of_section(
             query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1
