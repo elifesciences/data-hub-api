@@ -147,13 +147,15 @@ COLLECTIONS_DICT_1: dict = {
 PODCAST_DICT_WITH_NO_VALUE_1: dict = {
     'podcast_id': None,
     'podcast_title': None,
-    'podcast_desc': None
+    'podcast_desc': None,
+    'podcast_chapter_title': None,
+    'podcast_chapter_time': None
 }
 
 PODCAST_DICT_1: dict = {
     'podcast_id': 111,
-    'podcast_title': 'podcast_title_1',
-    'podcast_desc': 'podcast_desc_1'
+    'podcast_chapter_title': 'podcast_chapter_title_1',
+    'podcast_chapter_time': 222
 }
 
 RELATED_CONTENT_DICT_WITH_NO_VALUE_1: ApiRelatedContentInput = {
@@ -207,9 +209,8 @@ RELATED_COLLECTION_DOCMAP_OUTPUT_1: DocmapPartOfComplement = {
 
 RELATED_PODACST_DOCMAP_OUTPUT_1: DocmapPartOfComplement = {
     'type': 'Podcast',
-    'url': 'https://elifesciences.org/podcast/episode111',
-    'title': 'podcast_title_1',
-    'description': 'podcast_desc_1'
+    'url': 'https://elifesciences.org/podcast/episode111#222',
+    'title': 'podcast_chapter_title_1'
 }
 
 PUBLISHER_DICT_1 = {"id": "publisher_1"}
