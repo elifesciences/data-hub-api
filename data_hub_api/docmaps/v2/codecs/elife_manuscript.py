@@ -1,4 +1,4 @@
-from typing import Optional, Sequence
+from typing import Iterable, Optional, Sequence
 from data_hub_api.config import (
     DOI_ROOT_URL,
     ELECTRONIC_ARTICLE_IDENTIFIER_PREFIX,
@@ -20,7 +20,6 @@ from data_hub_api.docmaps.v2.docmap_typing import (
     DocmapPublishedElifeManuscriptOutput,
     DocmapPublishedElifeManuscriptPartOf
 )
-from data_hub_api.utils.json import remove_key_with_none_value_only
 
 
 def get_elife_manuscript_version_doi(
@@ -100,15 +99,12 @@ def get_elife_manuscript_subject_disciplines(
     return None
 
 
-def get_elife_manuscript_part_of_section_complement_for_one_record(
+def iter_elife_manuscript_part_of_section_complement_for_one_record(
     related_content: Optional[ApiRelatedContentInput]
-) -> Optional[Sequence[DocmapPartOfComplement]]:
-    related_article_dict: Optional[dict] = None
-    collection_dict: Optional[dict] = None
-    podcast_dict: Optional[dict] = None
+) -> Iterable[DocmapPartOfComplement]:
     if related_content:
         if related_content['manuscript_id']:
-            related_article_dict = {
+            yield {
                 'type': related_content['manuscript_type'],
                 'url': 'https://elifesciences.org/articles/' + related_content['manuscript_id'],
                 'title': related_content['manuscript_title'],
@@ -116,7 +112,7 @@ def get_elife_manuscript_part_of_section_complement_for_one_record(
             }
         if related_content['collection_id']:
             assert related_content['collection_curator_name']
-            collection_dict = {
+            yield {
                 'type': 'Collection',
                 'url': ('https://elifesciences.org/collections/'
                         + related_content['collection_id']
@@ -130,7 +126,7 @@ def get_elife_manuscript_part_of_section_complement_for_one_record(
                 'thumbnail': related_content['collection_thumbnail_url']
             }
         if related_content['podcast_id']:
-            podcast_dict = {
+            yield {
                 'type': 'Podcast',
                 'url': (
                     'https://elifesciences.org/podcast/episode'
@@ -139,10 +135,6 @@ def get_elife_manuscript_part_of_section_complement_for_one_record(
                 'title': related_content['podcast_title'],
                 'description': related_content['podcast_desc']
             }
-        return remove_key_with_none_value_only(
-            [related_article_dict, collection_dict, podcast_dict]
-        )  # type: ignore
-    return []
 
 
 def get_elife_manuscript_part_of_section_complement_for_each_record(
@@ -151,11 +143,10 @@ def get_elife_manuscript_part_of_section_complement_for_each_record(
     complement_list: list = []
     if related_content_array:
         for related_content in related_content_array:
-            complement = get_elife_manuscript_part_of_section_complement_for_one_record(
+            complement = iter_elife_manuscript_part_of_section_complement_for_one_record(
                 related_content
             )
-            if complement:
-                complement_list.extend(complement)
+            complement_list.extend(complement)
     return complement_list
 
 
