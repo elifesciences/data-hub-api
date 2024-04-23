@@ -131,9 +131,10 @@ def iter_elife_manuscript_part_of_section_complement_for_one_record(
             'url': (
                 'https://elifesciences.org/podcast/episode'
                 + str(related_content['podcast_id'])
+                + '#'
+                + str(related_content['podcast_chapter_time'])
             ),
-            'title': related_content['podcast_title'],
-            'description': related_content['podcast_desc']
+            'title': related_content['podcast_chapter_title']
         }
 
 
