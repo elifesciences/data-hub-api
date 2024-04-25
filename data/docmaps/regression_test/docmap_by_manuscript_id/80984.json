@@ -26,7 +26,13 @@
                             "identifier": "80984",
                             "doi": "10.7554/eLife.80984.1",
                             "versionIdentifier": "1",
-                            "license": "http://creativecommons.org/licenses/by/4.0/"
+                            "license": "http://creativecommons.org/licenses/by/4.0/",
+                            "content": [
+                                {
+                                    "type": "computer-file",
+                                    "url": "s3://elife-s3-bucket/manuscript-rp-12345-v1.meca"
+                                }
+                            ]
                         }
                     ]
                 }
@@ -312,7 +318,13 @@
                                         "title": "Listen to Stacey Harmer explain how sunflowers coordinate their flowering patterns."
                                     }
                                 ]
-                            }
+                            },
+                            "content": [
+                                {
+                                    "type": "computer-file",
+                                    "url": "s3://elife-s3-bucket/manuscript-rp-with-reviews-12345-v1.meca"
+                                }
+                            ]
                         }
                     ]
                 }
