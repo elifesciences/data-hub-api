@@ -241,13 +241,13 @@
                                 "electronicArticleIdentifier": "RP88266",
                                 "complement": [
                                     {
-                                        "type": "Insight",
+                                        "type": "insight",
                                         "url": "https://elifesciences.org/articles/94382",
                                         "title": "Genetics: From mouse to human",
                                         "description": "Arya Mani"
                                     },
                                     {
-                                        "type": "Collection",
+                                        "type": "collection",
                                         "url": "https://elifesciences.org/collections/560cc395/meta-research-a-collection-of-articles",
                                         "title": "Special Issue: Systems Genetics",
                                         "description": "Edited by David James et al",
@@ -544,13 +544,13 @@
                                 "electronicArticleIdentifier": "RP88266",
                                 "complement": [
                                     {
-                                        "type": "Insight",
+                                        "type": "insight",
                                         "url": "https://elifesciences.org/articles/94382",
                                         "title": "Genetics: From mouse to human",
                                         "description": "Arya Mani"
                                     },
                                     {
-                                        "type": "Collection",
+                                        "type": "collection",
                                         "url": "https://elifesciences.org/collections/560cc395/meta-research-a-collection-of-articles",
                                         "title": "Special Issue: Systems Genetics",
                                         "description": "Edited by David James et al",

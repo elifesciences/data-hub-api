@@ -20,7 +20,7 @@
         "actions": [
         {
             "participants": [
-            
+
             ],
             "outputs": [
             {
@@ -200,7 +200,7 @@
         },
         {
             "participants": [
-            
+
             ],
             "outputs": [
             {
@@ -252,7 +252,7 @@
         "actions": [
         {
             "participants": [
-            
+
             ],
             "outputs": [
             {
@@ -275,7 +275,7 @@
                 "electronicArticleIdentifier": "RP86824",
                 "complement": [
                     {
-                        "type": "Podcast",
+                        "type": "podcastChapterEpisode",
                         "url": "https://elifesciences.org/podcast/episode90#871",
                         "title": "Listen to Gen-Sheng Feng talk about intercellsomes and cancer"
                     }
@@ -326,7 +326,7 @@
         "actions": [
         {
             "participants": [
-            
+
             ],
             "outputs": [
             {
@@ -507,7 +507,7 @@
         },
         {
             "participants": [
-            
+
             ],
             "outputs": [
             {
@@ -559,7 +559,7 @@
         "actions": [
         {
             "participants": [
-            
+
             ],
             "outputs": [
             {
@@ -582,7 +582,7 @@
                 "electronicArticleIdentifier": "RP86824",
                 "complement": [
                     {
-                        "type": "Podcast",
+                        "type": "podcastChapterEpisode",
                         "url": "https://elifesciences.org/podcast/episode90#871",
                         "title": "Listen to Gen-Sheng Feng talk about intercellsomes and cancer"
                     }
@@ -633,7 +633,7 @@
         "actions": [
         {
             "participants": [
-            
+
             ],
             "outputs": [
             {

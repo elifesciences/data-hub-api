@@ -243,7 +243,7 @@
                   "electronicArticleIdentifier": "RP91729",
                   "complement": [
                     {
-                      "type": "Insight",
+                      "type": "insight",
                       "url": "https://elifesciences.org/articles/97247",
                       "title": "Vascular Endothelium: More than just a simple barrier",
                       "description": "Erandi Velazquez-Miranda, Ming He"
@@ -507,7 +507,7 @@
                   "electronicArticleIdentifier": "RP91729",
                   "complement": [
                     {
-                      "type": "Insight",
+                      "type": "insight",
                       "url": "https://elifesciences.org/articles/97247",
                       "title": "Vascular Endothelium: More than just a simple barrier",
                       "description": "Erandi Velazquez-Miranda, Ming He"

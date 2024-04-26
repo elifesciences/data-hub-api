@@ -242,7 +242,7 @@
                                 "electronicArticleIdentifier": "RP87198",
                                 "complement": [
                                     {
-                                        "type": "Insight",
+                                        "type": "insight",
                                         "url": "https://elifesciences.org/articles/90216",
                                         "title": "Deep-sea Adaptation: Surviving under pressure",
                                         "description": "Ying Wang, Liandong Yang"
@@ -539,7 +539,7 @@
                                 "electronicArticleIdentifier": "RP87198",
                                 "complement": [
                                     {
-                                        "type": "Insight",
+                                        "type": "insight",
                                         "url": "https://elifesciences.org/articles/90216",
                                         "title": "Deep-sea Adaptation: Surviving under pressure",
                                         "description": "Ying Wang, Liandong Yang"
