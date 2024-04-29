@@ -105,12 +105,11 @@ def iter_elife_manuscript_part_of_section_complement_for_one_record(
 ) -> Iterable[DocmapPartOfComplement]:
     if related_content['manuscript_id']:
         assert related_content['manuscript_type']
-        manuscript_type = related_content['manuscript_type'].lower().strip()
-        cleaned_manuscript_type = re.sub(r'[^a-z0-9 ]', ' ', manuscript_type)
-        manuscript_type_parts = re.split(r'\s+', cleaned_manuscript_type)
-        capitalized_parts = [part.capitalize() for part in manuscript_type_parts[1:]]
+        manuscript_type_parts = re.findall(r'\w+', related_content['manuscript_type'])
+        manuscript_type = manuscript_type_parts[0].lower()
+        manuscript_type += ''.join([part.capitalize() for part in manuscript_type_parts[1:]])
         yield {
-            'type': manuscript_type_parts[0] + ''.join(capitalized_parts),
+            'type': manuscript_type,
             'url': 'https://elifesciences.org/articles/' + related_content['manuscript_id'],
             'title': related_content['manuscript_title'],
             'description': related_content['manuscript_authors_csv']

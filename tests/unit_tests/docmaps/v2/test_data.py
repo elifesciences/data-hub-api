@@ -123,7 +123,7 @@ RELATED_ARTICLE_DICT_WITH_NO_VALUE_1: dict = {
 
 RELATED_ARTICLE_DICT_1: dict = {
     'manuscript_id': 'manuscript_id_1',
-    'manuscript_type': 'manuscript_type_1',
+    'manuscript_type': 'Manuscript Type 1',
     'manuscript_title': 'manuscript_title_1',
     'manuscript_authors_csv': 'manuscript_authors_csv_1'
 }
