@@ -123,7 +123,7 @@ RELATED_ARTICLE_DICT_WITH_NO_VALUE_1: dict = {
 
 RELATED_ARTICLE_DICT_1: dict = {
     'manuscript_id': 'manuscript_id_1',
-    'manuscript_type': 'manuscript_type_1',
+    'manuscript_type': 'Manuscript TYPE 1',
     'manuscript_title': 'manuscript_title_1',
     'manuscript_authors_csv': 'manuscript_authors_csv_1'
 }
@@ -187,14 +187,14 @@ RELATED_PODCAST_CONTENT_INPUT_DICT_1: ApiRelatedContentInput = {
 }
 
 RELATED_ARTICLE_DOCMAP_OUTPUT_1: DocmapPartOfComplement = {
-    'type': 'manuscript_type_1',
+    'type': 'manuscriptType1',
     'url': 'https://elifesciences.org/articles/manuscript_id_1',
     'title': 'manuscript_title_1',
     'description': 'manuscript_authors_csv_1'
 }
 
 RELATED_COLLECTION_DOCMAP_OUTPUT_1: DocmapPartOfComplement = {
-    'type': 'Collection',
+    'type': 'collection',
     'url': (
         'https://elifesciences.org/collections/'
         + 'collection_id_1'
@@ -206,7 +206,7 @@ RELATED_COLLECTION_DOCMAP_OUTPUT_1: DocmapPartOfComplement = {
 }
 
 RELATED_PODACST_DOCMAP_OUTPUT_1: DocmapPartOfComplement = {
-    'type': 'Podcast',
+    'type': 'podcastChapterEpisode',
     'url': 'https://elifesciences.org/podcast/episode111#222',
     'title': 'podcast_chapter_title_1'
 }

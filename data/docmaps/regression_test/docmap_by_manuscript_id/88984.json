@@ -274,7 +274,7 @@
                                 "electronicArticleIdentifier": "RP88984",
                                 "complement": [
                                     {
-                                        "type": "Collection",
+                                        "type": "collection",
                                         "url":"https://elifesciences.org/collections/8d233d47/meta-research-a-collection-of-articles",
                                         "title": "Meta-Research: A Collection of Articles",
                                         "description": "Edited by Peter A Rodgers",
@@ -608,7 +608,7 @@
                                 "electronicArticleIdentifier": "RP88984",
                                 "complement": [
                                     {
-                                        "type": "Collection",
+                                        "type": "collection",
                                         "url":"https://elifesciences.org/collections/8d233d47/meta-research-a-collection-of-articles",
                                         "title": "Meta-Research: A Collection of Articles",
                                         "description": "Edited by Peter A Rodgers",
@@ -946,7 +946,7 @@
                                 "electronicArticleIdentifier": "RP88984",
                                 "complement": [
                                     {
-                                        "type": "Collection",
+                                        "type": "collection",
                                         "url":"https://elifesciences.org/collections/8d233d47/meta-research-a-collection-of-articles",
                                         "title": "Meta-Research: A Collection of Articles",
                                         "description": "Edited by Peter A Rodgers",

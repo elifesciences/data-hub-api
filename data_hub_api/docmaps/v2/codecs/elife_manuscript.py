@@ -1,3 +1,4 @@
+import re
 from typing import Iterable, Optional, Sequence
 from data_hub_api.config import (
     DOI_ROOT_URL,
@@ -104,8 +105,11 @@ def iter_elife_manuscript_part_of_section_complement_for_one_record(
 ) -> Iterable[DocmapPartOfComplement]:
     if related_content['manuscript_id']:
         assert related_content['manuscript_type']
+        manuscript_type_parts = re.findall(r'\w+', related_content['manuscript_type'])
+        manuscript_type = manuscript_type_parts[0].lower()
+        manuscript_type += ''.join([part.capitalize() for part in manuscript_type_parts[1:]])
         yield {
-            'type': related_content['manuscript_type'],
+            'type': manuscript_type,
             'url': 'https://elifesciences.org/articles/' + related_content['manuscript_id'],
             'title': related_content['manuscript_title'],
             'description': related_content['manuscript_authors_csv']
@@ -113,7 +117,7 @@ def iter_elife_manuscript_part_of_section_complement_for_one_record(
     if related_content['collection_id']:
         assert related_content['collection_curator_name']
         yield {
-            'type': 'Collection',
+            'type': 'collection',
             'url': ('https://elifesciences.org/collections/'
                     + related_content['collection_id']
                     + '/meta-research-a-collection-of-articles'),
@@ -127,7 +131,7 @@ def iter_elife_manuscript_part_of_section_complement_for_one_record(
         }
     if related_content['podcast_id']:
         yield {
-            'type': 'Podcast',
+            'type': 'podcastChapterEpisode',
             'url': (
                 'https://elifesciences.org/podcast/episode'
                 + str(related_content['podcast_id'])
