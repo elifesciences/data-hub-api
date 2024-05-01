@@ -316,7 +316,7 @@
                             "content": [
                                 {
                                     "type": "computer-file",
-                                    "url": "s3://elife-s3-bucket/manuscript-rp-with-reviews-12345-v1.meca"
+                                    "url": "s3://prod-elife-epp-meca/reviewed-preprints/86284-v1-meca.zip"
                                 }
                             ]
                         }
