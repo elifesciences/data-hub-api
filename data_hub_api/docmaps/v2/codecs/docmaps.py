@@ -284,9 +284,8 @@ def iter_docmap_steps_for_query_result_item(query_result_item: ApiInput) -> Iter
                         query_result_item,
                         manuscript_version
                     )
-        else:
-            previous_manuscript_version = query_result_item['manuscript_versions'][index - 1]
-            assert manuscript_version['position_in_overall_stage'] > 1
+        if manuscript_version['vor_publication_date'] and index == len(manuscript_versions) - 1:
+            previous_manuscript_version = manuscript_versions[index - 1]
             yield get_docmaps_step_for_vor_published_status(
                 query_result_item,
                 manuscript_version,

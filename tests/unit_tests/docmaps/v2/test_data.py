@@ -15,6 +15,7 @@ LONG_MANUSCRIPT_ID_1 = 'long_manuscript_id'
 LONG_MANUSCRIPT_ID_2 = 'long_manuscript_id_R1'
 
 LONG_MANUSCRIPT_VOR_ID_1 = 'long_manuscript-VOR-id'
+LONG_MANUSCRIPT_VOR_ID_FOR_OPT_INS_1 = 'long_manuscript-id-R1'
 
 DOI_1 = '10.1101.test/doi1'
 DOI_2 = '10.1101.test/doi2'
