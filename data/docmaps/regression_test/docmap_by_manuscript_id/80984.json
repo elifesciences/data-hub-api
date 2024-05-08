@@ -365,9 +365,9 @@
                     "outputs": [
                         {
                             "type": "version-of-record",
-                            "doi": "10.7554/eLife.80984.1",
+                            "doi": "10.7554/eLife.80984.2",
                             "published": "2023-01-13",
-                            "url": "https://doi.org/10.7554/eLife.80984.1",
+                            "url": "https://doi.org/10.7554/eLife.80984.2",
                             "content": [
                                 {
                                     "type": "web-page",
@@ -382,7 +382,7 @@
                 {
                     "item": {
                         "type": "version-of-record",
-                        "doi": "10.7554/eLife.80984.1",
+                        "doi": "10.7554/eLife.80984.2",
                         "versionIdentifier": "1"
                     },
                     "status": "vor-published"
