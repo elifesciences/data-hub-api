@@ -217,14 +217,12 @@ def get_docmaps_step_for_manuscript_published_status(
 
 def get_docmap_assertions_for_vor_published_step(
     query_result_item: ApiInput,
-    manuscript_version: ApiManuscriptVersionInput,
-    is_vor_for_opt_ins: bool = False
+    manuscript_version: ApiManuscriptVersionInput
 ) -> Sequence[DocmapAssertion]:
     return [{
         'item': get_docmap_elife_manuscript_doi_assertion_item_for_vor(
             query_result_item=query_result_item,
-            manuscript_version=manuscript_version,
-            is_vor_for_opt_ins=is_vor_for_opt_ins
+            manuscript_version=manuscript_version
         ),
         'status': 'vor-published'
     }]
@@ -232,15 +230,13 @@ def get_docmap_assertions_for_vor_published_step(
 
 def get_docmap_actions_for_vor_published_step(
     query_result_item: ApiInput,
-    manuscript_version: ApiManuscriptVersionInput,
-    is_vor_for_opt_ins: bool = False
+    manuscript_version: ApiManuscriptVersionInput
 ) -> Sequence[DocmapAction]:
     return [{
         'participants': [],
         'outputs': [get_docmap_elife_manuscript_output_for_vor(
             query_result_item=query_result_item,
-            manuscript_version=manuscript_version,
-            is_vor_for_opt_ins=is_vor_for_opt_ins
+            manuscript_version=manuscript_version
         )]
     }]
 
@@ -248,62 +244,48 @@ def get_docmap_actions_for_vor_published_step(
 def get_docmaps_step_for_vor_published_status(
     query_result_item: ApiInput,
     manuscript_version: ApiManuscriptVersionInput,
-    previous_manuscript_version: ApiManuscriptVersionInput,
-    is_vor_for_opt_ins: bool = False
 ) -> DocmapStep:
     return {
         'actions': get_docmap_actions_for_vor_published_step(
             query_result_item=query_result_item,
-            manuscript_version=manuscript_version,
-            is_vor_for_opt_ins=is_vor_for_opt_ins
+            manuscript_version=manuscript_version
         ),
         'assertions': get_docmap_assertions_for_vor_published_step(
             query_result_item=query_result_item,
-            manuscript_version=manuscript_version,
-            is_vor_for_opt_ins=is_vor_for_opt_ins
+            manuscript_version=manuscript_version
         ),
         'inputs': [get_docmap_elife_manuscript_input(
             query_result_item=query_result_item,
-            manuscript_version=previous_manuscript_version
+            manuscript_version=manuscript_version
         )]
     }
 
 
-def is_manuscript_vor_from_new_site(long_manuscript_identifier: str) -> bool:
-    return ('-VOR-' in long_manuscript_identifier)
-
-
 def iter_docmap_steps_for_query_result_item(query_result_item: ApiInput) -> Iterable[DocmapStep]:
-    manuscript_versions = query_result_item['manuscript_versions']
+    manuscript_versions = [
+        manuscript_version
+        for manuscript_version in query_result_item['manuscript_versions']
+        if '-VOR-' not in manuscript_version['long_manuscript_identifier']
+    ]
     for index, manuscript_version in enumerate(manuscript_versions):
-        if not is_manuscript_vor_from_new_site(manuscript_version['long_manuscript_identifier']):
-            yield get_docmaps_step_for_under_review_status(query_result_item, manuscript_version)
-            if manuscript_version['evaluations']:
-                if manuscript_version['position_in_overall_stage'] == 1:
-                    yield get_docmaps_step_for_peer_reviewed_status(
-                        query_result_item,
-                        manuscript_version
-                    )
-                else:
-                    yield get_docmaps_step_for_revised_status(query_result_item, manuscript_version)
-                if manuscript_version['rp_publication_timestamp']:
-                    yield get_docmaps_step_for_manuscript_published_status(
-                        query_result_item,
-                        manuscript_version
-                    )
+        yield get_docmaps_step_for_under_review_status(query_result_item, manuscript_version)
+        if manuscript_version['evaluations']:
+            if manuscript_version['position_in_overall_stage'] == 1:
+                yield get_docmaps_step_for_peer_reviewed_status(
+                    query_result_item=query_result_item,
+                    manuscript_version=manuscript_version
+                )
+            else:
+                yield get_docmaps_step_for_revised_status(query_result_item, manuscript_version)
+            if manuscript_version['rp_publication_timestamp']:
+                yield get_docmaps_step_for_manuscript_published_status(
+                    query_result_item=query_result_item,
+                    manuscript_version=manuscript_version
+                )
         if manuscript_version['vor_publication_date'] and index == len(manuscript_versions) - 1:
-            is_vor_for_opt_ins = False
-            previous_manuscript_version = manuscript_versions[index - 1]
-            if not is_manuscript_vor_from_new_site(
-                manuscript_version['long_manuscript_identifier']
-            ):
-                is_vor_for_opt_ins = True
-                previous_manuscript_version = manuscript_version
             yield get_docmaps_step_for_vor_published_status(
-                query_result_item,
-                manuscript_version,
-                previous_manuscript_version,
-                is_vor_for_opt_ins
+                query_result_item=query_result_item,
+                manuscript_version=manuscript_version
             )
 
 
