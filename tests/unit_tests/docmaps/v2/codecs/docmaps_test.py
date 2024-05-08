@@ -578,10 +578,10 @@ class TestGetDocmapsItemForQueryResultItem:
         }]
 
     def test_should_populate_inputs_for_vor_published_step_for_opt_ins(self):
-        manuscript_versions = [
-            {**MANUSCRIPT_VERSION_WITH_EVALUATIONS_1,
-             'vor_publication_date': VOR_PUBLICATION_DATE_1}
-        ]
+        manuscript_versions = [{
+            **MANUSCRIPT_VERSION_WITH_EVALUATIONS_1,
+            'vor_publication_date': VOR_PUBLICATION_DATE_1
+        }]
         query_result_item = {
             **DOCMAPS_QUERY_RESULT_ITEM_1,
             'manuscript_versions': manuscript_versions
