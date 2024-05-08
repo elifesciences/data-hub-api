@@ -54,7 +54,7 @@ def get_docmap_elife_manuscript_doi_assertion_item(
         'doi': get_elife_manuscript_version_doi(
             elife_doi=query_result_item['elife_doi'],
             elife_doi_version_str=manuscript_version['elife_doi_version_str'],
-            is_vor_for_opt_ins = is_vor_for_opt_ins
+            is_vor_for_opt_ins=is_vor_for_opt_ins
         ),
         'versionIdentifier': get_elife_manuscript_version(
             manuscript_version['elife_doi_version_str'],
@@ -89,7 +89,7 @@ def get_docmap_elife_manuscript_output(
         'doi': get_elife_manuscript_version_doi(
             elife_doi=query_result_item['elife_doi'],
             elife_doi_version_str=manuscript_version['elife_doi_version_str'],
-            is_vor_for_opt_ins = is_vor_for_opt_ins
+            is_vor_for_opt_ins=is_vor_for_opt_ins
         ),
         'versionIdentifier': get_elife_manuscript_version(
             manuscript_version['elife_doi_version_str'],

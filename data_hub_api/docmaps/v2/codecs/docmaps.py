@@ -294,7 +294,9 @@ def iter_docmap_steps_for_query_result_item(query_result_item: ApiInput) -> Iter
         if manuscript_version['vor_publication_date'] and index == len(manuscript_versions) - 1:
             is_vor_for_opt_ins = False
             previous_manuscript_version = manuscript_versions[index - 1]
-            if not is_manuscript_vor_from_new_site(manuscript_version['long_manuscript_identifier']):
+            if not is_manuscript_vor_from_new_site(
+                manuscript_version['long_manuscript_identifier']
+            ):
                 is_vor_for_opt_ins = True
                 previous_manuscript_version = manuscript_version
             yield get_docmaps_step_for_vor_published_status(
