@@ -624,7 +624,8 @@ class TestGetDocmapsItemForQueryResultItem:
         vor_published_step = docmaps_item['steps']['_:b6']
         assert vor_published_step['assertions'] == get_docmap_assertions_for_vor_published_step(
             query_result_item=query_result_item,
-            manuscript_version=manuscript_versions[1]
+            manuscript_version=manuscript_versions[1],
+            is_vor_for_opt_ins=True
         )
 
     def test_should_populate_actions_for_vor_published_step(self):
@@ -660,7 +661,8 @@ class TestGetDocmapsItemForQueryResultItem:
         vor_published_step = docmaps_item['steps']['_:b6']
         assert vor_published_step['actions'] == get_docmap_actions_for_vor_published_step(
             query_result_item=query_result_item,
-            manuscript_version=manuscript_versions[1]
+            manuscript_version=manuscript_versions[1],
+            is_vor_for_opt_ins=True
         )
 
     def test_should_not_have_first_manuscript_published_step_if_publication_timestamp_not_provided(

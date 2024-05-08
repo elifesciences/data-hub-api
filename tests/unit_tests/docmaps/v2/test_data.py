@@ -31,9 +31,9 @@ PREPRINT_LINK_3 = f'{PREPRINT_LINK_1_PREFIX}v{PREPRINT_VERSION_3}'
 
 ELIFE_DOI_1 = 'elife_doi_1'
 
-ELIFE_DOI_VERSION_STR_1 = 'elife_doi_version_str_1'
-ELIFE_DOI_VERSION_STR_2 = 'elife_doi_version_str_2'
-ELIFE_DOI_VERSION_STR_3 = 'elife_doi_version_str_3'
+ELIFE_DOI_VERSION_STR_1 = '1'
+ELIFE_DOI_VERSION_STR_2 = '2'
+ELIFE_DOI_VERSION_STR_3 = '3'
 
 MECA_PATH_1 = 'meca_path_1'
 MECA_PATH_2 = 'meca_path_2'
