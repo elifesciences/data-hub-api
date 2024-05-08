@@ -23,14 +23,25 @@ from data_hub_api.docmaps.v2.docmap_typing import (
 )
 
 
+def get_elife_manuscript_version(
+    elife_doi_version_str: str,
+    is_vor_for_opt_ins: bool = False
+) -> str:
+    if is_vor_for_opt_ins:
+        elife_doi_version_str = str(int(elife_doi_version_str) + 1)
+    return elife_doi_version_str
+
+
 def get_elife_manuscript_version_doi(
     elife_doi_version_str: str,
     elife_doi: str,
     is_vor_for_opt_ins: bool = False
 ) -> str:
-    if is_vor_for_opt_ins:
-        elife_doi_version_str = str(int(elife_doi_version_str) + 1)
-    return elife_doi + '.' + elife_doi_version_str
+    return (
+        elife_doi
+        + '.'
+        + get_elife_manuscript_version(elife_doi_version_str, is_vor_for_opt_ins)
+    )
 
 
 def get_docmap_elife_manuscript_doi_assertion_item(
@@ -45,7 +56,10 @@ def get_docmap_elife_manuscript_doi_assertion_item(
             elife_doi_version_str=manuscript_version['elife_doi_version_str'],
             is_vor_for_opt_ins = is_vor_for_opt_ins
         ),
-        'versionIdentifier': manuscript_version['elife_doi_version_str']
+        'versionIdentifier': get_elife_manuscript_version(
+            manuscript_version['elife_doi_version_str'],
+            is_vor_for_opt_ins
+        )
     }
 
 
@@ -77,7 +91,10 @@ def get_docmap_elife_manuscript_output(
             elife_doi_version_str=manuscript_version['elife_doi_version_str'],
             is_vor_for_opt_ins = is_vor_for_opt_ins
         ),
-        'versionIdentifier': manuscript_version['elife_doi_version_str'],
+        'versionIdentifier': get_elife_manuscript_version(
+            manuscript_version['elife_doi_version_str'],
+            is_vor_for_opt_ins
+        ),
         'license': query_result_item['license']
     }
 
