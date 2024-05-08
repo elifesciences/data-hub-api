@@ -29,7 +29,6 @@ from tests.unit_tests.docmaps.v2.test_data import (
     DOCMAPS_QUERY_RESULT_ITEM_2,
     DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSION,
     MANUSCRIPT_VERSION_WITH_EVALUATIONS_AND_VOR_1,
-    MANUSCRIPT_VOR_VERSION_1,
     PODCAST_DICT_WITH_NO_VALUE_1,
     RELATED_ARTICLE_CONTENT_INPUT_DICT_1,
     RELATED_ARTICLE_DOCMAP_OUTPUT_1,
@@ -342,7 +341,9 @@ class TestGetDocmapElifeManuscriptOutputForVor:
         )
         manuscript_version_doi = get_elife_manuscript_version_doi(
             elife_doi=DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSION['elife_doi'],
-            elife_doi_version_str=MANUSCRIPT_VERSION_WITH_EVALUATIONS_AND_VOR_1['elife_doi_version_str'],
+            elife_doi_version_str=MANUSCRIPT_VERSION_WITH_EVALUATIONS_AND_VOR_1[
+                'elife_doi_version_str'
+            ],
             is_vor=True
         )
         assert result == {
