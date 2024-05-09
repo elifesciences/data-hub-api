@@ -14,6 +14,7 @@ from data_hub_api.docmaps.v2.codecs.elife_manuscript import (
     get_docmap_elife_manuscript_output_for_vor,
     get_elife_manuscript_electronic_article_identifier,
     get_elife_manuscript_part_of_section,
+    get_elife_manuscript_version,
     get_sorted_elife_manuscript_part_of_section_complement,
     iter_elife_manuscript_part_of_section_complement_for_each_record,
     iter_elife_manuscript_part_of_section_complement_for_one_record,
@@ -27,7 +28,7 @@ from tests.unit_tests.docmaps.v2.test_data import (
     DOCMAPS_QUERY_RESULT_ITEM_1,
     DOCMAPS_QUERY_RESULT_ITEM_2,
     DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSION,
-    MANUSCRIPT_VOR_VERSION_1,
+    MANUSCRIPT_VERSION_WITH_EVALUATIONS_AND_VOR_1,
     PODCAST_DICT_WITH_NO_VALUE_1,
     RELATED_ARTICLE_CONTENT_INPUT_DICT_1,
     RELATED_ARTICLE_DOCMAP_OUTPUT_1,
@@ -80,9 +81,13 @@ class TestGetDocmapElifeManuscriptDoiAssertionItemForVor:
             'type': 'version-of-record',
             'doi': get_elife_manuscript_version_doi(
                 elife_doi_version_str=MANUSCRIPT_VERSION_1['elife_doi_version_str'],
-                elife_doi=DOCMAPS_QUERY_RESULT_ITEM_1['elife_doi']
+                elife_doi=DOCMAPS_QUERY_RESULT_ITEM_1['elife_doi'],
+                is_vor=True
             ),
-            'versionIdentifier': MANUSCRIPT_VERSION_1['elife_doi_version_str']
+            'versionIdentifier': get_elife_manuscript_version(
+                MANUSCRIPT_VERSION_1['elife_doi_version_str'],
+                is_vor=True
+            )
         }
 
 
@@ -332,11 +337,14 @@ class TestGetDocmapElifeManuscriptOutputForVor:
     def test_should_populate_docmaps_elife_manuscript_output_for_vor(self):
         result = get_docmap_elife_manuscript_output_for_vor(
             query_result_item=DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSION,
-            manuscript_version=MANUSCRIPT_VOR_VERSION_1
+            manuscript_version=MANUSCRIPT_VERSION_WITH_EVALUATIONS_AND_VOR_1
         )
         manuscript_version_doi = get_elife_manuscript_version_doi(
             elife_doi=DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSION['elife_doi'],
-            elife_doi_version_str=MANUSCRIPT_VOR_VERSION_1['elife_doi_version_str']
+            elife_doi_version_str=MANUSCRIPT_VERSION_WITH_EVALUATIONS_AND_VOR_1[
+                'elife_doi_version_str'
+            ],
+            is_vor=True
         )
         assert result == {
             'type': 'version-of-record',

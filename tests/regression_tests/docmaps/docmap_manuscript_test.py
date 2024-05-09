@@ -20,8 +20,11 @@ MANUSCRIPT_ID_LIST = [
     '88984',
     '91729',  # have related article
     '86824',  # have related podcast
-    '80984',  # have both related article and podcast
-    '88266'  # have both related article and collection
+    # have both related article and podcast, has VoR after the first version, one of the six:
+    '80984',
+    '88266',  # have both related article and collection
+    '84553',  # Opt-Ins, have VoR after first version
+    '85596',  # Opt-Ins, have VoR after second version
 ]
 
 
