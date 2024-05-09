@@ -1,5 +1,4 @@
 import logging
-import ast
 from typing import Dict, Iterable, Sequence, Union, cast
 import urllib
 
@@ -32,7 +31,10 @@ from data_hub_api.docmaps.v2.docmap_typing import (
     Docmap
 )
 
-from data_hub_api.utils.json import remove_key_with_none_value_only
+from data_hub_api.utils.json import (
+    parse_json_if_string_or_return_value,
+    remove_key_with_none_value_only
+)
 
 
 LOGGER = logging.getLogger(__name__)
@@ -309,7 +311,9 @@ def get_docmap_item_for_query_result_item(query_result_item: ApiInput) -> Docmap
         manuscript_first_version = query_result_item['manuscript_versions'][0]
         qc_complete_timestamp_str = manuscript_first_version['qc_complete_timestamp'].isoformat()
         id_query_param = {'manuscript_id': query_result_item['manuscript_id']}
-        publisher_json = ast.literal_eval(query_result_item['publisher_json'])
+        publisher_json: dict = parse_json_if_string_or_return_value(
+            query_result_item['publisher_json']
+        )
         LOGGER.debug('publisher_json: %r', publisher_json)
         return {
             '@context': DOCMAPS_JSONLD_SCHEMA_URL,
@@ -323,7 +327,7 @@ def get_docmap_item_for_query_result_item(query_result_item: ApiInput) -> Docmap
                 iter_docmap_steps_for_query_result_item(query_result_item)
             )
         }
-    except ValueError as exc:
+    except Exception as exc:
         LOGGER.warning(
             'Failed to generate DocMaps for query_result_item: %r due to %r',
             query_result_item,

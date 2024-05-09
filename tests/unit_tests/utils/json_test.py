@@ -1,4 +1,5 @@
 from datetime import date, datetime
+import json
 
 import numpy as np
 
@@ -6,6 +7,7 @@ from data_hub_api.utils.json import (
     get_json_compatible_value,
     get_recursive_json_compatible_value,
     get_recursively_transformed_object,
+    parse_json_if_string_or_return_value,
     remove_key_with_none_value_only,
     is_none_value
 )
@@ -201,3 +203,13 @@ class TestRemoveKeyWithNoneValueOnly:
         record_copy = record.copy()
         remove_key_with_none_value_only(record)
         assert record == record_copy
+
+
+class TestParseJsonIfStringOrReturnValue:
+    def test_should_return_passed_in_dict_as_is(self):
+        assert parse_json_if_string_or_return_value({'name': 'test'}) == {'name': 'test'}
+
+    def test_should_parse_json(self):
+        assert parse_json_if_string_or_return_value(
+            json.dumps({'name': 'test'})
+        ) == {'name': 'test'}
