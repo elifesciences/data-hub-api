@@ -1,5 +1,5 @@
 from datetime import date, datetime
-from typing import Optional, Sequence, TypedDict
+from typing import Optional, Sequence, TypedDict, Union
 
 
 ApiEditorDetailInput = TypedDict(
@@ -38,7 +38,7 @@ ApiManuscriptVersionInput = TypedDict(
 ApiInput = TypedDict(
     'ApiInput',
     {
-        'publisher_json': str,
+        'publisher_json': Union[str, dict],
         'manuscript_id': str,
         'elife_doi': str,
         'license': str,
