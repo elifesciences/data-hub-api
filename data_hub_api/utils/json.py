@@ -1,5 +1,6 @@
 from datetime import date, datetime
-from typing import Any, Callable, Optional, Tuple, TypeVar
+import json
+from typing import Any, Callable, Optional, Tuple, TypeVar, Union
 import pandas as pd
 import numpy as np
 
@@ -125,3 +126,9 @@ def remove_key_with_none_value_only(record: T) -> T:
         record,
         lambda value: not is_none_value(value)
     )
+
+
+def parse_json_if_string_or_return_value(value: Union[T, str]) -> T:
+    if isinstance(value, str):
+        return json.loads(value)
+    return value
