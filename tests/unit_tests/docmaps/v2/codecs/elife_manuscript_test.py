@@ -79,6 +79,7 @@ class TestGetDocmapElifeManuscriptDoiAssertionItemForVor:
         )
         assert result == {
             'type': 'version-of-record',
+            'identifier': DOCMAPS_QUERY_RESULT_ITEM_1['manuscript_id'],
             'doi': get_elife_manuscript_version_doi(
                 elife_doi_version_str=MANUSCRIPT_VERSION_1['elife_doi_version_str'],
                 elife_doi=DOCMAPS_QUERY_RESULT_ITEM_1['elife_doi'],
@@ -348,6 +349,7 @@ class TestGetDocmapElifeManuscriptOutputForVor:
         )
         assert result == {
             'type': 'version-of-record',
+            'identifier': DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSION['manuscript_id'],
             'doi': manuscript_version_doi,
             'published': VOR_PUBLICATION_DATE_1.isoformat(),
             'url': f'{DOI_ROOT_URL}' + manuscript_version_doi,
