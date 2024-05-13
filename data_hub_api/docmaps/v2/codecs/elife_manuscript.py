@@ -73,7 +73,8 @@ def get_docmap_elife_manuscript_doi_assertion_item_for_vor(
             manuscript_version=manuscript_version,
             is_vor=True
         ),
-        'type': 'version-of-record'
+        'type': 'version-of-record',
+        'identifier': query_result_item['manuscript_id']
     }
 
 
@@ -247,6 +248,7 @@ def get_docmap_elife_manuscript_output_for_vor(
     )
     return {
         'type': 'version-of-record',
+        'identifier': query_result_item['manuscript_id'],
         'doi': manuscript_version_doi,
         'published': (
             manuscript_version['vor_publication_date'].isoformat()
