@@ -79,7 +79,6 @@ class TestGetDocmapElifeManuscriptDoiAssertionItemForVor:
         )
         assert result == {
             'type': 'version-of-record',
-            'identifier': DOCMAPS_QUERY_RESULT_ITEM_1['manuscript_id'],
             'doi': get_elife_manuscript_version_doi(
                 elife_doi_version_str=MANUSCRIPT_VERSION_1['elife_doi_version_str'],
                 elife_doi=DOCMAPS_QUERY_RESULT_ITEM_1['elife_doi'],
