@@ -580,6 +580,7 @@
                     "outputs": [
                         {
                             "type": "version-of-record",
+                            "identifier": "86873",
                             "doi": "10.7554/eLife.86873.3",
                             "published": "2023-12-11",
                             "url": "https://doi.org/10.7554/eLife.86873.3",

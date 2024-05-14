@@ -502,6 +502,7 @@
           "outputs": [
             {
               "type": "version-of-record",
+              "identifier": "86628",
               "doi": "10.7554/eLife.86628.3",
               "published": "2023-06-02",
               "url": "https://doi.org/10.7554/eLife.86628.3",

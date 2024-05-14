@@ -1006,6 +1006,7 @@
                     "outputs": [
                         {
                             "type": "version-of-record",
+                            "identifier": "88984",
                             "doi": "10.7554/eLife.88984.4",
                             "url": "https://doi.org/10.7554/eLife.88984.4",
                             "published": "2024-01-19",

@@ -606,6 +606,7 @@
                     "outputs": [
                         {
                             "type": "version-of-record",
+                            "identifier": "88266",
                             "doi": "10.7554/eLife.88266.3",
                             "published": "2023-12-07",
                             "url": "https://doi.org/10.7554/eLife.88266.3",
