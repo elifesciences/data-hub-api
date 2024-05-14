@@ -594,6 +594,7 @@
                     "outputs": [
                         {
                             "type": "version-of-record",
+                            "identifier": "87198",
                             "doi": "10.7554/eLife.87198.3",
                             "published": "2023-12-22",
                             "url": "https://doi.org/10.7554/eLife.87198.3",
