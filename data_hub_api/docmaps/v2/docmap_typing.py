@@ -91,6 +91,7 @@ DocmapElifeManuscriptVorOutput = TypedDict(
         'type': str,
         'identifier': str,
         'doi': str,
+        'versionIdentifier': str,
         'published': Optional[date_str],
         'url': str,
         'content': Sequence[DocmapContent]
