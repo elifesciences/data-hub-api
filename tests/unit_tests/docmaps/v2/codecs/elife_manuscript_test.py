@@ -350,6 +350,12 @@ class TestGetDocmapElifeManuscriptOutputForVor:
             'type': 'version-of-record',
             'identifier': DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSION['manuscript_id'],
             'doi': manuscript_version_doi,
+            'versionIdentifier': get_elife_manuscript_version(
+                MANUSCRIPT_VERSION_WITH_EVALUATIONS_AND_VOR_1[
+                    'elife_doi_version_str'
+                ],
+                is_vor=True
+            ),
             'published': VOR_PUBLICATION_DATE_1.isoformat(),
             'url': f'{DOI_ROOT_URL}' + manuscript_version_doi,
             'content': [{
