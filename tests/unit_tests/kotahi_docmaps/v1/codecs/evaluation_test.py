@@ -151,10 +151,20 @@ class TestGetRelatedOrganizationDetail:
         result = get_related_organization_detail(editor_detail_dict)
         assert result == 'institution_1'
 
-    def test_should_return_institution_and_country_if_defined(self):
+    def test_should_return_institution_and_country_if_both_defined(self):
         editor_detail_dict = {'institution': 'institution_1', 'country': 'country_1'}
         result = get_related_organization_detail(editor_detail_dict)
         assert result == 'institution_1, country_1'
+
+    def test_should_return_country_if_institution_not_defined(self):
+        editor_detail_dict = {'institution': None, 'country': 'country_1'}
+        result = get_related_organization_detail(editor_detail_dict)
+        assert result == 'country_1'
+
+    def test_should_return_empty_string_if_both_not_defined(self):
+        editor_detail_dict = {'institution': None, 'country': None}
+        result = get_related_organization_detail(editor_detail_dict)
+        assert not result
 
 
 class TestGetDocmapAffiliationLocation:
