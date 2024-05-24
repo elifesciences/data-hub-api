@@ -251,13 +251,20 @@ class TestGetDocmapAffiliationLocation:
 
 
 class TestGetDocmapAffiliation:
-    def test_should_populate_affiliation_with_given_details(self):
+    def test_should_populate_affiliation_if_instutition_available(self):
         result = get_docmap_affiliation(EDITOR_DETAIL_1)
         assert result == {
             'type': 'organization',
             'name': 'editor_institution_1',
             'location': 'editor_city_1, editor_country_1'
         }
+
+    def test_should_return_none_if_instutition_not_available(self):
+        result = get_docmap_affiliation({
+            **EDITOR_DETAIL_1,
+            'institution': None
+        })
+        assert not result
 
     def test_should_return_none_for_location_if_country_none(self):
         result = get_docmap_affiliation({

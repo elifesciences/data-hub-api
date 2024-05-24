@@ -185,12 +185,14 @@ def get_docmap_affiliation_location(
 
 def get_docmap_affiliation(
     editor_detail: ApiEditorDetailInput
-) -> DocmapAffiliation:
-    return {
-        'type': 'organization',
-        'name': editor_detail['institution'],
-        'location': get_docmap_affiliation_location(editor_detail)
-    }
+) -> Optional[DocmapAffiliation]:
+    if editor_detail['institution']:
+        return {
+            'type': 'organization',
+            'name': editor_detail['institution'],
+            'location': get_docmap_affiliation_location(editor_detail)
+        }
+    return None
 
 
 def get_docmap_actor_for_evaluation_summary_type(
