@@ -588,7 +588,7 @@
                             "content": [
                                 {
                                     "type": "web-page",
-                                    "url": "https://elifesciences.org/articles/87356"
+                                    "url": "https://elifesciences.org/articles/87356v1"
                                 }
                             ]
                         }
@@ -602,7 +602,7 @@
                         "doi": "10.7554/eLife.87356.3",
                         "versionIdentifier": "3"
                     },
-                    "status": "vor-published"
+                    "status": "published"
                 }
             ],
             "inputs": [
@@ -630,7 +630,7 @@
                             "content": [
                                 {
                                     "type": "web-page",
-                                    "url": "https://elifesciences.org/articles/87356"
+                                    "url": "https://elifesciences.org/articles/87356v2"
                                 }
                             ]
                         }
@@ -644,7 +644,7 @@
                         "doi": "10.7554/eLife.87356.3",
                         "versionIdentifier": "3"
                     },
-                    "status": "vor-updated",
+                    "status": "corrected",
                     "happened": "2024-03-21"
                 }
             ],
@@ -673,7 +673,7 @@
                             "content": [
                                 {
                                     "type": "web-page",
-                                    "url": "https://elifesciences.org/articles/87356"
+                                    "url": "https://elifesciences.org/articles/87356v3"
                                 }
                             ]
                         }
@@ -687,7 +687,7 @@
                         "doi": "10.7554/eLife.87356.3",
                         "versionIdentifier": "3"
                     },
-                    "status": "vor-updated",
+                    "status": "corrected",
                     "happened": "2024-04-15"
                 }
             ],
