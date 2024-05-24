@@ -210,9 +210,8 @@ def get_docmap_actor_for_evaluation_summary_type(
 def get_related_organization_detail(
     editor_detail: ApiEditorDetailInput
 ) -> str:
-    if editor_detail['country']:
-        return editor_detail['institution'] + ', ' + editor_detail['country']
-    return editor_detail['institution']
+    editor_details = [editor_detail.get('institution'), editor_detail.get('country')]
+    return ', '.join(filter(None, editor_details))
 
 
 def get_docmap_evaluation_participants_for_evaluation_summary_type(

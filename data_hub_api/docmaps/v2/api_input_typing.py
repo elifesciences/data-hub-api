@@ -18,7 +18,7 @@ ApiEditorDetailInput = TypedDict(
     'ApiEditorDetailInput',
     {
         'name': str,
-        'institution': str,
+        'institution': Optional[str],
         'country': Optional[str],
         'title': Optional[str],
         'first_name': str,
