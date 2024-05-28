@@ -124,7 +124,7 @@ DocmapEditorActor = TypedDict(
         '_middleName': Optional[str],
         'surname': str,
         '_relatesToOrganization': str,
-        'affiliation': DocmapAffiliation
+        'affiliation': Optional[DocmapAffiliation]
     }
 )
 
