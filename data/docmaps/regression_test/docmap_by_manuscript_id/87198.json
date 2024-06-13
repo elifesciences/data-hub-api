@@ -194,6 +194,24 @@
                             ]
                         }
                     ]
+                },
+                {
+                    "participants": [],
+                    "outputs": [
+                        {
+                            "type": "preprint",
+                            "identifier": "87198",
+                            "doi": "10.7554/eLife.87198.1",
+                            "versionIdentifier": "1",
+                            "license": "http://creativecommons.org/licenses/by/4.0/",
+                            "content": [
+                                {
+                                    "type": "computer-file",
+                                    "url": "s3://prod-elife-epp-meca/reviewed-preprints/87198-v1-meca.zip"
+                                }
+                            ]
+                        }
+                    ]
                 }
             ],
             "assertions": [
@@ -487,6 +505,24 @@
                                 {
                                     "type": "web-page",
                                     "url": "https://sciety.org/evaluations/hypothesis:vNOcpJLTEe6hBqcQECkveA/content"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "participants": [],
+                    "outputs": [
+                        {
+                            "type": "preprint",
+                            "identifier": "87198",
+                            "doi": "10.7554/eLife.87198.2",
+                            "versionIdentifier": "2",
+                            "license": "http://creativecommons.org/licenses/by/4.0/",
+                            "content": [
+                                {
+                                    "type": "computer-file",
+                                    "url": "s3://prod-elife-epp-meca/reviewed-preprints/87198-v2-meca.zip"
                                 }
                             ]
                         }

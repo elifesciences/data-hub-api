@@ -228,6 +228,24 @@
                 ]
               }
             ]
+          },
+          {
+            "participants": [],
+            "outputs": [
+              {
+                "type": "preprint",
+                "identifier": "85596",
+                "doi": "10.7554/eLife.85596.1",
+                "versionIdentifier": "1",
+                "license": "http://creativecommons.org/licenses/by/4.0/",
+                "content": [
+                    {
+                        "type": "computer-file",
+                        "url": "s3://prod-elife-epp-meca/reviewed-preprints/85596-v1-meca.zip"
+                    }
+                ]
+              }
+            ]
           }
         ],
         "assertions": [
@@ -552,6 +570,24 @@
                     "type": "web-page",
                     "url": "https://sciety.org/evaluations/hypothesis:IhjwXhTREe6aQWOQZIpXLQ/content"
                   }
+                ]
+              }
+            ]
+          },
+          {
+            "participants": [],
+            "outputs": [
+              {
+                "type": "preprint",
+                "identifier": "85596",
+                "doi": "10.7554/eLife.85596.2",
+                "versionIdentifier": "2",
+                "license": "http://creativecommons.org/licenses/by/4.0/",
+                "content": [
+                    {
+                        "type": "computer-file",
+                        "url": "s3://prod-elife-epp-meca/reviewed-preprints/85596-v2-meca.zip"
+                    }
                 ]
               }
             ]
