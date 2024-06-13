@@ -20,7 +20,8 @@ from data_hub_api.docmaps.v2.codecs.evaluation import (
     get_docmap_evaluation_input,
     get_docmap_evaluation_output,
     get_docmap_evaluation_participants_for_evalution_summary_type,
-    get_docmap_evaluation_participants_for_review_article_type
+    get_docmap_evaluation_participants_for_review_article_type,
+    get_rp_meca_path_action
 )
 
 from data_hub_api.docmaps.v2.codecs.preprint import (
@@ -281,7 +282,7 @@ class TestGetDocmapsItemForQueryResultItem:
         ))
         assert actual_hypothesis_ids == expected_hypothesis_ids_of_first_version
 
-    def test_should_not_populate_actions_peer_reviewed_step_if_tags_are_empty(self):
+    def test_should_populate_actions_peer_reviewed_step_for_rp_meca_path_even_tags_are_empty(self):
         query_result_with_evaluation = {
             **DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS,
             'manuscript_versions': [{
@@ -297,8 +298,11 @@ class TestGetDocmapsItemForQueryResultItem:
         )
         peer_reviewed_step = docmaps_item['steps']['_:b1']
         peer_reviewed_actions = peer_reviewed_step['actions']
-        assert len(peer_reviewed_actions) == 0
-        assert peer_reviewed_actions == []
+        assert len(peer_reviewed_actions) == 1  # 1 rp_meca_path content
+        assert peer_reviewed_actions[0] == get_rp_meca_path_action(
+            query_result_item=DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS,
+            manuscript_version=MANUSCRIPT_VERSION_1
+        )
 
     def test_should_populate_actions_outputs_peer_reviewed_step_for_each_evaluation(self):
         query_result_with_evaluation = {
@@ -328,7 +332,7 @@ class TestGetDocmapsItemForQueryResultItem:
         )
         peer_reviewed_step = docmaps_item['steps']['_:b1']
         peer_reviewed_actions = peer_reviewed_step['actions']
-        assert len(peer_reviewed_actions) == 3
+        assert len(peer_reviewed_actions) == 4  # 3 tags and 1 rp_meca_path content
         assert peer_reviewed_actions[0]['outputs'][0] == get_docmap_evaluation_output(
             query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1,
             manuscript_version=MANUSCRIPT_VERSION_1,

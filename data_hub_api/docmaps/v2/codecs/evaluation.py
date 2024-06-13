@@ -352,6 +352,10 @@ def iter_docmap_actions_for_evaluations(
             evaluation_suffix=evaluation_suffix,
             docmap_evaluation_type=docmap_evaluation_type
         )
+    yield get_rp_meca_path_action(
+        query_result_item=query_result_item,
+        manuscript_version=manuscript_version
+    )
 
 
 def iter_docmap_evaluation_input(
