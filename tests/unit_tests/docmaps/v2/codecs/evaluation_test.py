@@ -1,4 +1,5 @@
 from unittest.mock import patch
+from data_hub_api.docmaps.v2.codecs.elife_manuscript import get_elife_manuscript_version_doi
 import pytest
 from data_hub_api.docmaps.v2.codecs import evaluation as evaluation_module
 from data_hub_api.docmaps.v2.codecs.evaluation import (
@@ -21,7 +22,8 @@ from data_hub_api.docmaps.v2.codecs.evaluation import (
     get_docmap_evaluation_type_form_tags,
     get_elife_evaluation_doi,
     get_elife_evaluation_doi_url,
-    get_related_organization_detail
+    get_related_organization_detail,
+    get_rp_meca_path_action
 )
 from tests.unit_tests.docmaps.v2.test_data import (
     ANNOTATION_CREATED_TIMESTAMP_1,
@@ -34,6 +36,7 @@ from tests.unit_tests.docmaps.v2.test_data import (
     HYPOTHESIS_ID_1,
     LICENSE_1,
     MANUSCRIPT_VERSION_1,
+    RP_MECA_PATH_1,
     SENIOR_EDITOR_DETAIL_1
 )
 
@@ -384,3 +387,27 @@ class TestGetDocmapEvaluationParticipants:
                 docmap_evaluation_type=DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY
             )
             mock.assert_called_once()
+
+
+class TestGetRpMecaPathAction:
+    def test_should_return_action_for_rp_meca_path(self):
+        result = get_rp_meca_path_action(
+            query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1,
+            manuscript_version=MANUSCRIPT_VERSION_1
+        )
+        assert result == {
+            'participants': [],
+            'outputs': [{
+                'type': 'preprint',
+                'identifier': 'manuscript_id_1',
+                'doi': get_elife_manuscript_version_doi(ELIFE_DOI_VERSION_STR_1, ELIFE_DOI_1),
+                'versionIdentifier': ELIFE_DOI_VERSION_STR_1,
+                'license': LICENSE_1,
+                'content': [
+                    {
+                        'type': 'computer-file',
+                        'url': RP_MECA_PATH_1
+                    }
+                ]
+            }]
+        }
