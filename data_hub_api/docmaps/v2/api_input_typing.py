@@ -50,6 +50,7 @@ ApiManuscriptVersionInput = TypedDict(
         'preprint_version': Optional[str],
         'preprint_published_at_date': Optional[date],
         'meca_path': Optional[str],
+        'rp_meca_path': str,
         'evaluations': Sequence[ApiEvaluationInput],
         'rp_publication_timestamp': Optional[datetime],
         'vor_publication_date': Optional[date],

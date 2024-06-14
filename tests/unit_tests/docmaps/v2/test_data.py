@@ -36,6 +36,9 @@ ELIFE_DOI_VERSION_STR_3 = '3'
 MECA_PATH_1 = 'meca_path_1'
 MECA_PATH_2 = 'meca_path_2'
 
+RP_MECA_PATH_1 = 'rp_meca_path_1'
+RP_MECA_PATH_2 = 'rp_meca_path_2'
+
 LICENSE_1 = 'license_1'
 
 RP_PUBLICATION_TIMESTAMP_1 = datetime.fromisoformat('2022-05-05T01:02:03+00:00')
@@ -59,6 +62,7 @@ MANUSCRIPT_VERSION_1: ApiManuscriptVersionInput = {
     'preprint_version': PREPRINT_VERSION_1,
     'preprint_published_at_date': date.fromisoformat('2021-01-01'),
     'meca_path': MECA_PATH_1,
+    'rp_meca_path': RP_MECA_PATH_1,
     'evaluations': [],
     'rp_publication_timestamp': RP_PUBLICATION_TIMESTAMP_1,
     'vor_publication_date': None,
@@ -81,6 +85,7 @@ MANUSCRIPT_VERSION_2: ApiManuscriptVersionInput = {
     'preprint_version': PREPRINT_VERSION_2,
     'preprint_published_at_date': date.fromisoformat('2021-02-02'),
     'meca_path': MECA_PATH_2,
+    'rp_meca_path': RP_MECA_PATH_2,
     'evaluations': [],
     'rp_publication_timestamp': RP_PUBLICATION_TIMESTAMP_2,
     'vor_publication_date': None,

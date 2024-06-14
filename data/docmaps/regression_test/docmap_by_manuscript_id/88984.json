@@ -227,6 +227,24 @@
                             ]
                         }
                     ]
+                },
+                {
+                    "participants": [],
+                    "outputs": [
+                        {
+                            "type": "preprint",
+                            "identifier": "88984",
+                            "doi": "10.7554/eLife.88984.1",
+                            "versionIdentifier": "1",
+                            "license": "http://creativecommons.org/licenses/by/4.0/",
+                            "content": [
+                                {
+                                    "type": "computer-file",
+                                    "url": "s3://prod-elife-epp-meca/reviewed-preprints/88984-v1-meca.zip"
+                                }
+                            ]
+                        }
+                    ]
                 }
             ],
             "assertions": [
@@ -557,6 +575,24 @@
                                 {
                                     "type": "web-page",
                                     "url": "https://sciety.org/evaluations/hypothesis:5_y_xpjeEe6ah6eq6oN3hA/content"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "participants": [],
+                    "outputs": [
+                        {
+                            "type": "preprint",
+                            "identifier": "88984",
+                            "doi": "10.7554/eLife.88984.2",
+                            "versionIdentifier": "2",
+                            "license": "http://creativecommons.org/licenses/by/4.0/",
+                            "content": [
+                                {
+                                    "type": "computer-file",
+                                    "url": "s3://prod-elife-epp-meca/reviewed-preprints/88984-v2-meca.zip"
                                 }
                             ]
                         }
@@ -895,6 +931,24 @@
                                 {
                                     "type": "web-page",
                                     "url": "https://sciety.org/evaluations/hypothesis:gKYFbqwPEe6WVa-sHhVxYA/content"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "participants": [],
+                    "outputs": [
+                        {
+                            "type": "preprint",
+                            "identifier": "88984",
+                            "doi": "10.7554/eLife.88984.3",
+                            "versionIdentifier": "3",
+                            "license": "http://creativecommons.org/licenses/by/4.0/",
+                            "content": [
+                                {
+                                    "type": "computer-file",
+                                    "url": "s3://prod-elife-epp-meca/reviewed-preprints/88984-v3-meca.zip"
                                 }
                             ]
                         }

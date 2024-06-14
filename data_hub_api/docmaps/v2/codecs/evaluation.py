@@ -10,6 +10,7 @@ from data_hub_api.docmaps.v2.api_input_typing import (
     ApiInput,
     ApiManuscriptVersionInput
 )
+from data_hub_api.docmaps.v2.codecs.preprint import get_meca_path_content
 from data_hub_api.docmaps.v2.docmap_typing import (
     DocmapAction,
     DocmapAnonymousActor,
@@ -289,6 +290,26 @@ def get_docmap_actions_for_evaluations(
     }
 
 
+def get_rp_meca_path_action(
+    query_result_item: ApiInput,
+    manuscript_version: ApiManuscriptVersionInput
+):
+    return {
+        'participants': [],
+        'outputs': [{
+            'type': 'preprint',
+            'identifier': query_result_item['manuscript_id'],
+            'doi': get_elife_manuscript_version_doi(
+                elife_doi=query_result_item['elife_doi'],
+                elife_doi_version_str=manuscript_version['elife_doi_version_str']
+            ),
+            'versionIdentifier': manuscript_version['elife_doi_version_str'],
+            'license': query_result_item['license'],
+            'content': [get_meca_path_content(meca_path=manuscript_version['rp_meca_path'])]
+        }]
+    }
+
+
 def iter_evaluation_and_type_for_related_preprint_url(
     evaluations: Sequence[ApiEvaluationInput],
     preprint_url: str
@@ -331,6 +352,10 @@ def iter_docmap_actions_for_evaluations(
             evaluation_suffix=evaluation_suffix,
             docmap_evaluation_type=docmap_evaluation_type
         )
+    yield get_rp_meca_path_action(
+        query_result_item=query_result_item,
+        manuscript_version=manuscript_version
+    )
 
 
 def iter_docmap_evaluation_input(
