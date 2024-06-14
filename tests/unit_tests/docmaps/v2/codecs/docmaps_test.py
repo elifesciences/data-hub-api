@@ -332,7 +332,7 @@ class TestGetDocmapsItemForQueryResultItem:
         )
         peer_reviewed_step = docmaps_item['steps']['_:b1']
         peer_reviewed_actions = peer_reviewed_step['actions']
-        assert len(peer_reviewed_actions) == 4  # 3 tags and 1 rp_meca_path content
+        assert len(peer_reviewed_actions) == 4  # 3 evaluations and 1 rp_meca_path content
         assert peer_reviewed_actions[0]['outputs'][0] == get_docmap_evaluation_output(
             query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1,
             manuscript_version=MANUSCRIPT_VERSION_1,
