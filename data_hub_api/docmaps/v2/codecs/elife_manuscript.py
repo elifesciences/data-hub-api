@@ -212,6 +212,7 @@ def get_docmap_elife_manuscript_output_for_published_step(
     query_result_item: ApiInput,
     manuscript_version: ApiManuscriptVersionInput
 ) -> DocmapPublishedElifeManuscriptOutput:
+    assert manuscript_version['rp_publication_timestamp']
     return {
         **get_docmap_elife_manuscript_output(  # type: ignore
             query_result_item,
