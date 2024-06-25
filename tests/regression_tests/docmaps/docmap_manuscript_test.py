@@ -24,7 +24,8 @@ MANUSCRIPT_ID_LIST = [
     '80984',
     '88266',  # have both related article and collection
     '84553',  # Opt-Ins, have VoR after first version
-    '85596',  # Opt-Ins, have VoR after second version
+    '85596',  # Opt-Ins, have VoR after second version,
+    '87356',  # Has VoRs updates (has three versions)
 ]
 
 
