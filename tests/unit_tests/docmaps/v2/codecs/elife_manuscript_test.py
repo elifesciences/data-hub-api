@@ -10,6 +10,7 @@ from data_hub_api.docmaps.v2.codecs.elife_manuscript import (
     get_docmap_elife_manuscript_doi_assertion_item_for_vor,
     get_docmap_elife_manuscript_input,
     get_docmap_elife_manuscript_output,
+    get_docmap_elife_manuscript_output_content_for_vor,
     get_docmap_elife_manuscript_output_for_published_step,
     get_docmap_elife_manuscript_output_for_vor,
     get_elife_manuscript_electronic_article_identifier,
@@ -28,6 +29,8 @@ from tests.unit_tests.docmaps.v2.test_data import (
     DOCMAPS_QUERY_RESULT_ITEM_1,
     DOCMAPS_QUERY_RESULT_ITEM_2,
     DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSION,
+    DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSIONS_1,
+    DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSIONS_2,
     MANUSCRIPT_VERSION_WITH_EVALUATIONS_AND_VOR_1,
     PODCAST_DICT_WITH_NO_VALUE_1,
     RELATED_ARTICLE_CONTENT_INPUT_DICT_1,
@@ -42,7 +45,9 @@ from tests.unit_tests.docmaps.v2.test_data import (
     MANUSCRIPT_VERSION_1,
     SUBJECT_AREA_NAME_1,
     SUBJECT_AREA_NAME_2,
-    VOR_PUBLICATION_DATE_1
+    VOR_PUBLICATION_DATE_1,
+    VOR_VERSIONS_1,
+    VOR_VERSIONS_2
 )
 
 
@@ -331,6 +336,36 @@ class TestGetDocmapElifeManuscriptOutputForPublishedStep:
                 DOCMAPS_QUERY_RESULT_ITEM_1
             )
         }
+
+
+class TestGetDocmapElifeManuscriptOutputContentForVor:
+    def test_should_populate_vor_output_content_with_umbrella_url(self):
+        result = get_docmap_elife_manuscript_output_content_for_vor(
+            query_result_item=DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSIONS_1,
+            vor_version_number=VOR_VERSIONS_1['vor_version_number']
+        )
+        assert result == [{
+            'type': 'web-page',
+            'url': (
+                'https://elifesciences.org/articles/'
+                + DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSIONS_1['manuscript_id']
+            )
+        }]
+
+    def test_should_populate_corrected_vor_output_content_with_versined_url(self):
+        result = get_docmap_elife_manuscript_output_content_for_vor(
+            query_result_item=DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSIONS_2,
+            vor_version_number=VOR_VERSIONS_2['vor_version_number']
+        )
+        assert result == [{
+            'type': 'web-page',
+            'url': (
+                'https://elifesciences.org/articles/'
+                + DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSIONS_2['manuscript_id']
+                + 'v'
+                + str(VOR_VERSIONS_2['vor_version_number'])
+            )
+        }]
 
 
 class TestGetDocmapElifeManuscriptOutputForVor:

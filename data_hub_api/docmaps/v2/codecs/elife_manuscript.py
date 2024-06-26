@@ -228,8 +228,19 @@ def get_docmap_elife_manuscript_output_for_published_step(
 
 
 def get_docmap_elife_manuscript_output_content_for_vor(
-    query_result_item: ApiInput
+    query_result_item: ApiInput,
+    vor_version_number: int
 ) -> Sequence[DocmapContent]:
+    if vor_version_number > 1:
+        return [{
+            'type': 'web-page',
+            'url': (
+                'https://elifesciences.org/articles/'
+                + query_result_item['manuscript_id']
+                + 'v'
+                + str(vor_version_number)
+            )
+        }]
     return [{
         'type': 'web-page',
         'url': 'https://elifesciences.org/articles/' + query_result_item['manuscript_id']
@@ -261,7 +272,8 @@ def get_docmap_elife_manuscript_output_for_vor(
         ),
         'url': f'{DOI_ROOT_URL}' + manuscript_version_doi,
         'content': get_docmap_elife_manuscript_output_content_for_vor(
-            query_result_item=query_result_item
+            query_result_item=query_result_item,
+            vor_version_number=1
         )
     }
 

@@ -5,7 +5,8 @@ from data_hub_api.docmaps.v2.api_input_typing import (
     ApiEvaluationInput,
     ApiInput,
     ApiManuscriptVersionInput,
-    ApiRelatedContentInput
+    ApiRelatedContentInput,
+    ApiVorVersionsInput
 )
 from data_hub_api.docmaps.v2.docmap_typing import DocmapPartOfComplement
 
@@ -45,6 +46,9 @@ RP_PUBLICATION_TIMESTAMP_1 = datetime.fromisoformat('2022-05-05T01:02:03+00:00')
 RP_PUBLICATION_TIMESTAMP_2 = datetime.fromisoformat('2023-06-05T01:02:03+00:00')
 
 VOR_PUBLICATION_DATE_1 = date.fromisoformat('2023-08-03')
+VOR_UPDATED_TIMESTAMP_1 = datetime.fromisoformat('2023-08-03T00:00:00+00:00')
+VOR_UPDATED_TIMESTAMP_2 = datetime.fromisoformat('2023-12-03T01:02:03+00:00')
+VOR_UPDATED_TIMESTAMP_3 = datetime.fromisoformat('2024-06-26T16:15:00+00:00')
 
 SUBJECT_AREA_NAME_1 = 'subject_area_name_1'
 SUBJECT_AREA_NAME_2 = 'subject_area_name_2'
@@ -201,6 +205,7 @@ DOCMAPS_QUERY_RESULT_ITEM_1: ApiInput = {
     'license': LICENSE_1,
     'is_reviewed_preprint_type': True,
     'manuscript_versions': [MANUSCRIPT_VERSION_1],
+    'vor_versions': [],
     'related_content': [RELATED_CONTENT_DICT_WITH_NO_VALUE_1]
 }
 
@@ -211,6 +216,7 @@ DOCMAPS_QUERY_RESULT_ITEM_2: ApiInput = {
     'license': LICENSE_1,
     'is_reviewed_preprint_type': True,
     'manuscript_versions': [MANUSCRIPT_VERSION_1, MANUSCRIPT_VERSION_2],
+    'vor_versions': [],
     'related_content': [RELATED_CONTENT_DICT_WITH_ALL_VALUE_1]
 }
 
@@ -254,6 +260,24 @@ MANUSCRIPT_VERSION_WITH_EVALUATIONS_2: ApiManuscriptVersionInput = {
     'evaluations': [DOCMAPS_QUERY_RESULT_EVALUATION_2]
 }
 
+VOR_VERSIONS_1: ApiVorVersionsInput = {
+    'vor_version_number': 1,
+    'vor_publication_date': VOR_PUBLICATION_DATE_1,
+    'vor_updated_timestamp': VOR_UPDATED_TIMESTAMP_1
+}
+
+VOR_VERSIONS_2: ApiVorVersionsInput = {
+    'vor_version_number': 2,
+    'vor_publication_date': VOR_PUBLICATION_DATE_1,
+    'vor_updated_timestamp': VOR_UPDATED_TIMESTAMP_2
+}
+
+VOR_VERSIONS_3: ApiVorVersionsInput = {
+    'vor_version_number': 3,
+    'vor_publication_date': VOR_PUBLICATION_DATE_1,
+    'vor_updated_timestamp': VOR_UPDATED_TIMESTAMP_3
+}
+
 MANUSCRIPT_VERSION_WITH_EVALUATIONS_AND_VOR_1 = {
     **MANUSCRIPT_VERSION_WITH_EVALUATIONS_1,  # type: ignore
     'vor_publication_date': VOR_PUBLICATION_DATE_1
@@ -272,6 +296,16 @@ DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS = {
 DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSION = {
     **DOCMAPS_QUERY_RESULT_ITEM_1,  # type: ignore
     'manuscript_versions': [MANUSCRIPT_VERSION_WITH_EVALUATIONS_AND_VOR_1]
+}
+
+DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSIONS_1 = {
+    **DOCMAPS_QUERY_RESULT_ITEM_1,  # type: ignore
+    'vor_versions': [VOR_VERSIONS_1],
+}
+
+DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSIONS_2 = {
+    **DOCMAPS_QUERY_RESULT_ITEM_1,  # type: ignore
+    'vor_versions': [VOR_VERSIONS_1, VOR_VERSIONS_2],
 }
 
 EDITOR_DETAIL_1: ApiEditorDetailInput = {

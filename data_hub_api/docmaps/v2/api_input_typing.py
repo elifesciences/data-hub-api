@@ -35,6 +35,15 @@ ApiSubjectAreaInput = TypedDict(
     }
 )
 
+ApiVorVersionsInput = TypedDict(
+    'ApiVorVersionsInput',
+    {
+        'vor_version_number': int,
+        'vor_publication_date': date,
+        'vor_updated_timestamp': Optional[datetime]
+    }
+)
+
 ApiManuscriptVersionInput = TypedDict(
     'ApiManuscriptVersionInput',
     {
@@ -85,6 +94,7 @@ ApiInput = TypedDict(
         'license': str,
         'is_reviewed_preprint_type': bool,
         'manuscript_versions': Sequence[ApiManuscriptVersionInput],
+        'vor_versions': Optional[ApiVorVersionsInput],
         'related_content': Sequence[ApiRelatedContentInput]
     }
 )
