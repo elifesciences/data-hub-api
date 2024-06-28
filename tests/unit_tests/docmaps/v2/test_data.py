@@ -272,30 +272,9 @@ VOR_VERSIONS_2: ApiVorVersionsInput = {
     'vor_updated_timestamp': VOR_UPDATED_TIMESTAMP_2
 }
 
-VOR_VERSIONS_3: ApiVorVersionsInput = {
-    'vor_version_number': 3,
-    'vor_publication_date': VOR_PUBLICATION_DATE_1,
-    'vor_updated_timestamp': VOR_UPDATED_TIMESTAMP_3
-}
-
-MANUSCRIPT_VERSION_WITH_EVALUATIONS_AND_VOR_1 = {
-    **MANUSCRIPT_VERSION_WITH_EVALUATIONS_1,  # type: ignore
-    'vor_publication_date': VOR_PUBLICATION_DATE_1
-}
-
-MANUSCRIPT_VERSION_WITH_EVALUATIONS_AND_VOR_2 = {
-    **MANUSCRIPT_VERSION_WITH_EVALUATIONS_2,  # type: ignore
-    'vor_publication_date': VOR_PUBLICATION_DATE_1
-}
-
 DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS = {
     **DOCMAPS_QUERY_RESULT_ITEM_1,  # type: ignore
     'manuscript_versions': [MANUSCRIPT_VERSION_WITH_EVALUATIONS_1]
-}
-
-DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSION = {
-    **DOCMAPS_QUERY_RESULT_ITEM_1,  # type: ignore
-    'manuscript_versions': [MANUSCRIPT_VERSION_WITH_EVALUATIONS_AND_VOR_1]
 }
 
 DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSIONS_1 = {
