@@ -20,7 +20,11 @@ from data_hub_api.docmaps.v2.codecs.preprint import (
     get_docmap_preprint_input,
     get_docmap_preprint_input_with_published_and_meca_path
 )
-from data_hub_api.docmaps.v2.api_input_typing import ApiInput, ApiManuscriptVersionInput, ApiVorVersionsInput
+from data_hub_api.docmaps.v2.api_input_typing import (
+    ApiInput,
+    ApiManuscriptVersionInput,
+    ApiVorVersionsInput
+)
 
 from data_hub_api.docmaps.v2.docmap_typing import (
     DocmapAction,

@@ -68,7 +68,6 @@ from tests.unit_tests.docmaps.v2.test_data import (
     PREPRINT_VERSION_2,
     PUBLISHER_DICT_1,
     SENIOR_EDITOR_DETAIL_1,
-    VOR_UPDATED_TIMESTAMP_1,
     VOR_UPDATED_TIMESTAMP_2,
     VOR_VERSIONS_1,
     VOR_VERSIONS_2,

@@ -28,11 +28,9 @@ from tests.unit_tests.docmaps.v2.test_data import (
     COLLECTIONS_DICT_1,
     DOCMAPS_QUERY_RESULT_ITEM_1,
     DOCMAPS_QUERY_RESULT_ITEM_2,
-    DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSION,
     DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSIONS_1,
     DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSIONS_2,
     MANUSCRIPT_VERSION_WITH_EVALUATIONS_1,
-    MANUSCRIPT_VERSION_WITH_EVALUATIONS_AND_VOR_1,
     PODCAST_DICT_WITH_NO_VALUE_1,
     RELATED_ARTICLE_CONTENT_INPUT_DICT_1,
     RELATED_ARTICLE_DOCMAP_OUTPUT_1,
@@ -451,7 +449,9 @@ class TestGetDocmapElifeManuscriptInput:
         assert result == {
             'type': 'preprint',
             'doi': get_elife_manuscript_version_doi(
-                elife_doi_version_str=MANUSCRIPT_VERSION_WITH_EVALUATIONS_1['elife_doi_version_str'],
+                elife_doi_version_str=(
+                    MANUSCRIPT_VERSION_WITH_EVALUATIONS_1['elife_doi_version_str']
+                ),
                 elife_doi=DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSIONS_1['elife_doi']
             ),
             'identifier': DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSIONS_1['manuscript_id'],
@@ -467,13 +467,17 @@ class TestGetDocmapElifeManuscriptInput:
         assert result == {
             'type': 'version-of-record',
             'doi': get_elife_manuscript_version_doi(
-                elife_doi_version_str=MANUSCRIPT_VERSION_WITH_EVALUATIONS_1['elife_doi_version_str'],
+                elife_doi_version_str=(
+                    MANUSCRIPT_VERSION_WITH_EVALUATIONS_1['elife_doi_version_str']
+                ),
                 elife_doi=DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSIONS_2['elife_doi'],
                 is_vor=True
             ),
             'identifier': DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSIONS_2['manuscript_id'],
             'versionIdentifier': get_elife_manuscript_version(
-                elife_doi_version_str=MANUSCRIPT_VERSION_WITH_EVALUATIONS_1['elife_doi_version_str'],
+                elife_doi_version_str=(
+                    MANUSCRIPT_VERSION_WITH_EVALUATIONS_1['elife_doi_version_str']
+                ),
                 is_vor=True
             )
         }
