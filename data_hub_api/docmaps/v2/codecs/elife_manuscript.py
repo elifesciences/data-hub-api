@@ -277,9 +277,10 @@ def get_docmap_elife_manuscript_output_for_vor(
 
 def get_docmap_elife_manuscript_input(
     query_result_item: ApiInput,
-    manuscript_version: ApiManuscriptVersionInput
+    manuscript_version: ApiManuscriptVersionInput,
+    vor_version_number: int
 ) -> DocmapElifeManuscriptInput:
-    return {
+    input = {
         'type': 'preprint',
         'doi': get_elife_manuscript_version_doi(
             elife_doi=query_result_item['elife_doi'],
@@ -288,3 +289,18 @@ def get_docmap_elife_manuscript_input(
         'identifier': query_result_item['manuscript_id'],
         'versionIdentifier': manuscript_version['elife_doi_version_str']
     }
+    if vor_version_number > 1:
+        return {
+            **input,
+            'type': 'version-of-record',
+            'doi': get_elife_manuscript_version_doi(
+                elife_doi=query_result_item['elife_doi'],
+                elife_doi_version_str=manuscript_version['elife_doi_version_str'],
+                is_vor=True
+            ),
+            'versionIdentifier': get_elife_manuscript_version(
+                elife_doi_version_str=manuscript_version['elife_doi_version_str'],
+                is_vor=True
+            )
+        }
+    return input

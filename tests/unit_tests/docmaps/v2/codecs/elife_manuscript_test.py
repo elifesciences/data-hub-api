@@ -444,15 +444,36 @@ class TestGetDocmapElifeManuscriptOutputForVor:
 class TestGetDocmapElifeManuscriptInput:
     def test_should_populate_docmaps_elife_manuscript_input(self):
         result = get_docmap_elife_manuscript_input(
-            query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1,
-            manuscript_version=MANUSCRIPT_VERSION_1
+            query_result_item=DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSIONS_1,
+            manuscript_version=MANUSCRIPT_VERSION_WITH_EVALUATIONS_1,
+            vor_version_number=VOR_VERSIONS_1['vor_version_number']
         )
         assert result == {
             'type': 'preprint',
             'doi': get_elife_manuscript_version_doi(
-                elife_doi_version_str=MANUSCRIPT_VERSION_1['elife_doi_version_str'],
-                elife_doi=DOCMAPS_QUERY_RESULT_ITEM_1['elife_doi']
+                elife_doi_version_str=MANUSCRIPT_VERSION_WITH_EVALUATIONS_1['elife_doi_version_str'],
+                elife_doi=DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSIONS_1['elife_doi']
             ),
-            'identifier': DOCMAPS_QUERY_RESULT_ITEM_1['manuscript_id'],
-            'versionIdentifier': MANUSCRIPT_VERSION_1['elife_doi_version_str']
+            'identifier': DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSIONS_1['manuscript_id'],
+            'versionIdentifier': MANUSCRIPT_VERSION_WITH_EVALUATIONS_1['elife_doi_version_str']
+        }
+
+    def test_should_populate_docmaps_elife_manuscript_input_for_vor_corrected_step(self):
+        result = get_docmap_elife_manuscript_input(
+            query_result_item=DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSIONS_2,
+            manuscript_version=MANUSCRIPT_VERSION_WITH_EVALUATIONS_1,
+            vor_version_number=VOR_VERSIONS_2['vor_version_number']
+        )
+        assert result == {
+            'type': 'version-of-record',
+            'doi': get_elife_manuscript_version_doi(
+                elife_doi_version_str=MANUSCRIPT_VERSION_WITH_EVALUATIONS_1['elife_doi_version_str'],
+                elife_doi=DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSIONS_2['elife_doi'],
+                is_vor=True
+            ),
+            'identifier': DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSIONS_2['manuscript_id'],
+            'versionIdentifier': get_elife_manuscript_version(
+                elife_doi_version_str=MANUSCRIPT_VERSION_WITH_EVALUATIONS_1['elife_doi_version_str'],
+                is_vor=True
+            )
         }

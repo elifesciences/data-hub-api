@@ -63,13 +63,12 @@ from tests.unit_tests.docmaps.v2.test_data import (
     MANUSCRIPT_VERSION_2,
     MANUSCRIPT_VERSION_WITH_EVALUATIONS_1,
     MANUSCRIPT_VERSION_WITH_EVALUATIONS_2,
-    MANUSCRIPT_VERSION_WITH_EVALUATIONS_AND_VOR_1,
-    MANUSCRIPT_VERSION_WITH_EVALUATIONS_AND_VOR_2,
     PREPRINT_LINK_PREFIX,
     PREPRINT_VERSION_1,
     PREPRINT_VERSION_2,
     PUBLISHER_DICT_1,
     SENIOR_EDITOR_DETAIL_1,
+    VOR_UPDATED_TIMESTAMP_1,
     VOR_UPDATED_TIMESTAMP_2,
     VOR_VERSIONS_1,
     VOR_VERSIONS_2,
@@ -161,7 +160,7 @@ class TestGetDocmapAssertionsForVorSteps:
             query_result_item=DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSIONS_2,
             manuscript_version=MANUSCRIPT_VERSION_WITH_EVALUATIONS_1,
             vor_version_number=VOR_VERSIONS_2['vor_version_number'],
-            vor_updated_date=VOR_UPDATED_TIMESTAMP_2
+            vor_updated_timestamp=VOR_UPDATED_TIMESTAMP_2
         )
         assertion_status = assertion_list[0]['status']
         assertion_happened = assertion_list[0]['happened']
@@ -241,19 +240,6 @@ class TestGetDocmapsItemForQueryResultItem:
         peer_reviewed_step = docmaps_item['steps']['_:b1']
         assert peer_reviewed_step['assertions'] == [{
             'item': get_docmap_preprint_assertion_item(manuscript_version=MANUSCRIPT_VERSION_1),
-            'status': 'peer-reviewed'
-        }]
-
-    def test_should_populate_assertions_peer_reviewed_step_for_manuscript_has_vor_pub_date(self):
-        docmaps_item = get_docmap_item_for_query_result_item({
-            **DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS,
-            'manuscript_versions': [MANUSCRIPT_VERSION_WITH_EVALUATIONS_AND_VOR_1]
-        })
-        peer_reviewed_step = docmaps_item['steps']['_:b1']
-        assert peer_reviewed_step['assertions'] == [{
-            'item': get_docmap_preprint_assertion_item(
-                manuscript_version=MANUSCRIPT_VERSION_WITH_EVALUATIONS_AND_VOR_1
-            ),
             'status': 'peer-reviewed'
         }]
 
@@ -617,7 +603,22 @@ class TestGetDocmapsItemForQueryResultItem:
         vor_published_step = docmaps_item['steps']['_:b3']
         assert vor_published_step['inputs'] == [get_docmap_elife_manuscript_input(
             query_result_item=query_result_item,
-            manuscript_version=MANUSCRIPT_VERSION_WITH_EVALUATIONS_1
+            manuscript_version=MANUSCRIPT_VERSION_WITH_EVALUATIONS_1,
+            vor_version_number=VOR_VERSIONS_1['vor_version_number']
+        )]
+
+    def test_should_populate_inputs_for_vor_corrected_step(self):
+        manuscript_versions = [MANUSCRIPT_VERSION_WITH_EVALUATIONS_1]
+        query_result_item = {
+            **DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSIONS_2,
+            'manuscript_versions': manuscript_versions
+        }
+        docmaps_item = get_docmap_item_for_query_result_item(query_result_item)
+        vor_published_step = docmaps_item['steps']['_:b4']
+        assert vor_published_step['inputs'] == [get_docmap_elife_manuscript_input(
+            query_result_item=query_result_item,
+            manuscript_version=MANUSCRIPT_VERSION_WITH_EVALUATIONS_1,
+            vor_version_number=VOR_VERSIONS_2['vor_version_number']
         )]
 
     def test_should_populate_assertions_for_vor_published_step(self):
@@ -634,7 +635,25 @@ class TestGetDocmapsItemForQueryResultItem:
         assert vor_published_step['assertions'] == get_docmap_assertions_for_vor_steps(
             query_result_item=query_result_item,
             manuscript_version=MANUSCRIPT_VERSION_WITH_EVALUATIONS_2,
-            vor_version_number=1
+            vor_version_number=VOR_VERSIONS_1['vor_version_number']
+        )
+
+    def test_should_populate_assertions_for_vor_corrected_step(self):
+        manuscript_versions = [
+            MANUSCRIPT_VERSION_WITH_EVALUATIONS_1,
+            MANUSCRIPT_VERSION_WITH_EVALUATIONS_2
+        ]
+        query_result_item = {
+            **DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSIONS_2,
+            'manuscript_versions': manuscript_versions
+        }
+        docmaps_item = get_docmap_item_for_query_result_item(query_result_item)
+        vor_published_step = docmaps_item['steps']['_:b7']
+        assert vor_published_step['assertions'] == get_docmap_assertions_for_vor_steps(
+            query_result_item=query_result_item,
+            manuscript_version=MANUSCRIPT_VERSION_WITH_EVALUATIONS_2,
+            vor_version_number=VOR_VERSIONS_2['vor_version_number'],
+            vor_updated_timestamp=VOR_UPDATED_TIMESTAMP_2
         )
 
     def test_should_populate_actions_for_vor_published_step(self):
@@ -650,7 +669,25 @@ class TestGetDocmapsItemForQueryResultItem:
         vor_published_step = docmaps_item['steps']['_:b6']
         assert vor_published_step['actions'] == get_docmap_actions_for_vor_published_step(
             query_result_item=query_result_item,
-            manuscript_version=MANUSCRIPT_VERSION_WITH_EVALUATIONS_2
+            manuscript_version=MANUSCRIPT_VERSION_WITH_EVALUATIONS_2,
+            vor_version_number=VOR_VERSIONS_1['vor_version_number']
+        )
+
+    def test_should_populate_actions_for_vor_corrected_step(self):
+        manuscript_versions = [
+            MANUSCRIPT_VERSION_WITH_EVALUATIONS_1,
+            MANUSCRIPT_VERSION_WITH_EVALUATIONS_2
+        ]
+        query_result_item = {
+            **DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSIONS_2,
+            'manuscript_versions': manuscript_versions
+        }
+        docmaps_item = get_docmap_item_for_query_result_item(query_result_item)
+        vor_published_step = docmaps_item['steps']['_:b7']
+        assert vor_published_step['actions'] == get_docmap_actions_for_vor_published_step(
+            query_result_item=query_result_item,
+            manuscript_version=MANUSCRIPT_VERSION_WITH_EVALUATIONS_2,
+            vor_version_number=VOR_VERSIONS_2['vor_version_number']
         )
 
     def test_should_not_have_first_manuscript_published_step_if_publication_timestamp_not_provided(

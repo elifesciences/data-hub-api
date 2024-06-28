@@ -20,7 +20,7 @@ from data_hub_api.docmaps.v2.codecs.preprint import (
     get_docmap_preprint_input,
     get_docmap_preprint_input_with_published_and_meca_path
 )
-from data_hub_api.docmaps.v2.api_input_typing import ApiInput, ApiManuscriptVersionInput
+from data_hub_api.docmaps.v2.api_input_typing import ApiInput, ApiManuscriptVersionInput, ApiVorVersionsInput
 
 from data_hub_api.docmaps.v2.docmap_typing import (
     DocmapAction,
@@ -222,7 +222,7 @@ def get_docmap_assertions_for_vor_steps(
     query_result_item: ApiInput,
     manuscript_version: ApiManuscriptVersionInput,
     vor_version_number: int,
-    vor_updated_date: Optional[datetime] = None
+    vor_updated_timestamp: Optional[datetime] = None
 ) -> Sequence[DocmapAssertion]:
     assertion = {
         'item': get_docmap_elife_manuscript_doi_assertion_item_for_vor(
@@ -232,24 +232,26 @@ def get_docmap_assertions_for_vor_steps(
         'status': 'vor-published'
     }
     if vor_version_number > 1:
+        assert vor_updated_timestamp
         return [{
             **assertion,
             'status': 'corrected',
-            'happened': vor_updated_date.isoformat()
+            'happened': vor_updated_timestamp.isoformat()
         }]
     return [assertion]
 
 
 def get_docmap_actions_for_vor_published_step(
     query_result_item: ApiInput,
-    manuscript_version: ApiManuscriptVersionInput
+    manuscript_version: ApiManuscriptVersionInput,
+    vor_version_number: int
 ) -> Sequence[DocmapAction]:
     return [{
         'participants': [],
         'outputs': [get_docmap_elife_manuscript_output_for_vor(
             query_result_item=query_result_item,
             manuscript_version=manuscript_version,
-            vor_version_number=1
+            vor_version_number=vor_version_number
         )]
     }]
 
@@ -257,20 +259,25 @@ def get_docmap_actions_for_vor_published_step(
 def get_docmaps_step_for_vor_published_status(
     query_result_item: ApiInput,
     manuscript_version: ApiManuscriptVersionInput,
+    vor_version: Optional[ApiVorVersionsInput]
 ) -> DocmapStep:
+    vor_version_number = vor_version['vor_version_number']
     return {
         'actions': get_docmap_actions_for_vor_published_step(
             query_result_item=query_result_item,
-            manuscript_version=manuscript_version
+            manuscript_version=manuscript_version,
+            vor_version_number=vor_version_number
         ),
         'assertions': get_docmap_assertions_for_vor_steps(
             query_result_item=query_result_item,
             manuscript_version=manuscript_version,
-            vor_version_number=1
+            vor_version_number=vor_version_number,
+            vor_updated_timestamp=vor_version['vor_updated_timestamp']
         ),
         'inputs': [get_docmap_elife_manuscript_input(
             query_result_item=query_result_item,
-            manuscript_version=manuscript_version
+            manuscript_version=manuscript_version,
+            vor_version_number=vor_version_number
         )]
     }
 
@@ -298,10 +305,12 @@ def iter_docmap_steps_for_query_result_item(query_result_item: ApiInput) -> Iter
                     manuscript_version=manuscript_version
                 )
         if vor_versions and index == len(manuscript_versions) - 1:
-            yield get_docmaps_step_for_vor_published_status(
-                query_result_item=query_result_item,
-                manuscript_version=manuscript_version
-            )
+            for vor_version in vor_versions:
+                yield get_docmaps_step_for_vor_published_status(
+                    query_result_item=query_result_item,
+                    manuscript_version=manuscript_version,
+                    vor_version=vor_version
+                )
 
 
 def generate_docmap_steps_and_remove_none_value_keys(
