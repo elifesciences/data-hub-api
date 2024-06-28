@@ -228,7 +228,7 @@ def get_docmap_assertions_for_vor_steps(
     vor_version_number: int,
     vor_updated_timestamp: Optional[datetime] = None
 ) -> Sequence[DocmapAssertion]:
-    assertion = {
+    assertion: DocmapAssertion = {
         'item': get_docmap_elife_manuscript_doi_assertion_item_for_vor(
             query_result_item=query_result_item,
             manuscript_version=manuscript_version
@@ -238,7 +238,7 @@ def get_docmap_assertions_for_vor_steps(
     if vor_version_number > 1:
         assert vor_updated_timestamp
         return [{
-            **assertion,
+            **assertion,  # type: ignore
             'status': 'corrected',
             'happened': vor_updated_timestamp.isoformat()
         }]
@@ -263,7 +263,7 @@ def get_docmap_actions_for_vor_published_step(
 def get_docmaps_step_for_vor_published_status(
     query_result_item: ApiInput,
     manuscript_version: ApiManuscriptVersionInput,
-    vor_version: Optional[ApiVorVersionsInput]
+    vor_version: ApiVorVersionsInput
 ) -> DocmapStep:
     vor_version_number = vor_version['vor_version_number']
     return {

@@ -205,7 +205,7 @@ DOCMAPS_QUERY_RESULT_ITEM_1: ApiInput = {
     'license': LICENSE_1,
     'is_reviewed_preprint_type': True,
     'manuscript_versions': [MANUSCRIPT_VERSION_1],
-    'vor_versions': [],
+    'vor_versions': None,
     'related_content': [RELATED_CONTENT_DICT_WITH_NO_VALUE_1]
 }
 
@@ -216,7 +216,7 @@ DOCMAPS_QUERY_RESULT_ITEM_2: ApiInput = {
     'license': LICENSE_1,
     'is_reviewed_preprint_type': True,
     'manuscript_versions': [MANUSCRIPT_VERSION_1, MANUSCRIPT_VERSION_2],
-    'vor_versions': [],
+    'vor_versions': None,
     'related_content': [RELATED_CONTENT_DICT_WITH_ALL_VALUE_1]
 }
 
