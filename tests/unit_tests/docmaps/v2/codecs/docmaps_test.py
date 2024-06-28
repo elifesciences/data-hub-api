@@ -32,7 +32,7 @@ from data_hub_api.docmaps.v2.codecs.preprint import (
 
 from data_hub_api.docmaps.v2.codecs.docmaps import (
     get_docmap_actions_for_under_review_step,
-    get_docmap_actions_for_vor_published_step,
+    get_docmap_actions_for_vor_steps,
     get_docmap_assertions_for_under_review_step,
     get_docmap_assertions_for_vor_steps,
     get_docmap_item_for_query_result_item,
@@ -613,8 +613,8 @@ class TestGetDocmapsItemForQueryResultItem:
             'manuscript_versions': manuscript_versions
         }
         docmaps_item = get_docmap_item_for_query_result_item(query_result_item)
-        vor_published_step = docmaps_item['steps']['_:b4']
-        assert vor_published_step['inputs'] == [get_docmap_elife_manuscript_input(
+        vor_corrected_step = docmaps_item['steps']['_:b4']
+        assert vor_corrected_step['inputs'] == [get_docmap_elife_manuscript_input(
             query_result_item=query_result_item,
             manuscript_version=MANUSCRIPT_VERSION_WITH_EVALUATIONS_1,
             vor_version_number=VOR_VERSIONS_2['vor_version_number']
@@ -647,8 +647,8 @@ class TestGetDocmapsItemForQueryResultItem:
             'manuscript_versions': manuscript_versions
         }
         docmaps_item = get_docmap_item_for_query_result_item(query_result_item)
-        vor_published_step = docmaps_item['steps']['_:b7']
-        assert vor_published_step['assertions'] == get_docmap_assertions_for_vor_steps(
+        vor_corrected_step = docmaps_item['steps']['_:b7']
+        assert vor_corrected_step['assertions'] == get_docmap_assertions_for_vor_steps(
             query_result_item=query_result_item,
             manuscript_version=MANUSCRIPT_VERSION_WITH_EVALUATIONS_2,
             vor_version_number=VOR_VERSIONS_2['vor_version_number'],
@@ -666,7 +666,7 @@ class TestGetDocmapsItemForQueryResultItem:
         }
         docmaps_item = get_docmap_item_for_query_result_item(query_result_item)
         vor_published_step = docmaps_item['steps']['_:b6']
-        assert vor_published_step['actions'] == get_docmap_actions_for_vor_published_step(
+        assert vor_published_step['actions'] == get_docmap_actions_for_vor_steps(
             query_result_item=query_result_item,
             manuscript_version=MANUSCRIPT_VERSION_WITH_EVALUATIONS_2,
             vor_version_number=VOR_VERSIONS_1['vor_version_number']
@@ -682,8 +682,8 @@ class TestGetDocmapsItemForQueryResultItem:
             'manuscript_versions': manuscript_versions
         }
         docmaps_item = get_docmap_item_for_query_result_item(query_result_item)
-        vor_published_step = docmaps_item['steps']['_:b7']
-        assert vor_published_step['actions'] == get_docmap_actions_for_vor_published_step(
+        vor_corrected_step = docmaps_item['steps']['_:b7']
+        assert vor_corrected_step['actions'] == get_docmap_actions_for_vor_steps(
             query_result_item=query_result_item,
             manuscript_version=MANUSCRIPT_VERSION_WITH_EVALUATIONS_2,
             vor_version_number=VOR_VERSIONS_2['vor_version_number']

@@ -245,7 +245,7 @@ def get_docmap_assertions_for_vor_steps(
     return [assertion]
 
 
-def get_docmap_actions_for_vor_published_step(
+def get_docmap_actions_for_vor_steps(
     query_result_item: ApiInput,
     manuscript_version: ApiManuscriptVersionInput,
     vor_version_number: int
@@ -260,14 +260,14 @@ def get_docmap_actions_for_vor_published_step(
     }]
 
 
-def get_docmaps_step_for_vor_published_status(
+def get_docmaps_step_for_vor_published_or_corrected_status(
     query_result_item: ApiInput,
     manuscript_version: ApiManuscriptVersionInput,
     vor_version: ApiVorVersionsInput
 ) -> DocmapStep:
     vor_version_number = vor_version['vor_version_number']
     return {
-        'actions': get_docmap_actions_for_vor_published_step(
+        'actions': get_docmap_actions_for_vor_steps(
             query_result_item=query_result_item,
             manuscript_version=manuscript_version,
             vor_version_number=vor_version_number
@@ -310,7 +310,7 @@ def iter_docmap_steps_for_query_result_item(query_result_item: ApiInput) -> Iter
                 )
         if vor_versions and index == len(manuscript_versions) - 1:
             for vor_version in vor_versions:
-                yield get_docmaps_step_for_vor_published_status(
+                yield get_docmaps_step_for_vor_published_or_corrected_status(
                     query_result_item=query_result_item,
                     manuscript_version=manuscript_version,
                     vor_version=vor_version
