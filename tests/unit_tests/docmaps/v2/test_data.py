@@ -48,7 +48,6 @@ RP_PUBLICATION_TIMESTAMP_2 = datetime.fromisoformat('2023-06-05T01:02:03+00:00')
 VOR_PUBLICATION_DATE_1 = date.fromisoformat('2023-08-03')
 VOR_UPDATED_TIMESTAMP_1 = datetime.fromisoformat('2023-08-03T00:00:00+00:00')
 VOR_UPDATED_TIMESTAMP_2 = datetime.fromisoformat('2023-12-03T01:02:03+00:00')
-VOR_UPDATED_TIMESTAMP_3 = datetime.fromisoformat('2024-06-26T16:15:00+00:00')
 
 SUBJECT_AREA_NAME_1 = 'subject_area_name_1'
 SUBJECT_AREA_NAME_2 = 'subject_area_name_2'
