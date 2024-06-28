@@ -1,5 +1,6 @@
+from datetime import datetime
 import logging
-from typing import Dict, Iterable, Sequence, Union, cast
+from typing import Dict, Iterable, Optional, Sequence, Union, cast
 import urllib
 
 from data_hub_api.docmaps.v2.codecs.elife_manuscript import (
@@ -217,17 +218,26 @@ def get_docmaps_step_for_manuscript_published_status(
     }
 
 
-def get_docmap_assertions_for_vor_published_step(
+def get_docmap_assertions_for_vor_steps(
     query_result_item: ApiInput,
-    manuscript_version: ApiManuscriptVersionInput
+    manuscript_version: ApiManuscriptVersionInput,
+    vor_version_number: int,
+    vor_updated_date: Optional[datetime] = None
 ) -> Sequence[DocmapAssertion]:
-    return [{
+    assertion = {
         'item': get_docmap_elife_manuscript_doi_assertion_item_for_vor(
             query_result_item=query_result_item,
             manuscript_version=manuscript_version
         ),
         'status': 'vor-published'
-    }]
+    }
+    if vor_version_number > 1:
+        return [{
+            **assertion,
+            'status': 'corrected',
+            'happened': vor_updated_date.isoformat()
+        }]
+    return [assertion]
 
 
 def get_docmap_actions_for_vor_published_step(
@@ -253,9 +263,10 @@ def get_docmaps_step_for_vor_published_status(
             query_result_item=query_result_item,
             manuscript_version=manuscript_version
         ),
-        'assertions': get_docmap_assertions_for_vor_published_step(
+        'assertions': get_docmap_assertions_for_vor_steps(
             query_result_item=query_result_item,
-            manuscript_version=manuscript_version
+            manuscript_version=manuscript_version,
+            vor_version_number=1
         ),
         'inputs': [get_docmap_elife_manuscript_input(
             query_result_item=query_result_item,

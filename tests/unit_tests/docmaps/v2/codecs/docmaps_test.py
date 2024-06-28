@@ -34,7 +34,7 @@ from data_hub_api.docmaps.v2.codecs.docmaps import (
     get_docmap_actions_for_under_review_step,
     get_docmap_actions_for_vor_published_step,
     get_docmap_assertions_for_under_review_step,
-    get_docmap_assertions_for_vor_published_step,
+    get_docmap_assertions_for_vor_steps,
     get_docmap_item_for_query_result_item,
     DOCMAPS_JSONLD_SCHEMA_URL,
     DOCMAP_ID_PREFIX,
@@ -50,6 +50,7 @@ from tests.unit_tests.docmaps.v2.test_data import (
     DOCMAPS_QUERY_RESULT_ITEM_2,
     DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS,
     DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSIONS_1,
+    DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSIONS_2,
     DOI_1,
     EDITOR_DETAIL_1,
     EVALUATION_SUFFIX_1,
@@ -69,6 +70,9 @@ from tests.unit_tests.docmaps.v2.test_data import (
     PREPRINT_VERSION_2,
     PUBLISHER_DICT_1,
     SENIOR_EDITOR_DETAIL_1,
+    VOR_UPDATED_TIMESTAMP_2,
+    VOR_VERSIONS_1,
+    VOR_VERSIONS_2,
 )
 
 
@@ -140,6 +144,29 @@ class TestGenerateDocmapSteps:
         assert steps['_:b2']['previous-step'] == '_:b1'
         with pytest.raises(KeyError):
             assert steps['_:b2']['next-step']
+
+
+class TestGetDocmapAssertionsForVorSteps:
+    def test_should_populate_assertion_status_for_first_vor_version_as_vor_published(self):
+        assertion_list = get_docmap_assertions_for_vor_steps(
+            query_result_item=DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSIONS_1,
+            manuscript_version=MANUSCRIPT_VERSION_WITH_EVALUATIONS_1,
+            vor_version_number=VOR_VERSIONS_1['vor_version_number']
+        )
+        assertion_status = assertion_list[0]['status']
+        assert assertion_status == 'vor-published'
+
+    def test_should_populate_assertion_status_after_first_version_as_corrected_with_happened(self):
+        assertion_list = get_docmap_assertions_for_vor_steps(
+            query_result_item=DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSIONS_2,
+            manuscript_version=MANUSCRIPT_VERSION_WITH_EVALUATIONS_1,
+            vor_version_number=VOR_VERSIONS_2['vor_version_number'],
+            vor_updated_date=VOR_UPDATED_TIMESTAMP_2
+        )
+        assertion_status = assertion_list[0]['status']
+        assertion_happened = assertion_list[0]['happened']
+        assert assertion_status == 'corrected'
+        assert assertion_happened == VOR_UPDATED_TIMESTAMP_2.isoformat()
 
 
 class TestGetDocmapsItemForQueryResultItem:
@@ -604,9 +631,10 @@ class TestGetDocmapsItemForQueryResultItem:
         }
         docmaps_item = get_docmap_item_for_query_result_item(query_result_item)
         vor_published_step = docmaps_item['steps']['_:b6']
-        assert vor_published_step['assertions'] == get_docmap_assertions_for_vor_published_step(
+        assert vor_published_step['assertions'] == get_docmap_assertions_for_vor_steps(
             query_result_item=query_result_item,
-            manuscript_version=MANUSCRIPT_VERSION_WITH_EVALUATIONS_2
+            manuscript_version=MANUSCRIPT_VERSION_WITH_EVALUATIONS_2,
+            vor_version_number=1
         )
 
     def test_should_populate_actions_for_vor_published_step(self):
