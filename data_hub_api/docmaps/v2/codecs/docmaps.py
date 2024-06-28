@@ -238,7 +238,8 @@ def get_docmap_actions_for_vor_published_step(
         'participants': [],
         'outputs': [get_docmap_elife_manuscript_output_for_vor(
             query_result_item=query_result_item,
-            manuscript_version=manuscript_version
+            manuscript_version=manuscript_version,
+            vor_version_number=1
         )]
     }]
 
@@ -269,6 +270,7 @@ def iter_docmap_steps_for_query_result_item(query_result_item: ApiInput) -> Iter
         for manuscript_version in query_result_item['manuscript_versions']
         if '-VOR-' not in manuscript_version['long_manuscript_identifier']
     ]
+    vor_versions = query_result_item['vor_versions']
     for index, manuscript_version in enumerate(manuscript_versions):
         yield get_docmaps_step_for_under_review_status(query_result_item, manuscript_version)
         if manuscript_version['evaluations']:
@@ -284,7 +286,7 @@ def iter_docmap_steps_for_query_result_item(query_result_item: ApiInput) -> Iter
                     query_result_item=query_result_item,
                     manuscript_version=manuscript_version
                 )
-        if manuscript_version['vor_publication_date'] and index == len(manuscript_versions) - 1:
+        if vor_versions and index == len(manuscript_versions) - 1:
             yield get_docmaps_step_for_vor_published_status(
                 query_result_item=query_result_item,
                 manuscript_version=manuscript_version
