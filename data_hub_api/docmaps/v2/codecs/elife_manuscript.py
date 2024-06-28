@@ -250,7 +250,8 @@ def get_docmap_elife_manuscript_output_content_for_vor(
 def get_docmap_elife_manuscript_output_for_vor(
     query_result_item: ApiInput,
     manuscript_version: ApiManuscriptVersionInput,
-    is_vor: bool = True
+    vor_version_number: int,
+    is_vor: bool = True,
 ) -> DocmapElifeManuscriptVorOutput:
     manuscript_version_doi = get_elife_manuscript_version_doi(
         elife_doi=query_result_item['elife_doi'],
@@ -265,15 +266,11 @@ def get_docmap_elife_manuscript_output_for_vor(
              manuscript_version['elife_doi_version_str'],
              is_vor
          ),
-        'published': (
-            manuscript_version['vor_publication_date'].isoformat()
-            if manuscript_version['vor_publication_date']
-            else None
-        ),
+        'published': query_result_item['vor_versions'][0]['vor_publication_date'].isoformat(),
         'url': f'{DOI_ROOT_URL}' + manuscript_version_doi,
         'content': get_docmap_elife_manuscript_output_content_for_vor(
             query_result_item=query_result_item,
-            vor_version_number=1
+            vor_version_number=vor_version_number
         )
     }
 
