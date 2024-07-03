@@ -338,7 +338,7 @@ class TestGetDocmapElifeManuscriptOutputForPublishedStep:
 
 
 class TestGetDocmapElifeManuscriptOutputContentForVor:
-    def test_should_populate_vor_output_content_with_umbrella_url(self):
+    def test_should_populate_vor_output_content_with_versined_url_for_vor_published_step(self):
         result = get_docmap_elife_manuscript_output_content_for_vor(
             query_result_item=DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSIONS_1,
             vor_version_number=VOR_VERSIONS_1['vor_version_number']
@@ -348,10 +348,12 @@ class TestGetDocmapElifeManuscriptOutputContentForVor:
             'url': (
                 'https://elifesciences.org/articles/'
                 + DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSIONS_1['manuscript_id']
+                + 'v'
+                + str(VOR_VERSIONS_1['vor_version_number'])
             )
         }]
 
-    def test_should_populate_corrected_vor_output_content_with_versined_url(self):
+    def test_should_populate_vor_output_content_with_versined_url_for_vor_corrected_step(self):
         result = get_docmap_elife_manuscript_output_content_for_vor(
             query_result_item=DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSIONS_2,
             vor_version_number=VOR_VERSIONS_2['vor_version_number']
@@ -398,6 +400,8 @@ class TestGetDocmapElifeManuscriptOutputForVor:
                 'url': (
                     'https://elifesciences.org/articles/'
                     + DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSIONS_1['manuscript_id']
+                    + 'v'
+                    + str(VOR_VERSIONS_1['vor_version_number'])
                 )
             }]
         }
