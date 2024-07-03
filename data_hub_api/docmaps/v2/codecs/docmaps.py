@@ -23,7 +23,7 @@ from data_hub_api.docmaps.v2.codecs.preprint import (
 from data_hub_api.docmaps.v2.api_input_typing import (
     ApiInput,
     ApiManuscriptVersionInput,
-    ApiVorVersionsInput
+    ApiVorVersionInput
 )
 
 from data_hub_api.docmaps.v2.docmap_typing import (
@@ -263,7 +263,7 @@ def get_docmap_actions_for_vor_steps(
 def get_docmaps_step_for_vor_published_or_corrected_status(
     query_result_item: ApiInput,
     manuscript_version: ApiManuscriptVersionInput,
-    vor_version: ApiVorVersionsInput
+    vor_version: ApiVorVersionInput
 ) -> DocmapStep:
     vor_version_number = vor_version['vor_version_number']
     return {
