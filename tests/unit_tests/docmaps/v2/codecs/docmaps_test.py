@@ -166,6 +166,18 @@ class TestGetDocmapAssertionsForVorSteps:
         assert assertion_status == 'corrected'
         assert assertion_happened == VOR_UPDATED_TIMESTAMP_2.isoformat()
 
+    def test_should_populate_assertion_happened_with_none_if_updated_timestamp_not_available(self):
+        assertion_list = get_docmap_assertions_for_vor_steps(
+            query_result_item=DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSIONS_2,
+            manuscript_version=MANUSCRIPT_VERSION_WITH_EVALUATIONS_1,
+            vor_version_number=VOR_VERSIONS_2['vor_version_number'],
+            vor_updated_timestamp=None
+        )
+        assertion_status = assertion_list[0]['status']
+        assertion_happened = assertion_list[0]['happened']
+        assert assertion_status == 'corrected'
+        assert not assertion_happened
+
 
 class TestGetDocmapsItemForQueryResultItem:
     def test_should_populate_context(self):
