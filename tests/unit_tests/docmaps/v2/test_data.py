@@ -6,7 +6,7 @@ from data_hub_api.docmaps.v2.api_input_typing import (
     ApiInput,
     ApiManuscriptVersionInput,
     ApiRelatedContentInput,
-    ApiVorVersionsInput
+    ApiVorVersionInput
 )
 from data_hub_api.docmaps.v2.docmap_typing import DocmapPartOfComplement
 
@@ -259,13 +259,13 @@ MANUSCRIPT_VERSION_WITH_EVALUATIONS_2: ApiManuscriptVersionInput = {
     'evaluations': [DOCMAPS_QUERY_RESULT_EVALUATION_2]
 }
 
-VOR_VERSIONS_1: ApiVorVersionsInput = {
+VOR_VERSIONS_1: ApiVorVersionInput = {
     'vor_version_number': 1,
     'vor_publication_date': VOR_PUBLICATION_DATE_1,
     'vor_updated_timestamp': VOR_UPDATED_TIMESTAMP_1
 }
 
-VOR_VERSIONS_2: ApiVorVersionsInput = {
+VOR_VERSIONS_2: ApiVorVersionInput = {
     'vor_version_number': 2,
     'vor_publication_date': VOR_PUBLICATION_DATE_1,
     'vor_updated_timestamp': VOR_UPDATED_TIMESTAMP_2
