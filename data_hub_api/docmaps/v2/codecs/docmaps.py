@@ -1,5 +1,6 @@
+from datetime import datetime
 import logging
-from typing import Dict, Iterable, Sequence, Union, cast
+from typing import Dict, Iterable, Optional, Sequence, Union, cast
 import urllib
 
 from data_hub_api.docmaps.v2.codecs.elife_manuscript import (
@@ -19,7 +20,11 @@ from data_hub_api.docmaps.v2.codecs.preprint import (
     get_docmap_preprint_input,
     get_docmap_preprint_input_with_published_and_meca_path
 )
-from data_hub_api.docmaps.v2.api_input_typing import ApiInput, ApiManuscriptVersionInput
+from data_hub_api.docmaps.v2.api_input_typing import (
+    ApiInput,
+    ApiManuscriptVersionInput,
+    ApiVorVersionInput
+)
 
 from data_hub_api.docmaps.v2.docmap_typing import (
     DocmapAction,
@@ -217,48 +222,66 @@ def get_docmaps_step_for_manuscript_published_status(
     }
 
 
-def get_docmap_assertions_for_vor_published_step(
+def get_docmap_assertions_for_vor_steps(
     query_result_item: ApiInput,
-    manuscript_version: ApiManuscriptVersionInput
+    manuscript_version: ApiManuscriptVersionInput,
+    vor_version_number: int,
+    vor_updated_timestamp: Optional[datetime] = None
 ) -> Sequence[DocmapAssertion]:
-    return [{
+    assertion: DocmapAssertion = {
         'item': get_docmap_elife_manuscript_doi_assertion_item_for_vor(
             query_result_item=query_result_item,
             manuscript_version=manuscript_version
         ),
         'status': 'vor-published'
-    }]
+    }
+    if vor_version_number > 1:
+        assert vor_updated_timestamp
+        return [{
+            **assertion,  # type: ignore
+            'status': 'corrected',
+            'happened': vor_updated_timestamp.isoformat()
+        }]
+    return [assertion]
 
 
-def get_docmap_actions_for_vor_published_step(
+def get_docmap_actions_for_vor_steps(
     query_result_item: ApiInput,
-    manuscript_version: ApiManuscriptVersionInput
+    manuscript_version: ApiManuscriptVersionInput,
+    vor_version_number: int
 ) -> Sequence[DocmapAction]:
     return [{
         'participants': [],
         'outputs': [get_docmap_elife_manuscript_output_for_vor(
             query_result_item=query_result_item,
-            manuscript_version=manuscript_version
+            manuscript_version=manuscript_version,
+            vor_version_number=vor_version_number
         )]
     }]
 
 
-def get_docmaps_step_for_vor_published_status(
+def get_docmaps_step_for_vor_published_or_corrected_status(
     query_result_item: ApiInput,
     manuscript_version: ApiManuscriptVersionInput,
+    vor_version: ApiVorVersionInput
 ) -> DocmapStep:
+    vor_version_number = vor_version['vor_version_number']
     return {
-        'actions': get_docmap_actions_for_vor_published_step(
+        'actions': get_docmap_actions_for_vor_steps(
             query_result_item=query_result_item,
-            manuscript_version=manuscript_version
+            manuscript_version=manuscript_version,
+            vor_version_number=vor_version_number
         ),
-        'assertions': get_docmap_assertions_for_vor_published_step(
+        'assertions': get_docmap_assertions_for_vor_steps(
             query_result_item=query_result_item,
-            manuscript_version=manuscript_version
+            manuscript_version=manuscript_version,
+            vor_version_number=vor_version_number,
+            vor_updated_timestamp=vor_version['vor_updated_timestamp']
         ),
         'inputs': [get_docmap_elife_manuscript_input(
             query_result_item=query_result_item,
-            manuscript_version=manuscript_version
+            manuscript_version=manuscript_version,
+            vor_version_number=vor_version_number
         )]
     }
 
@@ -269,6 +292,7 @@ def iter_docmap_steps_for_query_result_item(query_result_item: ApiInput) -> Iter
         for manuscript_version in query_result_item['manuscript_versions']
         if '-VOR-' not in manuscript_version['long_manuscript_identifier']
     ]
+    vor_versions = query_result_item['vor_versions']
     for index, manuscript_version in enumerate(manuscript_versions):
         yield get_docmaps_step_for_under_review_status(query_result_item, manuscript_version)
         if manuscript_version['evaluations']:
@@ -284,11 +308,13 @@ def iter_docmap_steps_for_query_result_item(query_result_item: ApiInput) -> Iter
                     query_result_item=query_result_item,
                     manuscript_version=manuscript_version
                 )
-        if manuscript_version['vor_publication_date'] and index == len(manuscript_versions) - 1:
-            yield get_docmaps_step_for_vor_published_status(
-                query_result_item=query_result_item,
-                manuscript_version=manuscript_version
-            )
+        if vor_versions and index == len(manuscript_versions) - 1:
+            for vor_version in vor_versions:
+                yield get_docmaps_step_for_vor_published_or_corrected_status(
+                    query_result_item=query_result_item,
+                    manuscript_version=manuscript_version,
+                    vor_version=vor_version
+                )
 
 
 def generate_docmap_steps_and_remove_none_value_keys(
