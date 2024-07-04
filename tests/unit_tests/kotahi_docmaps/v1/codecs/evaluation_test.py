@@ -6,7 +6,7 @@ from data_hub_api.kotahi_docmaps.v1.codecs.evaluation import (
     DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE,
     extract_elife_assessments_from_email,
     extract_elife_public_reviews_from_email,
-    extract_public_review_parts,
+    extract_public_review_parts_in_html_format,
     generate_evaluation_id,
     get_docmap_affiliation,
     get_docmap_affiliation_location,
@@ -20,11 +20,11 @@ from data_hub_api.kotahi_docmaps.v1.codecs.evaluation import (
 )
 from tests.unit_tests.kotahi_docmaps.v1.test_data import (
     EDITOR_DETAIL_1,
-    ELIFE_ASSESSMENT_1,
     EMAIL_BODY_1,
     EMAIL_BODY_WITH_ELIFE_ASSESSMENT_AND_PUBLIC_REVIEWS_1,
     EMAIL_BODY_WITH_ELIFE_ASSESSMENT_WITHOUT_EXPECTED_END,
     EMAIL_BODY_WITH_JOINT_PUBLIC_REVIEW_1,
+    EXTRACTED_ELIFE_ASSESSMENT_HTML_1,
     JOINT_PUBLIC_REVIEW_1,
     MANUSCRIPT_VERSION_1,
     PUBLIC_REVIEWS_1,
@@ -40,8 +40,8 @@ class TestExtractElifeAssessmentsFromEmail:
     def test_should_extract_elife_assessment_from_email(self):
         result = extract_elife_assessments_from_email(
             EMAIL_BODY_WITH_ELIFE_ASSESSMENT_AND_PUBLIC_REVIEWS_1
-        )
-        assert result == ELIFE_ASSESSMENT_1.strip()
+        ).strip()
+        assert result == EXTRACTED_ELIFE_ASSESSMENT_HTML_1.strip()
 
     def test_should_return_none_if_there_is_no_elife_assessment_in_email(self):
         assert not extract_elife_assessments_from_email(EMAIL_BODY_1)
@@ -53,7 +53,7 @@ class TestExtractElifeAssessmentsFromEmail:
         result = extract_elife_assessments_from_email(
             EMAIL_BODY_WITH_ELIFE_ASSESSMENT_WITHOUT_EXPECTED_END
         )
-        assert result == ELIFE_ASSESSMENT_1.strip()
+        assert result == EXTRACTED_ELIFE_ASSESSMENT_HTML_1.strip()
 
 
 class TestExtractElifePublicReviewsFromEmail:
@@ -76,18 +76,18 @@ class TestExtractElifePublicReviewsFromEmail:
         assert result == JOINT_PUBLIC_REVIEW_1.strip()
 
 
-class TestExtractPublicReviewParts:
+class TestExtractPublicReviewPartsInHtmlFormat:
     def test_should_extract_all_public_reviews_individually(self):
-        result = extract_public_review_parts(PUBLIC_REVIEWS_1)
+        result = extract_public_review_parts_in_html_format(PUBLIC_REVIEWS_1)
         assert result[0] == REVIEW_1.strip()
         assert result[1] == REVIEW_2.strip()
         assert result[2] == REVIEW_3.strip()
 
     def test_should_return_none_when_there_is_no_public_reviews(self):
-        assert not extract_public_review_parts(None)
+        assert not extract_public_review_parts_in_html_format(None)
 
     def test_should_return_none_when_there_is_review_extracted(self):
-        assert not extract_public_review_parts(PUBLIC_REVIEWS_WITHOUT_EVALUATION_1)
+        assert not extract_public_review_parts_in_html_format(PUBLIC_REVIEWS_WITHOUT_EVALUATION_1)
 
 
 class TestGetEvaluationAndTypeListFromEmail:
@@ -97,7 +97,7 @@ class TestGetEvaluationAndTypeListFromEmail:
         )
         assert len(result) > 0
         assert result[0]['evaluation_type'] == DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY
-        assert result[0]['evaluation_text'] == ELIFE_ASSESSMENT_1.strip()
+        assert result[0]['evaluation_text'] == EXTRACTED_ELIFE_ASSESSMENT_HTML_1.strip()
         assert result[1]['evaluation_type'] == DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE
         assert result[1]['evaluation_text'] == REVIEW_1.strip()
         assert result[2]['evaluation_type'] == DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE

@@ -91,40 +91,66 @@ SPACE = ' '
 COLON = ':'
 
 REVIEW_1 = f'''
-    Reviewer #1 (Public Review){COLON}{SPACE}
+Reviewer #1 (Public Review){COLON}{SPACE}
 
-    This is review_1.
+This is review_1.
 '''
 
 REVIEW_2 = f'''
-    Reviewer #2 (Public Review){COLON}
+Reviewer #2 (Public Review){COLON}
 
-    This is review_2.
+This is review_2.
 '''
 
 REVIEW_3 = '''
-    Reviewer #3 (Public Review):
+Reviewer #3 (Public Review):
 
-    This is review_3.
-'''
+This is review_3.
 
-ELIFE_ASSESSMENT_1 = '''
-    eLife assessment
-
-    This is eLife assessment.
+New line
 '''
 
 PUBLIC_REVIEWS_1 = f'''
-    Public Reviews
+Public Reviews
 
-    {REVIEW_1}
+{REVIEW_1}
 
-    {REVIEW_2}
+{REVIEW_2}
 
-    {REVIEW_3}
+{REVIEW_3}
 '''
 
 JOINT_PUBLIC_REVIEW_1 = '''
+Public Review:
+
+Text for public review
+
+'''
+
+ELIFE_ASSESSMENT_1 = '''
+eLife assessment
+
+This is eLife assessment.
+New line.
+'''
+
+EXTRACTED_REVIEW_HTML_1 = f'''
+    <p><strong>Reviewer #1 (Public Review){COLON}{SPACE} </strong></p><p>This is review_1.</p>
+'''
+
+EXTRACTED_REVIEW_HTML_2 = f'''
+    <p><strong> Reviewer #2 (Public Review){COLON}</strong></p><p>This is review_2.</p>
+'''
+
+EXTRACTED_REVIEW_HTML_3 = '''
+    <p><strong>Reviewer #3 (Public Review):</strong></p><p>This is review_3.</p><p>New line</p>
+'''
+
+EXTRACTED_ELIFE_ASSESSMENT_HTML_1 = '''
+    <p><strong>eLife Assessment:</strong></p><p>This is eLife assessment.</p><p>New line.</p>
+'''
+
+EXTRACTED_JOINT_PUBLIC_REVIEW_HTML_1 = '''
     Public Review:
 
     Text for public review

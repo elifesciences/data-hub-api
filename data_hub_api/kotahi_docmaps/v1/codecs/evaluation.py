@@ -33,9 +33,10 @@ def extract_elife_assessments_from_email(email_body: Optional[str]) -> Optional[
         pattern = r'[eE][Ll]ife [aA]ssessment(.*?)(?=(?:[Pp]ublic [Rr]eview|-{10,}|\Z))'
         match = re.search(pattern, email_body, re.S)
         if match:
-            extracted_text = match.group().strip()
-            return extracted_text
-        return None
+            extracted_text = match.group(1).strip()
+            html_text = "<p><strong>eLife Assessment:</strong></p>"
+            html_text += "<p>" + extracted_text.replace('\n', '</p><p>') + "</p>"
+            return html_text
     return None
 
 
@@ -50,7 +51,7 @@ def extract_elife_public_reviews_from_email(email_body: Optional[str]) -> Option
     return None
 
 
-def extract_public_review_parts(public_reviews: Optional[str]):
+def extract_public_review_parts_in_html_format(public_reviews: Optional[str]):
     if public_reviews:
         pattern = r'(?=Reviewer #\d+ \(Public Review\):?)'
         parts = re.split(pattern, public_reviews)
@@ -78,7 +79,9 @@ def get_evaluation_and_type_list_from_email_body(
 
         joint_review_or_public_reviews = extract_elife_public_reviews_from_email(email_body)
         if joint_review_or_public_reviews:
-            public_review_parts = extract_public_review_parts(joint_review_or_public_reviews)
+            public_review_parts = extract_public_review_parts_in_html_format(
+                joint_review_or_public_reviews
+            )
             if public_review_parts:
                 for public_review in public_review_parts:
                     review_dict = {

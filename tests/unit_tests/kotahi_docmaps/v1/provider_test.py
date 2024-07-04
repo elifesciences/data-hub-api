@@ -15,7 +15,7 @@ from data_hub_api.kotahi_docmaps.v1.provider import (
 from tests.unit_tests.kotahi_docmaps.v1.test_data import (
     DOCMAPS_QUERY_RESULT_ITEM_1,
     DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATION_EMAILS_1,
-    ELIFE_ASSESSMENT_1,
+    EXTRACTED_ELIFE_ASSESSMENT_HTML_1,
     LONG_MANUSCRIPT_ID_1
 )
 
@@ -85,4 +85,4 @@ class TestEnhancedPreprintsDocmapsProvider:
             1
         )
         result = DocmapsProvider().get_evaluation_text_by_evaluation_id(evaluation_id)
-        assert result == ELIFE_ASSESSMENT_1.strip()
+        assert result == EXTRACTED_ELIFE_ASSESSMENT_HTML_1.strip()
