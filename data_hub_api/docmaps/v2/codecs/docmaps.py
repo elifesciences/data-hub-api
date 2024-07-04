@@ -236,11 +236,10 @@ def get_docmap_assertions_for_vor_steps(
         'status': 'vor-published'
     }
     if vor_version_number > 1:
-        assert vor_updated_timestamp
         return [{
             **assertion,  # type: ignore
             'status': 'corrected',
-            'happened': vor_updated_timestamp.isoformat()
+            'happened': (vor_updated_timestamp.isoformat() if vor_updated_timestamp else None)
         }]
     return [assertion]
 
