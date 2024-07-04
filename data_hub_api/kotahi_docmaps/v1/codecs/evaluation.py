@@ -28,7 +28,7 @@ DOCMAP_EVALUATION_TYPE_FOR_REPLY = 'reply'
 DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE = 'review-article'
 
 
-def extract_elife_assessments_from_email(email_body: Optional[str]) -> Optional[str]:
+def extract_elife_assessments_from_email_in_html_format(email_body: Optional[str]) -> Optional[str]:
     if email_body:
         pattern = r'[eE][Ll]ife [aA]ssessment(.*?)(?=(?:[Pp]ublic [Rr]eview|-{10,}|\Z))'
         match = re.search(pattern, email_body, re.S)
@@ -69,7 +69,7 @@ def get_evaluation_and_type_list_from_email_body(
     if email_body:
         evalution_list = []
 
-        evaluation_summary_text = extract_elife_assessments_from_email(email_body)
+        evaluation_summary_text = extract_elife_assessments_from_email_in_html_format(email_body)
         if evaluation_summary_text:
             evaluation_summary_dict = {
                 'evaluation_type': DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY,

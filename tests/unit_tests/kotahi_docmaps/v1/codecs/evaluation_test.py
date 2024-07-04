@@ -4,7 +4,7 @@ from data_hub_api.kotahi_docmaps.v1.codecs import evaluation as evaluation_modul
 from data_hub_api.kotahi_docmaps.v1.codecs.evaluation import (
     DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY,
     DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE,
-    extract_elife_assessments_from_email,
+    extract_elife_assessments_from_email_in_html_format,
     extract_elife_public_reviews_from_email,
     extract_public_review_parts_in_html_format,
     generate_evaluation_id,
@@ -36,21 +36,21 @@ from tests.unit_tests.kotahi_docmaps.v1.test_data import (
 )
 
 
-class TestExtractElifeAssessmentsFromEmail:
+class TestExtractElifeAssessmentsFromEmailInHtmlFormat:
     def test_should_extract_elife_assessment_from_email(self):
-        result = extract_elife_assessments_from_email(
+        result = extract_elife_assessments_from_email_in_html_format(
             EMAIL_BODY_WITH_ELIFE_ASSESSMENT_AND_PUBLIC_REVIEWS_1
         ).strip()
         assert result == EXTRACTED_ELIFE_ASSESSMENT_HTML_1.strip()
 
     def test_should_return_none_if_there_is_no_elife_assessment_in_email(self):
-        assert not extract_elife_assessments_from_email(EMAIL_BODY_1)
+        assert not extract_elife_assessments_from_email_in_html_format(EMAIL_BODY_1)
 
     def test_should_return_none_if_there_is_no_email_body(self):
-        assert not extract_elife_assessments_from_email(None)
+        assert not extract_elife_assessments_from_email_in_html_format(None)
 
     def test_should_extract_elife_assessment_from_email_until_public_review(self):
-        result = extract_elife_assessments_from_email(
+        result = extract_elife_assessments_from_email_in_html_format(
             EMAIL_BODY_WITH_ELIFE_ASSESSMENT_WITHOUT_EXPECTED_END
         )
         assert result == EXTRACTED_ELIFE_ASSESSMENT_HTML_1.strip()
