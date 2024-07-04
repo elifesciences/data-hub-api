@@ -176,7 +176,7 @@ class TestGetDocmapAssertionsForVorSteps:
         assertion_status = assertion_list[0]['status']
         assertion_happened = assertion_list[0]['happened']
         assert assertion_status == 'corrected'
-        assert not assertion_happened
+        assert assertion_happened is None
 
 
 class TestGetDocmapsItemForQueryResultItem:
