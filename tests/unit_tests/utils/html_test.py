@@ -11,6 +11,10 @@ class TestConvertPlainTextToHtml:
         result = convert_plain_text_to_html('this is a single line')
         assert result == '<p>this is a single line</p>'
 
+    def test_should_escape_special_charaters_as_html(self):
+        result = convert_plain_text_to_html('this is a single line with these < > charaters')
+        assert result == '<p>this is a single line with these &lt; &gt; charaters</p>'
+
     def test_should_return_multiple_paragraph_for_lines_split_by_blank_lines(self):
         plain_text = textwrap.dedent('''
             this is the first line
