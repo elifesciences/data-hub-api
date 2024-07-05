@@ -23,3 +23,13 @@ class TestConvertPlainTextToHtml:
 
             <p>this is the second line</p>
         ''').strip()
+
+    def test_should_return_multiple_paragraph_for_lines_split_by_blank_lines_with_space(self):
+        plain_text = 'this is the first line\n  \nthis is the second line'
+        result = convert_plain_text_to_html(plain_text)
+        assert result == textwrap.dedent('''
+            <p>this is the first line</p>
+
+            <p>this is the second line</p>
+        ''').strip()
+
