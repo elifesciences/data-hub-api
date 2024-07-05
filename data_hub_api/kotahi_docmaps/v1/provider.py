@@ -4,6 +4,7 @@ from pathlib import Path
 from time import monotonic
 from typing import Iterable, Mapping, Optional, Sequence, cast
 
+from data_hub_api.utils.html import convert_plain_text_to_html
 import objsize
 from data_hub_api.kotahi_docmaps.v1.codecs.docmaps import get_docmap_item_for_query_result_item
 from data_hub_api.kotahi_docmaps.v1.api_input_typing import ApiInput
@@ -128,3 +129,9 @@ class DocmapsProvider:
     def get_evaluation_text_by_evaluation_id(self, evaluation_id: str) -> Optional[str]:
         assert evaluation_id
         return self._get_data().evaluation_text_by_evaluation_id_map.get(evaluation_id)
+
+    def get_evaluation_html_by_evaluation_id(self, evaluation_id: str) -> Optional[str]:
+        evaluation_text = self.get_evaluation_text_by_evaluation_id(evaluation_id)
+        if evaluation_text is not None:
+            return convert_plain_text_to_html(evaluation_text)
+        return None
