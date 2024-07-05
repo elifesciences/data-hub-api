@@ -133,5 +133,5 @@ class DocmapsProvider:
     def get_evaluation_html_by_evaluation_id(self, evaluation_id: str) -> Optional[str]:
         evaluation_text = self.get_evaluation_text_by_evaluation_id(evaluation_id)
         if evaluation_text is not None:
-            return convert_plain_text_to_html(evaluation_text)
+            return convert_plain_text_to_html(evaluation_text, is_first_paragraph_bold=True)
         return None

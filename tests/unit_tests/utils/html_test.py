@@ -37,3 +37,15 @@ class TestConvertPlainTextToHtml:
             <p>this is the second line</p>
         ''').strip()
 
+    def test_should_make_first_paragraph_bold_if_enabled(self):
+        plain_text = textwrap.dedent('''
+            this is the first line
+
+            this is the second line
+        ''')
+        result = convert_plain_text_to_html(plain_text, is_first_paragraph_bold=True)
+        assert result == textwrap.dedent('''
+            <p><strong>this is the first line</strong></p>
+
+            <p>this is the second line</p>
+        ''').strip()
