@@ -3,6 +3,7 @@ import logging
 from typing import Dict, Iterable, Optional, Sequence, Union, cast
 import urllib
 
+from data_hub_api.utils.url import get_basepath
 from data_hub_api.docmaps.v2.codecs.elife_manuscript import (
     get_docmap_elife_manuscript_doi_assertion_item,
     get_docmap_elife_manuscript_doi_assertion_item_for_vor,
@@ -47,7 +48,9 @@ LOGGER = logging.getLogger(__name__)
 DOCMAPS_JSONLD_SCHEMA_URL = 'https://w3id.org/docmaps/context.jsonld'
 
 DOCMAP_ID_PREFIX = (
-    'https://data-hub-api.elifesciences.org/enhanced-preprints/docmaps/v2/'
+    get_basepath()
+    +
+    'enhanced-preprints/docmaps/v2/'
     +
     'by-publisher/elife/get-by-manuscript-id?'
 )
