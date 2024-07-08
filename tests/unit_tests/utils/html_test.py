@@ -49,3 +49,14 @@ class TestConvertPlainTextToHtml:
 
             <p>this is the second line</p>
         ''').strip()
+
+    def test_should_return_paragraph_with_br_when_there_is_a_single_new_line(self):
+        plain_text = textwrap.dedent('''
+            this is the first line
+            this is the second line
+        ''')
+        result = convert_plain_text_to_html(plain_text)
+        assert result == textwrap.dedent('''
+            <p>this is the first line<br/>
+            this is the second line</p>
+        ''').strip()
