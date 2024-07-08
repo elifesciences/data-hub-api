@@ -60,3 +60,11 @@ class TestConvertPlainTextToHtml:
             <p>this is the first line<br/>
             this is the second line</p>
         ''').strip()
+
+    def test_should_remove_trailing_whitespace(self):
+        plain_text = 'this is the first line \t\nthis is the second line \t'
+        result = convert_plain_text_to_html(plain_text)
+        assert result == textwrap.dedent('''
+            <p>this is the first line<br/>
+            this is the second line</p>
+        ''').strip()

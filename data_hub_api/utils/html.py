@@ -1,8 +1,10 @@
 import re
 import html
 
+
 def convert_paragraph_text_to_html(paragraph_text: str, is_bold: bool = False) -> str:
-    inner_html = html.escape(paragraph_text.strip()).replace('\n', '<br/>\n')
+    lines = [line.rstrip() for line in paragraph_text.strip().split('\n')]
+    inner_html = html.escape('\n'.join(lines)).replace('\n', '<br/>\n')
     if is_bold:
         inner_html = f'<strong>{inner_html}</strong>'
     return f'<p>{inner_html}</p>'
