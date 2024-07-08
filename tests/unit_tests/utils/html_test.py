@@ -16,7 +16,7 @@ class TestConvertPlainTextToHtml:
         assert result == '<p>this is a single line with these &lt; &gt; charaters</p>'
 
     def test_should_return_multiple_paragraph_for_lines_split_by_blank_lines(self):
-        plain_text = 'this is the first line\n \nthis is the second line'
+        plain_text = 'this is the first line\n\nthis is the second line'
         result = convert_plain_text_to_html(plain_text)
         assert result == textwrap.dedent('''
             <p>this is the first line</p>
@@ -25,7 +25,16 @@ class TestConvertPlainTextToHtml:
         ''').strip()
 
     def test_should_return_multiple_paragraph_for_lines_split_by_blank_lines_with_space(self):
-        plain_text = 'this is the first line\n  \nthis is the second line'
+        plain_text = 'this is the first line\n   \nthis is the second line'
+        result = convert_plain_text_to_html(plain_text)
+        assert result == textwrap.dedent('''
+            <p>this is the first line</p>
+
+            <p>this is the second line</p>
+        ''').strip()
+
+    def test_should_ignore_additional_new_lines_between_paragraphs(self):
+        plain_text = 'this is the first line\n\n\n\n\nthis is the second line'
         result = convert_plain_text_to_html(plain_text)
         assert result == textwrap.dedent('''
             <p>this is the first line</p>
