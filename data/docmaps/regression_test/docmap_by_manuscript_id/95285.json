@@ -335,7 +335,13 @@
                     "doi": "10.22541/au.169816558.89734100/v1",
                     "url": "https://doi.org/10.22541/au.169816558.89734100/v1",
                     "versionIdentifier": "2",
-                    "published": "2024-05-21"
+                    "published": "2024-05-21",
+                    "content": [
+                        {
+                            "type": "computer-file",
+                            "url": "s3://prod-elife-epp-meca/95285-v2-meca.zip"
+                        }
+                    ]
                 }
             ],
             "next-step": "_:b4",
@@ -497,7 +503,68 @@
                     "versionIdentifier": "2"
                 }
             ],
+            "next-step": "_:b5",
             "previous-step": "_:b3"
+        },
+        "_:b5": {
+            "actions": [
+                {
+                    "participants": [],
+                    "outputs": [
+                        {
+                            "type": "preprint",
+                            "identifier": "95285",
+                            "doi": "10.7554/eLife.95285.2",
+                            "versionIdentifier": "2",
+                            "license": "http://creativecommons.org/licenses/by/4.0/",
+                            "published": "2024-07-05T14:00:00+00:00",
+                            "partOf": {
+                                "type": "manuscript",
+                                "doi": "10.7554/eLife.95285",
+                                "identifier": "95285",
+                                "subjectDisciplines": [
+                                    "Immunology and Inflammation"
+                                ],
+                                "published": "2024-04-12T14:00:00+00:00",
+                                "volumeIdentifier": "13",
+                                "electronicArticleIdentifier": "RP95285",
+                                "complement": []
+                            }
+                        }
+                    ]
+                }
+            ],
+            "assertions": [
+                {
+                    "item": {
+                        "type": "preprint",
+                        "doi": "10.7554/eLife.95285.2",
+                        "versionIdentifier": "2"
+                    },
+                    "status": "manuscript-published"
+                }
+            ],
+            "inputs": [
+                {
+                    "type": "preprint",
+                    "doi": "10.22541/au.169816558.89734100/v1",
+                    "url": "https://doi.org/10.22541/au.169816558.89734100/v1",
+                    "versionIdentifier": "2"
+                },
+                {
+                    "type": "review-article",
+                    "doi": "10.7554/eLife.95285.2.sa0"
+                },
+                {
+                    "type": "evaluation-summary",
+                    "doi": "10.7554/eLife.95285.2.sa1"
+                },
+                {
+                    "type": "reply",
+                    "doi": "10.7554/eLife.95285.2.sa2"
+                }
+            ],
+            "previous-step": "_:b4"
         }
     }
 }
