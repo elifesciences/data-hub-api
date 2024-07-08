@@ -1,3 +1,4 @@
+import os
 import logging
 import json
 from typing import Dict, Iterable, Sequence, Union, cast
@@ -35,8 +36,15 @@ LOGGER = logging.getLogger(__name__)
 
 DOCMAPS_JSONLD_SCHEMA_URL = 'https://w3id.org/docmaps/context.jsonld'
 
+DOCMAP_BASEPATH = os.getenv(
+    'DOCMAP_BASEPATH',
+    'https://data-hub-api.elifesciences.org/'
+)
+
 DOCMAP_ID_PREFIX = (
-    'https://data-hub-api.elifesciences.org/enhanced-preprints/docmaps/v1/'
+    DOCMAP_BASEPATH
+    +
+    'enhanced-preprints/docmaps/v1/'
     +
     'by-publisher/elife/get-by-manuscript-id?'
 )
