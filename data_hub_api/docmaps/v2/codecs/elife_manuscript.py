@@ -212,6 +212,7 @@ def get_docmap_elife_manuscript_output_for_published_step(
     query_result_item: ApiInput,
     manuscript_version: ApiManuscriptVersionInput
 ) -> DocmapPublishedElifeManuscriptOutput:
+    assert manuscript_version['rp_publication_timestamp']
     return {
         **get_docmap_elife_manuscript_output(  # type: ignore
             query_result_item,
@@ -227,24 +228,32 @@ def get_docmap_elife_manuscript_output_for_published_step(
 
 
 def get_docmap_elife_manuscript_output_content_for_vor(
-    query_result_item: ApiInput
+    query_result_item: ApiInput,
+    vor_version_number: int
 ) -> Sequence[DocmapContent]:
     return [{
         'type': 'web-page',
-        'url': 'https://elifesciences.org/articles/' + query_result_item['manuscript_id']
+        'url': (
+            'https://elifesciences.org/articles/'
+            + query_result_item['manuscript_id']
+            + 'v'
+            + str(vor_version_number)
+        )
     }]
 
 
 def get_docmap_elife_manuscript_output_for_vor(
     query_result_item: ApiInput,
     manuscript_version: ApiManuscriptVersionInput,
-    is_vor: bool = True
+    vor_version_number: int,
+    is_vor: bool = True,
 ) -> DocmapElifeManuscriptVorOutput:
     manuscript_version_doi = get_elife_manuscript_version_doi(
         elife_doi=query_result_item['elife_doi'],
         elife_doi_version_str=manuscript_version['elife_doi_version_str'],
         is_vor=is_vor
     )
+    assert query_result_item['vor_versions']
     return {
         'type': 'version-of-record',
         'identifier': query_result_item['manuscript_id'],
@@ -253,23 +262,21 @@ def get_docmap_elife_manuscript_output_for_vor(
              manuscript_version['elife_doi_version_str'],
              is_vor
          ),
-        'published': (
-            manuscript_version['vor_publication_date'].isoformat()
-            if manuscript_version['vor_publication_date']
-            else None
-        ),
+        'published': query_result_item['vor_versions'][0]['vor_publication_date'].isoformat(),
         'url': f'{DOI_ROOT_URL}' + manuscript_version_doi,
         'content': get_docmap_elife_manuscript_output_content_for_vor(
-            query_result_item=query_result_item
+            query_result_item=query_result_item,
+            vor_version_number=vor_version_number
         )
     }
 
 
 def get_docmap_elife_manuscript_input(
     query_result_item: ApiInput,
-    manuscript_version: ApiManuscriptVersionInput
+    manuscript_version: ApiManuscriptVersionInput,
+    vor_version_number: int
 ) -> DocmapElifeManuscriptInput:
-    return {
+    input: DocmapElifeManuscriptInput = {
         'type': 'preprint',
         'doi': get_elife_manuscript_version_doi(
             elife_doi=query_result_item['elife_doi'],
@@ -278,3 +285,18 @@ def get_docmap_elife_manuscript_input(
         'identifier': query_result_item['manuscript_id'],
         'versionIdentifier': manuscript_version['elife_doi_version_str']
     }
+    if vor_version_number > 1:
+        return {
+            **input,  # type: ignore
+            'type': 'version-of-record',
+            'doi': get_elife_manuscript_version_doi(
+                elife_doi=query_result_item['elife_doi'],
+                elife_doi_version_str=manuscript_version['elife_doi_version_str'],
+                is_vor=True
+            ),
+            'versionIdentifier': get_elife_manuscript_version(
+                elife_doi_version_str=manuscript_version['elife_doi_version_str'],
+                is_vor=True
+            )
+        }
+    return input

@@ -10,6 +10,7 @@ from data_hub_api.docmaps.v2.codecs.elife_manuscript import (
     get_docmap_elife_manuscript_doi_assertion_item_for_vor,
     get_docmap_elife_manuscript_input,
     get_docmap_elife_manuscript_output,
+    get_docmap_elife_manuscript_output_content_for_vor,
     get_docmap_elife_manuscript_output_for_published_step,
     get_docmap_elife_manuscript_output_for_vor,
     get_elife_manuscript_electronic_article_identifier,
@@ -27,8 +28,9 @@ from tests.unit_tests.docmaps.v2.test_data import (
     COLLECTIONS_DICT_1,
     DOCMAPS_QUERY_RESULT_ITEM_1,
     DOCMAPS_QUERY_RESULT_ITEM_2,
-    DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSION,
-    MANUSCRIPT_VERSION_WITH_EVALUATIONS_AND_VOR_1,
+    DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSIONS_1,
+    DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSIONS_2,
+    MANUSCRIPT_VERSION_WITH_EVALUATIONS_1,
     PODCAST_DICT_WITH_NO_VALUE_1,
     RELATED_ARTICLE_CONTENT_INPUT_DICT_1,
     RELATED_ARTICLE_DOCMAP_OUTPUT_1,
@@ -42,7 +44,9 @@ from tests.unit_tests.docmaps.v2.test_data import (
     MANUSCRIPT_VERSION_1,
     SUBJECT_AREA_NAME_1,
     SUBJECT_AREA_NAME_2,
-    VOR_PUBLICATION_DATE_1
+    VOR_PUBLICATION_DATE_1,
+    VOR_VERSIONS_1,
+    VOR_VERSIONS_2
 )
 
 
@@ -333,25 +337,58 @@ class TestGetDocmapElifeManuscriptOutputForPublishedStep:
         }
 
 
+class TestGetDocmapElifeManuscriptOutputContentForVor:
+    def test_should_populate_vor_output_content_with_versined_url_for_vor_published_step(self):
+        result = get_docmap_elife_manuscript_output_content_for_vor(
+            query_result_item=DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSIONS_1,
+            vor_version_number=VOR_VERSIONS_1['vor_version_number']
+        )
+        assert result == [{
+            'type': 'web-page',
+            'url': (
+                'https://elifesciences.org/articles/'
+                + DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSIONS_1['manuscript_id']
+                + 'v'
+                + str(VOR_VERSIONS_1['vor_version_number'])
+            )
+        }]
+
+    def test_should_populate_vor_output_content_with_versined_url_for_vor_corrected_step(self):
+        result = get_docmap_elife_manuscript_output_content_for_vor(
+            query_result_item=DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSIONS_2,
+            vor_version_number=VOR_VERSIONS_2['vor_version_number']
+        )
+        assert result == [{
+            'type': 'web-page',
+            'url': (
+                'https://elifesciences.org/articles/'
+                + DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSIONS_2['manuscript_id']
+                + 'v'
+                + str(VOR_VERSIONS_2['vor_version_number'])
+            )
+        }]
+
+
 class TestGetDocmapElifeManuscriptOutputForVor:
-    def test_should_populate_docmaps_elife_manuscript_output_for_vor(self):
+    def test_should_populate_docmaps_elife_manuscript_output_for_vor_published(self):
         result = get_docmap_elife_manuscript_output_for_vor(
-            query_result_item=DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSION,
-            manuscript_version=MANUSCRIPT_VERSION_WITH_EVALUATIONS_AND_VOR_1
+            query_result_item=DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSIONS_1,
+            manuscript_version=MANUSCRIPT_VERSION_WITH_EVALUATIONS_1,
+            vor_version_number=VOR_VERSIONS_1['vor_version_number']
         )
         manuscript_version_doi = get_elife_manuscript_version_doi(
-            elife_doi=DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSION['elife_doi'],
-            elife_doi_version_str=MANUSCRIPT_VERSION_WITH_EVALUATIONS_AND_VOR_1[
+            elife_doi=DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSIONS_1['elife_doi'],
+            elife_doi_version_str=MANUSCRIPT_VERSION_WITH_EVALUATIONS_1[
                 'elife_doi_version_str'
             ],
             is_vor=True
         )
         assert result == {
             'type': 'version-of-record',
-            'identifier': DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSION['manuscript_id'],
+            'identifier': DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSIONS_1['manuscript_id'],
             'doi': manuscript_version_doi,
             'versionIdentifier': get_elife_manuscript_version(
-                MANUSCRIPT_VERSION_WITH_EVALUATIONS_AND_VOR_1[
+                MANUSCRIPT_VERSION_WITH_EVALUATIONS_1[
                     'elife_doi_version_str'
                 ],
                 is_vor=True
@@ -362,7 +399,45 @@ class TestGetDocmapElifeManuscriptOutputForVor:
                 'type': 'web-page',
                 'url': (
                     'https://elifesciences.org/articles/'
-                    + DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSION['manuscript_id']
+                    + DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSIONS_1['manuscript_id']
+                    + 'v'
+                    + str(VOR_VERSIONS_1['vor_version_number'])
+                )
+            }]
+        }
+
+    def test_should_populate_docmaps_elife_manuscript_output_for_vor_corrected(self):
+        result = get_docmap_elife_manuscript_output_for_vor(
+            query_result_item=DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSIONS_2,
+            manuscript_version=MANUSCRIPT_VERSION_WITH_EVALUATIONS_1,
+            vor_version_number=VOR_VERSIONS_2['vor_version_number']
+        )
+        manuscript_version_doi = get_elife_manuscript_version_doi(
+            elife_doi=DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSIONS_2['elife_doi'],
+            elife_doi_version_str=MANUSCRIPT_VERSION_WITH_EVALUATIONS_1[
+                'elife_doi_version_str'
+            ],
+            is_vor=True
+        )
+        assert result == {
+            'type': 'version-of-record',
+            'identifier': DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSIONS_2['manuscript_id'],
+            'doi': manuscript_version_doi,
+            'versionIdentifier': get_elife_manuscript_version(
+                MANUSCRIPT_VERSION_WITH_EVALUATIONS_1[
+                    'elife_doi_version_str'
+                ],
+                is_vor=True
+            ),
+            'published': VOR_PUBLICATION_DATE_1.isoformat(),
+            'url': f'{DOI_ROOT_URL}' + manuscript_version_doi,
+            'content': [{
+                'type': 'web-page',
+                'url': (
+                    'https://elifesciences.org/articles/'
+                    + DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSIONS_2['manuscript_id']
+                    + 'v'
+                    + str(VOR_VERSIONS_2['vor_version_number'])
                 )
             }]
         }
@@ -371,15 +446,42 @@ class TestGetDocmapElifeManuscriptOutputForVor:
 class TestGetDocmapElifeManuscriptInput:
     def test_should_populate_docmaps_elife_manuscript_input(self):
         result = get_docmap_elife_manuscript_input(
-            query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1,
-            manuscript_version=MANUSCRIPT_VERSION_1
+            query_result_item=DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSIONS_1,
+            manuscript_version=MANUSCRIPT_VERSION_WITH_EVALUATIONS_1,
+            vor_version_number=VOR_VERSIONS_1['vor_version_number']
         )
         assert result == {
             'type': 'preprint',
             'doi': get_elife_manuscript_version_doi(
-                elife_doi_version_str=MANUSCRIPT_VERSION_1['elife_doi_version_str'],
-                elife_doi=DOCMAPS_QUERY_RESULT_ITEM_1['elife_doi']
+                elife_doi_version_str=(
+                    MANUSCRIPT_VERSION_WITH_EVALUATIONS_1['elife_doi_version_str']
+                ),
+                elife_doi=DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSIONS_1['elife_doi']
             ),
-            'identifier': DOCMAPS_QUERY_RESULT_ITEM_1['manuscript_id'],
-            'versionIdentifier': MANUSCRIPT_VERSION_1['elife_doi_version_str']
+            'identifier': DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSIONS_1['manuscript_id'],
+            'versionIdentifier': MANUSCRIPT_VERSION_WITH_EVALUATIONS_1['elife_doi_version_str']
+        }
+
+    def test_should_populate_docmaps_elife_manuscript_input_for_vor_corrected_step(self):
+        result = get_docmap_elife_manuscript_input(
+            query_result_item=DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSIONS_2,
+            manuscript_version=MANUSCRIPT_VERSION_WITH_EVALUATIONS_1,
+            vor_version_number=VOR_VERSIONS_2['vor_version_number']
+        )
+        assert result == {
+            'type': 'version-of-record',
+            'doi': get_elife_manuscript_version_doi(
+                elife_doi_version_str=(
+                    MANUSCRIPT_VERSION_WITH_EVALUATIONS_1['elife_doi_version_str']
+                ),
+                elife_doi=DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSIONS_2['elife_doi'],
+                is_vor=True
+            ),
+            'identifier': DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSIONS_2['manuscript_id'],
+            'versionIdentifier': get_elife_manuscript_version(
+                elife_doi_version_str=(
+                    MANUSCRIPT_VERSION_WITH_EVALUATIONS_1['elife_doi_version_str']
+                ),
+                is_vor=True
+            )
         }

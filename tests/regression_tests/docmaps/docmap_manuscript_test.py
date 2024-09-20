@@ -21,10 +21,12 @@ MANUSCRIPT_ID_LIST = [
     '91729',  # have related article
     '86824',  # have related podcast
     # have both related article and podcast, has VoR after the first version, one of the six:
-    '80984',
+    '80984',  # And also has VoRs updates (has two versions)
     '88266',  # have both related article and collection
     '84553',  # Opt-Ins, have VoR after first version
-    '85596',  # Opt-Ins, have VoR after second version
+    '85596',  # Opt-Ins, have VoR after second version,
+    '87356',  # Has VoRs updates (has three versions)
+    '95285',  # Has Authorea preprint (manual hypothesis matching)
 ]
 
 

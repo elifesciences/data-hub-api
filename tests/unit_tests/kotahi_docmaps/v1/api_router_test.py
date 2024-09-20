@@ -71,7 +71,7 @@ class TestGetKotahiDocmapsIndex:
         self,
         docmaps_provider_mock: MagicMock
     ):
-        docmaps_provider_mock.get_evaluation_text_by_evaluation_id.return_value = None
+        docmaps_provider_mock.get_evaluation_html_by_evaluation_id.return_value = None
         client = create_test_client(docmaps_provider_mock)
         response = client.get(
             '/v1/evaluation/get-by-evaluation-id',
@@ -83,10 +83,11 @@ class TestGetKotahiDocmapsIndex:
         self,
         docmaps_provider_mock: MagicMock
     ):
-        docmaps_provider_mock.get_evaluation_text_by_evaluation_id.return_value = 'text_1'
+        docmaps_provider_mock.get_evaluation_html_by_evaluation_id.return_value = 'html_text_1'
         client = create_test_client(docmaps_provider_mock)
         response = client.get(
             '/v1/evaluation/get-by-evaluation-id',
             params={'evaluation_id': 'valid_id'}
         )
-        assert response.text == 'text_1'
+        assert response.headers['content-type'] == 'text/html; charset=utf-8'
+        assert response.text == 'html_text_1'

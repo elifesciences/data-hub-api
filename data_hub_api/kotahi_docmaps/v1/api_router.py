@@ -1,7 +1,7 @@
 import logging
 
 from fastapi import APIRouter, HTTPException
-from fastapi.responses import PlainTextResponse
+from fastapi.responses import HTMLResponse
 
 from data_hub_api.kotahi_docmaps.v1.provider import DocmapsProvider
 
@@ -29,9 +29,9 @@ def create_docmaps_router(
         assert len(docmaps) == 1
         return docmaps[0]
 
-    @router.get("/v1/evaluation/get-by-evaluation-id", response_class=PlainTextResponse)
+    @router.get("/v1/evaluation/get-by-evaluation-id", response_class=HTMLResponse)
     def get_evaluation_text_by_evaluation_id(evaluation_id: str):
-        evaluation_text = docmaps_provider.get_evaluation_text_by_evaluation_id(evaluation_id)
+        evaluation_text = docmaps_provider.get_evaluation_html_by_evaluation_id(evaluation_id)
         if not evaluation_text:
             raise HTTPException(
                 status_code=404,
