@@ -101,10 +101,16 @@ def get_docmaps_step_for_under_review_status(
 def get_docmap_assertions_for_peer_reviewed_step(
     manuscript_version: ApiManuscriptVersionInput
 ) -> Sequence[DocmapAssertion]:
-    return [{
-        'item': get_docmap_preprint_assertion_item(manuscript_version=manuscript_version),
-        'status': 'peer-reviewed'
-    }]
+    assertions = {
+            'item': get_docmap_preprint_assertion_item(manuscript_version=manuscript_version),
+            'status': 'peer-reviewed'
+        }
+    if manuscript_version['decision_sent_timestamp']:
+        return [{
+            **assertions,  # type: ignore
+            'happened': manuscript_version['decision_sent_timestamp']
+        }]
+    return [assertions]  # type: ignore
 
 
 def get_docmaps_step_for_peer_reviewed_status(

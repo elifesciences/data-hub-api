@@ -179,6 +179,25 @@ class TestGetDocmapsItemForQueryResultItem:
             'status': 'peer-reviewed'
         }]
 
+    def test_should_populate_happened_peer_reviewed_step_on_decision_sent_timestamp(self):
+        docmaps_item = get_docmap_item_for_query_result_item({
+            **DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATION_EMAILS_1,
+            'manuscript_versions': [
+                {
+                    **MANUSCRIPT_VERSION_WITH_EVALUATION_EMAILS_1,
+                    'decision_sent_timestamp': datetime.fromisoformat('2023-01-01T01:02:03+00:00')
+                }
+            ]
+        })
+        peer_reviewed_step = docmaps_item['steps']['_:b1']
+        assert peer_reviewed_step['assertions'] == [{
+            'item': get_docmap_preprint_assertion_item(
+                manuscript_version=MANUSCRIPT_VERSION_WITH_EVALUATION_EMAILS_1
+            ),
+            'status': 'peer-reviewed',
+            'happened': datetime.fromisoformat('2023-01-01T01:02:03+00:00')
+        }]
+
     def test_should_populate_inputs_peer_reviewed_step(self):
         docmaps_item = get_docmap_item_for_query_result_item(
             DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATION_EMAILS_1
@@ -346,14 +365,10 @@ class TestGetDocmapsItemForQueryResultItem:
             'status': 'revised'
         }]
 
-    def test_populate_happened_revised_step_on_decision_sent_timestamp(self):
+    def test_should_populate_happened_revised_step_on_decision_sent_timestamp(self):
         query_result_item = {
             **DOCMAPS_QUERY_RESULT_ITEM_1,
             'manuscript_versions': [
-                # {
-                #     **MANUSCRIPT_VERSION_WITH_EVALUATION_EMAILS_1,
-                #     'decision_sent_timestamp': datetime.fromisoformat('2023-01-01T01:02:03+00:00')
-                # },
                 MANUSCRIPT_VERSION_WITH_EVALUATION_EMAILS_1,
                 {
                     **MANUSCRIPT_VERSION_WITH_EVALUATION_EMAILS_2,
