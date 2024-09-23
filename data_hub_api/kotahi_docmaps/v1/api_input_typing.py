@@ -22,6 +22,7 @@ ApiManuscriptVersionInput = TypedDict(
         'long_manuscript_identifier': str,
         'position_in_overall_stage': int,
         'qc_complete_timestamp': datetime,
+        'decision_sent_timestamp': Optional[datetime],
         'under_review_timestamp': Optional[datetime],
         'editor_details': Sequence[ApiEditorDetailInput],
         'senior_editor_details': Sequence[ApiEditorDetailInput],
