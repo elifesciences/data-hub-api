@@ -1,3 +1,4 @@
+from datetime import datetime
 import urllib
 
 import pytest
@@ -343,6 +344,29 @@ class TestGetDocmapsItemForQueryResultItem:
         assert revised_step['assertions'] == [{
             'item': get_docmap_preprint_assertion_item(MANUSCRIPT_VERSION_WITH_EVALUATION_EMAILS_2),
             'status': 'revised'
+        }]
+
+    def test_populate_happened_revised_step_on_decision_sent_timestamp(self):
+        query_result_item = {
+            **DOCMAPS_QUERY_RESULT_ITEM_1,
+            'manuscript_versions': [
+                # {
+                #     **MANUSCRIPT_VERSION_WITH_EVALUATION_EMAILS_1,
+                #     'decision_sent_timestamp': datetime.fromisoformat('2023-01-01T01:02:03+00:00')
+                # },
+                MANUSCRIPT_VERSION_WITH_EVALUATION_EMAILS_1,
+                {
+                    **MANUSCRIPT_VERSION_WITH_EVALUATION_EMAILS_2,
+                    'decision_sent_timestamp': datetime.fromisoformat('2023-02-01T01:02:03+00:00')
+                }
+            ]
+        }
+        docmaps_item = get_docmap_item_for_query_result_item(query_result_item)
+        revised_step = docmaps_item['steps']['_:b3']
+        assert revised_step['assertions'] == [{
+            'item': get_docmap_preprint_assertion_item(MANUSCRIPT_VERSION_WITH_EVALUATION_EMAILS_2),
+            'status': 'revised',
+            'happened': datetime.fromisoformat('2023-02-01T01:02:03+00:00')
         }]
 
     def test_should_populate_inputs_revised_step(self):

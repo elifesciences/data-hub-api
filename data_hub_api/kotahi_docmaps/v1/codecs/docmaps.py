@@ -125,10 +125,16 @@ def get_docmaps_step_for_peer_reviewed_status(
 def get_docmap_assertions_for_revised_step(
     manuscript_version: ApiManuscriptVersionInput
 ) -> Sequence[DocmapAssertion]:
-    return [{
+    assertions = {
         'item': get_docmap_preprint_assertion_item(manuscript_version=manuscript_version),
         'status': 'revised'
-    }]
+    }
+    if manuscript_version['decision_sent_timestamp']:
+        return [{
+            **assertions,  # type: ignore
+            'happened': manuscript_version['decision_sent_timestamp']
+        }]
+    return [assertions]  # type: ignore
 
 
 def get_docmaps_step_for_revised_status(
