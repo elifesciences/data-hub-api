@@ -195,7 +195,7 @@ class TestGetDocmapsItemForQueryResultItem:
                 manuscript_version=MANUSCRIPT_VERSION_WITH_EVALUATION_EMAILS_1
             ),
             'status': 'peer-reviewed',
-            'happened': datetime.fromisoformat('2023-01-01T01:02:03+00:00')
+            'happened': '2023-01-01T01:02:03+00:00'
         }]
 
     def test_should_populate_inputs_peer_reviewed_step(self):
@@ -381,7 +381,7 @@ class TestGetDocmapsItemForQueryResultItem:
         assert revised_step['assertions'] == [{
             'item': get_docmap_preprint_assertion_item(MANUSCRIPT_VERSION_WITH_EVALUATION_EMAILS_2),
             'status': 'revised',
-            'happened': datetime.fromisoformat('2023-02-01T01:02:03+00:00')
+            'happened': '2023-02-01T01:02:03+00:00'
         }]
 
     def test_should_populate_inputs_revised_step(self):
