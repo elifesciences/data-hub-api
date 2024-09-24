@@ -217,6 +217,7 @@ t_result_with_sorted_manuscript_versions_array AS (
         result.is_or_was_under_review,
         TIMESTAMP(DATETIME(result.qc_complete_timestamp), 'US/Eastern') AS qc_complete_timestamp,
         TIMESTAMP(DATETIME(result.under_review_timestamp), 'US/Eastern') AS under_review_timestamp,
+        TIMESTAMP(DATETIME(result.decision_sent_timestamp), 'US/Eastern') AS decision_sent_timestamp,
         result.manuscript_title,
         result.preprint_url,
         result.elife_doi_version_str,

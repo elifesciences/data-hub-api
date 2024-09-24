@@ -101,10 +101,15 @@ def get_docmaps_step_for_under_review_status(
 def get_docmap_assertions_for_peer_reviewed_step(
     manuscript_version: ApiManuscriptVersionInput
 ) -> Sequence[DocmapAssertion]:
-    return [{
+    return remove_key_with_none_value_only([{
         'item': get_docmap_preprint_assertion_item(manuscript_version=manuscript_version),
-        'status': 'peer-reviewed'
-    }]
+        'status': 'peer-reviewed',
+        'happened': (
+            manuscript_version['decision_sent_timestamp'].isoformat()
+            if manuscript_version['decision_sent_timestamp']
+            else None
+        )
+    }])
 
 
 def get_docmaps_step_for_peer_reviewed_status(
@@ -125,10 +130,15 @@ def get_docmaps_step_for_peer_reviewed_status(
 def get_docmap_assertions_for_revised_step(
     manuscript_version: ApiManuscriptVersionInput
 ) -> Sequence[DocmapAssertion]:
-    return [{
+    return remove_key_with_none_value_only([{
         'item': get_docmap_preprint_assertion_item(manuscript_version=manuscript_version),
-        'status': 'revised'
-    }]
+        'status': 'revised',
+        'happened': (
+            manuscript_version['decision_sent_timestamp'].isoformat()
+            if manuscript_version['decision_sent_timestamp']
+            else None
+        )
+    }])
 
 
 def get_docmaps_step_for_revised_status(

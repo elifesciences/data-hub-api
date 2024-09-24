@@ -103,7 +103,7 @@ DocmapAssertion = TypedDict(
     {
         'item': DocmapAssertionItem,
         'status': str,
-        'happened': NotRequired[str]
+        'happened': NotRequired[Optional[str]]
     },
     total=False
 )
