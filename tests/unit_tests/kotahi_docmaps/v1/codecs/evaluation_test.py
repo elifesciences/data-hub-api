@@ -83,6 +83,10 @@ class TestExtractPublicReviewParts:
         assert result[1] == REVIEW_2.strip()
         assert result[2] == REVIEW_3.strip()
 
+    def test_should_match_case_insensitive(self):
+        result = extract_public_review_parts(PUBLIC_REVIEWS_1.lower())
+        assert result[0] == REVIEW_1.strip().lower()
+
     def test_should_return_none_when_there_is_no_public_reviews(self):
         assert not extract_public_review_parts(None)
 

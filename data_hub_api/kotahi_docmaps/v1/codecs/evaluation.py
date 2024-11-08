@@ -53,7 +53,7 @@ def extract_elife_public_reviews_from_email(email_body: Optional[str]) -> Option
 def extract_public_review_parts(public_reviews: Optional[str]):
     if public_reviews:
         pattern = r'(?=Reviewer #\d+ \(Public Review\):?)'
-        parts = re.split(pattern, public_reviews)
+        parts = re.split(pattern, public_reviews, flags=re.IGNORECASE)
         parts = [part.strip() for part in parts if part.strip()]
         if len(parts) > 1:
             return parts[1:]
