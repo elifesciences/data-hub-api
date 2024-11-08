@@ -63,6 +63,13 @@ class TestExtractElifePublicReviewsFromEmail:
         ).strip()
         assert result == PUBLIC_REVIEWS_1.strip()
 
+    def test_should_ignore_text_after_first_hyphen_break(self):
+        result = extract_elife_public_reviews_from_email(
+            EMAIL_BODY_WITH_ELIFE_ASSESSMENT_AND_PUBLIC_REVIEWS_1
+            + '\n----------\nmore text'
+        ).strip()
+        assert result == PUBLIC_REVIEWS_1.strip()
+
     def test_should_return_none_if_there_is_no_public_reviews_available(self):
         assert not extract_elife_public_reviews_from_email(EMAIL_BODY_1)
 
@@ -82,6 +89,10 @@ class TestExtractPublicReviewParts:
         assert result[0] == REVIEW_1.strip()
         assert result[1] == REVIEW_2.strip()
         assert result[2] == REVIEW_3.strip()
+
+    def test_should_match_case_insensitive(self):
+        result = extract_public_review_parts(PUBLIC_REVIEWS_1.lower())
+        assert result[0] == REVIEW_1.strip().lower()
 
     def test_should_return_none_when_there_is_no_public_reviews(self):
         assert not extract_public_review_parts(None)
