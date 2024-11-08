@@ -63,6 +63,13 @@ class TestExtractElifePublicReviewsFromEmail:
         ).strip()
         assert result == PUBLIC_REVIEWS_1.strip()
 
+    def test_should_ignore_text_after_first_hyphen_break(self):
+        result = extract_elife_public_reviews_from_email(
+            EMAIL_BODY_WITH_ELIFE_ASSESSMENT_AND_PUBLIC_REVIEWS_1
+            + '\n----------\nmore text'
+        ).strip()
+        assert result == PUBLIC_REVIEWS_1.strip()
+
     def test_should_return_none_if_there_is_no_public_reviews_available(self):
         assert not extract_elife_public_reviews_from_email(EMAIL_BODY_1)
 
