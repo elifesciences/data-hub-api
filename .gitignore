@@ -2,3 +2,5 @@ venv
 *.pyc
 
 .test_data/
+
+ignore_this_*
