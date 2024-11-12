@@ -195,10 +195,10 @@
                   "firstName": "Diane",
                   "_middleName": "M",
                   "surname": "Harper",
-                  "_relatesToOrganization": "University of Michiganâ€Ann Arbor\", United States of America",
+                  "_relatesToOrganization": "University of Michigan-Ann Arbor, United States of America",
                   "affiliation": {
                     "type": "organization",
-                    "name": "University of Michiganâ€Ann Arbor\"",
+                    "name": "University of Michigan-Ann Arbor",
                     "location": "Ann Arbor, United States of America"
                   }
                 },
@@ -514,10 +514,10 @@
                   "firstName": "Diane",
                   "_middleName": "M",
                   "surname": "Harper",
-                  "_relatesToOrganization": "University of Michiganâ€Ann Arbor\", United States of America",
+                  "_relatesToOrganization": "University of Michigan-Ann Arbor, United States of America",
                   "affiliation": {
                     "type": "organization",
-                    "name": "University of Michiganâ€Ann Arbor\"",
+                    "name": "University of Michigan-Ann Arbor",
                     "location": "Ann Arbor, United States of America"
                   }
                 },
