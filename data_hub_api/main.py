@@ -48,9 +48,7 @@ def create_app():
     public_reviews_docmaps_provider = DocmapsProviderV1(
         only_include_reviewed_preprint_type=False,
         only_include_evaluated_preprints=True,
-        query_results_cache=InMemorySingleObjectCache(
-            max_age_in_seconds=kotahi_docmaps_max_age_in_seconds
-        )
+        query_results_cache=InMemorySingleObjectCache(max_age_in_seconds=docmaps_max_age_in_seconds)
     )
 
     @app.get("/")
