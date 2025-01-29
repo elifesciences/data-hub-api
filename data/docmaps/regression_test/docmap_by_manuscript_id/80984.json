@@ -179,11 +179,11 @@
                                 "name": "Pil Joon Seo",
                                 "firstName": "Pil Joon",
                                 "surname": "Seo",
-                                "_relatesToOrganization": "Seoul National University, Korea, the Republic of",
+                                "_relatesToOrganization": "Seoul National University, Republic of Korea",
                                 "affiliation": {
                                     "type": "organization",
                                     "name": "Seoul National University",
-                                    "location": "Seoul, Korea, the Republic of"
+                                    "location": "Seoul, Republic of Korea"
                                 }
                             },
                             "role": "editor"
