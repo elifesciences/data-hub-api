@@ -1,0 +1,3 @@
+<p><strong>eLife Assessment</strong></p>
+
+<p>This valuable work provides novel insights into the substrate binding mechanism of a tripartite ATP-independent periplasmic (TRAP) transporter, which may be helpful for the development of specific inhibitors. The structural analysis is convincing, but additional work will be required to establish the transport mechanism as well as well as binding sites for all ligands. This study will be of interest to the membrane transport and bacterial biochemistry communities.</p>
