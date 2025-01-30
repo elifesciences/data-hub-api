@@ -1,0 +1,3 @@
+<p><strong>eLife assessment</strong></p>
+
+<p>This important study reports on an improved deep-learning-based method for predicting TCR specificity. The evidence supporting the overall method is compelling, although the inclusion of real-world applications and clear comparisons with the previous version would have further strengthened the study. This work will be of broad interest to immunologists and computational biologists.</p>
