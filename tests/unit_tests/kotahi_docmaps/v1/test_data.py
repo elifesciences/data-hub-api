@@ -1,4 +1,5 @@
 from datetime import date, datetime
+import textwrap
 
 from data_hub_api.kotahi_docmaps.v1.api_input_typing import (
     ApiEditorDetailInput,
@@ -92,31 +93,40 @@ DOCMAPS_QUERY_RESULT_ITEM_2: ApiInput = {
 SPACE = ' '
 COLON = ':'
 
-REVIEW_1 = f'''
+REVIEW_1 = textwrap.dedent(
+    f'''
     Reviewer #1 (Public Review){COLON}{SPACE}
 
     This is review_1.
-'''
+    '''
+)
 
-REVIEW_2 = f'''
+REVIEW_2 = textwrap.dedent(
+    f'''
     Reviewer #2 (Public Review){COLON}
 
     This is review_2.
-'''
+    '''
+)
 
-REVIEW_3 = '''
+REVIEW_3 = textwrap.dedent(
+    '''
     Reviewer #3 (Public Review):
 
     This is review_3.
-'''
+    '''
+)
 
-ELIFE_ASSESSMENT_1 = '''
+ELIFE_ASSESSMENT_1 = textwrap.dedent(
+    '''
     eLife assessment
 
     This is eLife assessment.
-'''
+    '''
+)
 
-PUBLIC_REVIEWS_1 = f'''
+PUBLIC_REVIEWS_1 = textwrap.dedent(
+    f'''
     Public Reviews
 
     {REVIEW_1}
@@ -124,49 +134,61 @@ PUBLIC_REVIEWS_1 = f'''
     {REVIEW_2}
 
     {REVIEW_3}
-'''
+    '''
+)
 
-JOINT_PUBLIC_REVIEW_1 = '''
+JOINT_PUBLIC_REVIEW_1 = textwrap.dedent(
+    '''
     Public Review:
 
     Text for public review
 
-'''
+    '''
+)
 
-EMAIL_BODY_WITH_JOINT_PUBLIC_REVIEW_1 = f'''
+EMAIL_BODY_WITH_JOINT_PUBLIC_REVIEW_1 = textwrap.dedent(
+    f'''
     Dear Dr Huang,
 
     Thank you for submitting your article.
 
     {JOINT_PUBLIC_REVIEW_1}
     ----------
-'''
+    '''
+)
 
-PUBLIC_REVIEWS_WITHOUT_EVALUATION_1 = '''
+PUBLIC_REVIEWS_WITHOUT_EVALUATION_1 = textwrap.dedent(
+    '''
     Public Reviews
     some text here but not review
 
-----------
-'''
+    ----------
+    '''
+)
 
-EMAIL_BODY_INTRO_FOR_ELIFE_ASSESSMENT_AND_PUBLIC_REVIEWS_1 = '''
+EMAIL_BODY_INTRO_FOR_ELIFE_ASSESSMENT_AND_PUBLIC_REVIEWS_1 = textwrap.dedent(
+    '''
     Dear Dr Huang,
 
     Thank you for submitting your article.
     Note: public reviews are near the top and recommendations to the authors follow further down.
 
-'''
+    '''
+)
 
-EMAIL_BODY_1 = '''
+EMAIL_BODY_1 = textwrap.dedent(
+    '''
     Dear Dr Huang,
 
     Thank you for submitting your article.
     ----------
 
     ----------
-'''
+    '''
+)
 
-EMAIL_BODY_WITH_ELIFE_ASSESSMENT_1 = f'''
+EMAIL_BODY_WITH_ELIFE_ASSESSMENT_1 = textwrap.dedent(
+    f'''
     Dear Dr Huang,
 
     Thank you for submitting your article.
@@ -176,18 +198,22 @@ EMAIL_BODY_WITH_ELIFE_ASSESSMENT_1 = f'''
 
     ----------
 
-'''
+    '''
+)
 
-EMAIL_BODY_WITH_PUBLIC_REVIEWS_1 = f'''
+EMAIL_BODY_WITH_PUBLIC_REVIEWS_1 = textwrap.dedent(
+    f'''
     {EMAIL_BODY_INTRO_FOR_ELIFE_ASSESSMENT_AND_PUBLIC_REVIEWS_1}
     ----------
 
     {PUBLIC_REVIEWS_1}
 
     ----------
-'''
+    '''
+)
 
-EMAIL_BODY_WITH_ELIFE_ASSESSMENT_AND_PUBLIC_REVIEWS_1 = f'''
+EMAIL_BODY_WITH_ELIFE_ASSESSMENT_AND_PUBLIC_REVIEWS_1 = textwrap.dedent(
+    f'''
     {EMAIL_BODY_INTRO_FOR_ELIFE_ASSESSMENT_AND_PUBLIC_REVIEWS_1}
     ----------
 
@@ -198,9 +224,11 @@ EMAIL_BODY_WITH_ELIFE_ASSESSMENT_AND_PUBLIC_REVIEWS_1 = f'''
     {PUBLIC_REVIEWS_1}
 
     ----------
-'''
+    '''
+)
 
-EMAIL_BODY_WITH_ELIFE_ASSESSMENT_WITHOUT_EXPECTED_END = f'''
+EMAIL_BODY_WITH_ELIFE_ASSESSMENT_WITHOUT_EXPECTED_END = textwrap.dedent(
+    f'''
     Dear Dr Huang,
 
     Thank you for submitting your article.
@@ -209,7 +237,8 @@ EMAIL_BODY_WITH_ELIFE_ASSESSMENT_WITHOUT_EXPECTED_END = f'''
     {ELIFE_ASSESSMENT_1}
 
     Public Review
-'''
+    '''
+)
 
 EDITOR_DETAIL_1: ApiEditorDetailInput = {
     'name': 'editor_name_1',

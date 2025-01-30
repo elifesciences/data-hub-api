@@ -291,7 +291,15 @@
                                 "published": "2023-03-24T14:00:00+00:00",
                                 "volumeIdentifier": "12",
                                 "electronicArticleIdentifier": "RP85596",
-                                "complement": []
+                                "complement": [
+                                    {
+                                        "type": "collection",
+                                        "url": "https://elifesciences.org/collections/f8cc6f3f/meta-research-a-collection-of-articles",
+                                        "title": "Special Issue: Reproductive Health",
+                                        "description": "Edited by Wei Yan et al",
+                                        "thumbnail": "https://iiif.elifesciences.org/journal-cms/collection%2F2025-01%2Freproductive-health-si-illustration.png/full/full/0/default.jpg"
+                                    }
+                                ]
                             }
                         }
                     ]
@@ -636,7 +644,15 @@
                                 "published": "2023-03-24T14:00:00+00:00",
                                 "volumeIdentifier": "12",
                                 "electronicArticleIdentifier": "RP85596",
-                                "complement": []
+                                "complement": [
+                                    {
+                                        "type": "collection",
+                                        "url": "https://elifesciences.org/collections/f8cc6f3f/meta-research-a-collection-of-articles",
+                                        "title": "Special Issue: Reproductive Health",
+                                        "description": "Edited by Wei Yan et al",
+                                        "thumbnail": "https://iiif.elifesciences.org/journal-cms/collection%2F2025-01%2Freproductive-health-si-illustration.png/full/full/0/default.jpg"
+                                    }
+                                ]
                             }
                         }
                     ]

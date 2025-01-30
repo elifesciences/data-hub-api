@@ -19,7 +19,8 @@ MANUSCRIPT_ID_LIST = [
 
 EVALUATION_ID_LIST = [
     'eLife-RP-TR-2023-93934:evaluation-summary:1',
-    'eLife-RP-TR-2023-93934:review-article:1'
+    'eLife-RP-TR-2023-93934:review-article:1',
+    'eLife-RP-RA-2024-104041:evaluation-summary:1'
 ]
 
 
