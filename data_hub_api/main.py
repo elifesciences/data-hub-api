@@ -21,27 +21,37 @@ LOGGER = logging.getLogger(__name__)
 def create_app():
     app = FastAPI()
 
-    max_age_in_seconds = 60 * 60  # 1 hour
+    docmaps_v1_max_age_in_seconds = 60 * 60  # 1 hour
+    docmaps_v2_max_age_in_seconds = 10 * 60  # 10 minutes
+    kotahi_docmaps_max_age_in_seconds = 60 * 60  # 1 hour
 
     enhanced_preprints_docmaps_provider_v1 = DocmapsProviderV1(
         only_include_reviewed_preprint_type=True,
         only_include_evaluated_preprints=False,
         additionally_include_manuscript_ids=ADDITIONAL_MANUSCRIPT_IDS,
-        query_results_cache=InMemorySingleObjectCache(max_age_in_seconds=max_age_in_seconds)
+        query_results_cache=InMemorySingleObjectCache(
+            max_age_in_seconds=docmaps_v2_max_age_in_seconds
+        )
     )
 
     enhanced_preprints_docmaps_provider = DocmapsProvider(
-        query_results_cache=InMemorySingleObjectCache(max_age_in_seconds=max_age_in_seconds)
+        query_results_cache=InMemorySingleObjectCache(
+            max_age_in_seconds=docmaps_v2_max_age_in_seconds
+        )
     )
 
     kotahi_docmaps_provider = KotahiDocmapsProvider(
-        data_cache=InMemorySingleObjectCache(max_age_in_seconds=max_age_in_seconds)
+        data_cache=InMemorySingleObjectCache(
+            max_age_in_seconds=kotahi_docmaps_max_age_in_seconds
+        )
     )
 
     public_reviews_docmaps_provider = DocmapsProviderV1(
         only_include_reviewed_preprint_type=False,
         only_include_evaluated_preprints=True,
-        query_results_cache=InMemorySingleObjectCache(max_age_in_seconds=max_age_in_seconds)
+        query_results_cache=InMemorySingleObjectCache(
+            max_age_in_seconds=docmaps_v1_max_age_in_seconds
+        )
     )
 
     @app.get("/")
