@@ -60,7 +60,7 @@
                     "content": [
                         {
                             "type": "computer-file",
-                            "url": "s3://transfers-elife/medrxiv_Current_Content/July_2023/24_Jul_23_Batch_998/4927b1c3-6fa1-1014-a905-ad2288a9aaa8.meca"
+                            "url": "s3://medrxiv-src-daily/Current_Content/July_2023/24_Jul_23_Batch_998/4927b1c3-6fa1-1014-a905-ad2288a9aaa8.meca"
                         }
                     ]
                 }
@@ -408,7 +408,7 @@
                     "content": [
                         {
                             "type": "computer-file",
-                            "url": "s3://transfers-elife/medrxiv_Current_Content/October_2023/04_Oct_23_Batch_1070/afbff6df-6c85-1014-8b5b-a48e914d7782.meca"
+                            "url": "s3://medrxiv-src-daily/Current_Content/October_2023/04_Oct_23_Batch_1070/afbff6df-6c85-1014-8b5b-a48e914d7782.meca"
                         }
                     ]
                 }

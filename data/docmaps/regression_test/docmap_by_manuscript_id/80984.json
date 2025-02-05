@@ -60,7 +60,7 @@
                     "content": [
                         {
                             "type": "computer-file",
-                            "url": "s3://transfers-elife/biorxiv_Current_Content/July_2022/03_Jul_22_Batch_1301/48c60452-6c66-1014-adf9-c7b61873ecd3.meca"
+                            "url": "s3://biorxiv-src-daily/Current_Content/July_2022/03_Jul_22_Batch_1301/48c60452-6c66-1014-adf9-c7b61873ecd3.meca"
                         }
                     ]
                 }

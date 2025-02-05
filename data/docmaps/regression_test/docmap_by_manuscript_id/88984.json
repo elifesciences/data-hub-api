@@ -60,7 +60,7 @@
                     "content": [
                         {
                             "type": "computer-file",
-                            "url": "s3://transfers-elife/biorxiv_Current_Content/June_2023/23_Jun_23_Batch_1651/7ea64a94-6dbb-1014-84ba-96f1d0e0ae49.meca"
+                            "url": "s3://biorxiv-src-daily/Current_Content/June_2023/23_Jun_23_Batch_1651/7ea64a94-6dbb-1014-84ba-96f1d0e0ae49.meca"
                         }
                     ]
                 }
@@ -293,7 +293,7 @@
                                 "complement": [
                                     {
                                         "type": "collection",
-                                        "url":"https://elifesciences.org/collections/8d233d47/meta-research-a-collection-of-articles",
+                                        "url": "https://elifesciences.org/collections/8d233d47/meta-research-a-collection-of-articles",
                                         "title": "Meta-Research: A Collection of Articles",
                                         "description": "Edited by Peter A Rodgers",
                                         "thumbnail": "https://iiif.elifesciences.org/journal-cms/collection%2F2018-07%2Fmetadata_-_1_1.jpg/full/full/0/default.jpg"
@@ -385,7 +385,7 @@
                     "content": [
                         {
                             "type": "computer-file",
-                            "url": "s3://transfers-elife/biorxiv_Current_Content/October_2023/21_Oct_23_Batch_1771/aeb81b4f-70e4-1014-b7d0-dce7ef84878e.meca"
+                            "url": "s3://biorxiv-src-daily/Current_Content/October_2023/21_Oct_23_Batch_1771/aeb81b4f-70e4-1014-b7d0-dce7ef84878e.meca"
                         }
                     ]
                 }
@@ -645,7 +645,7 @@
                                 "complement": [
                                     {
                                         "type": "collection",
-                                        "url":"https://elifesciences.org/collections/8d233d47/meta-research-a-collection-of-articles",
+                                        "url": "https://elifesciences.org/collections/8d233d47/meta-research-a-collection-of-articles",
                                         "title": "Meta-Research: A Collection of Articles",
                                         "description": "Edited by Peter A Rodgers",
                                         "thumbnail": "https://iiif.elifesciences.org/journal-cms/collection%2F2018-07%2Fmetadata_-_1_1.jpg/full/full/0/default.jpg"
@@ -741,7 +741,7 @@
                     "content": [
                         {
                             "type": "computer-file",
-                            "url": "s3://transfers-elife/biorxiv_Current_Content/December_2023/08_Dec_23_Batch_1819/03e0e663-6c9e-1014-abd7-faff78558f28.meca"
+                            "url": "s3://biorxiv-src-daily/Current_Content/December_2023/08_Dec_23_Batch_1819/03e0e663-6c9e-1014-abd7-faff78558f28.meca"
                         }
                     ]
                 }
@@ -1001,7 +1001,7 @@
                                 "complement": [
                                     {
                                         "type": "collection",
-                                        "url":"https://elifesciences.org/collections/8d233d47/meta-research-a-collection-of-articles",
+                                        "url": "https://elifesciences.org/collections/8d233d47/meta-research-a-collection-of-articles",
                                         "title": "Meta-Research: A Collection of Articles",
                                         "description": "Edited by Peter A Rodgers",
                                         "thumbnail": "https://iiif.elifesciences.org/journal-cms/collection%2F2018-07%2Fmetadata_-_1_1.jpg/full/full/0/default.jpg"
@@ -1063,8 +1063,8 @@
                             "identifier": "88984",
                             "doi": "10.7554/eLife.88984.4",
                             "versionIdentifier": "4",
-                            "url": "https://doi.org/10.7554/eLife.88984.4",
                             "published": "2024-01-19",
+                            "url": "https://doi.org/10.7554/eLife.88984.4",
                             "content": [
                                 {
                                     "type": "web-page",
