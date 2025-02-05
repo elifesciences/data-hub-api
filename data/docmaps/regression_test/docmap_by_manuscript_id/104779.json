@@ -291,7 +291,76 @@
                     "versionIdentifier": "4"
                 }
             ],
+            "next-step": "_:b2",
             "previous-step": "_:b0"
+        },
+        "_:b2": {
+            "actions": [
+                {
+                    "participants": [],
+                    "outputs": [
+                        {
+                            "type": "preprint",
+                            "identifier": "104779",
+                            "doi": "10.7554/eLife.104779.1",
+                            "versionIdentifier": "1",
+                            "license": "http://creativecommons.org/licenses/by/4.0/",
+                            "published": "2025-02-03T14:00:00+00:00",
+                            "partOf": {
+                                "type": "manuscript",
+                                "doi": "10.7554/eLife.104779",
+                                "identifier": "104779",
+                                "subjectDisciplines": [
+                                    "Neuroscience"
+                                ],
+                                "published": "2025-02-03T14:00:00+00:00",
+                                "volumeIdentifier": "14",
+                                "electronicArticleIdentifier": "RP104779",
+                                "complement": []
+                            }
+                        }
+                    ]
+                }
+            ],
+            "assertions": [
+                {
+                    "item": {
+                        "type": "preprint",
+                        "doi": "10.7554/eLife.104779.1",
+                        "versionIdentifier": "1"
+                    },
+                    "status": "manuscript-published"
+                }
+            ],
+            "inputs": [
+                {
+                    "type": "preprint",
+                    "doi": "10.31219/osf.io/4yh36",
+                    "url": "https://osf.io/preprints/osf/4yh36_v1",
+                    "versionIdentifier": "4"
+                },
+                {
+                    "type": "reply",
+                    "doi": "10.7554/eLife.104779.1.sa0"
+                },
+                {
+                    "type": "review-article",
+                    "doi": "10.7554/eLife.104779.1.sa1"
+                },
+                {
+                    "type": "review-article",
+                    "doi": "10.7554/eLife.104779.1.sa2"
+                },
+                {
+                    "type": "review-article",
+                    "doi": "10.7554/eLife.104779.1.sa3"
+                },
+                {
+                    "type": "evaluation-summary",
+                    "doi": "10.7554/eLife.104779.1.sa4"
+                }
+            ],
+            "previous-step": "_:b1"
         }
     }
 }

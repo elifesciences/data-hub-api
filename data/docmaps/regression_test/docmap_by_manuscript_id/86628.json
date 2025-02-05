@@ -60,7 +60,7 @@
           "content": [
             {
               "type": "computer-file",
-              "url": "s3://transfers-elife/biorxiv_Current_Content/February_2023/22_Feb_23_Batch_1531/c27a22b7-6c43-1014-aa80-efc7cf011f1d.meca"
+              "url": "s3://biorxiv-src-daily/Current_Content/February_2023/22_Feb_23_Batch_1531/c27a22b7-6c43-1014-aa80-efc7cf011f1d.meca"
             }
           ]
         }
@@ -171,10 +171,10 @@
               "versionIdentifier": "1",
               "license": "http://creativecommons.org/licenses/by/4.0/",
               "content": [
-                  {
-                      "type": "computer-file",
-                      "url": "s3://prod-elife-epp-meca/reviewed-preprints/86628-v1-meca.zip"
-                  }
+                {
+                  "type": "computer-file",
+                  "url": "s3://prod-elife-epp-meca/reviewed-preprints/86628-v1-meca.zip"
+                }
               ]
             }
           ]
@@ -302,7 +302,7 @@
           "content": [
             {
               "type": "computer-file",
-              "url": "s3://transfers-elife/biorxiv_Current_Content/April_2023/25_Apr_23_Batch_1592/00b11518-6c7e-1014-a8bd-92bb569a120d.meca"
+              "url": "s3://biorxiv-src-daily/Current_Content/April_2023/25_Apr_23_Batch_1592/00b11518-6c7e-1014-a8bd-92bb569a120d.meca"
             }
           ]
         }
@@ -440,10 +440,10 @@
               "versionIdentifier": "2",
               "license": "http://creativecommons.org/licenses/by/4.0/",
               "content": [
-                  {
-                      "type": "computer-file",
-                      "url": "s3://prod-elife-epp-meca/reviewed-preprints/86628-v2-meca.zip"
-                  }
+                {
+                  "type": "computer-file",
+                  "url": "s3://prod-elife-epp-meca/reviewed-preprints/86628-v2-meca.zip"
+                }
               ]
             }
           ]

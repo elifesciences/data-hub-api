@@ -60,7 +60,7 @@
           "content": [
             {
               "type": "computer-file",
-              "url": "s3://transfers-elife/biorxiv_Current_Content/August_2023/11_Aug_23_Batch_1700/7958d804-6c56-1014-8674-c49f42869aff.meca"
+              "url": "s3://biorxiv-src-daily/Current_Content/August_2023/11_Aug_23_Batch_1700/7958d804-6c56-1014-8674-c49f42869aff.meca"
             }
           ]
         }
@@ -349,7 +349,7 @@
           "content": [
             {
               "type": "computer-file",
-              "url": "s3://transfers-elife/biorxiv_Current_Content/January_2024/18_Jan_24_Batch_1860/0ac0e016-6c80-1014-aae0-b3f0b2d5310c.meca"
+              "url": "s3://biorxiv-src-daily/Current_Content/January_2024/18_Jan_24_Batch_1860/0ac0e016-6c80-1014-aae0-b3f0b2d5310c.meca"
             }
           ]
         }
