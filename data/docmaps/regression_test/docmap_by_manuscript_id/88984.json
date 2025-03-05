@@ -179,6 +179,11 @@
                                 "name": "Peter Rodgers",
                                 "firstName": "Peter",
                                 "surname": "Rodgers",
+                                "identifier": [{
+                                    "type": "PropertyValue",
+                                    "propertyID": "ORCID",
+                                    "value":  "0000-0001-8332-936X"
+                                }],
                                 "_relatesToOrganization": "eLife, United Kingdom",
                                 "affiliation": {
                                     "type": "organization",
@@ -194,6 +199,11 @@
                                 "name": "Peter Rodgers",
                                 "firstName": "Peter",
                                 "surname": "Rodgers",
+                                "identifier": [{
+                                    "type": "PropertyValue",
+                                    "propertyID": "ORCID",
+                                    "value":  "0000-0001-8332-936X"
+                                }],
                                 "_relatesToOrganization": "eLife, United Kingdom",
                                 "affiliation": {
                                     "type": "organization",
@@ -506,6 +516,11 @@
                                 "firstName": "Peter",
                                 "surname": "Rodgers",
                                 "_relatesToOrganization": "eLife, United Kingdom",
+                                "identifier": [{
+                                    "type": "PropertyValue",
+                                    "propertyID": "ORCID",
+                                    "value":  "0000-0001-8332-936X"
+                                }],
                                 "affiliation": {
                                     "type": "organization",
                                     "name": "eLife",
@@ -520,6 +535,11 @@
                                 "name": "Peter Rodgers",
                                 "firstName": "Peter",
                                 "surname": "Rodgers",
+                                "identifier": [{
+                                    "type": "PropertyValue",
+                                    "propertyID": "ORCID",
+                                    "value":  "0000-0001-8332-936X"
+                                }],
                                 "_relatesToOrganization": "eLife, United Kingdom",
                                 "affiliation": {
                                     "type": "organization",
@@ -861,6 +881,11 @@
                                 "name": "Peter Rodgers",
                                 "firstName": "Peter",
                                 "surname": "Rodgers",
+                                "identifier": [{
+                                    "type": "PropertyValue",
+                                    "propertyID": "ORCID",
+                                    "value":  "0000-0001-8332-936X"
+                                }],
                                 "_relatesToOrganization": "eLife, United Kingdom",
                                 "affiliation": {
                                     "type": "organization",
@@ -876,6 +901,11 @@
                                 "name": "Peter Rodgers",
                                 "firstName": "Peter",
                                 "surname": "Rodgers",
+                                "identifier": [{
+                                    "type": "PropertyValue",
+                                    "propertyID": "ORCID",
+                                    "value":  "0000-0001-8332-936X"
+                                }],
                                 "_relatesToOrganization": "eLife, United Kingdom",
                                 "affiliation": {
                                     "type": "organization",
