@@ -182,7 +182,7 @@
                                 "identifier": [{
                                     "type": "PropertyValue",
                                     "propertyID": "ORCID",
-                                    "value":  "0000-0001-8332-936X"
+                                    "value":  "https://orcid.org/0000-0001-8332-936X"
                                 }],
                                 "_relatesToOrganization": "eLife, United Kingdom",
                                 "affiliation": {
@@ -202,7 +202,7 @@
                                 "identifier": [{
                                     "type": "PropertyValue",
                                     "propertyID": "ORCID",
-                                    "value":  "0000-0001-8332-936X"
+                                    "value":  "https://orcid.org/0000-0001-8332-936X"
                                 }],
                                 "_relatesToOrganization": "eLife, United Kingdom",
                                 "affiliation": {
@@ -519,7 +519,7 @@
                                 "identifier": [{
                                     "type": "PropertyValue",
                                     "propertyID": "ORCID",
-                                    "value":  "0000-0001-8332-936X"
+                                    "value":  "https://orcid.org/0000-0001-8332-936X"
                                 }],
                                 "affiliation": {
                                     "type": "organization",
@@ -538,7 +538,7 @@
                                 "identifier": [{
                                     "type": "PropertyValue",
                                     "propertyID": "ORCID",
-                                    "value":  "0000-0001-8332-936X"
+                                    "value":  "https://orcid.org/0000-0001-8332-936X"
                                 }],
                                 "_relatesToOrganization": "eLife, United Kingdom",
                                 "affiliation": {
@@ -884,7 +884,7 @@
                                 "identifier": [{
                                     "type": "PropertyValue",
                                     "propertyID": "ORCID",
-                                    "value":  "0000-0001-8332-936X"
+                                    "value":  "https://orcid.org/0000-0001-8332-936X"
                                 }],
                                 "_relatesToOrganization": "eLife, United Kingdom",
                                 "affiliation": {
@@ -904,7 +904,7 @@
                                 "identifier": [{
                                     "type": "PropertyValue",
                                     "propertyID": "ORCID",
-                                    "value":  "0000-0001-8332-936X"
+                                    "value":  "https://orcid.org/0000-0001-8332-936X"
                                 }],
                                 "_relatesToOrganization": "eLife, United Kingdom",
                                 "affiliation": {
