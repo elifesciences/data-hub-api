@@ -312,8 +312,9 @@ class TestGetDocmapEvaluationParticipantsForEvaluationSummaryType:
         )
         assert result == {
             'actor': {
-                'name': 'editor_name_1',
                 'type': 'person',
+                'id': 'https://orcid.org/orcid_1',
+                'name': 'editor_name_1',
                 'firstName': 'editor_first_name_1',
                 '_middleName': 'editor_middle_name_1',
                 'surname': 'editor_last_name_1',
@@ -323,10 +324,11 @@ class TestGetDocmapEvaluationParticipantsForEvaluationSummaryType:
             'role': 'editor'
         }
 
-    def test_should_return_none_for_middle_name_if_not_defined(self):
+    def test_should_return_none_for_middle_name_or_id_if_they_not_defined(self):
         editor_detail_dict = {
             **EDITOR_DETAIL_1,
-            'middle_name': None
+            'middle_name': None,
+            'ORCID': None
         }
         role = 'editor'
         result = get_docmap_evaluation_participants_for_evaluation_summary_type(
@@ -335,8 +337,9 @@ class TestGetDocmapEvaluationParticipantsForEvaluationSummaryType:
         )
         assert result == {
             'actor': {
-                'name': 'editor_name_1',
                 'type': 'person',
+                'id': None,
+                'name': 'editor_name_1',
                 'firstName': 'editor_first_name_1',
                 '_middleName': None,
                 'surname': 'editor_last_name_1',

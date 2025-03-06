@@ -295,7 +295,7 @@ EDITOR_DETAIL_1: ApiEditorDetailInput = {
     'middle_name': 'editor_middle_name_1',
     'last_name': 'editor_last_name_1',
     'city': 'editor_city_1',
-    'ORCID': None
+    'ORCID': 'orcid_1'
 }
 
 SENIOR_EDITOR_DETAIL_1: ApiEditorDetailInput = {
@@ -307,5 +307,5 @@ SENIOR_EDITOR_DETAIL_1: ApiEditorDetailInput = {
     'middle_name': 'senior_editor_middle_name_1',
     'last_name': 'senior_editor_last_name_1',
     'city': 'senior_editor_city_1',
-    'ORCID': None
+    'ORCID': 'orcid_1'
 }
