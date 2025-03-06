@@ -119,6 +119,7 @@ DocmapEditorActor = TypedDict(
     'DocmapEditorActor',
     {
         'type': str,
+        'id': Optional[str],
         'name': str,
         'firstName': str,
         '_middleName': Optional[str],
