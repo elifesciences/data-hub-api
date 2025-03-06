@@ -176,14 +176,10 @@
                         {
                             "actor": {
                                 "type": "person",
+                                "id": "https://orcid.org/0000-0001-8332-936X",
                                 "name": "Peter Rodgers",
                                 "firstName": "Peter",
                                 "surname": "Rodgers",
-                                "identifier": [{
-                                    "type": "PropertyValue",
-                                    "propertyID": "ORCID",
-                                    "value":  "https://orcid.org/0000-0001-8332-936X"
-                                }],
                                 "_relatesToOrganization": "eLife, United Kingdom",
                                 "affiliation": {
                                     "type": "organization",
@@ -196,14 +192,10 @@
                         {
                             "actor": {
                                 "type": "person",
+                                "id": "https://orcid.org/0000-0001-8332-936X",
                                 "name": "Peter Rodgers",
                                 "firstName": "Peter",
                                 "surname": "Rodgers",
-                                "identifier": [{
-                                    "type": "PropertyValue",
-                                    "propertyID": "ORCID",
-                                    "value":  "https://orcid.org/0000-0001-8332-936X"
-                                }],
                                 "_relatesToOrganization": "eLife, United Kingdom",
                                 "affiliation": {
                                     "type": "organization",
@@ -512,15 +504,11 @@
                         {
                             "actor": {
                                 "type": "person",
+                                "id": "https://orcid.org/0000-0001-8332-936X",
                                 "name": "Peter Rodgers",
                                 "firstName": "Peter",
                                 "surname": "Rodgers",
                                 "_relatesToOrganization": "eLife, United Kingdom",
-                                "identifier": [{
-                                    "type": "PropertyValue",
-                                    "propertyID": "ORCID",
-                                    "value":  "https://orcid.org/0000-0001-8332-936X"
-                                }],
                                 "affiliation": {
                                     "type": "organization",
                                     "name": "eLife",
@@ -532,14 +520,10 @@
                         {
                             "actor": {
                                 "type": "person",
+                                "id": "https://orcid.org/0000-0001-8332-936X",
                                 "name": "Peter Rodgers",
                                 "firstName": "Peter",
                                 "surname": "Rodgers",
-                                "identifier": [{
-                                    "type": "PropertyValue",
-                                    "propertyID": "ORCID",
-                                    "value":  "https://orcid.org/0000-0001-8332-936X"
-                                }],
                                 "_relatesToOrganization": "eLife, United Kingdom",
                                 "affiliation": {
                                     "type": "organization",
@@ -878,14 +862,10 @@
                         {
                             "actor": {
                                 "type": "person",
+                                "id": "https://orcid.org/0000-0001-8332-936X",
                                 "name": "Peter Rodgers",
                                 "firstName": "Peter",
                                 "surname": "Rodgers",
-                                "identifier": [{
-                                    "type": "PropertyValue",
-                                    "propertyID": "ORCID",
-                                    "value":  "https://orcid.org/0000-0001-8332-936X"
-                                }],
                                 "_relatesToOrganization": "eLife, United Kingdom",
                                 "affiliation": {
                                     "type": "organization",
@@ -898,14 +878,10 @@
                         {
                             "actor": {
                                 "type": "person",
+                                "id": "https://orcid.org/0000-0001-8332-936X",
                                 "name": "Peter Rodgers",
                                 "firstName": "Peter",
                                 "surname": "Rodgers",
-                                "identifier": [{
-                                    "type": "PropertyValue",
-                                    "propertyID": "ORCID",
-                                    "value":  "https://orcid.org/0000-0001-8332-936X"
-                                }],
                                 "_relatesToOrganization": "eLife, United Kingdom",
                                 "affiliation": {
                                     "type": "organization",
