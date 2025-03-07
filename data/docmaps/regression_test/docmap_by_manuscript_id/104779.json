@@ -202,6 +202,7 @@
                         {
                             "actor": {
                                 "type": "person",
+                                "id": "https://orcid.org/0000-0001-7119-9350",
                                 "name": "Kristine Krug",
                                 "firstName": "Kristine",
                                 "surname": "Krug",

@@ -201,6 +201,7 @@ def get_docmap_actor_for_evaluation_summary_type(
 ) -> DocmapEditorActor:
     return {
         'type': 'person',
+        'id': ('https://orcid.org/' + editor_detail['ORCID'] if editor_detail['ORCID'] else None),
         'name': editor_detail['name'],
         'firstName': editor_detail['first_name'],
         '_middleName': (editor_detail['middle_name'] if editor_detail['middle_name'] else None),

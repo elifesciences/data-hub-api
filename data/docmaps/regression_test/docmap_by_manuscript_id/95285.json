@@ -142,6 +142,7 @@
                         {
                             "actor": {
                                 "type": "person",
+                                "id": "https://orcid.org/0000-0002-9570-2544",
                                 "name": "Jungsan Sohn",
                                 "firstName": "Jungsan",
                                 "surname": "Sohn",
@@ -388,6 +389,7 @@
                         {
                             "actor": {
                                 "type": "person",
+                                "id": "https://orcid.org/0000-0002-9570-2544",
                                 "name": "Jungsan Sohn",
                                 "firstName": "Jungsan",
                                 "surname": "Sohn",
@@ -686,6 +688,7 @@
                         {
                             "actor": {
                                 "type": "person",
+                                "id": "https://orcid.org/0000-0002-9570-2544",
                                 "name": "Jungsan Sohn",
                                 "firstName": "Jungsan",
                                 "surname": "Sohn",

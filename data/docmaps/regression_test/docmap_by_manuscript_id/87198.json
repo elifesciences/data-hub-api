@@ -142,6 +142,7 @@
                         {
                             "actor": {
                                 "type": "person",
+                                "id": "https://orcid.org/0000-0002-1228-5221",
                                 "name": "David Paz-Garcia",
                                 "firstName": "David",
                                 "_middleName": "A.",
@@ -158,6 +159,7 @@
                         {
                             "actor": {
                                 "type": "person",
+                                "id": "https://orcid.org/0000-0002-5369-9009",
                                 "name": "Molly Przeworski",
                                 "firstName": "Molly",
                                 "surname": "Przeworski",
@@ -431,6 +433,7 @@
                         {
                             "actor": {
                                 "type": "person",
+                                "id": "https://orcid.org/0000-0002-1228-5221",
                                 "name": "David Paz-Garcia",
                                 "firstName": "David",
                                 "_middleName": "A.",
