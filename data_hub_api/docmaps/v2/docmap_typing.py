@@ -109,6 +109,7 @@ DocmapAnonymousActor = TypedDict(
 DocmapAffiliation = TypedDict(
     'DocmapAffiliation',
     {
+        'id': Optional[str],
         'type': str,
         'name': str,
         'location': Optional[str]
