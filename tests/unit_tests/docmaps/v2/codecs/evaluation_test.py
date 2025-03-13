@@ -257,6 +257,7 @@ class TestGetDocmapAffiliation:
     def test_should_populate_affiliation_if_instutition_available(self):
         result = get_docmap_affiliation(EDITOR_DETAIL_1)
         assert result == {
+            'id': 'ror_id_1',
             'type': 'organization',
             'name': 'editor_institution_1',
             'location': 'editor_city_1, editor_country_1'
@@ -275,6 +276,7 @@ class TestGetDocmapAffiliation:
             'country': None
         })
         assert result == {
+            'id': 'ror_id_1',
             'type': 'organization',
             'name': 'editor_institution_1',
             'location': None
@@ -287,9 +289,22 @@ class TestGetDocmapAffiliation:
             'city': None
         })
         assert result == {
+            'id': 'ror_id_1',
             'type': 'organization',
             'name': 'editor_institution_1',
             'location': 'editor_country_1'
+        }
+
+    def test_should_return_none_for_id_if_ror_id_none(self):
+        result = get_docmap_affiliation({
+            **EDITOR_DETAIL_1,
+            'ROR_ID': None
+        })
+        assert result == {
+            'id': None,
+            'type': 'organization',
+            'name': 'editor_institution_1',
+            'location': 'editor_city_1, editor_country_1'
         }
 
 
