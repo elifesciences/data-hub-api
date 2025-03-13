@@ -25,7 +25,8 @@ ApiEditorDetailInput = TypedDict(
         'middle_name': Optional[str],
         'last_name': str,
         'city': Optional[str],
-        'ORCID': Optional[str]
+        'ORCID': Optional[str],
+        'ROR_ID': Optional[str]
     }
 )
 
