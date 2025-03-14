@@ -181,6 +181,7 @@
                                 "surname": "Yan",
                                 "_relatesToOrganization": "Washington State University, United States of America",
                                 "affiliation": {
+                                    "id": "https://ror.org/05dk0ce17",
                                     "type": "organization",
                                     "name": "Washington State University",
                                     "location": "Pullman, United States of America"
@@ -197,6 +198,7 @@
                                 "surname": "Harper",
                                 "_relatesToOrganization": "University of Michigan-Ann Arbor, United States of America",
                                 "affiliation": {
+                                    "id": "https://ror.org/00jmfr291",
                                     "type": "organization",
                                     "name": "University of Michigan-Ann Arbor",
                                     "location": "Ann Arbor, United States of America"
@@ -508,6 +510,7 @@
                                 "surname": "Yan",
                                 "_relatesToOrganization": "Washington State University, United States of America",
                                 "affiliation": {
+                                    "id": "https://ror.org/05dk0ce17",
                                     "type": "organization",
                                     "name": "Washington State University",
                                     "location": "Pullman, United States of America"
@@ -524,6 +527,7 @@
                                 "surname": "Harper",
                                 "_relatesToOrganization": "University of Michigan-Ann Arbor, United States of America",
                                 "affiliation": {
+                                    "id": "https://ror.org/00jmfr291",
                                     "type": "organization",
                                     "name": "University of Michigan-Ann Arbor",
                                     "location": "Ann Arbor, United States of America"
