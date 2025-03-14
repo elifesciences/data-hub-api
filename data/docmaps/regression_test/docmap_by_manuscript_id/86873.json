@@ -148,6 +148,7 @@
                                 "surname": "Kalan",
                                 "_relatesToOrganization": "University of Victoria, Canada",
                                 "affiliation": {
+                                    "id": "https://ror.org/04s5mat29",
                                     "type": "organization",
                                     "name": "University of Victoria",
                                     "location": "Victoria, Canada"
@@ -164,6 +165,7 @@
                                 "surname": "Perry",
                                 "_relatesToOrganization": "Pennsylvania State University, United States of America",
                                 "affiliation": {
+                                    "id": "https://ror.org/04p491231",
                                     "type": "organization",
                                     "name": "Pennsylvania State University",
                                     "location": "University Park, United States of America"
@@ -460,6 +462,7 @@
                                 "surname": "Kalan",
                                 "_relatesToOrganization": "University of Victoria, Canada",
                                 "affiliation": {
+                                    "id": "https://ror.org/04s5mat29",
                                     "type": "organization",
                                     "name": "University of Victoria",
                                     "location": "Victoria, Canada"
@@ -476,6 +479,7 @@
                                 "surname": "Perry",
                                 "_relatesToOrganization": "Pennsylvania State University, United States of America",
                                 "affiliation": {
+                                    "id": "https://ror.org/04p491231",
                                     "type": "organization",
                                     "name": "Pennsylvania State University",
                                     "location": "University Park, United States of America"

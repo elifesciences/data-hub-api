@@ -196,6 +196,7 @@
                                 "surname": "Kleine-Vehn",
                                 "_relatesToOrganization": "University of Freiburg, Germany",
                                 "affiliation": {
+                                    "id": "https://ror.org/0245cg223",
                                     "type": "organization",
                                     "name": "University of Freiburg",
                                     "location": "Freiburg, Germany"

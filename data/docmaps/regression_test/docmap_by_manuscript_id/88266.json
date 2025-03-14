@@ -164,6 +164,7 @@
                                 "surname": "James",
                                 "_relatesToOrganization": "University of Sydney, Australia",
                                 "affiliation": {
+                                    "id": "https://ror.org/0384j8v12",
                                     "type": "organization",
                                     "name": "University of Sydney",
                                     "location": "Sydney, Australia"
@@ -460,6 +461,7 @@
                                 "surname": "James",
                                 "_relatesToOrganization": "University of Sydney, Australia",
                                 "affiliation": {
+                                    "id": "https://ror.org/0384j8v12",
                                     "type": "organization",
                                     "name": "University of Sydney",
                                     "location": "Sydney, Australia"

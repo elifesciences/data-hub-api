@@ -148,6 +148,7 @@
                                 "surname": "Davis",
                                 "_relatesToOrganization": "University of Massachusetts Medical School, United States of America",
                                 "affiliation": {
+                                    "id": "https://ror.org/0464eyp60",
                                     "type": "organization",
                                     "name": "University of Massachusetts Medical School",
                                     "location": "Worcester, United States of America"
@@ -164,6 +165,7 @@
                                 "surname": "Stainier",
                                 "_relatesToOrganization": "Max Planck Institute for Heart and Lung Research, Germany",
                                 "affiliation": {
+                                    "id": "https://ror.org/0165r2y73",
                                     "type": "organization",
                                     "name": "Max Planck Institute for Heart and Lung Research",
                                     "location": "Bad Nauheim, Germany"
@@ -467,6 +469,7 @@
                                 "surname": "Davis",
                                 "_relatesToOrganization": "University of Massachusetts Medical School, United States of America",
                                 "affiliation": {
+                                    "id": "https://ror.org/0464eyp60",
                                     "type": "organization",
                                     "name": "University of Massachusetts Medical School",
                                     "location": "Worcester, United States of America"
@@ -483,6 +486,7 @@
                                 "surname": "Stainier",
                                 "_relatesToOrganization": "Max Planck Institute for Heart and Lung Research, Germany",
                                 "affiliation": {
+                                    "id": "https://ror.org/0165r2y73",
                                     "type": "organization",
                                     "name": "Max Planck Institute for Heart and Lung Research",
                                     "location": "Bad Nauheim, Germany"

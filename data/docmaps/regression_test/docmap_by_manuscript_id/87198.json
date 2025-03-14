@@ -165,6 +165,7 @@
                                 "surname": "Przeworski",
                                 "_relatesToOrganization": "Columbia University, United States of America",
                                 "affiliation": {
+                                    "id": "https://ror.org/00hj8s172",
                                     "type": "organization",
                                     "name": "Columbia University",
                                     "location": "New York, United States of America"
