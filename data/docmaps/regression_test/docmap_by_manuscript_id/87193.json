@@ -208,6 +208,7 @@
                                 "surname": "Pike",
                                 "_relatesToOrganization": "University of York, United Kingdom",
                                 "affiliation": {
+                                    "id": "https://ror.org/04m01e293",
                                     "type": "organization",
                                     "name": "University of York",
                                     "location": "York, United Kingdom"
@@ -223,6 +224,7 @@
                                 "surname": "Roiser",
                                 "_relatesToOrganization": "University College London, United Kingdom",
                                 "affiliation": {
+                                    "id": "https://ror.org/02jx3x895",
                                     "type": "organization",
                                     "name": "University College London",
                                     "location": "London, United Kingdom"
@@ -531,6 +533,7 @@
                                 "surname": "Pike",
                                 "_relatesToOrganization": "University of York, United Kingdom",
                                 "affiliation": {
+                                    "id": "https://ror.org/04m01e293",
                                     "type": "organization",
                                     "name": "University of York",
                                     "location": "York, United Kingdom"
@@ -546,6 +549,7 @@
                                 "surname": "Roiser",
                                 "_relatesToOrganization": "University College London, United Kingdom",
                                 "affiliation": {
+                                    "id": "https://ror.org/02jx3x895",
                                     "type": "organization",
                                     "name": "University College London",
                                     "location": "London, United Kingdom"

@@ -147,6 +147,7 @@
                                 "surname": "Toth",
                                 "_relatesToOrganization": "University of Ottawa, Canada",
                                 "affiliation": {
+                                    "id": "https://ror.org/03c4mmv16",
                                     "type": "organization",
                                     "name": "University of Ottawa",
                                     "location": "Ottawa, Canada"
@@ -429,6 +430,7 @@
                                 "surname": "Toth",
                                 "_relatesToOrganization": "University of Ottawa, Canada",
                                 "affiliation": {
+                                    "id": "https://ror.org/03c4mmv16",
                                     "type": "organization",
                                     "name": "University of Ottawa",
                                     "location": "Ottawa, Canada"

@@ -148,6 +148,7 @@
                 "surname": "Seldin",
                 "_relatesToOrganization": "University of California, Irvine, United States of America",
                 "affiliation": {
+                  "id": "https://ror.org/04gyf1771",
                   "type": "organization",
                   "name": "University of California, Irvine",
                   "location": "Irvine, United States of America"
@@ -164,6 +165,7 @@
                 "surname": "Ajijola",
                 "_relatesToOrganization": "University of California, Los Angeles, United States of America",
                 "affiliation": {
+                  "id": "https://ror.org/046rm7j60",
                   "type": "organization",
                   "name": "University of California, Los Angeles",
                   "location": "Los Angeles, United States of America"
@@ -404,6 +406,7 @@
                 "surname": "Seldin",
                 "_relatesToOrganization": "University of California, Irvine, United States of America",
                 "affiliation": {
+                  "id": "https://ror.org/04gyf1771",
                   "type": "organization",
                   "name": "University of California, Irvine",
                   "location": "Irvine, United States of America"
@@ -420,6 +423,7 @@
                 "surname": "Ajijola",
                 "_relatesToOrganization": "University of California, Los Angeles, United States of America",
                 "affiliation": {
+                  "id": "https://ror.org/046rm7j60",
                   "type": "organization",
                   "name": "University of California, Los Angeles",
                   "location": "Los Angeles, United States of America"

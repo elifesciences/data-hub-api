@@ -189,6 +189,7 @@ def get_docmap_affiliation(
 ) -> Optional[DocmapAffiliation]:
     if editor_detail['institution']:
         return {
+            'id': editor_detail['ROR_ID'],
             'type': 'organization',
             'name': editor_detail['institution'],
             'location': get_docmap_affiliation_location(editor_detail)
