@@ -1,4 +1,4 @@
-from unittest.mock import ANY, call, patch, MagicMock
+from unittest.mock import patch, MagicMock
 from typing import Iterable, Sequence
 
 import pytest
@@ -6,7 +6,6 @@ import pytest
 from fastapi.testclient import TestClient
 
 from data_hub_api import main as main_module
-from data_hub_api.config import ADDITIONAL_MANUSCRIPT_IDS
 from data_hub_api.main import create_app
 
 
@@ -16,7 +15,7 @@ MANUSCRIPT_ID = 'manuscript_id_1'
 
 @pytest.fixture(name='enhanced_preprints_docmaps_provider_class_mock', autouse=True)
 def _enhanced_preprints_docmaps_provider_class_mock() -> Iterable[MagicMock]:
-    with patch.object(main_module, 'DocmapsProviderV1') as mock:
+    with patch.object(main_module, 'DocmapsProvider') as mock:
         yield mock
 
 
@@ -36,13 +35,6 @@ def _enhanced_preprints_docmaps_provider_mock(
     return docmaps_provider_mock_list[0]
 
 
-@pytest.fixture(name='public_reviews_docmaps_provider_mock')
-def _public_reviews_docmaps_provider_mock(
-    docmaps_provider_mock_list: Sequence[MagicMock]
-) -> MagicMock:
-    return docmaps_provider_mock_list[1]
-
-
 def test_read_main():
     client = TestClient(create_app())
     response = client.get("/")
@@ -57,7 +49,7 @@ class TestGetEnhancedPreprintsDocmapsIndex:
         docmaps_index = [{'docmaps': [{'id': 'docmap_1'}, {'id': 'docmap_2'}]}]
         enhanced_preprints_docmaps_provider_mock.get_docmaps_index.return_value = docmaps_index
         client = TestClient(create_app())
-        response = client.get('/enhanced-preprints/docmaps/v1/index')
+        response = client.get('/enhanced-preprints/docmaps/v2/index')
         assert response.json() == docmaps_index
 
     def test_should_return_not_available_message_for_invalid_manuscript_id_by_elife(
@@ -67,7 +59,7 @@ class TestGetEnhancedPreprintsDocmapsIndex:
         enhanced_preprints_docmaps_provider_mock.get_docmaps_by_manuscript_id.return_value = []
         client = TestClient(create_app())
         response = client.get(
-            '/enhanced-preprints/docmaps/v1/by-publisher/elife/get-by-manuscript-id',
+            '/enhanced-preprints/docmaps/v2/by-publisher/elife/get-by-manuscript-id',
             params={'manuscript_id': MANUSCRIPT_ID}
         )
         assert response.status_code == 404
@@ -85,7 +77,7 @@ class TestGetEnhancedPreprintsDocmapsIndex:
         )
         client = TestClient(create_app())
         response = client.get(
-            '/enhanced-preprints/docmaps/v1/by-publisher/elife/get-by-manuscript-id',
+            '/enhanced-preprints/docmaps/v2/by-publisher/elife/get-by-manuscript-id',
             params={'manuscript_id': MANUSCRIPT_ID}
         )
         enhanced_preprints_docmaps_provider_mock.get_docmaps_by_manuscript_id.assert_called_with(
@@ -93,35 +85,3 @@ class TestGetEnhancedPreprintsDocmapsIndex:
         )
         assert response.status_code == 200
         assert response.json() == article_docmap_list[0]
-
-    def test_should_return_json_with_docmaps_list_from_public_review_provider(
-        self,
-        public_reviews_docmaps_provider_mock: MagicMock
-    ):
-        docmaps_index = [{'docmaps': [{'id': 'docmap_1'}, {'id': 'docmap_2'}]}]
-        public_reviews_docmaps_provider_mock.get_docmaps_index.return_value = docmaps_index
-        client = TestClient(create_app())
-        response = client.get('/public-reviews/docmaps/v1/index')
-        assert response.json() == docmaps_index
-
-    def test_should_pass_correct_parameters_to_provider_class(
-        self,
-        enhanced_preprints_docmaps_provider_class_mock: MagicMock
-    ):
-        create_app()
-        enhanced_preprints_docmaps_provider_class_mock.assert_has_calls(
-            [
-                call(
-                    only_include_reviewed_preprint_type=True,
-                    only_include_evaluated_preprints=False,
-                    additionally_include_manuscript_ids=ADDITIONAL_MANUSCRIPT_IDS,
-                    query_results_cache=ANY
-                ),
-                call(
-                    only_include_reviewed_preprint_type=False,
-                    only_include_evaluated_preprints=True,
-                    query_results_cache=ANY
-                )
-            ],
-            any_order=False
-        )
