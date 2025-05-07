@@ -28,6 +28,7 @@ MANUSCRIPT_ID_LIST = [
     '87356',  # Has VoRs updates (has three versions)
     '95285',  # Has Authorea preprint (manual hypothesis matching)
     '104779',  # OSF preprint with version included in URL from hypothesis
+    '85646',  # Opt-Ins, have VOR after second version
 ]
 
 
