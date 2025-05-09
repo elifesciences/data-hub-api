@@ -691,64 +691,12 @@
                     "participants": [],
                     "outputs": [
                         {
-                            "type": "preprint",
+                            "type": "version-of-record",
                             "identifier": "85646",
                             "doi": "10.7554/eLife.85646.3",
                             "versionIdentifier": "3",
-                            "license": "http://creativecommons.org/licenses/by/4.0/"
-                        }
-                    ]
-                }
-            ],
-            "assertions": [
-                {
-                    "item": {
-                        "type": "preprint",
-                        "doi": "10.1101/2022.12.15.520660",
-                        "versionIdentifier": "1"
-                    },
-                    "status": "under-review",
-                    "happened": "2024-01-18T14:00:14+00:00"
-                },
-                {
-                    "item": {
-                        "type": "preprint",
-                        "doi": "10.7554/eLife.85646.3",
-                        "versionIdentifier": "3"
-                    },
-                    "status": "draft"
-                }
-            ],
-            "inputs": [
-                {
-                    "type": "preprint",
-                    "doi": "10.1101/2022.12.15.520660",
-                    "url": "https://www.biorxiv.org/content/10.1101/2022.12.15.520660v1",
-                    "versionIdentifier": "1",
-                    "published": "2022-12-15",
-                    "content": [
-                        {
-                            "type": "computer-file",
-                            "url": "s3://biorxiv-src-daily/Current_Content/December_2022/18_Dec_22_Batch_1468/5379f1c8-6c6d-1014-921c-f1dada13e9b6.meca"
-                        }
-                    ]
-                }
-            ],
-            "next-step": "_:b7",
-            "previous-step": "_:b5"
-        },
-        "_:b7": {
-            "actions": [
-                {
-                    "participants": [],
-                    "outputs": [
-                        {
-                            "type": "version-of-record",
-                            "identifier": "85646",
-                            "doi": "10.7554/eLife.85646.4",
-                            "versionIdentifier": "4",
                             "published": "2024-02-16",
-                            "url": "https://doi.org/10.7554/eLife.85646.4",
+                            "url": "https://doi.org/10.7554/eLife.85646.3",
                             "content": [
                                 {
                                     "type": "web-page",
@@ -763,8 +711,8 @@
                 {
                     "item": {
                         "type": "version-of-record",
-                        "doi": "10.7554/eLife.85646.4",
-                        "versionIdentifier": "4"
+                        "doi": "10.7554/eLife.85646.3",
+                        "versionIdentifier": "3"
                     },
                     "status": "vor-published"
                 }
@@ -772,12 +720,12 @@
             "inputs": [
                 {
                     "type": "preprint",
-                    "doi": "10.7554/eLife.85646.3",
+                    "doi": "10.7554/eLife.85646.2",
                     "identifier": "85646",
-                    "versionIdentifier": "3"
+                    "versionIdentifier": "2"
                 }
             ],
-            "previous-step": "_:b6"
+            "previous-step": "_:b5"
         }
     }
 }
