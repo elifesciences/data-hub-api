@@ -36,7 +36,7 @@
                     "item": {
                         "type": "preprint",
                         "doi": "10.31219/osf.io/4yh36",
-                        "versionIdentifier": "4"
+                        "versionIdentifier": "1"
                     },
                     "status": "under-review",
                     "happened": "2024-11-01T09:04:34+00:00"
@@ -55,7 +55,7 @@
                     "type": "preprint",
                     "doi": "10.31219/osf.io/4yh36",
                     "url": "https://osf.io/preprints/osf/4yh36_v1",
-                    "versionIdentifier": "4",
+                    "versionIdentifier": "1",
                     "published": "2024-12-11",
                     "content": [
                         {
@@ -280,7 +280,7 @@
                     "item": {
                         "type": "preprint",
                         "doi": "10.31219/osf.io/4yh36",
-                        "versionIdentifier": "4"
+                        "versionIdentifier": "1"
                     },
                     "status": "peer-reviewed"
                 }
@@ -290,7 +290,7 @@
                     "type": "preprint",
                     "doi": "10.31219/osf.io/4yh36",
                     "url": "https://osf.io/preprints/osf/4yh36_v1",
-                    "versionIdentifier": "4"
+                    "versionIdentifier": "1"
                 }
             ],
             "next-step": "_:b2",
@@ -339,7 +339,7 @@
                     "type": "preprint",
                     "doi": "10.31219/osf.io/4yh36",
                     "url": "https://osf.io/preprints/osf/4yh36_v1",
-                    "versionIdentifier": "4"
+                    "versionIdentifier": "1"
                 },
                 {
                     "type": "reply",
