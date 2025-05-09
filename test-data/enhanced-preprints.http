@@ -1,0 +1,3 @@
+###
+
+GET http://localhost:8000/enhanced-preprints/docmaps/v2/by-publisher/elife/get-by-manuscript-id?manuscript_id=104779
