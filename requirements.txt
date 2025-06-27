@@ -1,4 +1,4 @@
-fastapi==0.115.13
+fastapi==0.115.14
 objsize==0.7.1
 uvicorn[standard]==0.34.3
 google-cloud-bigquery==3.34.0
