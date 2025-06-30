@@ -2,7 +2,7 @@ fastapi==0.115.14
 objsize==0.7.1
 uvicorn[standard]==0.35.0
 google-cloud-bigquery==3.34.0
-pandas==2.2.3
+pandas==2.3.0
 numpy==2.0.2
 types-python-dateutil
 types-requests
