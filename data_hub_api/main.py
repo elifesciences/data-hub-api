@@ -1,4 +1,5 @@
 import logging
+import uuid
 
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
@@ -20,17 +21,25 @@ def create_app():
 
     @app.middleware("http")
     async def log_requests(request, call_next):
+        request_id = str(uuid.uuid4())
         user_agent = request.headers.get("user-agent", "unknown")
         client_ip = request.client.host if request.client else "unknown"
         protocol = request.scope.get("http_version", "unknown")
         method = request.method
         path = request.url.path
 
+        request.state.request_id = request_id
+
         LOGGER.info(
-            f'{client_ip} - - "{method} {path} HTTP/{protocol}" "{user_agent}"'
+            f'{request_id} START {client_ip} - - "{method} {path} HTTP/{protocol}" "{user_agent}"'
         )
 
         response = await call_next(request)
+
+        LOGGER.info(
+            f'{request_id} END {client_ip} - - "{method} {path} HTTP/{protocol}" {response.status_code} "{user_agent}"'
+        )
+
         return response
 
     docmaps_v2_max_age_in_seconds = 10 * 60  # 10 minutes
