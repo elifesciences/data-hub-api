@@ -20,7 +20,10 @@ def create_app():
 
     @app.middleware("http")
     async def log_requests(request, call_next):
-        LOGGER.info(f"Received request: {request.method} {request.url.path}")
+        user_agent = request.headers.get("user-agent", "unknown")
+        LOGGER.info(
+            f"Received request: {request.method} {request.url.path} | User-Agent: {user_agent}"
+        )
         response = await call_next(request)
         return response
 
