@@ -3,13 +3,18 @@ disable_existing_loggers: false
 
 formatters:
   standard:
-    format: "%(asctime)s - %(levelname)s - %(message)s"
+    format: "%(asctime)s - %(levelname)s - %(request_id)s - %(message)s"
 
 handlers:
   console:
     class: logging.StreamHandler
     formatter: standard
     stream: ext://sys.stdout
+    filters: [request_log_filter]
+
+filters:
+  request_log_filter:
+    (): data_hub_api.utils.fastapi.RequestLogFilter
 
 loggers:
   uvicorn:

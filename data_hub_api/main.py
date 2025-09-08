@@ -10,6 +10,7 @@ from data_hub_api.kotahi_docmaps.v1.api_router import (
 from data_hub_api.utils.cache import InMemorySingleObjectCache
 from data_hub_api.docmaps.v2.provider import DocmapsProvider
 from data_hub_api.kotahi_docmaps.v1.provider import DocmapsProvider as KotahiDocmapsProvider
+from data_hub_api.utils.fastapi import log_requests_middleware
 
 
 LOGGER = logging.getLogger(__name__)
@@ -17,6 +18,8 @@ LOGGER = logging.getLogger(__name__)
 
 def create_app():
     app = FastAPI()
+
+    app.middleware("http")(log_requests_middleware())
 
     docmaps_v2_max_age_in_seconds = 10 * 60  # 10 minutes
     kotahi_docmaps_max_age_in_seconds = 60 * 60  # 1 hour
