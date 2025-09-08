@@ -33,8 +33,7 @@ def log_requests_middleware():
 
         LOGGER.info(
             '%s',
-            f'Received request: {request_id} {client_addr} "{method} {path} HTTP/{protocol}"'
-            f' "{user_agent}"'
+            f'Received request: {client_addr} "{method} {path} HTTP/{protocol}" "{user_agent}"'
         )
 
         response = await call_next(request)
