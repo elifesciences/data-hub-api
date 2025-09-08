@@ -18,6 +18,12 @@ LOGGER = logging.getLogger(__name__)
 def create_app():
     app = FastAPI()
 
+    @app.middleware("http")
+    async def log_requests(request, call_next):
+        LOGGER.info(f"Received request: {request.method} {request.url.path}")
+        response = await call_next(request)
+        return response
+
     docmaps_v2_max_age_in_seconds = 10 * 60  # 10 minutes
     kotahi_docmaps_max_age_in_seconds = 60 * 60  # 1 hour
 
