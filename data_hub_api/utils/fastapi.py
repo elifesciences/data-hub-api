@@ -27,13 +27,13 @@ def log_requests_middleware():
         )
         protocol = request.scope.get('http_version', 'unknown')
         method = request.method
-        path = request.url.path
+        url = request.url
 
         request_id_context_var.set(request_id)
 
         LOGGER.info(
             '%s',
-            f'Received request: {client_addr} "{method} {path} HTTP/{protocol}" "{user_agent}"'
+            f'Received request: {client_addr} "{method} {url} HTTP/{protocol}" "{user_agent}"'
         )
 
         response = await call_next(request)
