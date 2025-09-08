@@ -21,9 +21,15 @@ def create_app():
     @app.middleware("http")
     async def log_requests(request, call_next):
         user_agent = request.headers.get("user-agent", "unknown")
+        client_ip = request.client.host if request.client else "unknown"
+        protocol = request.scope.get("http_version", "unknown")
+        method = request.method
+        path = request.url.path
+
         LOGGER.info(
-            f"Received request: {request.method} {request.url.path} | User-Agent: {user_agent}"
+            f'{client_ip} - - "{method} {path} HTTP/{protocol}" "{user_agent}"'
         )
+
         response = await call_next(request)
         return response
 
