@@ -1,3 +1,4 @@
+import json
 import logging
 from pathlib import Path
 from time import monotonic
@@ -70,6 +71,13 @@ class DocmapsProvider:
     def get_docmaps_by_manuscript_id(self, manuscript_id: str) -> Sequence[Docmap]:
         return list(self.iter_docmaps_by_manuscript_id(manuscript_id))
 
-    def get_docmaps_index(self) -> dict:
-        article_docmaps_list = list(self.iter_docmaps_by_manuscript_id())
-        return {'docmaps': article_docmaps_list}
+    def iter_docmaps_index_json_stream(self):
+        yield '{"docmaps":['
+        first = True
+        for docmap in self.iter_docmaps_by_manuscript_id():
+            if not first:
+                yield ','
+            else:
+                first = False
+            yield json.dumps(docmap)
+        yield ']}'

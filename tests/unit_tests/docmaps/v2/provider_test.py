@@ -1,3 +1,4 @@
+import json
 from unittest.mock import patch, MagicMock
 from typing import Iterable, cast
 
@@ -19,6 +20,12 @@ def _iter_dict_from_bq_query_mock() -> Iterable[MagicMock]:
         yield mock
 
 
+def _get_docmaps_index_dict(provider: DocmapsProvider) -> dict:
+    return json.loads(
+        ''.join(provider.iter_docmaps_index_json_stream())
+    )
+
+
 class TestEnhancedPreprintsDocmapsProvider:
     def test_should_create_index_with_non_empty_docmaps(
         self,
@@ -27,7 +34,7 @@ class TestEnhancedPreprintsDocmapsProvider:
         iter_dict_from_bq_query_mock.return_value = iter([
             DOCMAPS_QUERY_RESULT_ITEM_1
         ])
-        docmaps_index = DocmapsProvider().get_docmaps_index()
+        docmaps_index = _get_docmaps_index_dict(DocmapsProvider())
         assert docmaps_index['docmaps'] == [
             get_docmap_item_for_query_result_item(cast(ApiInput, DOCMAPS_QUERY_RESULT_ITEM_1))
         ]
@@ -42,8 +49,8 @@ class TestEnhancedPreprintsDocmapsProvider:
         docmaps_provider = DocmapsProvider(
             query_results_cache=InMemorySingleObjectCache(max_age_in_seconds=10)
         )
-        docmaps_provider.get_docmaps_index()
-        docmaps_index = docmaps_provider.get_docmaps_index()
+        docmaps_index = _get_docmaps_index_dict(docmaps_provider)
+        docmaps_index = _get_docmaps_index_dict(docmaps_provider)
         assert iter_dict_from_bq_query_mock.call_count == 1
         assert docmaps_index['docmaps'] == [
             get_docmap_item_for_query_result_item(cast(ApiInput, DOCMAPS_QUERY_RESULT_ITEM_1))

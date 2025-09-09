@@ -1,3 +1,4 @@
+import json
 from unittest.mock import patch, MagicMock
 from typing import Iterable, Sequence
 
@@ -47,7 +48,9 @@ class TestGetEnhancedPreprintsDocmapsIndex:
         enhanced_preprints_docmaps_provider_mock: MagicMock
     ):
         docmaps_index = [{'docmaps': [{'id': 'docmap_1'}, {'id': 'docmap_2'}]}]
-        enhanced_preprints_docmaps_provider_mock.get_docmaps_index.return_value = docmaps_index
+        enhanced_preprints_docmaps_provider_mock.iter_docmaps_index_json_stream.return_value = iter(
+            [json.dumps(docmaps_index)]
+        )
         client = TestClient(create_app())
         response = client.get('/enhanced-preprints/docmaps/v2/index')
         assert response.json() == docmaps_index
