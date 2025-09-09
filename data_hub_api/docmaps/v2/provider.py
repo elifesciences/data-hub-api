@@ -72,12 +72,18 @@ class DocmapsProvider:
         return list(self.iter_docmaps_by_manuscript_id(manuscript_id))
 
     def iter_docmaps_index_json_stream(self):
-        yield '{"docmaps":['
-        first = True
-        for docmap in self.iter_docmaps_by_manuscript_id():
-            if not first:
-                yield ','
-            else:
-                first = False
-            yield json.dumps(docmap)
-        yield ']}'
+        LOGGER.info('Streaming docmaps index as JSON...')
+        try:
+            yield '{"docmaps":['
+            first = True
+            for docmap in self.iter_docmaps_by_manuscript_id():
+                if not first:
+                    yield ','
+                else:
+                    first = False
+                yield json.dumps(docmap)
+            yield ']}'
+        except Exception as e:
+            LOGGER.exception('Error while streaming docmaps index as JSON: %s', e)
+            raise
+        LOGGER.info('Finished streaming docmaps index as JSON.')
