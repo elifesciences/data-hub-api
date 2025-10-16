@@ -29,6 +29,7 @@ MANUSCRIPT_ID_LIST = [
     '95285',  # Has Authorea preprint (manual hypothesis matching)
     '104779',  # OSF preprint with version included in URL from hypothesis
     '85646',  # Opt-Ins, have VOR after second version
+    '109042',  # Has Figshare preprint (manual hypothesis matching with annotation url)
 ]
 
 
