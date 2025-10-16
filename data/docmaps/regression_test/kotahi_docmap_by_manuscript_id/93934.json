@@ -81,11 +81,11 @@
                                 "name": "Satyajit Rath",
                                 "firstName": "Satyajit",
                                 "surname": "Rath",
-                                "_relatesToOrganization": "Indian Institute of Science Education and Research (IISER), India",
+                                "_relatesToOrganization": "National Institute of Immunology, India",
                                 "affiliation": {
                                     "type": "organization",
-                                    "name": "Indian Institute of Science Education and Research (IISER)",
-                                    "location": "Pune, India"
+                                    "name": "National Institute of Immunology",
+                                    "location": "New Delhi, India"
                                 }
                             },
                             "role": "senior-editor"
@@ -233,11 +233,11 @@
                                 "name": "Satyajit Rath",
                                 "firstName": "Satyajit",
                                 "surname": "Rath",
-                                "_relatesToOrganization": "Indian Institute of Science Education and Research (IISER), India",
+                                "_relatesToOrganization": "National Institute of Immunology, India",
                                 "affiliation": {
                                     "type": "organization",
-                                    "name": "Indian Institute of Science Education and Research (IISER)",
-                                    "location": "Pune, India"
+                                    "name": "National Institute of Immunology",
+                                    "location": "New Delhi, India"
                                 }
                             },
                             "role": "senior-editor"
