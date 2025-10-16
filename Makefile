@@ -59,6 +59,9 @@ dev-unittest-detailed-view:
 dev-watch:
 	$(PYTHON) -m pytest_watch -- -p no:cacheprovider $(ARGS) $(PYTEST_WATCH_MODULES)
 
+dev-update-regression-test-data:
+	$(PYTHON) data/docmaps/regression_test/update_regression_test_data.py
+
 dev-regression-test:
 	$(PYTHON) -m pytest -p no:cacheprovider $(ARGS) tests/regression_tests
 
