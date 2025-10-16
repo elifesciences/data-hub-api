@@ -168,8 +168,9 @@
                         {
                             "actor": {
                                 "type": "person",
-                                "name": "María Zambrano",
-                                "firstName": "María",
+                                "id": "https://orcid.org/0000-0002-0796-4473",
+                                "name": "Mar\u00eda Zambrano",
+                                "firstName": "Mar\u00eda",
                                 "_middleName": "Mercedes",
                                 "surname": "Zambrano",
                                 "_relatesToOrganization": "CorpoGen, Colombia",
@@ -177,7 +178,7 @@
                                     "id": "https://ror.org/03npzn484",
                                     "type": "organization",
                                     "name": "CorpoGen",
-                                    "location": "Bogotá, Colombia"
+                                    "location": "Bogot\u00e1, Colombia"
                                 }
                             },
                             "role": "editor"
@@ -188,11 +189,11 @@
                                 "name": "Detlef Weigel",
                                 "firstName": "Detlef",
                                 "surname": "Weigel",
-                                "_relatesToOrganization": "Max Planck Institute for Biology Tübingen, Germany",
+                                "_relatesToOrganization": "Max Planck Institute for Biology T\u00fcbingen, Germany",
                                 "affiliation": {
                                     "type": "organization",
-                                    "name": "Max Planck Institute for Biology Tübingen",
-                                    "location": "Tübingen, Germany"
+                                    "name": "Max Planck Institute for Biology T\u00fcbingen",
+                                    "location": "T\u00fcbingen, Germany"
                                 }
                             },
                             "role": "senior-editor"

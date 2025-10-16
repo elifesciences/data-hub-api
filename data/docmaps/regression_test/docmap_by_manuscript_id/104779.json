@@ -218,9 +218,9 @@
                         {
                             "actor": {
                                 "type": "person",
-                                "name": "Christian Büchel",
+                                "name": "Christian B\u00fcchel",
                                 "firstName": "Christian",
-                                "surname": "Büchel",
+                                "surname": "B\u00fcchel",
                                 "_relatesToOrganization": "University Medical Center Hamburg-Eppendorf, Germany",
                                 "affiliation": {
                                     "id": "https://ror.org/01zgy1s35",
@@ -414,7 +414,348 @@
                     ]
                 }
             ],
+            "next-step": "_:b4",
             "previous-step": "_:b2"
+        },
+        "_:b4": {
+            "actions": [
+                {
+                    "participants": [],
+                    "outputs": [
+                        {
+                            "type": "reply",
+                            "published": "2025-07-28T08:17:38.186371+00:00",
+                            "doi": "10.7554/eLife.104779.2.sa0",
+                            "license": "http://creativecommons.org/licenses/by/4.0/",
+                            "url": "https://doi.org/10.7554/eLife.104779.2.sa0",
+                            "content": [
+                                {
+                                    "type": "web-page",
+                                    "url": "https://hypothes.is/a/UuRL2muLEfCCmONqYWny1A"
+                                },
+                                {
+                                    "type": "web-page",
+                                    "url": "https://sciety.org/articles/activity/10.31219/osf.io/4yh36#hypothesis:UuRL2muLEfCCmONqYWny1A"
+                                },
+                                {
+                                    "type": "web-page",
+                                    "url": "https://sciety.org/evaluations/hypothesis:UuRL2muLEfCCmONqYWny1A/content"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "participants": [
+                        {
+                            "actor": {
+                                "name": "anonymous",
+                                "type": "person"
+                            },
+                            "role": "peer-reviewer"
+                        }
+                    ],
+                    "outputs": [
+                        {
+                            "type": "review-article",
+                            "published": "2025-07-28T08:17:58.311438+00:00",
+                            "doi": "10.7554/eLife.104779.2.sa1",
+                            "license": "http://creativecommons.org/licenses/by/4.0/",
+                            "url": "https://doi.org/10.7554/eLife.104779.2.sa1",
+                            "content": [
+                                {
+                                    "type": "web-page",
+                                    "url": "https://hypothes.is/a/XtPs1GuLEfCiYUszIMrzEg"
+                                },
+                                {
+                                    "type": "web-page",
+                                    "url": "https://sciety.org/articles/activity/10.31219/osf.io/4yh36#hypothesis:XtPs1GuLEfCiYUszIMrzEg"
+                                },
+                                {
+                                    "type": "web-page",
+                                    "url": "https://sciety.org/evaluations/hypothesis:XtPs1GuLEfCiYUszIMrzEg/content"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "participants": [
+                        {
+                            "actor": {
+                                "name": "anonymous",
+                                "type": "person"
+                            },
+                            "role": "peer-reviewer"
+                        }
+                    ],
+                    "outputs": [
+                        {
+                            "type": "review-article",
+                            "published": "2025-07-28T08:18:16.247064+00:00",
+                            "doi": "10.7554/eLife.104779.2.sa2",
+                            "license": "http://creativecommons.org/licenses/by/4.0/",
+                            "url": "https://doi.org/10.7554/eLife.104779.2.sa2",
+                            "content": [
+                                {
+                                    "type": "web-page",
+                                    "url": "https://hypothes.is/a/aZBhcGuLEfCnmL9PRyxmlA"
+                                },
+                                {
+                                    "type": "web-page",
+                                    "url": "https://sciety.org/articles/activity/10.31219/osf.io/4yh36#hypothesis:aZBhcGuLEfCnmL9PRyxmlA"
+                                },
+                                {
+                                    "type": "web-page",
+                                    "url": "https://sciety.org/evaluations/hypothesis:aZBhcGuLEfCnmL9PRyxmlA/content"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "participants": [
+                        {
+                            "actor": {
+                                "name": "anonymous",
+                                "type": "person"
+                            },
+                            "role": "peer-reviewer"
+                        }
+                    ],
+                    "outputs": [
+                        {
+                            "type": "review-article",
+                            "published": "2025-07-28T08:18:26.844014+00:00",
+                            "doi": "10.7554/eLife.104779.2.sa3",
+                            "license": "http://creativecommons.org/licenses/by/4.0/",
+                            "url": "https://doi.org/10.7554/eLife.104779.2.sa3",
+                            "content": [
+                                {
+                                    "type": "web-page",
+                                    "url": "https://hypothes.is/a/b9XrfGuLEfCQfs9W6Xd3HQ"
+                                },
+                                {
+                                    "type": "web-page",
+                                    "url": "https://sciety.org/articles/activity/10.31219/osf.io/4yh36#hypothesis:b9XrfGuLEfCQfs9W6Xd3HQ"
+                                },
+                                {
+                                    "type": "web-page",
+                                    "url": "https://sciety.org/evaluations/hypothesis:b9XrfGuLEfCQfs9W6Xd3HQ/content"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "participants": [
+                        {
+                            "actor": {
+                                "type": "person",
+                                "name": "Christian B\u00fcchel",
+                                "firstName": "Christian",
+                                "surname": "B\u00fcchel",
+                                "_relatesToOrganization": "University Medical Center Hamburg-Eppendorf, Germany",
+                                "affiliation": {
+                                    "id": "https://ror.org/01zgy1s35",
+                                    "type": "organization",
+                                    "name": "University Medical Center Hamburg-Eppendorf",
+                                    "location": "Hamburg, Germany"
+                                }
+                            },
+                            "role": "editor"
+                        },
+                        {
+                            "actor": {
+                                "type": "person",
+                                "name": "Christian B\u00fcchel",
+                                "firstName": "Christian",
+                                "surname": "B\u00fcchel",
+                                "_relatesToOrganization": "University Medical Center Hamburg-Eppendorf, Germany",
+                                "affiliation": {
+                                    "id": "https://ror.org/01zgy1s35",
+                                    "type": "organization",
+                                    "name": "University Medical Center Hamburg-Eppendorf",
+                                    "location": "Hamburg, Germany"
+                                }
+                            },
+                            "role": "senior-editor"
+                        }
+                    ],
+                    "outputs": [
+                        {
+                            "type": "evaluation-summary",
+                            "published": "2025-07-28T08:18:37.663030+00:00",
+                            "doi": "10.7554/eLife.104779.2.sa4",
+                            "license": "http://creativecommons.org/licenses/by/4.0/",
+                            "url": "https://doi.org/10.7554/eLife.104779.2.sa4",
+                            "content": [
+                                {
+                                    "type": "web-page",
+                                    "url": "https://hypothes.is/a/dklOfGuLEfCGRFcDiP38Gg"
+                                },
+                                {
+                                    "type": "web-page",
+                                    "url": "https://sciety.org/articles/activity/10.31219/osf.io/4yh36#hypothesis:dklOfGuLEfCGRFcDiP38Gg"
+                                },
+                                {
+                                    "type": "web-page",
+                                    "url": "https://sciety.org/evaluations/hypothesis:dklOfGuLEfCGRFcDiP38Gg/content"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "participants": [],
+                    "outputs": [
+                        {
+                            "type": "preprint",
+                            "identifier": "104779",
+                            "doi": "10.7554/eLife.104779.2",
+                            "versionIdentifier": "2",
+                            "license": "http://creativecommons.org/licenses/by/4.0/",
+                            "content": [
+                                {
+                                    "type": "computer-file",
+                                    "url": "s3://prod-elife-epp-meca/reviewed-preprints/104779-v2-meca.zip"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "assertions": [
+                {
+                    "item": {
+                        "type": "preprint",
+                        "doi": "10.31219/osf.io/4yh36",
+                        "versionIdentifier": "3"
+                    },
+                    "status": "revised"
+                }
+            ],
+            "inputs": [
+                {
+                    "type": "preprint",
+                    "doi": "10.31219/osf.io/4yh36",
+                    "url": "https://osf.io/preprints/osf/4yh36_v3",
+                    "versionIdentifier": "3"
+                }
+            ],
+            "next-step": "_:b5",
+            "previous-step": "_:b3"
+        },
+        "_:b5": {
+            "actions": [
+                {
+                    "participants": [],
+                    "outputs": [
+                        {
+                            "type": "preprint",
+                            "identifier": "104779",
+                            "doi": "10.7554/eLife.104779.2",
+                            "versionIdentifier": "2",
+                            "license": "http://creativecommons.org/licenses/by/4.0/",
+                            "published": "2025-07-28T14:00:00+00:00",
+                            "partOf": {
+                                "type": "manuscript",
+                                "doi": "10.7554/eLife.104779",
+                                "identifier": "104779",
+                                "subjectDisciplines": [
+                                    "Neuroscience"
+                                ],
+                                "published": "2025-02-03T14:00:00+00:00",
+                                "volumeIdentifier": "14",
+                                "electronicArticleIdentifier": "RP104779",
+                                "complement": []
+                            }
+                        }
+                    ]
+                }
+            ],
+            "assertions": [
+                {
+                    "item": {
+                        "type": "preprint",
+                        "doi": "10.7554/eLife.104779.2",
+                        "versionIdentifier": "2"
+                    },
+                    "status": "manuscript-published"
+                }
+            ],
+            "inputs": [
+                {
+                    "type": "preprint",
+                    "doi": "10.31219/osf.io/4yh36",
+                    "url": "https://osf.io/preprints/osf/4yh36_v3",
+                    "versionIdentifier": "3"
+                },
+                {
+                    "type": "reply",
+                    "doi": "10.7554/eLife.104779.2.sa0"
+                },
+                {
+                    "type": "review-article",
+                    "doi": "10.7554/eLife.104779.2.sa1"
+                },
+                {
+                    "type": "review-article",
+                    "doi": "10.7554/eLife.104779.2.sa2"
+                },
+                {
+                    "type": "review-article",
+                    "doi": "10.7554/eLife.104779.2.sa3"
+                },
+                {
+                    "type": "evaluation-summary",
+                    "doi": "10.7554/eLife.104779.2.sa4"
+                }
+            ],
+            "next-step": "_:b6",
+            "previous-step": "_:b4"
+        },
+        "_:b6": {
+            "actions": [
+                {
+                    "participants": [],
+                    "outputs": [
+                        {
+                            "type": "version-of-record",
+                            "identifier": "104779",
+                            "doi": "10.7554/eLife.104779.3",
+                            "versionIdentifier": "3",
+                            "published": "2025-08-12",
+                            "url": "https://doi.org/10.7554/eLife.104779.3",
+                            "content": [
+                                {
+                                    "type": "web-page",
+                                    "url": "https://elifesciences.org/articles/104779v1"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "assertions": [
+                {
+                    "item": {
+                        "type": "version-of-record",
+                        "doi": "10.7554/eLife.104779.3",
+                        "versionIdentifier": "3"
+                    },
+                    "status": "vor-published"
+                }
+            ],
+            "inputs": [
+                {
+                    "type": "preprint",
+                    "doi": "10.7554/eLife.104779.2",
+                    "identifier": "104779",
+                    "versionIdentifier": "2"
+                }
+            ],
+            "previous-step": "_:b5"
         }
     }
 }

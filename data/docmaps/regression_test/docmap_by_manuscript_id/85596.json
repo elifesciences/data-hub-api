@@ -196,11 +196,11 @@
                                 "firstName": "Diane",
                                 "_middleName": "M",
                                 "surname": "Harper",
-                                "_relatesToOrganization": "University of Michigan-Ann Arbor, United States of America",
+                                "_relatesToOrganization": "University of Michigan, United States of America",
                                 "affiliation": {
                                     "id": "https://ror.org/00jmfr291",
                                     "type": "organization",
-                                    "name": "University of Michigan-Ann Arbor",
+                                    "name": "University of Michigan",
                                     "location": "Ann Arbor, United States of America"
                                 }
                             },
@@ -525,11 +525,11 @@
                                 "firstName": "Diane",
                                 "_middleName": "M",
                                 "surname": "Harper",
-                                "_relatesToOrganization": "University of Michigan-Ann Arbor, United States of America",
+                                "_relatesToOrganization": "University of Michigan, United States of America",
                                 "affiliation": {
                                     "id": "https://ror.org/00jmfr291",
                                     "type": "organization",
-                                    "name": "University of Michigan-Ann Arbor",
+                                    "name": "University of Michigan",
                                     "location": "Ann Arbor, United States of America"
                                 }
                             },
