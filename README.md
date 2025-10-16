@@ -48,6 +48,8 @@ make dev-regression-test
 
 ### Update Regression Test Data (Virtual Environment)
 
+Similar to running regression tests, this will also require the server to be running locally by default (which you can override using `DATA_HUB_API_REGRESSION_TEST_URL_PREFIX`).
+
 You can update the regression test data using the following command:
 
 ```bash
