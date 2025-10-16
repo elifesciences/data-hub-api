@@ -51,7 +51,7 @@ def main():
         response.raise_for_status()
         docmap_json = response.json()
         Path(json_file).write_text(
-            json.dumps(docmap_json, indent=4),
+            json.dumps(docmap_json, indent=4, ensure_ascii=False),
             encoding='utf-8'
         )
     LOGGER.info('Regression test data updated.')

@@ -147,10 +147,10 @@
                                 "firstName": "David",
                                 "_middleName": "A.",
                                 "surname": "Paz-Garcia",
-                                "_relatesToOrganization": "Centro de Investigaciones Biol\u00f3gicas del Noroeste (CIBNOR), Mexico",
+                                "_relatesToOrganization": "Centro de Investigaciones Biológicas del Noroeste (CIBNOR), Mexico",
                                 "affiliation": {
                                     "type": "organization",
-                                    "name": "Centro de Investigaciones Biol\u00f3gicas del Noroeste (CIBNOR)",
+                                    "name": "Centro de Investigaciones Biológicas del Noroeste (CIBNOR)",
                                     "location": "La Paz, Mexico"
                                 }
                             },
@@ -439,10 +439,10 @@
                                 "firstName": "David",
                                 "_middleName": "A.",
                                 "surname": "Paz-Garcia",
-                                "_relatesToOrganization": "Centro de Investigaciones Biol\u00f3gicas del Noroeste (CIBNOR), Mexico",
+                                "_relatesToOrganization": "Centro de Investigaciones Biológicas del Noroeste (CIBNOR), Mexico",
                                 "affiliation": {
                                     "type": "organization",
-                                    "name": "Centro de Investigaciones Biol\u00f3gicas del Noroeste (CIBNOR)",
+                                    "name": "Centro de Investigaciones Biológicas del Noroeste (CIBNOR)",
                                     "location": "La Paz, Mexico"
                                 }
                             },
@@ -454,11 +454,11 @@
                                 "name": "Detlef Weigel",
                                 "firstName": "Detlef",
                                 "surname": "Weigel",
-                                "_relatesToOrganization": "Max Planck Institute for Biology T\u00fcbingen, Germany",
+                                "_relatesToOrganization": "Max Planck Institute for Biology Tübingen, Germany",
                                 "affiliation": {
                                     "type": "organization",
-                                    "name": "Max Planck Institute for Biology T\u00fcbingen",
-                                    "location": "T\u00fcbingen, Germany"
+                                    "name": "Max Planck Institute for Biology Tübingen",
+                                    "location": "Tübingen, Germany"
                                 }
                             },
                             "role": "senior-editor"
