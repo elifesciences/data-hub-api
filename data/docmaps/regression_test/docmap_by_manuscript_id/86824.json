@@ -146,11 +146,11 @@
                                 "firstName": "Roger",
                                 "_middleName": "J",
                                 "surname": "Davis",
-                                "_relatesToOrganization": "University of Massachusetts Medical School, United States of America",
+                                "_relatesToOrganization": "University of Massachusetts Chan Medical School, United States of America",
                                 "affiliation": {
                                     "id": "https://ror.org/0464eyp60",
                                     "type": "organization",
-                                    "name": "University of Massachusetts Medical School",
+                                    "name": "University of Massachusetts Chan Medical School",
                                     "location": "Worcester, United States of America"
                                 }
                             },
@@ -159,6 +159,7 @@
                         {
                             "actor": {
                                 "type": "person",
+                                "id": "https://orcid.org/0000-0002-0382-0026",
                                 "name": "Didier Stainier",
                                 "firstName": "Didier",
                                 "_middleName": "YR",
@@ -467,11 +468,11 @@
                                 "firstName": "Roger",
                                 "_middleName": "J",
                                 "surname": "Davis",
-                                "_relatesToOrganization": "University of Massachusetts Medical School, United States of America",
+                                "_relatesToOrganization": "University of Massachusetts Chan Medical School, United States of America",
                                 "affiliation": {
                                     "id": "https://ror.org/0464eyp60",
                                     "type": "organization",
-                                    "name": "University of Massachusetts Medical School",
+                                    "name": "University of Massachusetts Chan Medical School",
                                     "location": "Worcester, United States of America"
                                 }
                             },
@@ -480,6 +481,7 @@
                         {
                             "actor": {
                                 "type": "person",
+                                "id": "https://orcid.org/0000-0002-0382-0026",
                                 "name": "Didier Stainier",
                                 "firstName": "Didier",
                                 "_middleName": "YR",

@@ -191,8 +191,8 @@
                         {
                             "actor": {
                                 "type": "person",
-                                "name": "Jürgen Kleine-Vehn",
-                                "firstName": "Jürgen",
+                                "name": "J\u00fcrgen Kleine-Vehn",
+                                "firstName": "J\u00fcrgen",
                                 "surname": "Kleine-Vehn",
                                 "_relatesToOrganization": "University of Freiburg, Germany",
                                 "affiliation": {

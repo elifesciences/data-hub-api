@@ -162,11 +162,11 @@
                                 "firstName": "David",
                                 "_middleName": "E",
                                 "surname": "James",
-                                "_relatesToOrganization": "University of Sydney, Australia",
+                                "_relatesToOrganization": "The University of Sydney, Australia",
                                 "affiliation": {
                                     "id": "https://ror.org/0384j8v12",
                                     "type": "organization",
-                                    "name": "University of Sydney",
+                                    "name": "The University of Sydney",
                                     "location": "Sydney, Australia"
                                 }
                             },
@@ -459,11 +459,11 @@
                                 "firstName": "David",
                                 "_middleName": "E",
                                 "surname": "James",
-                                "_relatesToOrganization": "University of Sydney, Australia",
+                                "_relatesToOrganization": "The University of Sydney, Australia",
                                 "affiliation": {
                                     "id": "https://ror.org/0384j8v12",
                                     "type": "organization",
-                                    "name": "University of Sydney",
+                                    "name": "The University of Sydney",
                                     "location": "Sydney, Australia"
                                 }
                             },
