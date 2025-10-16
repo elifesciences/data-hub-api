@@ -13,6 +13,8 @@ def main():
     LOGGER.info('Found %d JSON files:', len(json_files))
     for json_file in json_files:
         LOGGER.info('JSON file: %s', json_file)
+        manuscript_id = Path(json_file).name.split('.')[0]
+        LOGGER.info('manuscript_id: %s', manuscript_id)
     LOGGER.info('Regression test data updated.')
 
 
