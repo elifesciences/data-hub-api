@@ -366,7 +366,361 @@
                     "doi": "10.7554/eLife.108175.1.sa0"
                 }
             ],
+            "next-step": "_:b3",
             "previous-step": "_:b1"
+        },
+        "_:b3": {
+            "actions": [
+                {
+                    "participants": [],
+                    "outputs": [
+                        {
+                            "type": "preprint",
+                            "identifier": "108175",
+                            "doi": "10.7554/eLife.108175.2",
+                            "versionIdentifier": "2",
+                            "license": "http://creativecommons.org/licenses/by/4.0/"
+                        }
+                    ]
+                }
+            ],
+            "assertions": [
+                {
+                    "item": {
+                        "type": "preprint",
+                        "doi": "10.2139/ssrn.5359118",
+                        "versionIdentifier": "2"
+                    },
+                    "status": "under-review",
+                    "happened": "2025-11-04T06:23:11+00:00"
+                },
+                {
+                    "item": {
+                        "type": "preprint",
+                        "doi": "10.7554/eLife.108175.2",
+                        "versionIdentifier": "2"
+                    },
+                    "status": "draft"
+                }
+            ],
+            "inputs": [
+                {
+                    "type": "preprint",
+                    "doi": "10.2139/ssrn.5359118",
+                    "url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5359118",
+                    "versionIdentifier": "2",
+                    "published": "2025-11-03",
+                    "content": [
+                        {
+                            "type": "computer-file",
+                            "url": "s3://prod-elife-epp-meca/108175-v2-meca.zip"
+                        }
+                    ]
+                }
+            ],
+            "next-step": "_:b4",
+            "previous-step": "_:b2"
+        },
+        "_:b4": {
+            "actions": [
+                {
+                    "participants": [],
+                    "outputs": [
+                        {
+                            "type": "reply",
+                            "published": "2025-12-16T15:21:55.732440+00:00",
+                            "doi": "10.7554/eLife.108175.2.sa4",
+                            "license": "http://creativecommons.org/licenses/by/4.0/",
+                            "url": "https://doi.org/10.7554/eLife.108175.2.sa4",
+                            "content": [
+                                {
+                                    "type": "web-page",
+                                    "url": "https://hypothes.is/a/9PDigtqSEfC6-KdDtE-1pQ"
+                                },
+                                {
+                                    "type": "web-page",
+                                    "url": "https://sciety.org/articles/activity/10.2139/ssrn.5359118#hypothesis:9PDigtqSEfC6-KdDtE-1pQ"
+                                },
+                                {
+                                    "type": "web-page",
+                                    "url": "https://sciety.org/evaluations/hypothesis:9PDigtqSEfC6-KdDtE-1pQ/content"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "participants": [
+                        {
+                            "actor": {
+                                "name": "anonymous",
+                                "type": "person"
+                            },
+                            "role": "peer-reviewer"
+                        }
+                    ],
+                    "outputs": [
+                        {
+                            "type": "review-article",
+                            "published": "2025-12-16T15:22:04.944943+00:00",
+                            "doi": "10.7554/eLife.108175.2.sa3",
+                            "license": "http://creativecommons.org/licenses/by/4.0/",
+                            "url": "https://doi.org/10.7554/eLife.108175.2.sa3",
+                            "content": [
+                                {
+                                    "type": "web-page",
+                                    "url": "https://hypothes.is/a/-mxc5tqSEfC_1gtyEUIF9A"
+                                },
+                                {
+                                    "type": "web-page",
+                                    "url": "https://sciety.org/articles/activity/10.2139/ssrn.5359118#hypothesis:-mxc5tqSEfC_1gtyEUIF9A"
+                                },
+                                {
+                                    "type": "web-page",
+                                    "url": "https://sciety.org/evaluations/hypothesis:-mxc5tqSEfC_1gtyEUIF9A/content"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "participants": [
+                        {
+                            "actor": {
+                                "name": "anonymous",
+                                "type": "person"
+                            },
+                            "role": "peer-reviewer"
+                        }
+                    ],
+                    "outputs": [
+                        {
+                            "type": "review-article",
+                            "published": "2025-12-16T15:22:15.193688+00:00",
+                            "doi": "10.7554/eLife.108175.2.sa2",
+                            "license": "http://creativecommons.org/licenses/by/4.0/",
+                            "url": "https://doi.org/10.7554/eLife.108175.2.sa2",
+                            "content": [
+                                {
+                                    "type": "web-page",
+                                    "url": "https://hypothes.is/a/AIzYYtqTEfCsOYPMQLmTCg"
+                                },
+                                {
+                                    "type": "web-page",
+                                    "url": "https://sciety.org/articles/activity/10.2139/ssrn.5359118#hypothesis:AIzYYtqTEfCsOYPMQLmTCg"
+                                },
+                                {
+                                    "type": "web-page",
+                                    "url": "https://sciety.org/evaluations/hypothesis:AIzYYtqTEfCsOYPMQLmTCg/content"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "participants": [
+                        {
+                            "actor": {
+                                "name": "anonymous",
+                                "type": "person"
+                            },
+                            "role": "peer-reviewer"
+                        }
+                    ],
+                    "outputs": [
+                        {
+                            "type": "review-article",
+                            "published": "2025-12-16T15:22:21.754375+00:00",
+                            "doi": "10.7554/eLife.108175.2.sa1",
+                            "license": "http://creativecommons.org/licenses/by/4.0/",
+                            "url": "https://doi.org/10.7554/eLife.108175.2.sa1",
+                            "content": [
+                                {
+                                    "type": "web-page",
+                                    "url": "https://hypothes.is/a/BHM-vNqTEfCcJ_uIuW6AOQ"
+                                },
+                                {
+                                    "type": "web-page",
+                                    "url": "https://sciety.org/articles/activity/10.2139/ssrn.5359118#hypothesis:BHM-vNqTEfCcJ_uIuW6AOQ"
+                                },
+                                {
+                                    "type": "web-page",
+                                    "url": "https://sciety.org/evaluations/hypothesis:BHM-vNqTEfCcJ_uIuW6AOQ/content"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "participants": [
+                        {
+                            "actor": {
+                                "type": "person",
+                                "id": "https://orcid.org/0000-0003-1716-6712",
+                                "name": "Bryan Bryson",
+                                "firstName": "Bryan",
+                                "_middleName": "D",
+                                "surname": "Bryson",
+                                "_relatesToOrganization": "Massachusetts Institute of Technology, United States of America",
+                                "affiliation": {
+                                    "id": "https://ror.org/042nb2s44",
+                                    "type": "organization",
+                                    "name": "Massachusetts Institute of Technology",
+                                    "location": "Cambridge, United States of America"
+                                }
+                            },
+                            "role": "editor"
+                        },
+                        {
+                            "actor": {
+                                "type": "person",
+                                "id": "https://orcid.org/0000-0001-9713-3480",
+                                "name": "Bavesh Kana",
+                                "firstName": "Bavesh",
+                                "_middleName": "D",
+                                "surname": "Kana",
+                                "_relatesToOrganization": "University of the Witwatersrand, South Africa",
+                                "affiliation": {
+                                    "id": "https://ror.org/03rp50x72",
+                                    "type": "organization",
+                                    "name": "University of the Witwatersrand",
+                                    "location": "Johannesburg, South Africa"
+                                }
+                            },
+                            "role": "senior-editor"
+                        }
+                    ],
+                    "outputs": [
+                        {
+                            "type": "evaluation-summary",
+                            "published": "2025-12-16T15:22:35.143483+00:00",
+                            "doi": "10.7554/eLife.108175.2.sa0",
+                            "license": "http://creativecommons.org/licenses/by/4.0/",
+                            "url": "https://doi.org/10.7554/eLife.108175.2.sa0",
+                            "content": [
+                                {
+                                    "type": "web-page",
+                                    "url": "https://hypothes.is/a/DGyxKtqTEfCsCiM5f9gafQ"
+                                },
+                                {
+                                    "type": "web-page",
+                                    "url": "https://sciety.org/articles/activity/10.2139/ssrn.5359118#hypothesis:DGyxKtqTEfCsCiM5f9gafQ"
+                                },
+                                {
+                                    "type": "web-page",
+                                    "url": "https://sciety.org/evaluations/hypothesis:DGyxKtqTEfCsCiM5f9gafQ/content"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "participants": [],
+                    "outputs": [
+                        {
+                            "type": "preprint",
+                            "identifier": "108175",
+                            "doi": "10.7554/eLife.108175.2",
+                            "versionIdentifier": "2",
+                            "license": "http://creativecommons.org/licenses/by/4.0/",
+                            "content": [
+                                {
+                                    "type": "computer-file",
+                                    "url": "s3://prod-elife-epp-meca/reviewed-preprints/108175-v2-meca.zip"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "assertions": [
+                {
+                    "item": {
+                        "type": "preprint",
+                        "doi": "10.2139/ssrn.5359118",
+                        "versionIdentifier": "2"
+                    },
+                    "status": "revised"
+                }
+            ],
+            "inputs": [
+                {
+                    "type": "preprint",
+                    "doi": "10.2139/ssrn.5359118",
+                    "url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5359118",
+                    "versionIdentifier": "2"
+                }
+            ],
+            "next-step": "_:b5",
+            "previous-step": "_:b3"
+        },
+        "_:b5": {
+            "actions": [
+                {
+                    "participants": [],
+                    "outputs": [
+                        {
+                            "type": "preprint",
+                            "identifier": "108175",
+                            "doi": "10.7554/eLife.108175.2",
+                            "versionIdentifier": "2",
+                            "license": "http://creativecommons.org/licenses/by/4.0/",
+                            "published": "2025-12-18T14:00:00+00:00",
+                            "partOf": {
+                                "type": "manuscript",
+                                "doi": "10.7554/eLife.108175",
+                                "identifier": "108175",
+                                "subjectDisciplines": [
+                                    "Immunology and Inflammation"
+                                ],
+                                "published": "2025-10-02T14:00:00+00:00",
+                                "volumeIdentifier": "14",
+                                "electronicArticleIdentifier": "RP108175",
+                                "complement": []
+                            }
+                        }
+                    ]
+                }
+            ],
+            "assertions": [
+                {
+                    "item": {
+                        "type": "preprint",
+                        "doi": "10.7554/eLife.108175.2",
+                        "versionIdentifier": "2"
+                    },
+                    "status": "manuscript-published"
+                }
+            ],
+            "inputs": [
+                {
+                    "type": "preprint",
+                    "doi": "10.2139/ssrn.5359118",
+                    "url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5359118",
+                    "versionIdentifier": "2"
+                },
+                {
+                    "type": "reply",
+                    "doi": "10.7554/eLife.108175.2.sa4"
+                },
+                {
+                    "type": "review-article",
+                    "doi": "10.7554/eLife.108175.2.sa3"
+                },
+                {
+                    "type": "review-article",
+                    "doi": "10.7554/eLife.108175.2.sa2"
+                },
+                {
+                    "type": "review-article",
+                    "doi": "10.7554/eLife.108175.2.sa1"
+                },
+                {
+                    "type": "evaluation-summary",
+                    "doi": "10.7554/eLife.108175.2.sa0"
+                }
+            ],
+            "previous-step": "_:b4"
         }
     }
 }

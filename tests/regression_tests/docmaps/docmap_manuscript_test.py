@@ -31,6 +31,8 @@ MANUSCRIPT_ID_LIST = [
     '85646',  # Opt-Ins, have VOR after second version
     '109042',  # Has Figshare preprint (manual hypothesis matching with irregular_preprint_url)
     '108175',  # Has SSRN preprint (manual hypothesis matching with irregular_preprint_url)
+    '108495',  # OSF preprint with version included in URL
+    # have Author Response with different creation version
 ]
 
 
