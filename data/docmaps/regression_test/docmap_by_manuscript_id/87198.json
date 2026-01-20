@@ -451,6 +451,7 @@
                         {
                             "actor": {
                                 "type": "person",
+                                "id": "https://orcid.org/0000-0002-2114-7963",
                                 "name": "Detlef Weigel",
                                 "firstName": "Detlef",
                                 "surname": "Weigel",

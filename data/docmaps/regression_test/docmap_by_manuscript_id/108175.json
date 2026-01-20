@@ -205,7 +205,7 @@
                                 "id": "https://orcid.org/0000-0003-1716-6712",
                                 "name": "Bryan Bryson",
                                 "firstName": "Bryan",
-                                "_middleName": "D",
+                                "_middleName": "D.",
                                 "surname": "Bryson",
                                 "_relatesToOrganization": "Massachusetts Institute of Technology, United States of America",
                                 "affiliation": {
@@ -559,7 +559,7 @@
                                 "id": "https://orcid.org/0000-0003-1716-6712",
                                 "name": "Bryan Bryson",
                                 "firstName": "Bryan",
-                                "_middleName": "D",
+                                "_middleName": "D.",
                                 "surname": "Bryson",
                                 "_relatesToOrganization": "Massachusetts Institute of Technology, United States of America",
                                 "affiliation": {
@@ -720,7 +720,50 @@
                     "doi": "10.7554/eLife.108175.2.sa0"
                 }
             ],
+            "next-step": "_:b6",
             "previous-step": "_:b4"
+        },
+        "_:b6": {
+            "actions": [
+                {
+                    "participants": [],
+                    "outputs": [
+                        {
+                            "type": "version-of-record",
+                            "identifier": "108175",
+                            "doi": "10.7554/eLife.108175.3",
+                            "versionIdentifier": "3",
+                            "published": "2026-01-07",
+                            "url": "https://doi.org/10.7554/eLife.108175.3",
+                            "content": [
+                                {
+                                    "type": "web-page",
+                                    "url": "https://elifesciences.org/articles/108175v1"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "assertions": [
+                {
+                    "item": {
+                        "type": "version-of-record",
+                        "doi": "10.7554/eLife.108175.3",
+                        "versionIdentifier": "3"
+                    },
+                    "status": "vor-published"
+                }
+            ],
+            "inputs": [
+                {
+                    "type": "preprint",
+                    "doi": "10.7554/eLife.108175.2",
+                    "identifier": "108175",
+                    "versionIdentifier": "2"
+                }
+            ],
+            "previous-step": "_:b5"
         }
     }
 }
