@@ -33,7 +33,7 @@ MANUSCRIPT_ID_LIST = [
     '108175',  # Has SSRN preprint (manual hypothesis matching with irregular_preprint_url)
     '108495',  # OSF preprint with version included in URL
     # have Author Response with different creation version
-    '110553',  # new bioRxiv preprint server prefix
+    '110004',  # new bioRxiv preprint server prefix with evaluations
     '110458',  # new medRxiv preprint server prefix
 ]
 
