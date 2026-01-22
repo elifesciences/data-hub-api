@@ -56,13 +56,7 @@
                     "doi": "10.64898/2025.12.31.697193",
                     "url": "https://www.biorxiv.org/content/10.64898/2025.12.31.697193v2",
                     "versionIdentifier": "2",
-                    "published": "2026-01-12",
-                    "content": [
-                        {
-                            "type": "computer-file",
-                            "url": "s3://prod-elife-epp-meca/110458-v1-meca.zip"
-                        }
-                    ]
+                    "published": "2026-01-12"
                 }
             ]
         }
