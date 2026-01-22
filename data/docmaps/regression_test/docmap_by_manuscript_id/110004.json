@@ -1,0 +1,268 @@
+{
+    "@context": "https://w3id.org/docmaps/context.jsonld",
+    "type": "docmap",
+    "id": "https://data-hub-api.elifesciences.org/enhanced-preprints/docmaps/v2/by-publisher/elife/get-by-manuscript-id?manuscript_id=110004",
+    "created": "2025-11-20T06:39:50+00:00",
+    "updated": "2025-11-20T06:39:50+00:00",
+    "publisher": {
+        "account": {
+            "id": "https://sciety.org/groups/elife",
+            "service": "https://sciety.org"
+        },
+        "homepage": "https://elifesciences.org/",
+        "id": "https://elifesciences.org/",
+        "logo": "https://sciety.org/static/groups/elife--b560187e-f2fb-4ff9-a861-a204f3fc0fb0.png",
+        "name": "eLife"
+    },
+    "first-step": "_:b0",
+    "steps": {
+        "_:b0": {
+            "actions": [
+                {
+                    "participants": [],
+                    "outputs": [
+                        {
+                            "type": "preprint",
+                            "identifier": "110004",
+                            "doi": "10.7554/eLife.110004.1",
+                            "versionIdentifier": "1",
+                            "license": "http://creativecommons.org/licenses/by/4.0/"
+                        }
+                    ]
+                }
+            ],
+            "assertions": [
+                {
+                    "item": {
+                        "type": "preprint",
+                        "doi": "10.64898/2025.12.03.692063",
+                        "versionIdentifier": "1"
+                    },
+                    "status": "under-review",
+                    "happened": "2025-12-03T12:44:04+00:00"
+                },
+                {
+                    "item": {
+                        "type": "preprint",
+                        "doi": "10.7554/eLife.110004.1",
+                        "versionIdentifier": "1"
+                    },
+                    "status": "draft"
+                }
+            ],
+            "inputs": [
+                {
+                    "type": "preprint",
+                    "doi": "10.64898/2025.12.03.692063",
+                    "url": "https://www.biorxiv.org/content/10.64898/2025.12.03.692063v1",
+                    "versionIdentifier": "1",
+                    "published": "2025-12-03"
+                }
+            ],
+            "next-step": "_:b1"
+        },
+        "_:b1": {
+            "actions": [
+                {
+                    "participants": [
+                        {
+                            "actor": {
+                                "name": "anonymous",
+                                "type": "person"
+                            },
+                            "role": "peer-reviewer"
+                        }
+                    ],
+                    "outputs": [
+                        {
+                            "type": "review-article",
+                            "published": "2026-01-21T12:05:29.431834+00:00",
+                            "doi": "10.7554/eLife.110004.1.sa0",
+                            "license": "http://creativecommons.org/licenses/by/4.0/",
+                            "url": "https://doi.org/10.7554/eLife.110004.1.sa0",
+                            "content": [
+                                {
+                                    "type": "web-page",
+                                    "url": "https://hypothes.is/a/epraQvbBEfC_Sx_H5Oeu2w"
+                                },
+                                {
+                                    "type": "web-page",
+                                    "url": "https://sciety.org/articles/activity/10.64898/2025.12.03.692063#hypothesis:epraQvbBEfC_Sx_H5Oeu2w"
+                                },
+                                {
+                                    "type": "web-page",
+                                    "url": "https://sciety.org/evaluations/hypothesis:epraQvbBEfC_Sx_H5Oeu2w/content"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "participants": [
+                        {
+                            "actor": {
+                                "name": "anonymous",
+                                "type": "person"
+                            },
+                            "role": "peer-reviewer"
+                        }
+                    ],
+                    "outputs": [
+                        {
+                            "type": "review-article",
+                            "published": "2026-01-21T12:05:29.743544+00:00",
+                            "doi": "10.7554/eLife.110004.1.sa1",
+                            "license": "http://creativecommons.org/licenses/by/4.0/",
+                            "url": "https://doi.org/10.7554/eLife.110004.1.sa1",
+                            "content": [
+                                {
+                                    "type": "web-page",
+                                    "url": "https://hypothes.is/a/eshn3PbBEfCc9hMI6jRscA"
+                                },
+                                {
+                                    "type": "web-page",
+                                    "url": "https://sciety.org/articles/activity/10.64898/2025.12.03.692063#hypothesis:eshn3PbBEfCc9hMI6jRscA"
+                                },
+                                {
+                                    "type": "web-page",
+                                    "url": "https://sciety.org/evaluations/hypothesis:eshn3PbBEfCc9hMI6jRscA/content"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "participants": [
+                        {
+                            "actor": {
+                                "name": "anonymous",
+                                "type": "person"
+                            },
+                            "role": "peer-reviewer"
+                        }
+                    ],
+                    "outputs": [
+                        {
+                            "type": "review-article",
+                            "published": "2026-01-21T12:05:30.041729+00:00",
+                            "doi": "10.7554/eLife.110004.1.sa2",
+                            "license": "http://creativecommons.org/licenses/by/4.0/",
+                            "url": "https://doi.org/10.7554/eLife.110004.1.sa2",
+                            "content": [
+                                {
+                                    "type": "web-page",
+                                    "url": "https://hypothes.is/a/evctVvbBEfClCCeqGe36HA"
+                                },
+                                {
+                                    "type": "web-page",
+                                    "url": "https://sciety.org/articles/activity/10.64898/2025.12.03.692063#hypothesis:evctVvbBEfClCCeqGe36HA"
+                                },
+                                {
+                                    "type": "web-page",
+                                    "url": "https://sciety.org/evaluations/hypothesis:evctVvbBEfClCCeqGe36HA/content"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "participants": [
+                        {
+                            "actor": {
+                                "type": "person",
+                                "name": "Amit Singh",
+                                "firstName": "Amit",
+                                "surname": "Singh",
+                                "_relatesToOrganization": "Indian Institute of Science, India",
+                                "affiliation": {
+                                    "type": "organization",
+                                    "name": "Indian Institute of Science",
+                                    "location": "Bangalore, India"
+                                }
+                            },
+                            "role": "editor"
+                        },
+                        {
+                            "actor": {
+                                "type": "person",
+                                "id": "https://orcid.org/0000-0001-9713-3480",
+                                "name": "Bavesh Kana",
+                                "firstName": "Bavesh",
+                                "_middleName": "D",
+                                "surname": "Kana",
+                                "_relatesToOrganization": "University of the Witwatersrand, South Africa",
+                                "affiliation": {
+                                    "id": "https://ror.org/03rp50x72",
+                                    "type": "organization",
+                                    "name": "University of the Witwatersrand",
+                                    "location": "Johannesburg, South Africa"
+                                }
+                            },
+                            "role": "senior-editor"
+                        }
+                    ],
+                    "outputs": [
+                        {
+                            "type": "evaluation-summary",
+                            "published": "2026-01-21T12:05:30.362494+00:00",
+                            "doi": "10.7554/eLife.110004.1.sa3",
+                            "license": "http://creativecommons.org/licenses/by/4.0/",
+                            "url": "https://doi.org/10.7554/eLife.110004.1.sa3",
+                            "content": [
+                                {
+                                    "type": "web-page",
+                                    "url": "https://hypothes.is/a/eyiMXPbBEfChfuNu5zMxEQ"
+                                },
+                                {
+                                    "type": "web-page",
+                                    "url": "https://sciety.org/articles/activity/10.64898/2025.12.03.692063#hypothesis:eyiMXPbBEfChfuNu5zMxEQ"
+                                },
+                                {
+                                    "type": "web-page",
+                                    "url": "https://sciety.org/evaluations/hypothesis:eyiMXPbBEfChfuNu5zMxEQ/content"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "participants": [],
+                    "outputs": [
+                        {
+                            "type": "preprint",
+                            "identifier": "110004",
+                            "doi": "10.7554/eLife.110004.1",
+                            "versionIdentifier": "1",
+                            "license": "http://creativecommons.org/licenses/by/4.0/",
+                            "content": [
+                                {
+                                    "type": "computer-file",
+                                    "url": "s3://prod-elife-epp-meca/reviewed-preprints/110004-v1-meca.zip"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "assertions": [
+                {
+                    "item": {
+                        "type": "preprint",
+                        "doi": "10.64898/2025.12.03.692063",
+                        "versionIdentifier": "1"
+                    },
+                    "status": "peer-reviewed"
+                }
+            ],
+            "inputs": [
+                {
+                    "type": "preprint",
+                    "doi": "10.64898/2025.12.03.692063",
+                    "url": "https://www.biorxiv.org/content/10.64898/2025.12.03.692063v1",
+                    "versionIdentifier": "1"
+                }
+            ],
+            "previous-step": "_:b0"
+        }
+    }
+}
