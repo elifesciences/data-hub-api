@@ -56,7 +56,13 @@
                     "doi": "10.64898/2025.12.31.697193",
                     "url": "https://www.biorxiv.org/content/10.64898/2025.12.31.697193v2",
                     "versionIdentifier": "2",
-                    "published": "2026-01-12"
+                    "published": "2026-01-12",
+                    "content": [
+                        {
+                            "type": "computer-file",
+                            "url": "s3://biorxiv-src-daily/Current_Content/January_2026/13_Jan_26_Batch_2584/358e0845-6dd7-1014-ba01-90c53a7287dc.meca"
+                        }
+                    ]
                 }
             ]
         }
