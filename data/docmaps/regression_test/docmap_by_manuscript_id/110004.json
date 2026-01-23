@@ -56,7 +56,13 @@
                     "doi": "10.64898/2025.12.03.692063",
                     "url": "https://www.biorxiv.org/content/10.64898/2025.12.03.692063v1",
                     "versionIdentifier": "1",
-                    "published": "2025-12-03"
+                    "published": "2025-12-03",
+                    "content": [
+                        {
+                            "type": "computer-file",
+                            "url": "s3://biorxiv-src-daily/Current_Content/December_2025/04_Dec_25_Batch_2545/c2ae0ea1-77c6-1014-874c-e170f672b517.meca"
+                        }
+                    ]
                 }
             ],
             "next-step": "_:b1"
@@ -262,7 +268,72 @@
                     "versionIdentifier": "1"
                 }
             ],
+            "next-step": "_:b2",
             "previous-step": "_:b0"
+        },
+        "_:b2": {
+            "actions": [
+                {
+                    "participants": [],
+                    "outputs": [
+                        {
+                            "type": "preprint",
+                            "identifier": "110004",
+                            "doi": "10.7554/eLife.110004.1",
+                            "versionIdentifier": "1",
+                            "license": "http://creativecommons.org/licenses/by/4.0/",
+                            "published": "2026-01-23T14:00:00+00:00",
+                            "partOf": {
+                                "type": "manuscript",
+                                "doi": "10.7554/eLife.110004",
+                                "identifier": "110004",
+                                "subjectDisciplines": [
+                                    "Microbiology and Infectious Disease"
+                                ],
+                                "published": "2026-01-23T14:00:00+00:00",
+                                "volumeIdentifier": "15",
+                                "electronicArticleIdentifier": "RP110004",
+                                "complement": []
+                            }
+                        }
+                    ]
+                }
+            ],
+            "assertions": [
+                {
+                    "item": {
+                        "type": "preprint",
+                        "doi": "10.7554/eLife.110004.1",
+                        "versionIdentifier": "1"
+                    },
+                    "status": "manuscript-published"
+                }
+            ],
+            "inputs": [
+                {
+                    "type": "preprint",
+                    "doi": "10.64898/2025.12.03.692063",
+                    "url": "https://www.biorxiv.org/content/10.64898/2025.12.03.692063v1",
+                    "versionIdentifier": "1"
+                },
+                {
+                    "type": "review-article",
+                    "doi": "10.7554/eLife.110004.1.sa0"
+                },
+                {
+                    "type": "review-article",
+                    "doi": "10.7554/eLife.110004.1.sa1"
+                },
+                {
+                    "type": "review-article",
+                    "doi": "10.7554/eLife.110004.1.sa2"
+                },
+                {
+                    "type": "evaluation-summary",
+                    "doi": "10.7554/eLife.110004.1.sa3"
+                }
+            ],
+            "previous-step": "_:b1"
         }
     }
 }
