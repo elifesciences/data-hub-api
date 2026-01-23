@@ -5,7 +5,7 @@ WITH t_reviewed_preprints AS (
       preprint_url_from_ejp,
       ejp_normalized_title,
       biorxiv_medrxiv_normalized_title)
-  FROM `elife-data-pipeline.prod.v_manuscript_with_matching_preprint_server_doi`
+  FROM `elife-data-pipeline.prod.mv_manuscript_with_matching_preprint_server_doi`
   WHERE is_reviewed_preprint_type
     AND under_review_timestamp IS NOT NULL
     AND preprint_doi IS NOT NULL
@@ -13,7 +13,7 @@ WITH t_reviewed_preprints AS (
     AND manuscript_id IN (
       SELECT 
         manuscript_id
-      FROM `elife-data-pipeline.prod.v_manuscript_with_matching_preprint_server_doi`
+      FROM `elife-data-pipeline.prod.mv_manuscript_with_matching_preprint_server_doi`
       WHERE position_in_overall_stage = 1
         AND qc_complete_timestamp >= '2023-10-01'
     )
@@ -24,7 +24,9 @@ t_latest_evaluation_emails AS(
     * EXCEPT(rn)
   FROM (
     SELECT 
-      *,
+      long_manuscript_identifier,
+      create_dt,
+      converted_body,
       ROW_NUMBER() OVER (
         PARTITION BY email.email_id
         ORDER BY email.imported_timestamp DESC
@@ -153,18 +155,11 @@ t_result_with_preprint_version AS (
 ),
 
 t_manual_preprint_match_for_published_date AS (
-  SELECT
-    * EXCEPT(rn),
-  FROM
-  (
-    SELECT 
-      *,
-      ROW_NUMBER() OVER(PARTITION BY long_manuscript_identifier ORDER BY imported_timestamp DESC) AS rn
-    FROM `elife-data-pipeline.prod.unmatched_manuscripts`
-    WHERE preprint_published_at_date IS NOT NULL 
-      AND preprint_published_at_date != ''
-  )
-  WHERE rn = 1
+  SELECT 
+    *
+  FROM `elife-data-pipeline.prod.mv_latest_unmatched_manuscripts`
+  WHERE preprint_published_at_date IS NOT NULL 
+    AND preprint_published_at_date != ''
 ),
 
 t_europepmc_preprint_publication_date AS (
