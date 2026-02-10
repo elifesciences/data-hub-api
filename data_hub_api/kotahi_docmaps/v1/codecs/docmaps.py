@@ -1,6 +1,6 @@
 import logging
 from typing import Dict, Iterable, Sequence, cast
-import urllib
+import urllib.parse
 
 from data_hub_api.utils.url import get_basepath
 from data_hub_api.kotahi_docmaps.v1.codecs.elife_manuscript import (
