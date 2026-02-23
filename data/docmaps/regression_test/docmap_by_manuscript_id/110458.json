@@ -269,7 +269,73 @@
                     "versionIdentifier": "2"
                 }
             ],
+            "next-step": "_:b2",
             "previous-step": "_:b0"
+        },
+        "_:b2": {
+            "actions": [
+                {
+                    "participants": [],
+                    "outputs": [
+                        {
+                            "type": "preprint",
+                            "identifier": "110458",
+                            "doi": "10.7554/eLife.110458.1",
+                            "versionIdentifier": "1",
+                            "license": "http://creativecommons.org/licenses/by/4.0/",
+                            "published": "2026-02-12T14:00:00+00:00",
+                            "partOf": {
+                                "type": "manuscript",
+                                "doi": "10.7554/eLife.110458",
+                                "identifier": "110458",
+                                "subjectDisciplines": [
+                                    "Medicine",
+                                    "Immunology and Inflammation"
+                                ],
+                                "published": "2026-02-12T14:00:00+00:00",
+                                "volumeIdentifier": "15",
+                                "electronicArticleIdentifier": "RP110458",
+                                "complement": []
+                            }
+                        }
+                    ]
+                }
+            ],
+            "assertions": [
+                {
+                    "item": {
+                        "type": "preprint",
+                        "doi": "10.7554/eLife.110458.1",
+                        "versionIdentifier": "1"
+                    },
+                    "status": "manuscript-published"
+                }
+            ],
+            "inputs": [
+                {
+                    "type": "preprint",
+                    "doi": "10.64898/2025.12.31.697193",
+                    "url": "https://www.biorxiv.org/content/10.64898/2025.12.31.697193v2",
+                    "versionIdentifier": "2"
+                },
+                {
+                    "type": "review-article",
+                    "doi": "10.7554/eLife.110458.1.sa0"
+                },
+                {
+                    "type": "review-article",
+                    "doi": "10.7554/eLife.110458.1.sa1"
+                },
+                {
+                    "type": "review-article",
+                    "doi": "10.7554/eLife.110458.1.sa2"
+                },
+                {
+                    "type": "evaluation-summary",
+                    "doi": "10.7554/eLife.110458.1.sa3"
+                }
+            ],
+            "previous-step": "_:b1"
         }
     }
 }
