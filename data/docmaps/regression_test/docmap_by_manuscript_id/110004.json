@@ -176,6 +176,7 @@
                         {
                             "actor": {
                                 "type": "person",
+                                "id": "https://orcid.org/0000-0001-6761-1664",
                                 "name": "Amit Singh",
                                 "firstName": "Amit",
                                 "surname": "Singh",

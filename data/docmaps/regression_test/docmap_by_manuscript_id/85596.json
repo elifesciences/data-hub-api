@@ -176,6 +176,7 @@
                         {
                             "actor": {
                                 "type": "person",
+                                "id": "https://orcid.org/0000-0001-9569-9026",
                                 "name": "Wei Yan",
                                 "firstName": "Wei",
                                 "surname": "Yan",
@@ -192,6 +193,7 @@
                         {
                             "actor": {
                                 "type": "person",
+                                "id": "https://orcid.org/0000-0001-7648-883X",
                                 "name": "Diane Harper",
                                 "firstName": "Diane",
                                 "_middleName": "M",
@@ -505,6 +507,7 @@
                         {
                             "actor": {
                                 "type": "person",
+                                "id": "https://orcid.org/0000-0001-9569-9026",
                                 "name": "Wei Yan",
                                 "firstName": "Wei",
                                 "surname": "Yan",
@@ -521,6 +524,7 @@
                         {
                             "actor": {
                                 "type": "person",
+                                "id": "https://orcid.org/0000-0001-7648-883X",
                                 "name": "Diane Harper",
                                 "firstName": "Diane",
                                 "_middleName": "M",

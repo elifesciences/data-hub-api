@@ -142,6 +142,7 @@
                         {
                             "actor": {
                                 "type": "person",
+                                "id": "https://orcid.org/0000-0003-1542-7077",
                                 "name": "Ammie Kalan",
                                 "firstName": "Ammie",
                                 "_middleName": "K",
@@ -159,6 +160,7 @@
                         {
                             "actor": {
                                 "type": "person",
+                                "id": "https://orcid.org/0000-0003-4527-3806",
                                 "name": "George Perry",
                                 "firstName": "George",
                                 "_middleName": "H",
@@ -456,6 +458,7 @@
                         {
                             "actor": {
                                 "type": "person",
+                                "id": "https://orcid.org/0000-0003-1542-7077",
                                 "name": "Ammie Kalan",
                                 "firstName": "Ammie",
                                 "_middleName": "K",
@@ -473,6 +476,7 @@
                         {
                             "actor": {
                                 "type": "person",
+                                "id": "https://orcid.org/0000-0003-4527-3806",
                                 "name": "George Perry",
                                 "firstName": "George",
                                 "_middleName": "H",

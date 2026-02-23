@@ -142,6 +142,7 @@
                         {
                             "actor": {
                                 "type": "person",
+                                "id": "https://orcid.org/0000-0001-8026-4759",
                                 "name": "Marcus Seldin",
                                 "firstName": "Marcus",
                                 "_middleName": "M",
@@ -159,6 +160,7 @@
                         {
                             "actor": {
                                 "type": "person",
+                                "id": "https://orcid.org/0000-0001-6197-7593",
                                 "name": "Olujimi Ajijola",
                                 "firstName": "Olujimi",
                                 "_middleName": "A",
@@ -400,6 +402,7 @@
                         {
                             "actor": {
                                 "type": "person",
+                                "id": "https://orcid.org/0000-0001-8026-4759",
                                 "name": "Marcus Seldin",
                                 "firstName": "Marcus",
                                 "_middleName": "M",
@@ -417,6 +420,7 @@
                         {
                             "actor": {
                                 "type": "person",
+                                "id": "https://orcid.org/0000-0001-6197-7593",
                                 "name": "Olujimi Ajijola",
                                 "firstName": "Olujimi",
                                 "_middleName": "A",

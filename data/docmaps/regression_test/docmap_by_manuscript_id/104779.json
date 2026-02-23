@@ -202,6 +202,7 @@
                         {
                             "actor": {
                                 "type": "person",
+                                "id": "https://orcid.org/0000-0001-7119-9350",
                                 "name": "Kristine Krug",
                                 "firstName": "Kristine",
                                 "surname": "Krug",
@@ -218,6 +219,7 @@
                         {
                             "actor": {
                                 "type": "person",
+                                "id": "https://orcid.org/0000-0003-1965-906X",
                                 "name": "Christian Büchel",
                                 "firstName": "Christian",
                                 "surname": "Büchel",
@@ -552,6 +554,7 @@
                         {
                             "actor": {
                                 "type": "person",
+                                "id": "https://orcid.org/0000-0003-1965-906X",
                                 "name": "Christian Büchel",
                                 "firstName": "Christian",
                                 "surname": "Büchel",
@@ -568,6 +571,7 @@
                         {
                             "actor": {
                                 "type": "person",
+                                "id": "https://orcid.org/0000-0003-1965-906X",
                                 "name": "Christian Büchel",
                                 "firstName": "Christian",
                                 "surname": "Büchel",
