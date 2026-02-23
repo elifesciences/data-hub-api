@@ -158,6 +158,7 @@
                         {
                             "actor": {
                                 "type": "person",
+                                "id": "https://orcid.org/0000-0001-5946-5257",
                                 "name": "David James",
                                 "firstName": "David",
                                 "_middleName": "E",
@@ -455,6 +456,7 @@
                         {
                             "actor": {
                                 "type": "person",
+                                "id": "https://orcid.org/0000-0001-5946-5257",
                                 "name": "David James",
                                 "firstName": "David",
                                 "_middleName": "E",

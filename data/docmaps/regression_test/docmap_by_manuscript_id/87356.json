@@ -142,6 +142,7 @@
                         {
                             "actor": {
                                 "type": "person",
+                                "id": "https://orcid.org/0000-0002-2300-4536",
                                 "name": "Katalin Toth",
                                 "firstName": "Katalin",
                                 "surname": "Toth",
@@ -158,6 +159,7 @@
                         {
                             "actor": {
                                 "type": "person",
+                                "id": "https://orcid.org/0000-0002-4853-8913",
                                 "name": "Laura Colgin",
                                 "firstName": "Laura",
                                 "_middleName": "L",
@@ -425,6 +427,7 @@
                         {
                             "actor": {
                                 "type": "person",
+                                "id": "https://orcid.org/0000-0002-2300-4536",
                                 "name": "Katalin Toth",
                                 "firstName": "Katalin",
                                 "surname": "Toth",
@@ -441,6 +444,7 @@
                         {
                             "actor": {
                                 "type": "person",
+                                "id": "https://orcid.org/0000-0002-4853-8913",
                                 "name": "Laura Colgin",
                                 "firstName": "Laura",
                                 "_middleName": "L",
