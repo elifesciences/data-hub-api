@@ -89,4 +89,5 @@ class DocmapsProvider:
         LOGGER.info('Finished streaming docmaps index as JSON.')
 
     def get_evaluation_content_by_id(self, evaluation_id: str) -> Optional[str]:
-        return 'dummy evaluation content for evaluation_id: ' + evaluation_id
+        LOGGER.debug('Getting evaluation content for evaluation_id: %s', evaluation_id)
+        return None

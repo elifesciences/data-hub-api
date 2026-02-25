@@ -55,3 +55,11 @@ class TestDocmapsProvider:
         assert docmaps_index['docmaps'] == [
             get_docmap_item_for_query_result_item(cast(ApiInput, DOCMAPS_QUERY_RESULT_ITEM_1))
         ]
+
+    def test_should_return_none_for_invalid_evaluation_id(
+        self,
+        iter_dict_from_bq_query_mock: MagicMock
+    ):
+        iter_dict_from_bq_query_mock.return_value = []
+        docmaps_provider = DocmapsProvider()
+        assert docmaps_provider.get_evaluation_content_by_id('not_found_id_1') is None
