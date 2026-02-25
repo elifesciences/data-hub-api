@@ -231,9 +231,13 @@ ANNOTATION_CREATED_TIMESTAMP_1 = datetime.fromisoformat('2020-01-01T01:02:03+00:
 ANNOTATION_CREATED_TIMESTAMP_2 = datetime.fromisoformat('2021-01-01T01:02:03+00:00')
 ANNOTATION_CREATED_TIMESTAMP_3 = datetime.fromisoformat('2022-01-01T01:02:03+00:00')
 
+ANNOTATION_CONTENT_1 = 'annotation_content_1'
+ANNOTATION_CONTENT_2 = 'annotation_content_2'
+
 DOCMAPS_QUERY_RESULT_EVALUATION_1: ApiEvaluationInput = {
     'hypothesis_id': HYPOTHESIS_ID_1,
     'annotation_created_timestamp': ANNOTATION_CREATED_TIMESTAMP_1,
+    'annotation_content': ANNOTATION_CONTENT_1,
     'tags': [],
     'uri': PREPRINT_LINK_1,
     'source_version': PREPRINT_VERSION_1,
@@ -243,6 +247,7 @@ DOCMAPS_QUERY_RESULT_EVALUATION_1: ApiEvaluationInput = {
 DOCMAPS_QUERY_RESULT_EVALUATION_2: ApiEvaluationInput = {
     'hypothesis_id': HYPOTHESIS_ID_2,
     'annotation_created_timestamp': ANNOTATION_CREATED_TIMESTAMP_2,
+    'annotation_content': ANNOTATION_CONTENT_2,
     'tags': [],
     'uri': PREPRINT_LINK_2,
     'source_version': PREPRINT_VERSION_2,

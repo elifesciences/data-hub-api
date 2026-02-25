@@ -7,6 +7,7 @@ ApiEvaluationInput = TypedDict(
     {
         'hypothesis_id': str,
         'annotation_created_timestamp': datetime,
+        'annotation_content': str,
         'tags': list,
         'uri': str,
         'source_version': str,

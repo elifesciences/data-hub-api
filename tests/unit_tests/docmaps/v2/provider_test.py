@@ -11,7 +11,11 @@ from data_hub_api.docmaps.v2.provider import (
     get_docmap_item_for_query_result_item,
     DocmapsProvider
 )
-from tests.unit_tests.docmaps.v2.test_data import DOCMAPS_QUERY_RESULT_ITEM_1
+from tests.unit_tests.docmaps.v2.test_data import (
+    DOCMAPS_QUERY_RESULT_EVALUATION_1,
+    DOCMAPS_QUERY_RESULT_ITEM_1,
+    MANUSCRIPT_VERSION_1
+)
 
 
 @pytest.fixture(name='iter_dict_from_bq_query_mock', autouse=True)
@@ -63,3 +67,19 @@ class TestDocmapsProvider:
         iter_dict_from_bq_query_mock.return_value = []
         docmaps_provider = DocmapsProvider()
         assert docmaps_provider.get_evaluation_content_by_id('not_found_id_1') is None
+
+    def test_should_return_evaluation_content_for_valid_evaluation_id(
+        self,
+        iter_dict_from_bq_query_mock: MagicMock
+    ):
+        iter_dict_from_bq_query_mock.return_value = [{
+            **DOCMAPS_QUERY_RESULT_ITEM_1,
+            'manuscript_versions': [{
+                **MANUSCRIPT_VERSION_1,  # type: ignore
+                'evaluations': [DOCMAPS_QUERY_RESULT_EVALUATION_1]
+            }]
+        }]
+        docmaps_provider = DocmapsProvider()
+        assert docmaps_provider.get_evaluation_content_by_id(
+            DOCMAPS_QUERY_RESULT_EVALUATION_1['hypothesis_id']
+        ) == DOCMAPS_QUERY_RESULT_EVALUATION_1['annotation_content']
