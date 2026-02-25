@@ -72,6 +72,18 @@ class TestGetEnhancedPreprintsDocmapsIndex:
         assert response.status_code == 200
         assert response.json() == article_docmap_list[0]
 
+    def test_should_return_not_found_status_code_for_invalid_evaluation_id(
+        self,
+        docmaps_provider_mock: MagicMock
+    ):
+        docmaps_provider_mock.get_evaluation_content_by_id.return_value = None
+        client = create_test_client(docmaps_provider_mock)
+        response = client.get(
+            '/v2/evaluation/get-by-evaluation-id',
+            params={'evaluation_id': 'non_existent_evaluation_id_1'}
+        )
+        assert response.status_code == 404
+
     def test_should_return_evaluation_content_from_provider(
         self,
         docmaps_provider_mock: MagicMock
