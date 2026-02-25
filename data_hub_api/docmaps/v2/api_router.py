@@ -1,7 +1,7 @@
 import logging
 
 from fastapi import APIRouter, HTTPException
-from fastapi.responses import StreamingResponse
+from fastapi.responses import HTMLResponse, StreamingResponse
 
 from data_hub_api.docmaps.v2.provider import DocmapsProvider
 
@@ -31,5 +31,10 @@ def create_docmaps_router(
             )
         assert len(docmaps) == 1
         return docmaps[0]
+
+    @router.get("/v2/evaluation/get-by-evaluation-id", response_class=HTMLResponse)
+    def get_evaluation_text_by_evaluation_id(evaluation_id: str):
+        evaluation_text = 'dummy evaluation text for evaluation_id: ' + evaluation_id
+        return evaluation_text
 
     return router
