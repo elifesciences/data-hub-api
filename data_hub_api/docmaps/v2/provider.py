@@ -87,3 +87,16 @@ class DocmapsProvider:
             LOGGER.exception('Error while streaming docmaps index as JSON: %s', e)
             raise
         LOGGER.info('Finished streaming docmaps index as JSON.')
+
+    def get_evaluation_content_by_id(self, evaluation_id: str) -> Optional[str]:
+        LOGGER.debug('Getting evaluation content for evaluation_id: %s', evaluation_id)
+        bq_result_list = self._query_results_cache.get_or_load(
+            load_fn=self._load_query_results_from_bq
+        )
+        LOGGER.debug('bq_result_list: %r', bq_result_list)
+        for bq_result in bq_result_list:
+            for manuscript_version in bq_result.get('manuscript_versions', []):
+                for evaluation in manuscript_version.get('evaluations', []):
+                    if evaluation['hypothesis_id'] == evaluation_id:
+                        return evaluation['annotation_content']
+        return None
