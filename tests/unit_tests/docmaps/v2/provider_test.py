@@ -26,7 +26,7 @@ def _get_docmaps_index_dict(provider: DocmapsProvider) -> dict:
     )
 
 
-class TestEnhancedPreprintsDocmapsProvider:
+class TestDocmapsProvider:
     def test_should_create_index_with_non_empty_docmaps(
         self,
         iter_dict_from_bq_query_mock: MagicMock
