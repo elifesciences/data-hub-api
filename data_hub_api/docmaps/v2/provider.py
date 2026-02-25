@@ -87,3 +87,6 @@ class DocmapsProvider:
             LOGGER.exception('Error while streaming docmaps index as JSON: %s', e)
             raise
         LOGGER.info('Finished streaming docmaps index as JSON.')
+
+    def get_evaluation_content_by_id(self, evaluation_id: str) -> str:
+        return 'dummy evaluation content for evaluation_id: ' + evaluation_id

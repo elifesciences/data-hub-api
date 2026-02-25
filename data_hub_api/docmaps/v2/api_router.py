@@ -34,7 +34,6 @@ def create_docmaps_router(
 
     @router.get("/v2/evaluation/get-by-evaluation-id", response_class=HTMLResponse)
     def get_evaluation_text_by_evaluation_id(evaluation_id: str):
-        evaluation_text = 'dummy evaluation text for evaluation_id: ' + evaluation_id
-        return evaluation_text
+        return docmaps_provider.get_evaluation_content_by_id(evaluation_id)
 
     return router
