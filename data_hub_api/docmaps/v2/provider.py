@@ -5,6 +5,7 @@ from pathlib import Path
 from time import monotonic
 from typing import Iterable, Optional, Sequence, cast
 
+import nh3
 import objsize
 from data_hub_api.docmaps.v2.codecs.docmaps import get_docmap_item_for_query_result_item
 from data_hub_api.docmaps.v2.api_input_typing import ApiInput
@@ -26,7 +27,9 @@ LOGGER = logging.getLogger(__name__)
 def get_html_formatted_evaluation_content(
     evaluation_content: str
 ) -> str:
-    return markdown(evaluation_content)
+    html = markdown(evaluation_content)
+    sanitized_html = nh3.clean(html, link_rel=None)
+    return sanitized_html
 
 
 class DocmapsProvider:

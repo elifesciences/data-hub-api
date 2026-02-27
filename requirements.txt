@@ -3,6 +3,7 @@ objsize==0.8.0
 uvicorn[standard]==0.39.0
 google-cloud-bigquery==3.40.1
 Markdown==3.9
+nh3==0.3.3
 pandas==2.3.3
 numpy==2.0.2
 types-python-dateutil

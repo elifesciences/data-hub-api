@@ -52,6 +52,11 @@ class TestGetHtmlFormattedEvaluationContent:
             '[link text](https://www.example.com)'
         ) == '<p><a href="https://www.example.com">link text</a></p>'
 
+    def test_should_remove_script_tags_from_markdown(self):
+        assert get_html_formatted_evaluation_content(
+            'cleaned <script>var bad = true;</script> html'
+        ) == '<p>cleaned  html</p>'
+
 
 class TestDocmapsProvider:
     def test_should_create_index_with_non_empty_docmaps(
