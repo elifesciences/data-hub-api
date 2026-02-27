@@ -47,6 +47,11 @@ class TestGetHtmlFormattedEvaluationContent:
         bold_italic_html = '<p><em><strong>bold/italics</strong> italics</em></p>'
         assert get_html_formatted_evaluation_content(bold_italic) == bold_italic_html
 
+    def test_should_convert_markdown_link_to_html_link(self):
+        assert get_html_formatted_evaluation_content(
+            '[link text](https://www.example.com)'
+        ) == '<p><a href="https://www.example.com">link text</a></p>'
+
 
 class TestDocmapsProvider:
     def test_should_create_index_with_non_empty_docmaps(
