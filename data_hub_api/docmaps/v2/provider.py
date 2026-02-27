@@ -22,6 +22,12 @@ from data_hub_api.docmaps.v2.sql import get_sql_path
 LOGGER = logging.getLogger(__name__)
 
 
+def get_html_formatted_evaluation_content(
+    evaluation_content: str
+) -> str:
+    return evaluation_content
+
+
 class DocmapsProvider:
     def __init__(
         self,
@@ -98,5 +104,7 @@ class DocmapsProvider:
             for manuscript_version in bq_result.get('manuscript_versions', []):
                 for evaluation in manuscript_version.get('evaluations', []):
                     if evaluation['hypothesis_id'] == evaluation_id:
-                        return evaluation['annotation_content']
+                        return get_html_formatted_evaluation_content(
+                            evaluation['annotation_content']
+                        )
         return None

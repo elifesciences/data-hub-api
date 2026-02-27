@@ -9,7 +9,8 @@ from data_hub_api.utils.cache import InMemorySingleObjectCache
 from data_hub_api.docmaps.v2 import provider as provider_module
 from data_hub_api.docmaps.v2.provider import (
     get_docmap_item_for_query_result_item,
-    DocmapsProvider
+    DocmapsProvider,
+    get_html_formatted_evaluation_content
 )
 from tests.unit_tests.docmaps.v2.test_data import (
     DOCMAPS_QUERY_RESULT_EVALUATION_1,
@@ -82,4 +83,6 @@ class TestDocmapsProvider:
         docmaps_provider = DocmapsProvider()
         assert docmaps_provider.get_evaluation_content_by_id(
             DOCMAPS_QUERY_RESULT_EVALUATION_1['hypothesis_id']
-        ) == DOCMAPS_QUERY_RESULT_EVALUATION_1['annotation_content']
+        ) == get_html_formatted_evaluation_content(
+            DOCMAPS_QUERY_RESULT_EVALUATION_1['annotation_content']
+        )
