@@ -31,6 +31,23 @@ def _get_docmaps_index_dict(provider: DocmapsProvider) -> dict:
     )
 
 
+class TestGetHtmlFormattedEvaluationContent:
+    def test_should_return_same_evaluation_content_if_no_markdown(self):
+        content = 'evaluation content for evaluation_id_1'
+        assert get_html_formatted_evaluation_content(content) == f'<p>{content}</p>'
+
+    def test_should_return_html_formatted_content_for_bold_markdown(self):
+        assert get_html_formatted_evaluation_content('**bold**') == '<p><strong>bold</strong></p>'
+
+    def test_should_return_html_formatted_content_for_italic_markdown(self):
+        assert get_html_formatted_evaluation_content('*italic*') == '<p><em>italic</em></p>'
+
+    def test_should_return_html_formatted_content_for_both_bold_and_italic(self):
+        bold_italic = '***bold/italics** italics*'
+        bold_italic_html = '<p><em><strong>bold/italics</strong> italics</em></p>'
+        assert get_html_formatted_evaluation_content(bold_italic) == bold_italic_html
+
+
 class TestDocmapsProvider:
     def test_should_create_index_with_non_empty_docmaps(
         self,

@@ -1,5 +1,6 @@
 import json
 import logging
+from markdown import markdown
 from pathlib import Path
 from time import monotonic
 from typing import Iterable, Optional, Sequence, cast
@@ -25,7 +26,7 @@ LOGGER = logging.getLogger(__name__)
 def get_html_formatted_evaluation_content(
     evaluation_content: str
 ) -> str:
-    return evaluation_content
+    return markdown(evaluation_content)
 
 
 class DocmapsProvider:
