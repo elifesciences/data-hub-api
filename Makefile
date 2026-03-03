@@ -80,6 +80,14 @@ dev-start:
 		--port 8000 \
 		--log-config=config/logging.yaml
 
+dev-start-without-reload:
+	$(PYTHON) -m uvicorn \
+		data_hub_api.main:create_app \
+		--factory \
+		--host 127.0.0.1 \
+		--port 8000 \
+		--log-config=config/logging.yaml
+
 
 build:
 	$(DOCKER_COMPOSE) build data-hub-api
