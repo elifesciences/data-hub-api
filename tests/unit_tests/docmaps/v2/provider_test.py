@@ -55,6 +55,16 @@ class TestGetHtmlFormattedEvaluationContent:
             '[link text](https://www.example.com)'
         ) == '<p><a href="https://www.example.com">link text</a></p>'
 
+    def test_should_convert_plain_url_with_protocol_to_html_link(self):
+        assert get_html_formatted_evaluation_content(
+            'https://www.example.com'
+        ) == '<p><a href="https://www.example.com">https://www.example.com</a></p>'
+
+    def test_should_convert_plain_url_without_protocol_to_html_link(self):
+        assert get_html_formatted_evaluation_content(
+            'www.example.com'
+        ) == '<p><a href="http://www.example.com">www.example.com</a></p>'
+
     def test_should_remove_script_tags_from_markdown(self):
         assert get_html_formatted_evaluation_content(
             'cleaned <script>var bad = true;</script> html'

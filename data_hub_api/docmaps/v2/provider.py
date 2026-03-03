@@ -27,7 +27,7 @@ LOGGER = logging.getLogger(__name__)
 def get_html_formatted_evaluation_content(
     evaluation_content: str
 ) -> str:
-    html = markdown(evaluation_content)
+    html = markdown(evaluation_content, extensions=["mdx_linkify"])
     sanitized_html = nh3.clean(html, link_rel=None)
     return sanitized_html
 
