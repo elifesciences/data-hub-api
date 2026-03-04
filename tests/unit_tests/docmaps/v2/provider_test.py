@@ -70,6 +70,11 @@ class TestGetHtmlFormattedEvaluationContent:
             'cleaned <script>var bad = true;</script> html'
         ) == '<p>cleaned  html</p>'
 
+    def test_should_add_line_break_for_two_spaces_before_newline(self):
+        assert get_html_formatted_evaluation_content(
+            'line 1  \nline 2'
+        ) == '<p>line 1<br>\nline 2</p>'
+
 
 class TestDocmapsProvider:
     def test_should_create_index_with_non_empty_docmaps(
