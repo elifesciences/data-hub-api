@@ -1,9 +1,12 @@
 import json
 import logging
+import re
+from markdown import markdown
 from pathlib import Path
 from time import monotonic
 from typing import Iterable, Optional, Sequence, cast
 
+import nh3
 import objsize
 from data_hub_api.docmaps.v2.codecs.docmaps import get_docmap_item_for_query_result_item
 from data_hub_api.docmaps.v2.api_input_typing import ApiInput
@@ -20,6 +23,21 @@ from data_hub_api.docmaps.v2.sql import get_sql_path
 
 
 LOGGER = logging.getLogger(__name__)
+
+
+def remove_trailing_spaces_before_blank_line(md: str) -> str:
+    return re.sub(r'  +\r?\n *\n', r'\n\n', md)
+
+
+def get_html_formatted_evaluation_content(
+    evaluation_content: str
+) -> str:
+    html = markdown(
+        remove_trailing_spaces_before_blank_line(evaluation_content),
+        extensions=["mdx_linkify"]
+    )
+    sanitized_html = nh3.clean(html, link_rel=None)
+    return sanitized_html
 
 
 class DocmapsProvider:
@@ -98,5 +116,7 @@ class DocmapsProvider:
             for manuscript_version in bq_result.get('manuscript_versions', []):
                 for evaluation in manuscript_version.get('evaluations', []):
                     if evaluation['hypothesis_id'] == evaluation_id:
-                        return evaluation['annotation_content']
+                        return get_html_formatted_evaluation_content(
+                            evaluation['annotation_content']
+                        )
         return None

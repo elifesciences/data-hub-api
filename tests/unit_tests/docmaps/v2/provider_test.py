@@ -9,13 +9,17 @@ from data_hub_api.utils.cache import InMemorySingleObjectCache
 from data_hub_api.docmaps.v2 import provider as provider_module
 from data_hub_api.docmaps.v2.provider import (
     get_docmap_item_for_query_result_item,
-    DocmapsProvider
+    DocmapsProvider,
+    get_html_formatted_evaluation_content
 )
 from tests.unit_tests.docmaps.v2.test_data import (
     DOCMAPS_QUERY_RESULT_EVALUATION_1,
     DOCMAPS_QUERY_RESULT_ITEM_1,
     MANUSCRIPT_VERSION_1
 )
+
+
+LINE_FEED = '\n'
 
 
 @pytest.fixture(name='iter_dict_from_bq_query_mock', autouse=True)
@@ -28,6 +32,73 @@ def _get_docmaps_index_dict(provider: DocmapsProvider) -> dict:
     return json.loads(
         ''.join(provider.iter_docmaps_index_json_stream())
     )
+
+
+class TestRemoveTrailingSpacesBeforeBlankLine:
+    def test_should_remove_trailing_spaces_before_blank_line_without_spaces(self):
+        assert provider_module.remove_trailing_spaces_before_blank_line(
+            f'line 1  {LINE_FEED}{LINE_FEED}line 2'
+        ) == f'line 1{LINE_FEED}{LINE_FEED}line 2'
+
+    def test_should_remove_trailing_spaces_before_blank_line_with_spaces(self):
+        assert provider_module.remove_trailing_spaces_before_blank_line(
+            f'line 1  {LINE_FEED}  {LINE_FEED}line 2'
+        ) == f'line 1{LINE_FEED}{LINE_FEED}line 2'
+
+    def test_should_not_remove_trailing_spaces_if_not_before_blank_line(self):
+        assert provider_module.remove_trailing_spaces_before_blank_line(
+            f'line 1  {LINE_FEED}line 2'
+        ) == f'line 1  {LINE_FEED}line 2'
+
+
+class TestGetHtmlFormattedEvaluationContent:
+    def test_should_return_same_evaluation_content_if_no_markdown(self):
+        content = 'evaluation content for evaluation_id_1'
+        assert get_html_formatted_evaluation_content(content) == f'<p>{content}</p>'
+
+    def test_should_return_html_formatted_content_for_bold_markdown(self):
+        assert get_html_formatted_evaluation_content('**bold**') == '<p><strong>bold</strong></p>'
+
+    def test_should_return_html_formatted_content_for_italic_markdown(self):
+        assert get_html_formatted_evaluation_content('*italic*') == '<p><em>italic</em></p>'
+
+    def test_should_return_html_formatted_content_for_both_bold_and_italic(self):
+        bold_italic = '***bold/italics** italics*'
+        bold_italic_html = '<p><em><strong>bold/italics</strong> italics</em></p>'
+        assert get_html_formatted_evaluation_content(bold_italic) == bold_italic_html
+
+    def test_should_convert_markdown_header_to_html_header(self):
+        assert get_html_formatted_evaluation_content('# Header 1') == '<h1>Header 1</h1>'
+
+    def test_should_convert_markdown_link_to_html_link(self):
+        assert get_html_formatted_evaluation_content(
+            '[link text](https://www.example.com)'
+        ) == '<p><a href="https://www.example.com">link text</a></p>'
+
+    def test_should_convert_plain_url_with_protocol_to_html_link(self):
+        assert get_html_formatted_evaluation_content(
+            'https://www.example.com'
+        ) == '<p><a href="https://www.example.com">https://www.example.com</a></p>'
+
+    def test_should_convert_plain_url_without_protocol_to_html_link(self):
+        assert get_html_formatted_evaluation_content(
+            'www.example.com'
+        ) == '<p><a href="http://www.example.com">www.example.com</a></p>'
+
+    def test_should_remove_script_tags_from_markdown(self):
+        assert get_html_formatted_evaluation_content(
+            'cleaned <script>var bad = true;</script> html'
+        ) == '<p>cleaned  html</p>'
+
+    def test_should_add_line_break_for_two_spaces_before_newline(self):
+        assert get_html_formatted_evaluation_content(
+            f'line 1  {LINE_FEED}line 2'
+        ) == f'<p>line 1<br>{LINE_FEED}line 2</p>'
+
+    def test_should_remove_two_spaces_before_blank_line(self):
+        assert get_html_formatted_evaluation_content(
+            f'line 1  {LINE_FEED}{LINE_FEED}line 2'
+        ) == f'<p>line 1</p>{LINE_FEED}<p>line 2</p>'
 
 
 class TestDocmapsProvider:
@@ -82,4 +153,6 @@ class TestDocmapsProvider:
         docmaps_provider = DocmapsProvider()
         assert docmaps_provider.get_evaluation_content_by_id(
             DOCMAPS_QUERY_RESULT_EVALUATION_1['hypothesis_id']
-        ) == DOCMAPS_QUERY_RESULT_EVALUATION_1['annotation_content']
+        ) == get_html_formatted_evaluation_content(
+            DOCMAPS_QUERY_RESULT_EVALUATION_1['annotation_content']
+        )
