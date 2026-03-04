@@ -43,7 +43,7 @@ def test_should_evaluation_match_example_response(
     )
     response.raise_for_status()
     with open(
-        f'data/docmaps/regression_test/evaluation_by_evaluation_id/{evaluation_id}.txt',
+        f'data/docmaps/regression_test/evaluation_by_evaluation_id/{evaluation_id}.html',
         'r',
         encoding='utf-8'
     ) as file:
