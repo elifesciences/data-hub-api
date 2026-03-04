@@ -1,5 +1,6 @@
 import json
 import logging
+import re
 from markdown import markdown
 from pathlib import Path
 from time import monotonic
@@ -24,10 +25,17 @@ from data_hub_api.docmaps.v2.sql import get_sql_path
 LOGGER = logging.getLogger(__name__)
 
 
+def remove_trailing_spaces_before_blank_line(md: str) -> str:
+    return re.sub(r'  +\r?\n *\n', r'\n\n', md)
+
+
 def get_html_formatted_evaluation_content(
     evaluation_content: str
 ) -> str:
-    html = markdown(evaluation_content, extensions=["mdx_linkify"])
+    html = markdown(
+        remove_trailing_spaces_before_blank_line(evaluation_content),
+        extensions=["mdx_linkify"]
+    )
     sanitized_html = nh3.clean(html, link_rel=None)
     return sanitized_html
 

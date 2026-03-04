@@ -19,6 +19,9 @@ from tests.unit_tests.docmaps.v2.test_data import (
 )
 
 
+LINE_FEED = '\n'
+
+
 @pytest.fixture(name='iter_dict_from_bq_query_mock', autouse=True)
 def _iter_dict_from_bq_query_mock() -> Iterable[MagicMock]:
     with patch.object(provider_module, 'iter_dict_from_bq_query') as mock:
@@ -29,6 +32,23 @@ def _get_docmaps_index_dict(provider: DocmapsProvider) -> dict:
     return json.loads(
         ''.join(provider.iter_docmaps_index_json_stream())
     )
+
+
+class TestRemoveTrailingSpacesBeforeBlankLine:
+    def test_should_remove_trailing_spaces_before_blank_line_without_spaces(self):
+        assert provider_module.remove_trailing_spaces_before_blank_line(
+            f'line 1  {LINE_FEED}{LINE_FEED}line 2'
+        ) == f'line 1{LINE_FEED}{LINE_FEED}line 2'
+
+    def test_should_remove_trailing_spaces_before_blank_line_with_spaces(self):
+        assert provider_module.remove_trailing_spaces_before_blank_line(
+            f'line 1  {LINE_FEED}  {LINE_FEED}line 2'
+        ) == f'line 1{LINE_FEED}{LINE_FEED}line 2'
+
+    def test_should_not_remove_trailing_spaces_if_not_before_blank_line(self):
+        assert provider_module.remove_trailing_spaces_before_blank_line(
+            f'line 1  {LINE_FEED}line 2'
+        ) == f'line 1  {LINE_FEED}line 2'
 
 
 class TestGetHtmlFormattedEvaluationContent:
@@ -72,8 +92,13 @@ class TestGetHtmlFormattedEvaluationContent:
 
     def test_should_add_line_break_for_two_spaces_before_newline(self):
         assert get_html_formatted_evaluation_content(
-            'line 1  \nline 2'
-        ) == '<p>line 1<br>\nline 2</p>'
+            f'line 1  {LINE_FEED}line 2'
+        ) == f'<p>line 1<br>{LINE_FEED}line 2</p>'
+
+    def test_should_remove_two_spaces_before_blank_line(self):
+        assert get_html_formatted_evaluation_content(
+            f'line 1  {LINE_FEED}{LINE_FEED}line 2'
+        ) == f'<p>line 1</p>{LINE_FEED}<p>line 2</p>'
 
 
 class TestDocmapsProvider:
