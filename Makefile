@@ -68,6 +68,12 @@ dev-regression-test:
 dev-regression-test-detailed-view:
 	$(PYTHON) -m pytest -p no:cacheprovider -vv $(ARGS) tests/regression_tests
 
+dev-regression-test-enhanced-preprints:
+	$(PYTHON) -m pytest -p no:cacheprovider -vv $(ARGS) tests/regression_tests/docmaps
+
+dev-regression-test-kotahi:
+	$(PYTHON) -m pytest -p no:cacheprovider -vv $(ARGS) tests/regression_tests/kotahi_docmaps
+
 dev-test: dev-lint dev-unittest
 
 
