@@ -106,20 +106,20 @@ def get_docmap_evaluation_content_list(
     preprint_doi: str
 ) -> Sequence[DocmapContent]:
     return [
-            get_docmap_evaluation_output_content(
-                base_url=HYPOTHESIS_URL,
-                hypothesis_id=hypothesis_id
-            ),
-            get_docmap_evaluation_output_content(
-                base_url=SCIETY_ARTICLES_ACTIVITY_URL,
-                hypothesis_id=hypothesis_id,
-                preprint_doi=preprint_doi
-            ),
-            get_docmap_evaluation_output_content(
-                base_url=SCIETY_ARTICLES_EVALUATIONS_URL,
-                hypothesis_id=hypothesis_id
-            )
-        ]
+        get_docmap_evaluation_output_content(
+            base_url=HYPOTHESIS_URL,
+            hypothesis_id=hypothesis_id
+        ),
+        get_docmap_evaluation_output_content(
+            base_url=SCIETY_ARTICLES_ACTIVITY_URL,
+            hypothesis_id=hypothesis_id,
+            preprint_doi=preprint_doi
+        ),
+        get_docmap_evaluation_output_content(
+            base_url=SCIETY_ARTICLES_EVALUATIONS_URL,
+            hypothesis_id=hypothesis_id
+        )
+    ]
 
 
 def get_docmap_evaluation_output(
