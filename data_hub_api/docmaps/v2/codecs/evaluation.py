@@ -21,6 +21,7 @@ from data_hub_api.docmaps.v2.docmap_typing import (
     DocmapEvaluationOutput,
     DocmapParticipant
 )
+from data_hub_api.utils.url import get_basepath
 
 LOGGER = logging.getLogger(__name__)
 
@@ -84,6 +85,16 @@ def get_docmap_evaluation_output_content_url(
         assert preprint_doi
         return base_url + preprint_doi + '#hypothesis:' + hypothesis_id
     return base_url + hypothesis_id + '/content'
+
+
+def get_docmap_evaluation_data_hub_content_url(
+    hypothesis_id: str
+) -> str:
+    return (
+        get_basepath()
+        + 'enhanced-preprints/docmaps/v2/evaluation/get-by-evaluation-id?evaluation_id='
+        + hypothesis_id
+    )
 
 
 def get_docmap_evaluation_output_content(

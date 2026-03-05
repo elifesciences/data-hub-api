@@ -12,6 +12,7 @@ from data_hub_api.docmaps.v2.codecs.evaluation import (
     SCIETY_ARTICLES_EVALUATIONS_URL,
     get_docmap_affiliation,
     get_docmap_affiliation_location,
+    get_docmap_evaluation_data_hub_content_url,
     get_docmap_evaluation_input,
     get_docmap_evaluation_output,
     get_docmap_evaluation_content_list,
@@ -26,6 +27,7 @@ from data_hub_api.docmaps.v2.codecs.evaluation import (
     get_related_organization_detail,
     get_rp_meca_path_action
 )
+from data_hub_api.utils.url import get_basepath
 from tests.unit_tests.docmaps.v2.test_data import (
     ANNOTATION_CREATED_TIMESTAMP_1,
     DOCMAPS_QUERY_RESULT_ITEM_1,
@@ -119,6 +121,17 @@ class TestGetDocmapEvaluationOutputContentUrl:
                 hypothesis_id=hypothesis_id,
                 preprint_doi=None
             )
+
+
+class TestGetDocmapEvaluationDataHubContentUrl:
+    def test_should_populate_the_content_url_correctly_per_given_base_url(self):
+        assert get_docmap_evaluation_data_hub_content_url(
+            HYPOTHESIS_ID_1
+        ) == (
+            get_basepath()
+            + 'enhanced-preprints/docmaps/v2/evaluation/get-by-evaluation-id?evaluation_id='
+            + HYPOTHESIS_ID_1
+        )
 
 
 class TestGetDocmapEvaluationOutputContent:
