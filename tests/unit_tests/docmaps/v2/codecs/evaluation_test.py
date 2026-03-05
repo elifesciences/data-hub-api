@@ -14,6 +14,7 @@ from data_hub_api.docmaps.v2.codecs.evaluation import (
     get_docmap_affiliation_location,
     get_docmap_evaluation_input,
     get_docmap_evaluation_output,
+    get_docmap_evaluation_content_list,
     get_docmap_evaluation_output_content,
     get_docmap_evaluation_output_content_url,
     get_docmap_evaluation_participants,
@@ -130,6 +131,34 @@ class TestGetDocmapEvaluationOutputContent:
         }
 
 
+class TestGetDocmapEvaluationContentList:
+    def test_should_populate_minimum_evaluation_content_list(self):
+        result = get_docmap_evaluation_content_list(
+            hypothesis_id=HYPOTHESIS_ID_1,
+            preprint_doi=DOI_1
+        )
+        assert result == [
+            {
+                'type': 'web-page',
+                'url': f'{HYPOTHESIS_URL}{HYPOTHESIS_ID_1}'
+            },
+            {
+                'type': 'web-page',
+                'url': (
+                    f'{SCIETY_ARTICLES_ACTIVITY_URL}'
+                    f'{DOI_1}#hypothesis:{HYPOTHESIS_ID_1}'
+                )
+            },
+            {
+                'type': 'web-page',
+                'url': (
+                    f'{SCIETY_ARTICLES_EVALUATIONS_URL}'
+                    f'{HYPOTHESIS_ID_1}/content'
+                )
+            }
+        ]
+
+
 class TestGetDocmapEvaluationOutput:
     def test_should_populate_evaluation_output(self):
         result = get_docmap_evaluation_output(
@@ -153,26 +182,10 @@ class TestGetDocmapEvaluationOutput:
             'url': get_elife_evaluation_doi_url(
                 elife_evaluation_doi=elife_evaluation_doi,
             ),
-            'content': [
-                {
-                    'type': 'web-page',
-                    'url': f'{HYPOTHESIS_URL}{HYPOTHESIS_ID_1}'
-                },
-                {
-                    'type': 'web-page',
-                    'url': (
-                        f'{SCIETY_ARTICLES_ACTIVITY_URL}'
-                        f'{DOI_1}#hypothesis:{HYPOTHESIS_ID_1}'
-                    )
-                },
-                {
-                    'type': 'web-page',
-                    'url': (
-                        f'{SCIETY_ARTICLES_EVALUATIONS_URL}'
-                        f'{HYPOTHESIS_ID_1}/content'
-                    )
-                }
-            ]
+            'content': get_docmap_evaluation_content_list(
+                hypothesis_id=HYPOTHESIS_ID_1,
+                preprint_doi=DOI_1
+            )
         }
 
 
