@@ -101,6 +101,27 @@ def get_docmap_evaluation_output_content(
     }
 
 
+def get_docmap_evaluation_content_list(
+    hypothesis_id: str,
+    preprint_doi: str
+) -> Sequence[DocmapContent]:
+    return [
+            get_docmap_evaluation_output_content(
+                base_url=HYPOTHESIS_URL,
+                hypothesis_id=hypothesis_id
+            ),
+            get_docmap_evaluation_output_content(
+                base_url=SCIETY_ARTICLES_ACTIVITY_URL,
+                hypothesis_id=hypothesis_id,
+                preprint_doi=preprint_doi
+            ),
+            get_docmap_evaluation_output_content(
+                base_url=SCIETY_ARTICLES_EVALUATIONS_URL,
+                hypothesis_id=hypothesis_id
+            )
+        ]
+
+
 def get_docmap_evaluation_output(
     query_result_item: ApiInput,
     manuscript_version: ApiManuscriptVersionInput,
@@ -121,21 +142,10 @@ def get_docmap_evaluation_output(
         'doi': elife_evaluation_doi,
         'license': query_result_item['license'],
         'url': get_elife_evaluation_doi_url(elife_evaluation_doi=elife_evaluation_doi),
-        'content': [
-            get_docmap_evaluation_output_content(
-                base_url=HYPOTHESIS_URL,
-                hypothesis_id=hypothesis_id
-            ),
-            get_docmap_evaluation_output_content(
-                base_url=SCIETY_ARTICLES_ACTIVITY_URL,
-                hypothesis_id=hypothesis_id,
-                preprint_doi=preprint_doi
-            ),
-            get_docmap_evaluation_output_content(
-                base_url=SCIETY_ARTICLES_EVALUATIONS_URL,
-                hypothesis_id=hypothesis_id
-            )
-        ]
+        'content': get_docmap_evaluation_content_list(
+            hypothesis_id=hypothesis_id,
+            preprint_doi=preprint_doi
+        )
     }
 
 
