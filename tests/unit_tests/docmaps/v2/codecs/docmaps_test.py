@@ -51,7 +51,7 @@ from tests.unit_tests.docmaps.v2.test_data import (
     DOCMAPS_QUERY_RESULT_EVALUATION_1,
     DOCMAPS_QUERY_RESULT_ITEM_1,
     DOCMAPS_QUERY_RESULT_ITEM_2,
-    DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS,
+    DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS_1,
     DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSIONS_1,
     DOCMAPS_QUERY_RESULT_ITEM_WITH_VOR_VERSIONS_2,
     DOI_1,
@@ -249,7 +249,7 @@ class TestGetDocmapsItemForQueryResultItem:
 
     def test_should_populate_assertions_peer_reviewed_step(self):
         docmaps_item = get_docmap_item_for_query_result_item(
-            DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS
+            DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS_1
         )
         peer_reviewed_step = docmaps_item['steps']['_:b1']
         assert peer_reviewed_step['assertions'] == [{
@@ -259,7 +259,7 @@ class TestGetDocmapsItemForQueryResultItem:
 
     def test_should_populate_inputs_peer_reviewed_step(self):
         docmaps_item = get_docmap_item_for_query_result_item(
-            DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS
+            DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS_1
         )
         peer_reviewed_step = docmaps_item['steps']['_:b1']
         assert peer_reviewed_step['inputs'] == [
@@ -312,7 +312,7 @@ class TestGetDocmapsItemForQueryResultItem:
 
     def test_should_populate_actions_peer_reviewed_step_for_rp_meca_path_even_tags_are_empty(self):
         query_result_with_evaluation = {
-            **DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS,
+            **DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS_1,
             'manuscript_versions': [{
                 **MANUSCRIPT_VERSION_1,
                 'evaluations': [{
@@ -327,13 +327,13 @@ class TestGetDocmapsItemForQueryResultItem:
         peer_reviewed_step = docmaps_item['steps']['_:b1']
         peer_reviewed_actions = peer_reviewed_step['actions']
         assert peer_reviewed_actions == [get_rp_meca_path_action(
-            query_result_item=DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS,
+            query_result_item=DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS_1,
             manuscript_version=MANUSCRIPT_VERSION_1
         )]
 
     def test_should_populate_actions_outputs_peer_reviewed_step_for_each_evaluation(self):
         query_result_with_evaluation = {
-            **DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS,
+            **DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS_1,
             'manuscript_versions': [{
                 **MANUSCRIPT_VERSION_1,
                 'evaluations': [{
@@ -392,7 +392,7 @@ class TestGetDocmapsItemForQueryResultItem:
 
     def test_should_populate_outputs_evaluation_type_according_to_tags_peer_reviewed_step(self):
         query_result_with_evaluation = {
-            **DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS,
+            **DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS_1,
             'manuscript_versions': [{
                 **MANUSCRIPT_VERSION_1,
                 'evaluations': [{
@@ -421,7 +421,7 @@ class TestGetDocmapsItemForQueryResultItem:
 
     def test_should_populate_participants_peer_reviewed_step_for_review_article_type(self):
         query_result_with_evaluation = {
-            **DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS,
+            **DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS_1,
             'manuscript_versions': [{
                 **MANUSCRIPT_VERSION_1,
                 'evaluations': [{
@@ -444,7 +444,7 @@ class TestGetDocmapsItemForQueryResultItem:
         editor_details = [EDITOR_DETAIL_1]
         senior_editor_details = [SENIOR_EDITOR_DETAIL_1]
         query_result_with_evaluation_and_editor_details = {
-            **DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS,
+            **DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS_1,
             'manuscript_versions': [{
                 **MANUSCRIPT_VERSION_1,
                 'evaluations': [{
@@ -470,12 +470,12 @@ class TestGetDocmapsItemForQueryResultItem:
 
     def test_should_populate_assertions_for_first_manuscript_published_step(self):
         docmaps_item = get_docmap_item_for_query_result_item(
-            DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS
+            DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS_1
         )
         manuscript_published_step = docmaps_item['steps']['_:b2']
         assert manuscript_published_step['assertions'] == [{
             'item': get_docmap_elife_manuscript_doi_assertion_item(
-                query_result_item=DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS,
+                query_result_item=DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS_1,
                 manuscript_version=MANUSCRIPT_VERSION_WITH_EVALUATIONS_1
             ),
             'status': 'manuscript-published'
@@ -483,7 +483,7 @@ class TestGetDocmapsItemForQueryResultItem:
 
     def test_should_populate_actions_outputs_for_first_manuscript_published_step(self):
         docmaps_item = get_docmap_item_for_query_result_item(
-            DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS
+            DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS_1
         )
         manuscript_published_step = docmaps_item['steps']['_:b2']
         assert manuscript_published_step['actions'] == [{
@@ -491,7 +491,7 @@ class TestGetDocmapsItemForQueryResultItem:
             'outputs': [
                 remove_key_with_none_value_only(
                     get_docmap_elife_manuscript_output_for_published_step(
-                        query_result_item=DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS,
+                        query_result_item=DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS_1,
                         manuscript_version=MANUSCRIPT_VERSION_WITH_EVALUATIONS_1
                     )
                 )
@@ -500,7 +500,7 @@ class TestGetDocmapsItemForQueryResultItem:
 
     def test_should_populate_inputs_for_first_manuscript_published_step(self):
         docmaps_item = get_docmap_item_for_query_result_item({
-            **DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS,
+            **DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS_1,
             'manuscript_versions': [{
                 **MANUSCRIPT_VERSION_1,
                 'evaluations': [{
@@ -517,13 +517,13 @@ class TestGetDocmapsItemForQueryResultItem:
         assert manuscript_published_step['inputs'] == [
             get_docmap_preprint_input(manuscript_version=MANUSCRIPT_VERSION_1),
             get_docmap_evaluation_input(
-                query_result_item=DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS,
+                query_result_item=DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS_1,
                 manuscript_version=MANUSCRIPT_VERSION_WITH_EVALUATIONS_1,
                 evaluation_suffix=EVALUATION_SUFFIX_1,
                 docmap_evaluation_type=DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE
             ),
             get_docmap_evaluation_input(
-                query_result_item=DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS,
+                query_result_item=DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS_1,
                 manuscript_version=MANUSCRIPT_VERSION_WITH_EVALUATIONS_1,
                 evaluation_suffix=EVALUATION_SUFFIX_2,
                 docmap_evaluation_type=DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY
@@ -713,7 +713,7 @@ class TestGetDocmapsItemForQueryResultItem:
         self
     ):
         query_result_item = {
-            **DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS,
+            **DOCMAPS_QUERY_RESULT_ITEM_WITH_EVALUATIONS_1,
             'manuscript_versions': [{
                 **MANUSCRIPT_VERSION_WITH_EVALUATIONS_1,
                 'rp_publication_timestamp': None
