@@ -148,6 +148,12 @@ def get_docmap_evaluation_content_list(
     return content_list
 
 
+def get_include_data_hub_content(manuscript_id: str) -> bool:
+    if manuscript_id == '85111':
+        return True
+    return False
+
+
 def get_docmap_evaluation_output(
     query_result_item: ApiInput,
     manuscript_version: ApiManuscriptVersionInput,
@@ -170,7 +176,10 @@ def get_docmap_evaluation_output(
         'url': get_elife_evaluation_doi_url(elife_evaluation_doi=elife_evaluation_doi),
         'content': get_docmap_evaluation_content_list(
             hypothesis_id=hypothesis_id,
-            preprint_doi=preprint_doi
+            preprint_doi=preprint_doi,
+            include_data_hub_content=get_include_data_hub_content(
+                query_result_item['manuscript_id']
+            )
         )
     }
 

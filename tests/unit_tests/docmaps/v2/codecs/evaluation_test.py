@@ -1,4 +1,5 @@
-from unittest.mock import patch
+from typing import Iterable
+from unittest.mock import MagicMock, patch
 from data_hub_api.docmaps.v2.codecs.elife_manuscript import get_elife_manuscript_version_doi
 import pytest
 from data_hub_api.docmaps.v2.codecs import evaluation as evaluation_module
@@ -25,6 +26,7 @@ from data_hub_api.docmaps.v2.codecs.evaluation import (
     get_docmap_evaluation_type_form_tags,
     get_elife_evaluation_doi,
     get_elife_evaluation_doi_url,
+    get_include_data_hub_content,
     get_related_organization_detail,
     get_rp_meca_path_action
 )
@@ -43,6 +45,13 @@ from tests.unit_tests.docmaps.v2.test_data import (
     RP_MECA_PATH_1,
     SENIOR_EDITOR_DETAIL_1
 )
+
+
+@pytest.fixture(name='get_include_data_hub_content_mock', autouse=True)
+def _get_include_data_hub_content_mock() -> Iterable[MagicMock]:
+    with patch.object(evaluation_module, 'get_include_data_hub_content') as mock:
+        mock.return_value = False
+        yield mock
 
 
 class TestGetElifeEvaluationDoi:
@@ -189,6 +198,14 @@ class TestGetDocmapEvaluationContentList:
         assert result[-1] == get_docmap_evaluation_output_content_for_data_hub(HYPOTHESIS_ID_1)
 
 
+class TestGetIncludeDataHubContent:
+    def test_should_return_false_by_default(self):
+        assert not get_include_data_hub_content('any_manuscript_id')
+
+    def test_should_return_true_for_specific_manuscript_id(self):
+        assert get_include_data_hub_content('85111')
+
+
 class TestGetDocmapEvaluationOutput:
     def test_should_populate_evaluation_output(self):
         result = get_docmap_evaluation_output(
@@ -217,6 +234,24 @@ class TestGetDocmapEvaluationOutput:
                 preprint_doi=DOI_1
             )
         }
+
+    def test_should_include_data_hub_content_in_evaluation_output_when_enabled(
+        self,
+        get_include_data_hub_content_mock: MagicMock
+    ):
+        get_include_data_hub_content_mock.return_value = True
+        result = get_docmap_evaluation_output(
+            query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1,
+            manuscript_version=MANUSCRIPT_VERSION_1,
+            hypothesis_id=HYPOTHESIS_ID_1,
+            evaluation_suffix=EVALUATION_SUFFIX_1,
+            annotation_created_timestamp=ANNOTATION_CREATED_TIMESTAMP_1,
+            docmap_evaluation_type='docmap_evaluation_type_1'
+        )
+        assert (
+            get_docmap_evaluation_output_content_for_data_hub(HYPOTHESIS_ID_1)
+            in result['content']
+        )
 
 
 class TestGetEvaluationsTypeFromTags:
