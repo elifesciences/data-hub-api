@@ -123,9 +123,10 @@ def get_docmap_evaluation_output_content(
 
 def get_docmap_evaluation_content_list(
     hypothesis_id: str,
-    preprint_doi: str
+    preprint_doi: str,
+    include_data_hub_content: bool = False
 ) -> Sequence[DocmapContent]:
-    return [
+    content_list = [
         get_docmap_evaluation_output_content(
             base_url=HYPOTHESIS_URL,
             hypothesis_id=hypothesis_id
@@ -140,6 +141,11 @@ def get_docmap_evaluation_content_list(
             hypothesis_id=hypothesis_id
         )
     ]
+    if include_data_hub_content:
+        content_list.append(
+            get_docmap_evaluation_output_content_for_data_hub(hypothesis_id=hypothesis_id)
+        )
+    return content_list
 
 
 def get_docmap_evaluation_output(

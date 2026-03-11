@@ -180,6 +180,14 @@ class TestGetDocmapEvaluationContentList:
             }
         ]
 
+    def test_should_include_data_hub_content_when_enabled(self):
+        result = get_docmap_evaluation_content_list(
+            hypothesis_id=HYPOTHESIS_ID_1,
+            preprint_doi=DOI_1,
+            include_data_hub_content=True
+        )
+        assert result[-1] == get_docmap_evaluation_output_content_for_data_hub(HYPOTHESIS_ID_1)
+
 
 class TestGetDocmapEvaluationOutput:
     def test_should_populate_evaluation_output(self):
