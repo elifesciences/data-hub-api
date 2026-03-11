@@ -97,6 +97,15 @@ def get_docmap_evaluation_data_hub_content_url(
     )
 
 
+def get_docmap_evaluation_data_hub_output_content(
+    hypothesis_id: str
+) -> DocmapContent:
+    return {
+        'type': 'web-content',
+        'url': get_docmap_evaluation_data_hub_content_url(hypothesis_id=hypothesis_id)
+    }
+
+
 def get_docmap_evaluation_output_content(
     base_url: str,
     hypothesis_id: str,

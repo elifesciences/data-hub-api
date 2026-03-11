@@ -13,6 +13,7 @@ from data_hub_api.docmaps.v2.codecs.evaluation import (
     get_docmap_affiliation,
     get_docmap_affiliation_location,
     get_docmap_evaluation_data_hub_content_url,
+    get_docmap_evaluation_data_hub_output_content,
     get_docmap_evaluation_input,
     get_docmap_evaluation_output,
     get_docmap_evaluation_content_list,
@@ -132,6 +133,14 @@ class TestGetDocmapEvaluationDataHubContentUrl:
             + 'enhanced-preprints/docmaps/v2/evaluation/get-by-evaluation-id?evaluation_id='
             + HYPOTHESIS_ID_1
         )
+
+
+class TestGetDocmapEvaluationDataHubOutputContent:
+    def test_should_populate_evaluation_output_content_for_data_hub(self):
+        assert get_docmap_evaluation_data_hub_output_content(HYPOTHESIS_ID_1) == {
+            'type': 'web-content',
+            'url': get_docmap_evaluation_data_hub_content_url(HYPOTHESIS_ID_1)
+        }
 
 
 class TestGetDocmapEvaluationOutputContent:
