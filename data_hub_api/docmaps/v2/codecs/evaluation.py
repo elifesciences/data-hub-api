@@ -184,6 +184,7 @@ def get_docmap_evaluation_output(
     evaluation_output: DocmapEvaluationOutput = {
         'type': docmap_evaluation_type,
         'published': annotation_created_timestamp.isoformat(),
+        'updated': annotation_updated_timestamp.isoformat(),
         'doi': elife_evaluation_doi,
         'license': query_result_item['license'],
         'url': get_elife_evaluation_doi_url(elife_evaluation_doi=elife_evaluation_doi),
@@ -193,8 +194,8 @@ def get_docmap_evaluation_output(
             include_data_hub_content=include_data_hub_content
         )
     }
-    if include_data_hub_content:
-        evaluation_output['updated'] = annotation_updated_timestamp.isoformat()
+    if not include_data_hub_content:
+        del evaluation_output['updated']
     return evaluation_output
 
 
