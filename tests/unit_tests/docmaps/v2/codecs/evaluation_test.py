@@ -9,6 +9,7 @@ from data_hub_api.docmaps.v2.codecs.evaluation import (
     DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE,
     DOI_ROOT_URL,
     HYPOTHESIS_URL,
+    INCLUDE_DATA_HUB_CONTENT_REGEX_ENV_VAR,
     SCIETY_ARTICLES_ACTIVITY_URL,
     SCIETY_ARTICLES_EVALUATIONS_URL,
     get_docmap_affiliation,
@@ -202,8 +203,13 @@ class TestGetIncludeDataHubContent:
     def test_should_return_false_by_default(self):
         assert not get_include_data_hub_content('any_manuscript_id')
 
-    def test_should_return_true_for_specific_manuscript_id(self):
+    def test_should_return_true_if_manuscript_id_matches_regex(
+        self,
+        mock_env: dict
+    ):
+        mock_env[INCLUDE_DATA_HUB_CONTENT_REGEX_ENV_VAR] = r'^85111$'
         assert get_include_data_hub_content('85111')
+        assert not get_include_data_hub_content('85200')
 
 
 class TestGetDocmapEvaluationOutput:

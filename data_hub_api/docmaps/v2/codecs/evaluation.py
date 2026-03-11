@@ -1,5 +1,7 @@
 from datetime import datetime
 import logging
+import os
+import re
 from typing import Iterable, Optional, Sequence, cast, Tuple
 from data_hub_api.config import DOI_ROOT_URL
 
@@ -32,6 +34,14 @@ SCIETY_ARTICLES_EVALUATIONS_URL = 'https://sciety.org/evaluations/hypothesis:'
 DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY = 'evaluation-summary'
 DOCMAP_EVALUATION_TYPE_FOR_REPLY = 'reply'
 DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE = 'review-article'
+
+INCLUDE_DATA_HUB_CONTENT_REGEX_ENV_VAR = (
+    'DATA_HUB_API_INCLUDE_DATA_HUB_CONTENT_MANUSCRIPT_ID_REGEX'
+)
+
+
+def get_include_data_hub_content_regex() -> str:
+    return os.getenv(INCLUDE_DATA_HUB_CONTENT_REGEX_ENV_VAR, '')
 
 
 def get_elife_evaluation_doi(
@@ -149,8 +159,9 @@ def get_docmap_evaluation_content_list(
 
 
 def get_include_data_hub_content(manuscript_id: str) -> bool:
-    if manuscript_id == '85111':
-        return True
+    regex = get_include_data_hub_content_regex()
+    if regex:
+        return bool(re.match(regex, manuscript_id))
     return False
 
 
