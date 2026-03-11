@@ -87,7 +87,7 @@ def get_docmap_evaluation_output_content_url(
     return base_url + hypothesis_id + '/content'
 
 
-def get_docmap_evaluation_data_hub_content_url(
+def get_docmap_evaluation_content_url_for_data_hub(
     hypothesis_id: str
 ) -> str:
     return (
@@ -97,12 +97,12 @@ def get_docmap_evaluation_data_hub_content_url(
     )
 
 
-def get_docmap_evaluation_data_hub_output_content(
+def get_docmap_evaluation_output_content_for_data_hub(
     hypothesis_id: str
 ) -> DocmapContent:
     return {
         'type': 'web-content',
-        'url': get_docmap_evaluation_data_hub_content_url(hypothesis_id=hypothesis_id)
+        'url': get_docmap_evaluation_content_url_for_data_hub(hypothesis_id=hypothesis_id)
     }
 
 

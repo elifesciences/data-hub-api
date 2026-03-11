@@ -12,8 +12,8 @@ from data_hub_api.docmaps.v2.codecs.evaluation import (
     SCIETY_ARTICLES_EVALUATIONS_URL,
     get_docmap_affiliation,
     get_docmap_affiliation_location,
-    get_docmap_evaluation_data_hub_content_url,
-    get_docmap_evaluation_data_hub_output_content,
+    get_docmap_evaluation_content_url_for_data_hub,
+    get_docmap_evaluation_output_content_for_data_hub,
     get_docmap_evaluation_input,
     get_docmap_evaluation_output,
     get_docmap_evaluation_content_list,
@@ -124,9 +124,9 @@ class TestGetDocmapEvaluationOutputContentUrl:
             )
 
 
-class TestGetDocmapEvaluationDataHubContentUrl:
+class TestGetDocmapEvaluationContentUrlForDataHub:
     def test_should_populate_the_content_url_correctly_per_given_base_url(self):
-        assert get_docmap_evaluation_data_hub_content_url(
+        assert get_docmap_evaluation_content_url_for_data_hub(
             HYPOTHESIS_ID_1
         ) == (
             get_basepath()
@@ -135,11 +135,11 @@ class TestGetDocmapEvaluationDataHubContentUrl:
         )
 
 
-class TestGetDocmapEvaluationDataHubOutputContent:
+class TestGetDocmapEvaluationOutputContentForDataHub:
     def test_should_populate_evaluation_output_content_for_data_hub(self):
-        assert get_docmap_evaluation_data_hub_output_content(HYPOTHESIS_ID_1) == {
+        assert get_docmap_evaluation_output_content_for_data_hub(HYPOTHESIS_ID_1) == {
             'type': 'web-content',
-            'url': get_docmap_evaluation_data_hub_content_url(HYPOTHESIS_ID_1)
+            'url': get_docmap_evaluation_content_url_for_data_hub(HYPOTHESIS_ID_1)
         }
 
 
