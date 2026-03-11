@@ -1,7 +1,9 @@
 from typing import Iterable
 from unittest.mock import MagicMock, patch
-from data_hub_api.docmaps.v2.codecs.elife_manuscript import get_elife_manuscript_version_doi
+
 import pytest
+
+from data_hub_api.docmaps.v2.codecs.elife_manuscript import get_elife_manuscript_version_doi
 from data_hub_api.docmaps.v2.codecs import evaluation as evaluation_module
 from data_hub_api.docmaps.v2.codecs.evaluation import (
     DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY,
@@ -34,6 +36,7 @@ from data_hub_api.docmaps.v2.codecs.evaluation import (
 from data_hub_api.utils.url import get_basepath
 from tests.unit_tests.docmaps.v2.test_data import (
     ANNOTATION_CREATED_TIMESTAMP_1,
+    ANNOTATION_UPDATED_TIMESTAMP_1,
     DOCMAPS_QUERY_RESULT_ITEM_1,
     DOI_1,
     EDITOR_DETAIL_1,
@@ -220,6 +223,7 @@ class TestGetDocmapEvaluationOutput:
             hypothesis_id=HYPOTHESIS_ID_1,
             evaluation_suffix=EVALUATION_SUFFIX_1,
             annotation_created_timestamp=ANNOTATION_CREATED_TIMESTAMP_1,
+            annotation_updated_timestamp=ANNOTATION_UPDATED_TIMESTAMP_1,
             docmap_evaluation_type='docmap_evaluation_type_1'
         )
         elife_evaluation_doi = get_elife_evaluation_doi(
@@ -252,12 +256,29 @@ class TestGetDocmapEvaluationOutput:
             hypothesis_id=HYPOTHESIS_ID_1,
             evaluation_suffix=EVALUATION_SUFFIX_1,
             annotation_created_timestamp=ANNOTATION_CREATED_TIMESTAMP_1,
+            annotation_updated_timestamp=ANNOTATION_UPDATED_TIMESTAMP_1,
             docmap_evaluation_type='docmap_evaluation_type_1'
         )
         assert (
             get_docmap_evaluation_output_content_for_data_hub(HYPOTHESIS_ID_1)
             in result['content']
         )
+
+    def test_should_return_updated_timestamp_if_enabled(
+        self,
+        get_include_data_hub_content_mock: MagicMock
+    ):
+        get_include_data_hub_content_mock.return_value = True
+        result = get_docmap_evaluation_output(
+            query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1,
+            manuscript_version=MANUSCRIPT_VERSION_1,
+            hypothesis_id=HYPOTHESIS_ID_1,
+            evaluation_suffix=EVALUATION_SUFFIX_1,
+            annotation_created_timestamp=ANNOTATION_CREATED_TIMESTAMP_1,
+            annotation_updated_timestamp=ANNOTATION_UPDATED_TIMESTAMP_1,
+            docmap_evaluation_type='docmap_evaluation_type_1'
+        )
+        assert result['updated'] == ANNOTATION_UPDATED_TIMESTAMP_1.isoformat()
 
 
 class TestGetEvaluationsTypeFromTags:

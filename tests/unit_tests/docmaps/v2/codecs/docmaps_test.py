@@ -45,6 +45,9 @@ from tests.unit_tests.docmaps.v2.test_data import (
     ANNOTATION_CREATED_TIMESTAMP_1,
     ANNOTATION_CREATED_TIMESTAMP_2,
     ANNOTATION_CREATED_TIMESTAMP_3,
+    ANNOTATION_UPDATED_TIMESTAMP_1,
+    ANNOTATION_UPDATED_TIMESTAMP_2,
+    ANNOTATION_UPDATED_TIMESTAMP_3,
     DOCMAPS_QUERY_RESULT_EVALUATION_1,
     DOCMAPS_QUERY_RESULT_ITEM_1,
     DOCMAPS_QUERY_RESULT_ITEM_2,
@@ -340,12 +343,14 @@ class TestGetDocmapsItemForQueryResultItem:
                     **DOCMAPS_QUERY_RESULT_EVALUATION_1,
                     'hypothesis_id': HYPOTHESIS_ID_2,
                     'annotation_created_timestamp': ANNOTATION_CREATED_TIMESTAMP_2,
+                    'annotation_updated_timestamp': ANNOTATION_UPDATED_TIMESTAMP_2,
                     'tags': ['PeerReview', 'evaluationSummary'],
                     'evaluation_suffix': EVALUATION_SUFFIX_2
                 }, {
                     **DOCMAPS_QUERY_RESULT_EVALUATION_1,
                     'hypothesis_id': HYPOTHESIS_ID_3,
                     'annotation_created_timestamp': ANNOTATION_CREATED_TIMESTAMP_3,
+                    'annotation_updated_timestamp': ANNOTATION_UPDATED_TIMESTAMP_3,
                     'tags': ['PeerReview', 'AuthorResponse'],
                     'evaluation_suffix': EVALUATION_SUFFIX_3
                 }]
@@ -363,6 +368,7 @@ class TestGetDocmapsItemForQueryResultItem:
             hypothesis_id=HYPOTHESIS_ID_1,
             evaluation_suffix=EVALUATION_SUFFIX_1,
             annotation_created_timestamp=ANNOTATION_CREATED_TIMESTAMP_1,
+            annotation_updated_timestamp=ANNOTATION_UPDATED_TIMESTAMP_1,
             docmap_evaluation_type=DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE
         )
         assert peer_reviewed_actions[1]['outputs'][0] == get_docmap_evaluation_output(
@@ -371,6 +377,7 @@ class TestGetDocmapsItemForQueryResultItem:
             hypothesis_id=HYPOTHESIS_ID_2,
             evaluation_suffix=EVALUATION_SUFFIX_2,
             annotation_created_timestamp=ANNOTATION_CREATED_TIMESTAMP_2,
+            annotation_updated_timestamp=ANNOTATION_UPDATED_TIMESTAMP_2,
             docmap_evaluation_type=DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY
         )
         assert peer_reviewed_actions[2]['outputs'][0] == get_docmap_evaluation_output(
@@ -379,6 +386,7 @@ class TestGetDocmapsItemForQueryResultItem:
             hypothesis_id=HYPOTHESIS_ID_3,
             evaluation_suffix=EVALUATION_SUFFIX_3,
             annotation_created_timestamp=ANNOTATION_CREATED_TIMESTAMP_3,
+            annotation_updated_timestamp=ANNOTATION_UPDATED_TIMESTAMP_3,
             docmap_evaluation_type=DOCMAP_EVALUATION_TYPE_FOR_REPLY
         )
 

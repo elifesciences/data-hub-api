@@ -171,6 +171,7 @@ def get_docmap_evaluation_output(
     hypothesis_id: str,
     evaluation_suffix: str,
     annotation_created_timestamp: datetime,
+    annotation_updated_timestamp: datetime,
     docmap_evaluation_type: str
 ) -> DocmapEvaluationOutput:
     preprint_doi = manuscript_version['preprint_doi']
@@ -179,7 +180,8 @@ def get_docmap_evaluation_output(
         elife_doi=query_result_item['elife_doi'],
         evaluation_suffix=evaluation_suffix
     )
-    return {
+    include_data_hub_content = get_include_data_hub_content(query_result_item['manuscript_id'])
+    evaluation_output: DocmapEvaluationOutput = {
         'type': docmap_evaluation_type,
         'published': annotation_created_timestamp.isoformat(),
         'doi': elife_evaluation_doi,
@@ -188,11 +190,12 @@ def get_docmap_evaluation_output(
         'content': get_docmap_evaluation_content_list(
             hypothesis_id=hypothesis_id,
             preprint_doi=preprint_doi,
-            include_data_hub_content=get_include_data_hub_content(
-                query_result_item['manuscript_id']
-            )
+            include_data_hub_content=include_data_hub_content
         )
     }
+    if include_data_hub_content:
+        evaluation_output['updated'] = annotation_updated_timestamp.isoformat()
+    return evaluation_output
 
 
 def has_tag_containing(tags: list, text: str) -> bool:
@@ -328,6 +331,7 @@ def get_docmap_actions_for_evaluations(
     hypothesis_id: str,
     evaluation_suffix: str,
     annotation_created_timestamp: datetime,
+    annotation_updated_timestamp: datetime,
     docmap_evaluation_type: str
 ) -> DocmapAction:
     return {
@@ -341,6 +345,7 @@ def get_docmap_actions_for_evaluations(
                 manuscript_version=manuscript_version,
                 hypothesis_id=hypothesis_id,
                 annotation_created_timestamp=annotation_created_timestamp,
+                annotation_updated_timestamp=annotation_updated_timestamp,
                 evaluation_suffix=evaluation_suffix,
                 docmap_evaluation_type=docmap_evaluation_type
             )
@@ -407,6 +412,7 @@ def iter_docmap_actions_for_evaluations(
             manuscript_version=manuscript_version,
             hypothesis_id=hypothesis_id,
             annotation_created_timestamp=annotation_created_timestamp,
+            annotation_updated_timestamp=evaluation['annotation_updated_timestamp'],
             evaluation_suffix=evaluation_suffix,
             docmap_evaluation_type=docmap_evaluation_type
         )
