@@ -18,6 +18,7 @@ DocmapEvaluationOutput = TypedDict(
         'type': str,
         'doi': Optional[str],
         'published': timestamp_str,
+        'updated': NotRequired[timestamp_str],
         'license': str,
         'url': Optional[str],
         'content': Sequence[DocmapContent]

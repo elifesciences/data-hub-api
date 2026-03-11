@@ -1,7 +1,7 @@
 import os
 
 
-def get_basepath():
+def get_basepath() -> str:
     return (
         os.getenv(
             'DOCMAP_BASEPATH',

@@ -1,5 +1,7 @@
 from datetime import datetime
 import logging
+import os
+import re
 from typing import Iterable, Optional, Sequence, cast, Tuple
 from data_hub_api.config import DOI_ROOT_URL
 
@@ -21,6 +23,7 @@ from data_hub_api.docmaps.v2.docmap_typing import (
     DocmapEvaluationOutput,
     DocmapParticipant
 )
+from data_hub_api.utils.url import get_basepath
 
 LOGGER = logging.getLogger(__name__)
 
@@ -31,6 +34,14 @@ SCIETY_ARTICLES_EVALUATIONS_URL = 'https://sciety.org/evaluations/hypothesis:'
 DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY = 'evaluation-summary'
 DOCMAP_EVALUATION_TYPE_FOR_REPLY = 'reply'
 DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE = 'review-article'
+
+INCLUDE_DATA_HUB_CONTENT_REGEX_ENV_VAR = (
+    'DATA_HUB_API_INCLUDE_DATA_HUB_CONTENT_MANUSCRIPT_ID_REGEX'
+)
+
+
+def get_include_data_hub_content_regex() -> str:
+    return os.getenv(INCLUDE_DATA_HUB_CONTENT_REGEX_ENV_VAR, '')
 
 
 def get_elife_evaluation_doi(
@@ -86,6 +97,25 @@ def get_docmap_evaluation_output_content_url(
     return base_url + hypothesis_id + '/content'
 
 
+def get_docmap_evaluation_content_url_for_data_hub(
+    hypothesis_id: str
+) -> str:
+    return (
+        get_basepath()
+        + 'enhanced-preprints/docmaps/v2/evaluation/get-by-evaluation-id?evaluation_id='
+        + hypothesis_id
+    )
+
+
+def get_docmap_evaluation_output_content_for_data_hub(
+    hypothesis_id: str
+) -> DocmapContent:
+    return {
+        'type': 'web-content',
+        'url': get_docmap_evaluation_content_url_for_data_hub(hypothesis_id=hypothesis_id)
+    }
+
+
 def get_docmap_evaluation_output_content(
     base_url: str,
     hypothesis_id: str,
@@ -101,12 +131,47 @@ def get_docmap_evaluation_output_content(
     }
 
 
+def get_docmap_evaluation_content_list(
+    hypothesis_id: str,
+    preprint_doi: str,
+    include_data_hub_content: bool = False
+) -> Sequence[DocmapContent]:
+    content_list = [
+        get_docmap_evaluation_output_content(
+            base_url=HYPOTHESIS_URL,
+            hypothesis_id=hypothesis_id
+        ),
+        get_docmap_evaluation_output_content(
+            base_url=SCIETY_ARTICLES_ACTIVITY_URL,
+            hypothesis_id=hypothesis_id,
+            preprint_doi=preprint_doi
+        ),
+        get_docmap_evaluation_output_content(
+            base_url=SCIETY_ARTICLES_EVALUATIONS_URL,
+            hypothesis_id=hypothesis_id
+        )
+    ]
+    if include_data_hub_content:
+        content_list.append(
+            get_docmap_evaluation_output_content_for_data_hub(hypothesis_id=hypothesis_id)
+        )
+    return content_list
+
+
+def get_include_data_hub_content(manuscript_id: str) -> bool:
+    regex = get_include_data_hub_content_regex()
+    if regex:
+        return bool(re.match(regex, manuscript_id))
+    return False
+
+
 def get_docmap_evaluation_output(
     query_result_item: ApiInput,
     manuscript_version: ApiManuscriptVersionInput,
     hypothesis_id: str,
     evaluation_suffix: str,
     annotation_created_timestamp: datetime,
+    annotation_updated_timestamp: datetime,
     docmap_evaluation_type: str
 ) -> DocmapEvaluationOutput:
     preprint_doi = manuscript_version['preprint_doi']
@@ -115,28 +180,23 @@ def get_docmap_evaluation_output(
         elife_doi=query_result_item['elife_doi'],
         evaluation_suffix=evaluation_suffix
     )
-    return {
+    include_data_hub_content = get_include_data_hub_content(query_result_item['manuscript_id'])
+    evaluation_output: DocmapEvaluationOutput = {
         'type': docmap_evaluation_type,
         'published': annotation_created_timestamp.isoformat(),
+        'updated': annotation_updated_timestamp.isoformat(),
         'doi': elife_evaluation_doi,
         'license': query_result_item['license'],
         'url': get_elife_evaluation_doi_url(elife_evaluation_doi=elife_evaluation_doi),
-        'content': [
-            get_docmap_evaluation_output_content(
-                base_url=HYPOTHESIS_URL,
-                hypothesis_id=hypothesis_id
-            ),
-            get_docmap_evaluation_output_content(
-                base_url=SCIETY_ARTICLES_ACTIVITY_URL,
-                hypothesis_id=hypothesis_id,
-                preprint_doi=preprint_doi
-            ),
-            get_docmap_evaluation_output_content(
-                base_url=SCIETY_ARTICLES_EVALUATIONS_URL,
-                hypothesis_id=hypothesis_id
-            )
-        ]
+        'content': get_docmap_evaluation_content_list(
+            hypothesis_id=hypothesis_id,
+            preprint_doi=preprint_doi,
+            include_data_hub_content=include_data_hub_content
+        )
     }
+    if not include_data_hub_content:
+        del evaluation_output['updated']
+    return evaluation_output
 
 
 def has_tag_containing(tags: list, text: str) -> bool:
@@ -272,6 +332,7 @@ def get_docmap_actions_for_evaluations(
     hypothesis_id: str,
     evaluation_suffix: str,
     annotation_created_timestamp: datetime,
+    annotation_updated_timestamp: datetime,
     docmap_evaluation_type: str
 ) -> DocmapAction:
     return {
@@ -285,6 +346,7 @@ def get_docmap_actions_for_evaluations(
                 manuscript_version=manuscript_version,
                 hypothesis_id=hypothesis_id,
                 annotation_created_timestamp=annotation_created_timestamp,
+                annotation_updated_timestamp=annotation_updated_timestamp,
                 evaluation_suffix=evaluation_suffix,
                 docmap_evaluation_type=docmap_evaluation_type
             )
@@ -351,6 +413,7 @@ def iter_docmap_actions_for_evaluations(
             manuscript_version=manuscript_version,
             hypothesis_id=hypothesis_id,
             annotation_created_timestamp=annotation_created_timestamp,
+            annotation_updated_timestamp=evaluation['annotation_updated_timestamp'],
             evaluation_suffix=evaluation_suffix,
             docmap_evaluation_type=docmap_evaluation_type
         )

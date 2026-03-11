@@ -1,6 +1,9 @@
-from unittest.mock import patch
-from data_hub_api.docmaps.v2.codecs.elife_manuscript import get_elife_manuscript_version_doi
+from typing import Iterable
+from unittest.mock import MagicMock, patch
+
 import pytest
+
+from data_hub_api.docmaps.v2.codecs.elife_manuscript import get_elife_manuscript_version_doi
 from data_hub_api.docmaps.v2.codecs import evaluation as evaluation_module
 from data_hub_api.docmaps.v2.codecs.evaluation import (
     DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY,
@@ -8,12 +11,16 @@ from data_hub_api.docmaps.v2.codecs.evaluation import (
     DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE,
     DOI_ROOT_URL,
     HYPOTHESIS_URL,
+    INCLUDE_DATA_HUB_CONTENT_REGEX_ENV_VAR,
     SCIETY_ARTICLES_ACTIVITY_URL,
     SCIETY_ARTICLES_EVALUATIONS_URL,
     get_docmap_affiliation,
     get_docmap_affiliation_location,
+    get_docmap_evaluation_content_url_for_data_hub,
+    get_docmap_evaluation_output_content_for_data_hub,
     get_docmap_evaluation_input,
     get_docmap_evaluation_output,
+    get_docmap_evaluation_content_list,
     get_docmap_evaluation_output_content,
     get_docmap_evaluation_output_content_url,
     get_docmap_evaluation_participants,
@@ -22,11 +29,14 @@ from data_hub_api.docmaps.v2.codecs.evaluation import (
     get_docmap_evaluation_type_form_tags,
     get_elife_evaluation_doi,
     get_elife_evaluation_doi_url,
+    get_include_data_hub_content,
     get_related_organization_detail,
     get_rp_meca_path_action
 )
+from data_hub_api.utils.url import get_basepath
 from tests.unit_tests.docmaps.v2.test_data import (
     ANNOTATION_CREATED_TIMESTAMP_1,
+    ANNOTATION_UPDATED_TIMESTAMP_1,
     DOCMAPS_QUERY_RESULT_ITEM_1,
     DOI_1,
     EDITOR_DETAIL_1,
@@ -39,6 +49,13 @@ from tests.unit_tests.docmaps.v2.test_data import (
     RP_MECA_PATH_1,
     SENIOR_EDITOR_DETAIL_1
 )
+
+
+@pytest.fixture(name='get_include_data_hub_content_mock', autouse=True)
+def _get_include_data_hub_content_mock() -> Iterable[MagicMock]:
+    with patch.object(evaluation_module, 'get_include_data_hub_content') as mock:
+        mock.return_value = False
+        yield mock
 
 
 class TestGetElifeEvaluationDoi:
@@ -120,6 +137,25 @@ class TestGetDocmapEvaluationOutputContentUrl:
             )
 
 
+class TestGetDocmapEvaluationContentUrlForDataHub:
+    def test_should_populate_the_content_url_correctly_per_given_base_url(self):
+        assert get_docmap_evaluation_content_url_for_data_hub(
+            HYPOTHESIS_ID_1
+        ) == (
+            get_basepath()
+            + 'enhanced-preprints/docmaps/v2/evaluation/get-by-evaluation-id?evaluation_id='
+            + HYPOTHESIS_ID_1
+        )
+
+
+class TestGetDocmapEvaluationOutputContentForDataHub:
+    def test_should_populate_evaluation_output_content_for_data_hub(self):
+        assert get_docmap_evaluation_output_content_for_data_hub(HYPOTHESIS_ID_1) == {
+            'type': 'web-content',
+            'url': get_docmap_evaluation_content_url_for_data_hub(HYPOTHESIS_ID_1)
+        }
+
+
 class TestGetDocmapEvaluationOutputContent:
     def test_should_populate_evaluation_output_content(self):
         hypothesis_id = 'hypothesis_id_1'
@@ -130,6 +166,55 @@ class TestGetDocmapEvaluationOutputContent:
         }
 
 
+class TestGetDocmapEvaluationContentList:
+    def test_should_populate_minimum_evaluation_content_list(self):
+        result = get_docmap_evaluation_content_list(
+            hypothesis_id=HYPOTHESIS_ID_1,
+            preprint_doi=DOI_1
+        )
+        assert result == [
+            {
+                'type': 'web-page',
+                'url': f'{HYPOTHESIS_URL}{HYPOTHESIS_ID_1}'
+            },
+            {
+                'type': 'web-page',
+                'url': (
+                    f'{SCIETY_ARTICLES_ACTIVITY_URL}'
+                    f'{DOI_1}#hypothesis:{HYPOTHESIS_ID_1}'
+                )
+            },
+            {
+                'type': 'web-page',
+                'url': (
+                    f'{SCIETY_ARTICLES_EVALUATIONS_URL}'
+                    f'{HYPOTHESIS_ID_1}/content'
+                )
+            }
+        ]
+
+    def test_should_include_data_hub_content_when_enabled(self):
+        result = get_docmap_evaluation_content_list(
+            hypothesis_id=HYPOTHESIS_ID_1,
+            preprint_doi=DOI_1,
+            include_data_hub_content=True
+        )
+        assert result[-1] == get_docmap_evaluation_output_content_for_data_hub(HYPOTHESIS_ID_1)
+
+
+class TestGetIncludeDataHubContent:
+    def test_should_return_false_by_default(self):
+        assert not get_include_data_hub_content('any_manuscript_id')
+
+    def test_should_return_true_if_manuscript_id_matches_regex(
+        self,
+        mock_env: dict
+    ):
+        mock_env[INCLUDE_DATA_HUB_CONTENT_REGEX_ENV_VAR] = r'^85111$'
+        assert get_include_data_hub_content('85111')
+        assert not get_include_data_hub_content('85200')
+
+
 class TestGetDocmapEvaluationOutput:
     def test_should_populate_evaluation_output(self):
         result = get_docmap_evaluation_output(
@@ -138,6 +223,7 @@ class TestGetDocmapEvaluationOutput:
             hypothesis_id=HYPOTHESIS_ID_1,
             evaluation_suffix=EVALUATION_SUFFIX_1,
             annotation_created_timestamp=ANNOTATION_CREATED_TIMESTAMP_1,
+            annotation_updated_timestamp=ANNOTATION_UPDATED_TIMESTAMP_1,
             docmap_evaluation_type='docmap_evaluation_type_1'
         )
         elife_evaluation_doi = get_elife_evaluation_doi(
@@ -153,27 +239,46 @@ class TestGetDocmapEvaluationOutput:
             'url': get_elife_evaluation_doi_url(
                 elife_evaluation_doi=elife_evaluation_doi,
             ),
-            'content': [
-                {
-                    'type': 'web-page',
-                    'url': f'{HYPOTHESIS_URL}{HYPOTHESIS_ID_1}'
-                },
-                {
-                    'type': 'web-page',
-                    'url': (
-                        f'{SCIETY_ARTICLES_ACTIVITY_URL}'
-                        f'{DOI_1}#hypothesis:{HYPOTHESIS_ID_1}'
-                    )
-                },
-                {
-                    'type': 'web-page',
-                    'url': (
-                        f'{SCIETY_ARTICLES_EVALUATIONS_URL}'
-                        f'{HYPOTHESIS_ID_1}/content'
-                    )
-                }
-            ]
+            'content': get_docmap_evaluation_content_list(
+                hypothesis_id=HYPOTHESIS_ID_1,
+                preprint_doi=DOI_1
+            )
         }
+
+    def test_should_include_data_hub_content_in_evaluation_output_when_enabled(
+        self,
+        get_include_data_hub_content_mock: MagicMock
+    ):
+        get_include_data_hub_content_mock.return_value = True
+        result = get_docmap_evaluation_output(
+            query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1,
+            manuscript_version=MANUSCRIPT_VERSION_1,
+            hypothesis_id=HYPOTHESIS_ID_1,
+            evaluation_suffix=EVALUATION_SUFFIX_1,
+            annotation_created_timestamp=ANNOTATION_CREATED_TIMESTAMP_1,
+            annotation_updated_timestamp=ANNOTATION_UPDATED_TIMESTAMP_1,
+            docmap_evaluation_type='docmap_evaluation_type_1'
+        )
+        assert (
+            get_docmap_evaluation_output_content_for_data_hub(HYPOTHESIS_ID_1)
+            in result['content']
+        )
+
+    def test_should_return_updated_timestamp_if_enabled(
+        self,
+        get_include_data_hub_content_mock: MagicMock
+    ):
+        get_include_data_hub_content_mock.return_value = True
+        result = get_docmap_evaluation_output(
+            query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1,
+            manuscript_version=MANUSCRIPT_VERSION_1,
+            hypothesis_id=HYPOTHESIS_ID_1,
+            evaluation_suffix=EVALUATION_SUFFIX_1,
+            annotation_created_timestamp=ANNOTATION_CREATED_TIMESTAMP_1,
+            annotation_updated_timestamp=ANNOTATION_UPDATED_TIMESTAMP_1,
+            docmap_evaluation_type='docmap_evaluation_type_1'
+        )
+        assert result['updated'] == ANNOTATION_UPDATED_TIMESTAMP_1.isoformat()
 
 
 class TestGetEvaluationsTypeFromTags:
