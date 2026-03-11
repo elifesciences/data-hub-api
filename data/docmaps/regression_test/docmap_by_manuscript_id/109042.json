@@ -54,7 +54,7 @@
                 {
                     "type": "preprint",
                     "doi": "10.6084/m9.figshare.29302004.v2",
-                    "url": "https://rori.figshare.com/articles/preprint/The_i_Matthew_i_effect_and_early-career_setbacks_in_research_funding_-_a_replication_study_RoRI_Working_Paper_No_16_/29302004/2?file=57478351",
+                    "url": "https://rori.figshare.com/articles/preprint/The_i_Matthew_i_effect_and_early-career_setbacks_in_research_funding_-_a_replication_study_RoRI_Working_Paper_No_16_/29302004",
                     "versionIdentifier": "2",
                     "published": "2025-08-28",
                     "content": [
@@ -64,7 +64,275 @@
                         }
                     ]
                 }
-            ]
+            ],
+            "next-step": "_:b1"
+        },
+        "_:b1": {
+            "actions": [
+                {
+                    "participants": [
+                        {
+                            "actor": {
+                                "name": "anonymous",
+                                "type": "person"
+                            },
+                            "role": "peer-reviewer"
+                        }
+                    ],
+                    "outputs": [
+                        {
+                            "type": "review-article",
+                            "published": "2025-10-09T11:49:22.440371+00:00",
+                            "doi": "10.7554/eLife.109042.1.sa3",
+                            "license": "http://creativecommons.org/licenses/by/4.0/",
+                            "url": "https://doi.org/10.7554/eLife.109042.1.sa3",
+                            "content": [
+                                {
+                                    "type": "web-page",
+                                    "url": "https://hypothes.is/a/_1ys0qUFEfCo4s9RnxzELg"
+                                },
+                                {
+                                    "type": "web-page",
+                                    "url": "https://sciety.org/articles/activity/10.6084/m9.figshare.29302004.v2#hypothesis:_1ys0qUFEfCo4s9RnxzELg"
+                                },
+                                {
+                                    "type": "web-page",
+                                    "url": "https://sciety.org/evaluations/hypothesis:_1ys0qUFEfCo4s9RnxzELg/content"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "participants": [
+                        {
+                            "actor": {
+                                "name": "anonymous",
+                                "type": "person"
+                            },
+                            "role": "peer-reviewer"
+                        }
+                    ],
+                    "outputs": [
+                        {
+                            "type": "review-article",
+                            "published": "2025-10-09T11:49:46.046529+00:00",
+                            "doi": "10.7554/eLife.109042.1.sa2",
+                            "license": "http://creativecommons.org/licenses/by/4.0/",
+                            "url": "https://doi.org/10.7554/eLife.109042.1.sa2",
+                            "content": [
+                                {
+                                    "type": "web-page",
+                                    "url": "https://hypothes.is/a/DWkbCKUGEfCNiFO6rKa_gg"
+                                },
+                                {
+                                    "type": "web-page",
+                                    "url": "https://sciety.org/articles/activity/10.6084/m9.figshare.29302004.v2#hypothesis:DWkbCKUGEfCNiFO6rKa_gg"
+                                },
+                                {
+                                    "type": "web-page",
+                                    "url": "https://sciety.org/evaluations/hypothesis:DWkbCKUGEfCNiFO6rKa_gg/content"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "participants": [
+                        {
+                            "actor": {
+                                "name": "anonymous",
+                                "type": "person"
+                            },
+                            "role": "peer-reviewer"
+                        }
+                    ],
+                    "outputs": [
+                        {
+                            "type": "review-article",
+                            "published": "2025-10-09T11:50:51.726017+00:00",
+                            "doi": "10.7554/eLife.109042.1.sa1",
+                            "license": "http://creativecommons.org/licenses/by/4.0/",
+                            "url": "https://doi.org/10.7554/eLife.109042.1.sa1",
+                            "content": [
+                                {
+                                    "type": "web-page",
+                                    "url": "https://hypothes.is/a/NJNNDKUGEfCo5P-eSxrqPg"
+                                },
+                                {
+                                    "type": "web-page",
+                                    "url": "https://sciety.org/articles/activity/10.6084/m9.figshare.29302004.v2#hypothesis:NJNNDKUGEfCo5P-eSxrqPg"
+                                },
+                                {
+                                    "type": "web-page",
+                                    "url": "https://sciety.org/evaluations/hypothesis:NJNNDKUGEfCo5P-eSxrqPg/content"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "participants": [
+                        {
+                            "actor": {
+                                "type": "person",
+                                "id": "https://orcid.org/0000-0001-8332-936X",
+                                "name": "Peter Rodgers",
+                                "firstName": "Peter",
+                                "surname": "Rodgers",
+                                "_relatesToOrganization": "eLife, United Kingdom",
+                                "affiliation": {
+                                    "type": "organization",
+                                    "name": "eLife",
+                                    "location": "Cambridge, United Kingdom"
+                                }
+                            },
+                            "role": "editor"
+                        },
+                        {
+                            "actor": {
+                                "type": "person",
+                                "id": "https://orcid.org/0000-0001-8332-936X",
+                                "name": "Peter Rodgers",
+                                "firstName": "Peter",
+                                "surname": "Rodgers",
+                                "_relatesToOrganization": "eLife, United Kingdom",
+                                "affiliation": {
+                                    "type": "organization",
+                                    "name": "eLife",
+                                    "location": "Cambridge, United Kingdom"
+                                }
+                            },
+                            "role": "senior-editor"
+                        }
+                    ],
+                    "outputs": [
+                        {
+                            "type": "evaluation-summary",
+                            "published": "2025-10-09T11:51:00.451759+00:00",
+                            "doi": "10.7554/eLife.109042.1.sa0",
+                            "license": "http://creativecommons.org/licenses/by/4.0/",
+                            "url": "https://doi.org/10.7554/eLife.109042.1.sa0",
+                            "content": [
+                                {
+                                    "type": "web-page",
+                                    "url": "https://hypothes.is/a/Obm6KKUGEfCEYncaewB10A"
+                                },
+                                {
+                                    "type": "web-page",
+                                    "url": "https://sciety.org/articles/activity/10.6084/m9.figshare.29302004.v2#hypothesis:Obm6KKUGEfCEYncaewB10A"
+                                },
+                                {
+                                    "type": "web-page",
+                                    "url": "https://sciety.org/evaluations/hypothesis:Obm6KKUGEfCEYncaewB10A/content"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "participants": [],
+                    "outputs": [
+                        {
+                            "type": "preprint",
+                            "identifier": "109042",
+                            "doi": "10.7554/eLife.109042.1",
+                            "versionIdentifier": "1",
+                            "license": "http://creativecommons.org/licenses/by/4.0/",
+                            "content": [
+                                {
+                                    "type": "computer-file",
+                                    "url": "s3://prod-elife-epp-meca/reviewed-preprints/109042-v1-meca.zip"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "assertions": [
+                {
+                    "item": {
+                        "type": "preprint",
+                        "doi": "10.6084/m9.figshare.29302004.v2",
+                        "versionIdentifier": "2"
+                    },
+                    "status": "peer-reviewed"
+                }
+            ],
+            "inputs": [
+                {
+                    "type": "preprint",
+                    "doi": "10.6084/m9.figshare.29302004.v2",
+                    "url": "https://rori.figshare.com/articles/preprint/The_i_Matthew_i_effect_and_early-career_setbacks_in_research_funding_-_a_replication_study_RoRI_Working_Paper_No_16_/29302004",
+                    "versionIdentifier": "2"
+                }
+            ],
+            "next-step": "_:b2",
+            "previous-step": "_:b0"
+        },
+        "_:b2": {
+            "actions": [
+                {
+                    "participants": [],
+                    "outputs": [
+                        {
+                            "type": "preprint",
+                            "identifier": "109042",
+                            "doi": "10.7554/eLife.109042.1",
+                            "versionIdentifier": "1",
+                            "license": "http://creativecommons.org/licenses/by/4.0/",
+                            "published": "2025-10-13T14:00:00+00:00",
+                            "partOf": {
+                                "type": "manuscript",
+                                "doi": "10.7554/eLife.109042",
+                                "identifier": "109042",
+                                "subjectDisciplines": [
+                                    "Physics of Living Systems"
+                                ],
+                                "published": "2025-10-13T14:00:00+00:00",
+                                "volumeIdentifier": "14",
+                                "electronicArticleIdentifier": "RP109042",
+                                "complement": []
+                            }
+                        }
+                    ]
+                }
+            ],
+            "assertions": [
+                {
+                    "item": {
+                        "type": "preprint",
+                        "doi": "10.7554/eLife.109042.1",
+                        "versionIdentifier": "1"
+                    },
+                    "status": "manuscript-published"
+                }
+            ],
+            "inputs": [
+                {
+                    "type": "preprint",
+                    "doi": "10.6084/m9.figshare.29302004.v2",
+                    "url": "https://rori.figshare.com/articles/preprint/The_i_Matthew_i_effect_and_early-career_setbacks_in_research_funding_-_a_replication_study_RoRI_Working_Paper_No_16_/29302004",
+                    "versionIdentifier": "2"
+                },
+                {
+                    "type": "review-article",
+                    "doi": "10.7554/eLife.109042.1.sa3"
+                },
+                {
+                    "type": "review-article",
+                    "doi": "10.7554/eLife.109042.1.sa2"
+                },
+                {
+                    "type": "review-article",
+                    "doi": "10.7554/eLife.109042.1.sa1"
+                },
+                {
+                    "type": "evaluation-summary",
+                    "doi": "10.7554/eLife.109042.1.sa0"
+                }
+            ],
+            "previous-step": "_:b1"
         }
     }
 }
