@@ -1,18 +1,15 @@
 FROM python:3.10-slim AS base
 
 USER root
-ENV PIP_NO_CACHE_DIR=1
-
 WORKDIR /app/api
 
-COPY requirements.build.txt ./
-RUN pip install --disable-pip-version-check -r requirements.build.txt
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
 COPY requirements.txt ./
-RUN pip install --disable-pip-version-check -r requirements.txt
+RUN uv pip install --system -r requirements.txt
 
 COPY requirements.dev.txt ./
-RUN pip install --disable-pip-version-check -r requirements.dev.txt
+RUN uv pip install --system -r requirements.dev.txt
 
 COPY .pylintrc .flake8 mypy.ini ./
 COPY data_hub_api ./data_hub_api
