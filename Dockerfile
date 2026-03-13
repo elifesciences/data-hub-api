@@ -1,18 +1,16 @@
 FROM python:3.10-slim AS base
 
 USER root
-ENV PIP_NO_CACHE_DIR=1
-
 WORKDIR /app/api
 
-COPY requirements.build.txt ./
-RUN pip install --disable-pip-version-check -r requirements.build.txt
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
-COPY requirements.txt ./
-RUN pip install --disable-pip-version-check -r requirements.txt
+ENV VENV=/opt/venv
+ENV VIRTUAL_ENV=${VENV} PYTHONUSERBASE=${VENV} PATH=${VENV}/bin:$PATH
 
-COPY requirements.dev.txt ./
-RUN pip install --disable-pip-version-check -r requirements.dev.txt
+COPY pyproject.toml uv.lock ./
+RUN uv sync --active --frozen \
+  --dev
 
 COPY .pylintrc .flake8 mypy.ini ./
 COPY data_hub_api ./data_hub_api
