@@ -3,7 +3,7 @@ name = "data-hub-api"
 version = "0.0.0"
 description = "Data Hup DocMaps API"
 readme = "README.md"
-requires-python = ">=3.10.15"
+requires-python = ">=3.11"
 dependencies = [
     "fastapi>=0.128.8",
     "google-cloud-bigquery>=3.40.1",
