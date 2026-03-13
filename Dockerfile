@@ -5,11 +5,12 @@ WORKDIR /app/api
 
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
-COPY requirements.txt ./
-RUN uv pip install --system -r requirements.txt
+ENV VENV=/opt/venv
+ENV VIRTUAL_ENV=${VENV} PYTHONUSERBASE=${VENV} PATH=${VENV}/bin:$PATH
 
-COPY requirements.dev.txt ./
-RUN uv pip install --system -r requirements.dev.txt
+COPY pyproject.toml uv.lock ./
+RUN uv sync --active --frozen \
+  --dev
 
 COPY .pylintrc .flake8 mypy.ini ./
 COPY data_hub_api ./data_hub_api
