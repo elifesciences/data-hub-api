@@ -1,8 +1,10 @@
 import logging
+from time import monotonic
 from typing import Any, Iterable, Optional, Sequence
 
 from google.cloud import bigquery
 from google.cloud.bigquery.table import RowIterator
+from google.cloud.bigquery_storage import BigQueryReadClient
 
 LOGGER = logging.getLogger(__name__)
 
@@ -18,8 +20,10 @@ def get_bq_result_from_bq_query(
 ) -> RowIterator:
     client = get_bq_client(project_name=project_name)
     job_config = bigquery.QueryJobConfig(query_parameters=query_parameters)
-    query_job = client.query(query, job_config=job_config)  # Make an API request.
+    t0 = monotonic()
+    query_job = client.query(query, job_config=job_config)
     bq_result = query_job.result()  # Waits for query to finish
+    LOGGER.info('BQ query execution finished in %.3f seconds', monotonic() - t0)
     LOGGER.debug('bq_result: %r', bq_result)
     return bq_result
 
@@ -34,6 +38,9 @@ def iter_dict_from_bq_query(
         query=query,
         query_parameters=query_parameters
     )
-    for row in bq_result:
-        LOGGER.debug('row: %r', row)
-        yield dict(row.items())
+    t0 = monotonic()
+    bqstorage_client = BigQueryReadClient()
+    for batch in bq_result.to_arrow_iterable(bqstorage_client=bqstorage_client):
+        LOGGER.debug('batch: %r', batch)
+        yield from batch.to_pylist()
+    LOGGER.info('BQ data transfer finished in %.3f seconds', monotonic() - t0)
