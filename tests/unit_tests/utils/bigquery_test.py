@@ -14,6 +14,12 @@ def _bigquery_mock() -> Iterable[MagicMock]:
         yield mock
 
 
+@pytest.fixture(name="bq_storage_client_mock", autouse=True)
+def _bq_storage_client_mock() -> Iterable[MagicMock]:
+    with patch.object(bigquery_module, "BigQueryReadClient") as mock:
+        yield mock
+
+
 @pytest.fixture(name="bq_client_mock")
 def _bq_client_mock(bigquery_mock: MagicMock) -> MagicMock:
     return bigquery_mock.Client
