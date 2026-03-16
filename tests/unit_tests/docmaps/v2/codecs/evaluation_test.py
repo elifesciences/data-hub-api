@@ -151,7 +151,7 @@ class TestGetDocmapEvaluationContentUrlForDataHub:
 class TestGetDocmapEvaluationOutputContentForDataHub:
     def test_should_populate_evaluation_output_content_for_data_hub(self):
         assert get_docmap_evaluation_output_content_for_data_hub(HYPOTHESIS_ID_1) == {
-            'type': 'web-content',
+            'type': 'web-page',
             'url': get_docmap_evaluation_content_url_for_data_hub(HYPOTHESIS_ID_1)
         }
 

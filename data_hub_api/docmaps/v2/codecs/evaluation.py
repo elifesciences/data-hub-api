@@ -111,7 +111,7 @@ def get_docmap_evaluation_output_content_for_data_hub(
     hypothesis_id: str
 ) -> DocmapContent:
     return {
-        'type': 'web-content',
+        'type': 'web-page',
         'url': get_docmap_evaluation_content_url_for_data_hub(hypothesis_id=hypothesis_id)
     }
 
