@@ -36,6 +36,7 @@ MANUSCRIPT_ID_LIST = [
     # have Author Response with different creation version
     '110004',  # new bioRxiv preprint server prefix with evaluations
     '110458',  # new medRxiv preprint server prefix
+    '90679',  # Has deleted annotations
 ]
 
 
