@@ -5,5 +5,3 @@ venv
 .test_data/
 
 ignore_this_*
-
-.claude
