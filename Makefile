@@ -58,6 +58,9 @@ dev-update-regression-test-data:
 dev-regression-test:
 	$(PYTHON) -m pytest -p no:cacheprovider $(ARGS) tests/regression_tests
 
+dev-regression-test-cli:
+	$(PYTHON) -m data_hub_api.regression_test_cli $(ARGS)
+
 dev-regression-test-detailed-view:
 	$(PYTHON) -m pytest -p no:cacheprovider -vv $(ARGS) tests/regression_tests
 
