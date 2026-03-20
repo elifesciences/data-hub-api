@@ -83,6 +83,7 @@
                         {
                             "type": "review-article",
                             "published": "2023-11-27T10:30:19.904618+00:00",
+                            "updated": "2023-11-27T10:30:19.904618+00:00",
                             "doi": "10.7554/eLife.91729.1.sa0",
                             "license": "http://creativecommons.org/licenses/by/4.0/",
                             "url": "https://doi.org/10.7554/eLife.91729.1.sa0",
@@ -98,6 +99,10 @@
                                 {
                                     "type": "web-page",
                                     "url": "https://sciety.org/evaluations/hypothesis:9sYBoI0PEe6mwY8sENNLhg/content"
+                                },
+                                {
+                                    "type": "web-page",
+                                    "url": "https://data-hub-api.elifesciences.org/enhanced-preprints/docmaps/v2/evaluation/get-by-evaluation-id?evaluation_id=9sYBoI0PEe6mwY8sENNLhg"
                                 }
                             ]
                         }
@@ -117,6 +122,7 @@
                         {
                             "type": "review-article",
                             "published": "2023-11-27T10:30:20.699198+00:00",
+                            "updated": "2023-11-27T10:30:20.699198+00:00",
                             "doi": "10.7554/eLife.91729.1.sa1",
                             "license": "http://creativecommons.org/licenses/by/4.0/",
                             "url": "https://doi.org/10.7554/eLife.91729.1.sa1",
@@ -132,6 +138,10 @@
                                 {
                                     "type": "web-page",
                                     "url": "https://sciety.org/evaluations/hypothesis:9z4WuI0PEe6z1fNX0UgbVw/content"
+                                },
+                                {
+                                    "type": "web-page",
+                                    "url": "https://data-hub-api.elifesciences.org/enhanced-preprints/docmaps/v2/evaluation/get-by-evaluation-id?evaluation_id=9z4WuI0PEe6z1fNX0UgbVw"
                                 }
                             ]
                         }
@@ -180,6 +190,7 @@
                         {
                             "type": "evaluation-summary",
                             "published": "2023-11-27T10:30:21.467627+00:00",
+                            "updated": "2023-11-27T10:30:21.467627+00:00",
                             "doi": "10.7554/eLife.91729.1.sa2",
                             "license": "http://creativecommons.org/licenses/by/4.0/",
                             "url": "https://doi.org/10.7554/eLife.91729.1.sa2",
@@ -195,6 +206,10 @@
                                 {
                                     "type": "web-page",
                                     "url": "https://sciety.org/evaluations/hypothesis:97NROo0PEe6eqKOTcQoaaw/content"
+                                },
+                                {
+                                    "type": "web-page",
+                                    "url": "https://data-hub-api.elifesciences.org/enhanced-preprints/docmaps/v2/evaluation/get-by-evaluation-id?evaluation_id=97NROo0PEe6eqKOTcQoaaw"
                                 }
                             ]
                         }
@@ -377,6 +392,7 @@
                         {
                             "type": "review-article",
                             "published": "2024-03-01T06:44:45.857198+00:00",
+                            "updated": "2024-03-01T06:44:45.857198+00:00",
                             "doi": "10.7554/eLife.91729.2.sa0",
                             "license": "http://creativecommons.org/licenses/by/4.0/",
                             "url": "https://doi.org/10.7554/eLife.91729.2.sa0",
@@ -392,6 +408,10 @@
                                 {
                                     "type": "web-page",
                                     "url": "https://sciety.org/evaluations/hypothesis:MRhb4teXEe6O0aMGUpzOqA/content"
+                                },
+                                {
+                                    "type": "web-page",
+                                    "url": "https://data-hub-api.elifesciences.org/enhanced-preprints/docmaps/v2/evaluation/get-by-evaluation-id?evaluation_id=MRhb4teXEe6O0aMGUpzOqA"
                                 }
                             ]
                         }
@@ -440,6 +460,7 @@
                         {
                             "type": "evaluation-summary",
                             "published": "2024-03-01T06:44:47.011786+00:00",
+                            "updated": "2024-03-01T06:44:47.011786+00:00",
                             "doi": "10.7554/eLife.91729.2.sa1",
                             "license": "http://creativecommons.org/licenses/by/4.0/",
                             "url": "https://doi.org/10.7554/eLife.91729.2.sa1",
@@ -455,6 +476,10 @@
                                 {
                                     "type": "web-page",
                                     "url": "https://sciety.org/evaluations/hypothesis:McdysteXEe6skDcHpwAucg/content"
+                                },
+                                {
+                                    "type": "web-page",
+                                    "url": "https://data-hub-api.elifesciences.org/enhanced-preprints/docmaps/v2/evaluation/get-by-evaluation-id?evaluation_id=McdysteXEe6skDcHpwAucg"
                                 }
                             ]
                         }
@@ -466,6 +491,7 @@
                         {
                             "type": "reply",
                             "published": "2024-03-01T13:33:24.606418+00:00",
+                            "updated": "2024-03-01T13:33:24.606418+00:00",
                             "doi": "10.7554/eLife.91729.2.sa2",
                             "license": "http://creativecommons.org/licenses/by/4.0/",
                             "url": "https://doi.org/10.7554/eLife.91729.2.sa2",
@@ -481,6 +507,10 @@
                                 {
                                     "type": "web-page",
                                     "url": "https://sciety.org/evaluations/hypothesis:R5_exNfQEe63eIuJD69VLA/content"
+                                },
+                                {
+                                    "type": "web-page",
+                                    "url": "https://data-hub-api.elifesciences.org/enhanced-preprints/docmaps/v2/evaluation/get-by-evaluation-id?evaluation_id=R5_exNfQEe63eIuJD69VLA"
                                 }
                             ]
                         }
