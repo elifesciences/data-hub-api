@@ -14,11 +14,10 @@ def get_bq_client(project_name: str) -> bigquery.Client:
 
 
 def get_bq_result_from_bq_query(
-    project_name: str,
+    client: bigquery.Client,
     query: str,
     query_parameters: Optional[Sequence[Any]] = tuple()
 ) -> RowIterator:
-    client = get_bq_client(project_name=project_name)
     job_config = bigquery.QueryJobConfig(query_parameters=query_parameters)
     t0 = monotonic()
     query_job = client.query(query, job_config=job_config)
@@ -33,15 +32,17 @@ def iter_dict_from_bq_query(
     query: str,
     query_parameters: Optional[Sequence[Any]] = tuple()
 ) -> Iterable[dict]:
-    bq_result = get_bq_result_from_bq_query(
-        project_name=project_name,
-        query=query,
-        query_parameters=query_parameters
-    )
-    t0 = monotonic()
-    bqstorage_client = BigQueryReadClient()
-    with bqstorage_client:
-        for batch in bq_result.to_arrow_iterable(bqstorage_client=bqstorage_client):
-            LOGGER.debug('batch: %r', batch)
-            yield from batch.to_pylist()
-    LOGGER.info('BQ data transfer finished in %.3f seconds', monotonic() - t0)
+    bq_client = get_bq_client(project_name=project_name)
+    with bq_client:
+        bq_result = get_bq_result_from_bq_query(
+            client=bq_client,
+            query=query,
+            query_parameters=query_parameters
+        )
+        t0 = monotonic()
+        bqstorage_client = BigQueryReadClient()
+        with bqstorage_client:
+            for batch in bq_result.to_arrow_iterable(bqstorage_client=bqstorage_client):
+                LOGGER.debug('batch: %r', batch)
+                yield from batch.to_pylist()
+        LOGGER.info('BQ data transfer finished in %.3f seconds', monotonic() - t0)

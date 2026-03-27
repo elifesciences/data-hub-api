@@ -53,3 +53,15 @@ class TestIterDictFromBqQuery:
         ]
         list(iter_dict_from_bq_query(project_name="project1", query="query1"))
         bq_storage_client_mock.return_value.__exit__.assert_called_once()
+
+    def test_should_close_bq_client_after_query(
+        self,
+        bq_client_mock: MagicMock
+    ):
+        mock_query_job = bq_client_mock.return_value.query.return_value
+        mock_result = mock_query_job.result.return_value
+        mock_result.to_arrow_iterable.return_value = [
+            pa.RecordBatch.from_pylist([{"key1": "value1"}])
+        ]
+        list(iter_dict_from_bq_query(project_name="project1", query="query1"))
+        bq_client_mock.return_value.__exit__.assert_called_once()
