@@ -389,7 +389,7 @@ wheels = [
 
 [[package]]
 name = "google-cloud-bigquery-storage"
-version = "2.36.2"
+version = "2.37.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "google-api-core", extra = ["grpc"] },
@@ -398,9 +398,9 @@ dependencies = [
     { name = "proto-plus" },
     { name = "protobuf" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/e0/fa/877e0059349369be38a64586b135c59ceadb87d0386084043d8c440ef929/google_cloud_bigquery_storage-2.36.2.tar.gz", hash = "sha256:ad49d8c09ad6cd82da4efe596fcfcdbc1458bf05b93915e3c5c00f1e700ae128", size = 308672, upload-time = "2026-02-19T16:03:10.544Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/13/31/5c6fa9e7b8e266a765ec80d13a2b2852cb0a6d3733572e7dbdc0cb39003c/google_cloud_bigquery_storage-2.37.0.tar.gz", hash = "sha256:f88ee7f1e49db1e639da3d9a8b79835ca4bc47afbb514fb2adfc0ccb41a7fd97", size = 310578, upload-time = "2026-03-30T22:51:13.418Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/1f/07/62dbe78ef773569be0a1d2c1b845e9214889b404e506126519b4d33ee999/google_cloud_bigquery_storage-2.36.2-py3-none-any.whl", hash = "sha256:823a73db0c4564e8ad3eedcfd5049f3d5aa41775267863b5627211ec36be2dbf", size = 304398, upload-time = "2026-02-19T16:02:55.112Z" },
+    { url = "https://files.pythonhosted.org/packages/74/0e/2950d4d0160300f51c7397a080b1685d3e25b40badb2c96f03d58d0ee868/google_cloud_bigquery_storage-2.37.0-py3-none-any.whl", hash = "sha256:1e319c27ef60fc31030f6e0b52e5e891e1cdd50551effe8c6f673a4c3c56fcb6", size = 306678, upload-time = "2026-03-30T22:47:42.333Z" },
 ]
 
 [[package]]
