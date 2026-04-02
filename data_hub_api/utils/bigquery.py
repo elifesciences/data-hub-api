@@ -44,5 +44,7 @@ def iter_dict_from_bq_query(
         with bqstorage_client:
             for batch in bq_result.to_arrow_iterable(bqstorage_client=bqstorage_client):
                 LOGGER.debug('batch: %r', batch)
-                yield from batch.to_pylist()
+                rows = batch.to_pylist()
+                del batch
+                yield from rows
         LOGGER.info('BQ data transfer finished in %.3f seconds', monotonic() - t0)
