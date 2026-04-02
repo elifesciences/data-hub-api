@@ -1,3 +1,4 @@
+import gc
 from time import monotonic
 from threading import Lock
 from typing import Callable, Optional,  Protocol, TypeVar
@@ -38,6 +39,9 @@ class InMemorySingleObjectCache(SingleObjectCache[T]):
             result = self._value
             if result is not None and not self._is_max_age_reached(now):
                 return result
+            self._value = None
+            del result
+            gc.collect()
             result = load_fn()
             assert result is not None
             self._value = result
