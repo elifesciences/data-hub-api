@@ -1,3 +1,5 @@
+import ctypes
+import ctypes.util
 import gc
 from time import monotonic
 from threading import Lock
@@ -5,6 +7,15 @@ from typing import Callable, Optional,  Protocol, TypeVar
 
 
 T = TypeVar('T')
+
+
+def _malloc_trim() -> None:
+    libc_name = ctypes.util.find_library('c')
+    if libc_name:
+        try:
+            ctypes.CDLL(libc_name).malloc_trim(0)
+        except AttributeError:
+            pass
 
 
 class SingleObjectCache(Protocol[T]):
@@ -42,6 +53,7 @@ class InMemorySingleObjectCache(SingleObjectCache[T]):
             self._value = None
             del result
             gc.collect()
+            _malloc_trim()
             result = load_fn()
             assert result is not None
             self._value = result
