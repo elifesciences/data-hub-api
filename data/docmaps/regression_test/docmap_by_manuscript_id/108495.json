@@ -399,7 +399,225 @@
                     ]
                 }
             ],
+            "next-step": "_:b4",
             "previous-step": "_:b2"
+        },
+        "_:b4": {
+            "actions": [
+                {
+                    "participants": [],
+                    "outputs": [
+                        {
+                            "type": "reply",
+                            "published": "2026-04-01T14:01:06.585957+00:00",
+                            "updated": "2026-04-01T14:01:06.585957+00:00",
+                            "doi": "10.7554/eLife.108495.2.sa0",
+                            "license": "http://creativecommons.org/licenses/by/4.0/",
+                            "url": "https://doi.org/10.7554/eLife.108495.2.sa0",
+                            "content": [
+                                {
+                                    "type": "web-page",
+                                    "url": "https://hypothes.is/a/OnwiLi3TEfGKbYdvMHe3FA"
+                                },
+                                {
+                                    "type": "web-page",
+                                    "url": "https://sciety.org/articles/activity/10.31234/osf.io/8au9j_v5#hypothesis:OnwiLi3TEfGKbYdvMHe3FA"
+                                },
+                                {
+                                    "type": "web-page",
+                                    "url": "https://sciety.org/evaluations/hypothesis:OnwiLi3TEfGKbYdvMHe3FA/content"
+                                },
+                                {
+                                    "type": "web-page",
+                                    "url": "https://data-hub-api.elifesciences.org/enhanced-preprints/docmaps/v2/evaluation/get-by-evaluation-id?evaluation_id=OnwiLi3TEfGKbYdvMHe3FA"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "participants": [
+                        {
+                            "actor": {
+                                "name": "anonymous",
+                                "type": "person"
+                            },
+                            "role": "peer-reviewer"
+                        }
+                    ],
+                    "outputs": [
+                        {
+                            "type": "review-article",
+                            "published": "2026-04-01T14:01:16.681282+00:00",
+                            "updated": "2026-04-01T14:01:16.681282+00:00",
+                            "doi": "10.7554/eLife.108495.2.sa1",
+                            "license": "http://creativecommons.org/licenses/by/4.0/",
+                            "url": "https://doi.org/10.7554/eLife.108495.2.sa1",
+                            "content": [
+                                {
+                                    "type": "web-page",
+                                    "url": "https://hypothes.is/a/QKCxJC3TEfG9nr-H2Uxp1g"
+                                },
+                                {
+                                    "type": "web-page",
+                                    "url": "https://sciety.org/articles/activity/10.31234/osf.io/8au9j_v5#hypothesis:QKCxJC3TEfG9nr-H2Uxp1g"
+                                },
+                                {
+                                    "type": "web-page",
+                                    "url": "https://sciety.org/evaluations/hypothesis:QKCxJC3TEfG9nr-H2Uxp1g/content"
+                                },
+                                {
+                                    "type": "web-page",
+                                    "url": "https://data-hub-api.elifesciences.org/enhanced-preprints/docmaps/v2/evaluation/get-by-evaluation-id?evaluation_id=QKCxJC3TEfG9nr-H2Uxp1g"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "participants": [
+                        {
+                            "actor": {
+                                "name": "anonymous",
+                                "type": "person"
+                            },
+                            "role": "peer-reviewer"
+                        }
+                    ],
+                    "outputs": [
+                        {
+                            "type": "review-article",
+                            "published": "2026-04-01T14:01:25.812490+00:00",
+                            "updated": "2026-04-01T14:01:25.812490+00:00",
+                            "doi": "10.7554/eLife.108495.2.sa2",
+                            "license": "http://creativecommons.org/licenses/by/4.0/",
+                            "url": "https://doi.org/10.7554/eLife.108495.2.sa2",
+                            "content": [
+                                {
+                                    "type": "web-page",
+                                    "url": "https://hypothes.is/a/RfTEEi3TEfGPQMsAHIY7pA"
+                                },
+                                {
+                                    "type": "web-page",
+                                    "url": "https://sciety.org/articles/activity/10.31234/osf.io/8au9j_v5#hypothesis:RfTEEi3TEfGPQMsAHIY7pA"
+                                },
+                                {
+                                    "type": "web-page",
+                                    "url": "https://sciety.org/evaluations/hypothesis:RfTEEi3TEfGPQMsAHIY7pA/content"
+                                },
+                                {
+                                    "type": "web-page",
+                                    "url": "https://data-hub-api.elifesciences.org/enhanced-preprints/docmaps/v2/evaluation/get-by-evaluation-id?evaluation_id=RfTEEi3TEfGPQMsAHIY7pA"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "participants": [
+                        {
+                            "actor": {
+                                "type": "person",
+                                "id": "https://orcid.org/0000-0002-3616-2859",
+                                "name": "Tessa Dekker",
+                                "firstName": "Tessa",
+                                "surname": "Dekker",
+                                "_relatesToOrganization": "University College London, United Kingdom",
+                                "affiliation": {
+                                    "id": "https://ror.org/02jx3x895",
+                                    "type": "organization",
+                                    "name": "University College London",
+                                    "location": "London, United Kingdom"
+                                }
+                            },
+                            "role": "editor"
+                        },
+                        {
+                            "actor": {
+                                "type": "person",
+                                "id": "https://orcid.org/0000-0002-6018-0483",
+                                "name": "Joshua Gold",
+                                "firstName": "Joshua",
+                                "_middleName": "I",
+                                "surname": "Gold",
+                                "_relatesToOrganization": "University of Pennsylvania, United States of America",
+                                "affiliation": {
+                                    "id": "https://ror.org/00b30xv10",
+                                    "type": "organization",
+                                    "name": "University of Pennsylvania",
+                                    "location": "Philadelphia, United States of America"
+                                }
+                            },
+                            "role": "senior-editor"
+                        }
+                    ],
+                    "outputs": [
+                        {
+                            "type": "evaluation-summary",
+                            "published": "2026-04-01T14:01:30.170012+00:00",
+                            "updated": "2026-04-01T14:01:30.170012+00:00",
+                            "doi": "10.7554/eLife.108495.2.sa3",
+                            "license": "http://creativecommons.org/licenses/by/4.0/",
+                            "url": "https://doi.org/10.7554/eLife.108495.2.sa3",
+                            "content": [
+                                {
+                                    "type": "web-page",
+                                    "url": "https://hypothes.is/a/SIkMxC3TEfGhZocRu3yd9Q"
+                                },
+                                {
+                                    "type": "web-page",
+                                    "url": "https://sciety.org/articles/activity/10.31234/osf.io/8au9j_v5#hypothesis:SIkMxC3TEfGhZocRu3yd9Q"
+                                },
+                                {
+                                    "type": "web-page",
+                                    "url": "https://sciety.org/evaluations/hypothesis:SIkMxC3TEfGhZocRu3yd9Q/content"
+                                },
+                                {
+                                    "type": "web-page",
+                                    "url": "https://data-hub-api.elifesciences.org/enhanced-preprints/docmaps/v2/evaluation/get-by-evaluation-id?evaluation_id=SIkMxC3TEfGhZocRu3yd9Q"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "participants": [],
+                    "outputs": [
+                        {
+                            "type": "preprint",
+                            "identifier": "108495",
+                            "doi": "10.7554/eLife.108495.2",
+                            "versionIdentifier": "2",
+                            "license": "http://creativecommons.org/licenses/by/4.0/",
+                            "content": [
+                                {
+                                    "type": "computer-file",
+                                    "url": "s3://prod-elife-epp-meca/reviewed-preprints/108495-v2-meca.zip"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "assertions": [
+                {
+                    "item": {
+                        "type": "preprint",
+                        "doi": "10.31234/osf.io/8au9j_v5",
+                        "versionIdentifier": "5"
+                    },
+                    "status": "revised"
+                }
+            ],
+            "inputs": [
+                {
+                    "type": "preprint",
+                    "doi": "10.31234/osf.io/8au9j_v5",
+                    "url": "https://osf.io/preprints/psyarxiv/8au9j_v5",
+                    "versionIdentifier": "5"
+                }
+            ],
+            "previous-step": "_:b3"
         }
     }
 }
