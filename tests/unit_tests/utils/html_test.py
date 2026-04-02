@@ -1,5 +1,5 @@
 import textwrap
-from data_hub_api.utils.html import convert_plain_text_to_html
+from data_hub_api.utils.html import convert_html_to_xhtml, convert_plain_text_to_html
 
 
 class TestConvertPlainTextToHtml:
@@ -74,3 +74,34 @@ class TestConvertPlainTextToHtml:
             <p>\t this is the first line<br/>
             \t this is the second line</p>
         ''').strip()
+
+
+class TestConvertHtmlToXhtml:
+    def test_should_return_unchanged_html_with_no_issues(self):
+        assert convert_html_to_xhtml('<p>hello world</p>') == '<p>hello world</p>'
+
+    def test_should_self_close_br_tag(self):
+        assert convert_html_to_xhtml('<p>line 1<br>\nline 2</p>') == '<p>line 1<br/>\nline 2</p>'
+
+    def test_should_self_close_img_tag(self):
+        assert convert_html_to_xhtml(
+            '<p><img alt="alt" src="https://example.com/img.png"></p>'
+        ) == '<p><img alt="alt" src="https://example.com/img.png"/></p>'
+
+    def test_should_self_close_hr_tag(self):
+        assert convert_html_to_xhtml('<hr>') == '<hr/>'
+
+    def test_should_not_alter_already_self_closed_tags(self):
+        assert convert_html_to_xhtml('<br/>') == '<br/>'
+
+    def test_should_replace_nbsp_with_numeric_character_reference(self):
+        assert convert_html_to_xhtml('hello&nbsp;world') == 'hello&#160;world'
+
+    def test_should_preserve_xml_builtin_entities(self):
+        assert convert_html_to_xhtml('a&lt;b&gt;c&amp;d') == 'a&lt;b&gt;c&amp;d'
+
+    def test_should_not_alter_non_void_elements(self):
+        assert convert_html_to_xhtml('<p>text</p>') == '<p>text</p>'
+
+    def test_should_not_alter_closing_tags(self):
+        assert convert_html_to_xhtml('<p>text</p>') == '<p>text</p>'

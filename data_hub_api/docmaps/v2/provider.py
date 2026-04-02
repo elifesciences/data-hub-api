@@ -10,6 +10,7 @@ import nh3
 import objsize
 from data_hub_api.docmaps.v2.codecs.docmaps import get_docmap_item_for_query_result_item
 from data_hub_api.docmaps.v2.api_input_typing import ApiInput
+from data_hub_api.utils.html import convert_html_to_xhtml
 
 from data_hub_api.docmaps.v2.docmap_typing import (
     Docmap
@@ -37,7 +38,7 @@ def get_html_formatted_evaluation_content(
         extensions=["mdx_linkify"]
     )
     sanitized_html = nh3.clean(html, link_rel=None)
-    return sanitized_html
+    return convert_html_to_xhtml(sanitized_html)
 
 
 class DocmapsProvider:

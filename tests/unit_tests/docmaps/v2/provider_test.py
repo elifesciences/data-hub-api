@@ -93,7 +93,17 @@ class TestGetHtmlFormattedEvaluationContent:
     def test_should_add_line_break_for_two_spaces_before_newline(self):
         assert get_html_formatted_evaluation_content(
             f'line 1  {LINE_FEED}line 2'
-        ) == f'<p>line 1<br>{LINE_FEED}line 2</p>'
+        ) == f'<p>line 1<br/>{LINE_FEED}line 2</p>'
+
+    def test_should_self_close_img_tag(self):
+        assert get_html_formatted_evaluation_content(
+            '![alt text](https://example.com/img.png)'
+        ) == '<p><img alt="alt text" src="https://example.com/img.png"/></p>'
+
+    def test_should_replace_nbsp_entity_with_numeric_character_reference(self):
+        assert get_html_formatted_evaluation_content(
+            'hello&nbsp;world'
+        ) == '<p>hello&#160;world</p>'
 
     def test_should_remove_two_spaces_before_blank_line(self):
         assert get_html_formatted_evaluation_content(
