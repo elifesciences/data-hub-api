@@ -617,7 +617,72 @@
                     "versionIdentifier": "5"
                 }
             ],
+            "next-step": "_:b5",
             "previous-step": "_:b3"
+        },
+        "_:b5": {
+            "actions": [
+                {
+                    "participants": [],
+                    "outputs": [
+                        {
+                            "type": "preprint",
+                            "identifier": "108495",
+                            "doi": "10.7554/eLife.108495.2",
+                            "versionIdentifier": "2",
+                            "license": "http://creativecommons.org/licenses/by/4.0/",
+                            "published": "2026-04-02T14:00:00+00:00",
+                            "partOf": {
+                                "type": "manuscript",
+                                "doi": "10.7554/eLife.108495",
+                                "identifier": "108495",
+                                "subjectDisciplines": [
+                                    "Neuroscience"
+                                ],
+                                "published": "2025-10-22T14:00:00+00:00",
+                                "volumeIdentifier": "14",
+                                "electronicArticleIdentifier": "RP108495",
+                                "complement": []
+                            }
+                        }
+                    ]
+                }
+            ],
+            "assertions": [
+                {
+                    "item": {
+                        "type": "preprint",
+                        "doi": "10.7554/eLife.108495.2",
+                        "versionIdentifier": "2"
+                    },
+                    "status": "manuscript-published"
+                }
+            ],
+            "inputs": [
+                {
+                    "type": "preprint",
+                    "doi": "10.31234/osf.io/8au9j_v5",
+                    "url": "https://osf.io/preprints/psyarxiv/8au9j_v5",
+                    "versionIdentifier": "5"
+                },
+                {
+                    "type": "reply",
+                    "doi": "10.7554/eLife.108495.2.sa0"
+                },
+                {
+                    "type": "review-article",
+                    "doi": "10.7554/eLife.108495.2.sa1"
+                },
+                {
+                    "type": "review-article",
+                    "doi": "10.7554/eLife.108495.2.sa2"
+                },
+                {
+                    "type": "evaluation-summary",
+                    "doi": "10.7554/eLife.108495.2.sa3"
+                }
+            ],
+            "previous-step": "_:b4"
         }
     }
 }
