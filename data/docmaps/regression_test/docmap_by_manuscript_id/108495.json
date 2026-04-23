@@ -682,7 +682,56 @@
                     "doi": "10.7554/eLife.108495.2.sa3"
                 }
             ],
+            "next-step": "_:b6",
             "previous-step": "_:b4"
+        },
+        "_:b6": {
+            "actions": [
+                {
+                    "participants": [],
+                    "outputs": [
+                        {
+                            "type": "preprint",
+                            "identifier": "108495",
+                            "doi": "10.7554/eLife.108495.3",
+                            "versionIdentifier": "3",
+                            "license": "http://creativecommons.org/licenses/by/4.0/"
+                        }
+                    ]
+                }
+            ],
+            "assertions": [
+                {
+                    "item": {
+                        "type": "preprint",
+                        "doi": "10.31234/osf.io/8au9j_v7"
+                    },
+                    "status": "under-review",
+                    "happened": "2026-04-23T04:38:35+00:00"
+                },
+                {
+                    "item": {
+                        "type": "preprint",
+                        "doi": "10.7554/eLife.108495.3",
+                        "versionIdentifier": "3"
+                    },
+                    "status": "draft"
+                }
+            ],
+            "inputs": [
+                {
+                    "type": "preprint",
+                    "doi": "10.31234/osf.io/8au9j_v7",
+                    "url": "https://osf.io/preprints/psyarxiv/8au9j_v7",
+                    "content": [
+                        {
+                            "type": "computer-file",
+                            "url": "s3://prod-elife-epp-meca/108495-v3-meca.zip"
+                        }
+                    ]
+                }
+            ],
+            "previous-step": "_:b5"
         }
     }
 }
