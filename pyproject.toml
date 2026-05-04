@@ -16,7 +16,7 @@ dependencies = [
     "pandas>=2.3.3",
     "pyarrow>=24.0.0",
     "types-python-dateutil>=2.9.0.20260305",
-    "types-requests>=2.32.4.20260107",
+    "types-requests>=2.33.0.20260503",
     "uvicorn[standard]>=0.46.0",
 ]
 
