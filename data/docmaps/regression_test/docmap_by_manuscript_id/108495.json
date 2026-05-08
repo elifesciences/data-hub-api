@@ -704,7 +704,8 @@
                 {
                     "item": {
                         "type": "preprint",
-                        "doi": "10.31234/osf.io/8au9j_v7"
+                        "doi": "10.31234/osf.io/8au9j_v7",
+                        "versionIdentifier": "7"
                     },
                     "status": "under-review",
                     "happened": "2026-04-23T04:38:35+00:00"
@@ -723,6 +724,8 @@
                     "type": "preprint",
                     "doi": "10.31234/osf.io/8au9j_v7",
                     "url": "https://osf.io/preprints/psyarxiv/8au9j_v7",
+                    "versionIdentifier": "7",
+                    "published": "2026-04-20",
                     "content": [
                         {
                             "type": "computer-file",
