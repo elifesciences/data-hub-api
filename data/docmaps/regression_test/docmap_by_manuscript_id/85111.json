@@ -187,11 +187,11 @@
                                 "name": "Brice Bathellier",
                                 "firstName": "Brice",
                                 "surname": "Bathellier",
-                                "_relatesToOrganization": "Centre National pour la Recherche Scientifique et Technique (CNRST), France",
+                                "_relatesToOrganization": "Centre National de la Recherche Scientifique, France",
                                 "affiliation": {
-                                    "id": "https://ror.org/00675rp98",
+                                    "id": "https://ror.org/02feahw73",
                                     "type": "organization",
-                                    "name": "Centre National pour la Recherche Scientifique et Technique (CNRST)",
+                                    "name": "Centre National de la Recherche Scientifique",
                                     "location": "Paris, France"
                                 }
                             },
@@ -491,11 +491,11 @@
                                 "name": "Brice Bathellier",
                                 "firstName": "Brice",
                                 "surname": "Bathellier",
-                                "_relatesToOrganization": "Centre National pour la Recherche Scientifique et Technique (CNRST), France",
+                                "_relatesToOrganization": "Centre National de la Recherche Scientifique, France",
                                 "affiliation": {
-                                    "id": "https://ror.org/00675rp98",
+                                    "id": "https://ror.org/02feahw73",
                                     "type": "organization",
-                                    "name": "Centre National pour la Recherche Scientifique et Technique (CNRST)",
+                                    "name": "Centre National de la Recherche Scientifique",
                                     "location": "Paris, France"
                                 }
                             },
