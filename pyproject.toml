@@ -17,7 +17,7 @@ dependencies = [
     "pyarrow>=24.0.0",
     "types-python-dateutil>=2.9.0.20260518",
     "types-requests>=2.33.0.20260518",
-    "uvicorn[standard]>=0.50.1",
+    "uvicorn[standard]>=0.50.2",
 ]
 
 [dependency-groups]
