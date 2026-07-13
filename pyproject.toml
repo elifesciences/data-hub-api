@@ -28,5 +28,5 @@ dev = [
     "pylint>=4.0.6",
     "pytest>=9.1.1",
     "pytest-watch>=4.2.0",
-    "types-markdown>=3.10.2.20260518",
+    "types-markdown>=3.10.2.20260712",
 ]
