@@ -104,8 +104,18 @@
                     "participants": [
                         {
                             "actor": {
-                                "name": "anonymous",
-                                "type": "person"
+                                "name": "Qi Yuan",
+                                "type": "person",
+                                "id": "https://orcid.org/0000-0002-9837-8495",
+                                "firstName": "Qi",
+                                "surname": "Yuan",
+                                "_relatesToOrganization": "Memorial University, Canada",
+                                "affiliation": {
+                                    "id": "",
+                                    "type": "organization",
+                                    "name": "Memorial University",
+                                    "location": "St. John's, Canada"
+                                }
                             },
                             "role": "peer-reviewer"
                         }
@@ -143,8 +153,18 @@
                     "participants": [
                         {
                             "actor": {
-                                "name": "anonymous",
-                                "type": "person"
+                                "name": "Qi Yuan",
+                                "type": "person",
+                                "id": "https://orcid.org/0000-0002-9837-8495",
+                                "firstName": "Qi",
+                                "surname": "Yuan",
+                                "_relatesToOrganization": "Memorial University, Canada",
+                                "affiliation": {
+                                    "id": "",
+                                    "type": "organization",
+                                    "name": "Memorial University",
+                                    "location": "St. John's, Canada"
+                                }
                             },
                             "role": "peer-reviewer"
                         }
@@ -408,8 +428,35 @@
                     "participants": [
                         {
                             "actor": {
-                                "name": "anonymous",
-                                "type": "person"
+                                "name": "Qi Yuan",
+                                "type": "person",
+                                "id": "https://orcid.org/0000-0002-9837-8495",
+                                "firstName": "Qi",
+                                "surname": "Yuan",
+                                "_relatesToOrganization": "Memorial University, Canada",
+                                "affiliation": {
+                                    "id": "",
+                                    "type": "organization",
+                                    "name": "Memorial University",
+                                    "location": "St. John's, Canada"
+                                }
+                            },
+                            "role": "peer-reviewer"
+                        },
+                        {
+                            "actor": {
+                                "name": "Sami El-Boustani",
+                                "type": "person",
+                                "id": "",
+                                "firstName": "Sami",
+                                "surname": "El-Boustani",
+                                "_relatesToOrganization": "University of Geneva, Switzerland",
+                                "affiliation": {
+                                    "id": "",
+                                    "type": "organization",
+                                    "name": "University of Geneva",
+                                    "location": "Geneva, Switzerland"
+                                }
                             },
                             "role": "peer-reviewer"
                         }
@@ -447,8 +494,35 @@
                     "participants": [
                         {
                             "actor": {
-                                "name": "anonymous",
-                                "type": "person"
+                                "name": "Qi Yuan",
+                                "type": "person",
+                                "id": "https://orcid.org/0000-0002-9837-8495",
+                                "firstName": "Qi",
+                                "surname": "Yuan",
+                                "_relatesToOrganization": "Memorial University, Canada",
+                                "affiliation": {
+                                    "id": "",
+                                    "type": "organization",
+                                    "name": "Memorial University",
+                                    "location": "St. John's, Canada"
+                                }
+                            },
+                            "role": "peer-reviewer"
+                        },
+                        {
+                            "actor": {
+                                "name": "Sami El-Boustani",
+                                "type": "person",
+                                "id": "",
+                                "firstName": "Sami",
+                                "surname": "El-Boustani",
+                                "_relatesToOrganization": "University of Geneva, Switzerland",
+                                "affiliation": {
+                                    "id": "",
+                                    "type": "organization",
+                                    "name": "University of Geneva",
+                                    "location": "Geneva, Switzerland"
+                                }
                             },
                             "role": "peer-reviewer"
                         }
