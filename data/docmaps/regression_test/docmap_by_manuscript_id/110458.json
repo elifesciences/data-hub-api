@@ -1111,7 +1111,50 @@
                     "doi": "10.7554/eLife.110458.3.sa4"
                 }
             ],
+            "next-step": "_:b9",
             "previous-step": "_:b7"
+        },
+        "_:b9": {
+            "actions": [
+                {
+                    "participants": [],
+                    "outputs": [
+                        {
+                            "type": "version-of-record",
+                            "identifier": "110458",
+                            "doi": "10.7554/eLife.110458.4",
+                            "versionIdentifier": "4",
+                            "published": "2026-08-18",
+                            "url": "https://doi.org/10.7554/eLife.110458.4",
+                            "content": [
+                                {
+                                    "type": "web-page",
+                                    "url": "https://elifesciences.org/articles/110458v1"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "assertions": [
+                {
+                    "item": {
+                        "type": "version-of-record",
+                        "doi": "10.7554/eLife.110458.4",
+                        "versionIdentifier": "4"
+                    },
+                    "status": "vor-published"
+                }
+            ],
+            "inputs": [
+                {
+                    "type": "preprint",
+                    "doi": "10.7554/eLife.110458.3",
+                    "identifier": "110458",
+                    "versionIdentifier": "3"
+                }
+            ],
+            "previous-step": "_:b8"
         }
     }
 }
