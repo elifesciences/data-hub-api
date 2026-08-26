@@ -151,8 +151,17 @@
                     "participants": [
                         {
                             "actor": {
-                                "name": "anonymous",
-                                "type": "person"
+                                "type": "person",
+                                "id": "https://orcid.org/0000-0002-5499-3138",
+                                "name": "Pil Joon Seo",
+                                "firstName": "Pil Joon",
+                                "surname": "Seo",
+                                "_relatesToOrganization": "Seoul National University, Republic of Korea",
+                                "affiliation": {
+                                    "type": "organization",
+                                    "name": "Seoul National University",
+                                    "location": "Seoul, Republic of Korea"
+                                }
                             },
                             "role": "peer-reviewer"
                         }
