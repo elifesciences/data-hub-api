@@ -6,6 +6,7 @@ from data_hub_api.docmaps.v2.api_input_typing import (
     ApiInput,
     ApiManuscriptVersionInput,
     ApiRelatedContentInput,
+    ApiReviewerDetailInput,
     ApiVorVersionInput
 )
 from data_hub_api.docmaps.v2.docmap_typing import DocmapPartOfComplement
@@ -59,6 +60,8 @@ MANUSCRIPT_VERSION_1: ApiManuscriptVersionInput = {
     'under_review_timestamp': datetime.fromisoformat('2022-02-01T01:02:03+00:00'),
     'editor_details': [],
     'senior_editor_details': [],
+    'reviewer_details': [],
+    'reviewer_count': None,
     'preprint_url': PREPRINT_LINK_1,
     'elife_doi_version_str': ELIFE_DOI_VERSION_STR_1,
     'preprint_doi': DOI_1,
@@ -82,6 +85,8 @@ MANUSCRIPT_VERSION_2: ApiManuscriptVersionInput = {
     'under_review_timestamp': datetime.fromisoformat('2022-03-02T02:02:02+00:00'),
     'editor_details': [],
     'senior_editor_details': [],
+    'reviewer_details': [],
+    'reviewer_count': None,
     'preprint_url': PREPRINT_LINK_2,
     'elife_doi_version_str': ELIFE_DOI_VERSION_STR_2,
     'preprint_doi': DOI_2,
@@ -260,6 +265,11 @@ DOCMAPS_QUERY_RESULT_EVALUATION_2: ApiEvaluationInput = {
     'evaluation_suffix': EVALUATION_SUFFIX_2
 }
 
+REVIEW_ARTICLE_EVALUATION_1: ApiEvaluationInput = {
+    **DOCMAPS_QUERY_RESULT_EVALUATION_1,  # type: ignore
+    'tags': ['PeerReview']
+}
+
 MANUSCRIPT_VERSION_WITH_EVALUATIONS_1: ApiManuscriptVersionInput = {
     **MANUSCRIPT_VERSION_1,  # type: ignore
     'evaluations': [DOCMAPS_QUERY_RESULT_EVALUATION_1]
@@ -321,4 +331,32 @@ SENIOR_EDITOR_DETAIL_1: ApiEditorDetailInput = {
     'city': 'senior_editor_city_1',
     'ORCID': 'orcid_1',
     'ROR_ID': 'ror_id_1'
+}
+
+REVIEWER_DETAIL_1: ApiReviewerDetailInput = {
+    'name': 'reviewer_name_1',
+    'institution': 'reviewer_institution_1',
+    'country': 'reviewer_country_1',
+    'title': 'reviewer_title_1',
+    'first_name': 'reviewer_first_name_1',
+    'middle_name': 'reviewer_middle_name_1',
+    'last_name': 'reviewer_last_name_1',
+    'city': 'reviewer_city_1',
+    'ORCID': 'reviewer_orcid_1',
+    'ROR_ID': 'reviewer_ror_id_1',
+    'reviewer_number': 1
+}
+
+REVIEWER_DETAIL_2: ApiReviewerDetailInput = {
+    'name': 'reviewer_name_2',
+    'institution': 'reviewer_institution_2',
+    'country': 'reviewer_country_2',
+    'title': 'reviewer_title_2',
+    'first_name': 'reviewer_first_name_2',
+    'middle_name': 'reviewer_middle_name_2',
+    'last_name': 'reviewer_last_name_2',
+    'city': 'reviewer_city_2',
+    'ORCID': 'reviewer_orcid_2',
+    'ROR_ID': 'reviewer_ror_id_2',
+    'reviewer_number': 2
 }

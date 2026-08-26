@@ -20,7 +20,6 @@ from data_hub_api.docmaps.v2.codecs.evaluation import (
     get_docmap_evaluation_input,
     get_docmap_evaluation_output,
     get_docmap_evaluation_participants_for_evalution_summary_type,
-    get_docmap_evaluation_participants_for_review_article_type,
     get_rp_meca_path_action
 )
 
@@ -436,9 +435,10 @@ class TestGetDocmapsItemForQueryResultItem:
         peer_reviewed_step = docmaps_item['steps']['_:b1']
         peer_reviewed_actions = peer_reviewed_step['actions']
         participants_for_review_article = peer_reviewed_actions[0]['participants']
-        assert participants_for_review_article == (
-            get_docmap_evaluation_participants_for_review_article_type()
-        )
+        assert participants_for_review_article == [{
+            'actor': {'name': 'anonymous', 'type': 'person'},
+            'role': 'peer-reviewer'
+        }]
 
     def test_should_populate_participants_peer_reviewed_step_for_evaluation_summary_type(self):
         editor_details = [EDITOR_DETAIL_1]

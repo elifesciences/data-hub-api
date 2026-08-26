@@ -1,6 +1,7 @@
 from datetime import datetime
 import logging
-from typing import Iterable, Optional, Sequence, cast, Tuple
+import re
+from typing import Iterable, List, Optional, Sequence, cast, Tuple
 from data_hub_api.config import DOI_ROOT_URL
 
 from data_hub_api.docmaps.v2.codecs.elife_manuscript import get_elife_manuscript_version_doi
@@ -8,7 +9,8 @@ from data_hub_api.docmaps.v2.api_input_typing import (
     ApiEditorDetailInput,
     ApiEvaluationInput,
     ApiInput,
-    ApiManuscriptVersionInput
+    ApiManuscriptVersionInput,
+    ApiReviewerDetailInput
 )
 from data_hub_api.docmaps.v2.codecs.preprint import get_meca_path_content
 from data_hub_api.docmaps.v2.docmap_typing import (
@@ -32,6 +34,13 @@ SCIETY_ARTICLES_EVALUATIONS_URL = 'https://sciety.org/evaluations/hypothesis:'
 DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY = 'evaluation-summary'
 DOCMAP_EVALUATION_TYPE_FOR_REPLY = 'reply'
 DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE = 'review-article'
+
+JOINT_REVIEW_REGEX = re.compile(r'joint|combined|consensus', re.IGNORECASE)
+NUMBERED_REVIEW_REGEX = re.compile(r'^review(?:er|ing)?\s*#?\s*(\d+)', re.IGNORECASE)
+EDITOR_ASSESSED_NOTE_REGEX = re.compile(
+    r'assessed by the Reviewing Editor without further input from the original reviewers',
+    re.IGNORECASE
+)
 
 
 def get_elife_evaluation_doi(
@@ -202,11 +211,119 @@ def get_docmap_actor_for_review_article_type() -> DocmapAnonymousActor:
     }
 
 
-def get_docmap_evaluation_participants_for_review_article_type() -> Sequence[DocmapParticipant]:
-    return [{
+def get_anonymous_reviewer_participant() -> DocmapParticipant:
+    return {
         'actor': get_docmap_actor_for_review_article_type(),
         'role': 'peer-reviewer'
-    }]
+    }
+
+
+def get_named_reviewer_participant(
+    reviewer_detail: ApiReviewerDetailInput
+) -> DocmapParticipant:
+    return {
+        'actor': get_docmap_actor_for_evaluation_summary_type(reviewer_detail),
+        'role': 'peer-reviewer'
+    }
+
+
+def get_first_line_of_annotation_content_without_markdown(
+    annotation_content: Optional[str]
+) -> str:
+    if not annotation_content:
+        return ''
+    first_line = annotation_content.split('\n', 1)[0]
+    return re.sub(r'[*\\]', '', first_line).strip()
+
+
+def get_reviewer_participants_for_joint_review(
+    manuscript_version: ApiManuscriptVersionInput
+) -> Sequence[DocmapParticipant]:
+    reviewer_details = manuscript_version['reviewer_details']
+    reviewer_count = manuscript_version.get('reviewer_count')
+    participants: List[DocmapParticipant] = [
+        get_named_reviewer_participant(reviewer_detail)
+        for reviewer_detail in reviewer_details
+    ]
+    if reviewer_count is not None:
+        anonymous_count = max(reviewer_count - len(reviewer_details), 0)
+        participants += [
+            get_anonymous_reviewer_participant()
+            for _ in range(anonymous_count)
+        ]
+    if not participants:
+        return [get_anonymous_reviewer_participant()]
+    return participants
+
+
+def get_reviewer_participants_for_numbered_review(
+    manuscript_version: ApiManuscriptVersionInput,
+    reviewer_number: int
+) -> Sequence[DocmapParticipant]:
+    for reviewer_detail in manuscript_version['reviewer_details']:
+        if reviewer_detail['reviewer_number'] == reviewer_number:
+            return [get_named_reviewer_participant(reviewer_detail)]
+    return [get_anonymous_reviewer_participant()]
+
+
+def get_reviewer_details_of_nearest_earlier_version(
+    query_result_item: ApiInput,
+    manuscript_version: ApiManuscriptVersionInput
+) -> Sequence[ApiReviewerDetailInput]:
+    current_position = manuscript_version['position_in_overall_stage']
+    earlier_versions = sorted(
+        (
+            version
+            for version in query_result_item['manuscript_versions']
+            if version['position_in_overall_stage'] < current_position
+        ),
+        key=lambda version: version['position_in_overall_stage'],
+        reverse=True
+    )
+    for version in earlier_versions:
+        if version['reviewer_details']:
+            return version['reviewer_details']
+    return []
+
+
+def get_reviewer_participants_for_editor_assessed_version(
+    query_result_item: ApiInput,
+    manuscript_version: ApiManuscriptVersionInput
+) -> Sequence[DocmapParticipant]:
+    reviewer_details = get_reviewer_details_of_nearest_earlier_version(
+        query_result_item=query_result_item,
+        manuscript_version=manuscript_version
+    )
+    if reviewer_details:
+        return [
+            get_named_reviewer_participant(reviewer_detail)
+            for reviewer_detail in reviewer_details
+        ]
+    return [get_anonymous_reviewer_participant()]
+
+
+def get_docmap_evaluation_participants_for_review_article_type(
+    query_result_item: ApiInput,
+    manuscript_version: ApiManuscriptVersionInput,
+    evaluation: ApiEvaluationInput
+) -> Sequence[DocmapParticipant]:
+    first_line = get_first_line_of_annotation_content_without_markdown(
+        evaluation['annotation_content']
+    )
+    if JOINT_REVIEW_REGEX.search(first_line):
+        return get_reviewer_participants_for_joint_review(manuscript_version)
+    numbered_review_match = NUMBERED_REVIEW_REGEX.match(first_line)
+    if numbered_review_match:
+        return get_reviewer_participants_for_numbered_review(
+            manuscript_version=manuscript_version,
+            reviewer_number=int(numbered_review_match.group(1))
+        )
+    if EDITOR_ASSESSED_NOTE_REGEX.search(first_line):
+        return get_reviewer_participants_for_editor_assessed_version(
+            query_result_item=query_result_item,
+            manuscript_version=manuscript_version
+        )
+    return [get_anonymous_reviewer_participant()]
 
 
 def get_docmap_affiliation_location(
@@ -284,13 +401,19 @@ def get_docmap_evaluation_participants_for_evalution_summary_type(
 
 
 def get_docmap_evaluation_participants(
+    query_result_item: ApiInput,
     manuscript_version: ApiManuscriptVersionInput,
+    evaluation: ApiEvaluationInput,
     docmap_evaluation_type: str
 ) -> Sequence[DocmapParticipant]:
     editor_details_list = manuscript_version['editor_details']
     senior_editor_details_list = manuscript_version['senior_editor_details']
     if docmap_evaluation_type == DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE:
-        return get_docmap_evaluation_participants_for_review_article_type()
+        return get_docmap_evaluation_participants_for_review_article_type(
+            query_result_item=query_result_item,
+            manuscript_version=manuscript_version,
+            evaluation=evaluation
+        )
     if docmap_evaluation_type == DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY:
         return get_docmap_evaluation_participants_for_evalution_summary_type(
             editor_details_list=editor_details_list,
@@ -302,6 +425,7 @@ def get_docmap_evaluation_participants(
 def get_docmap_actions_for_evaluations(
     query_result_item: ApiInput,
     manuscript_version: ApiManuscriptVersionInput,
+    evaluation: ApiEvaluationInput,
     hypothesis_id: str,
     evaluation_suffix: str,
     annotation_created_timestamp: datetime,
@@ -310,7 +434,9 @@ def get_docmap_actions_for_evaluations(
 ) -> DocmapAction:
     return {
         'participants': get_docmap_evaluation_participants(
+            query_result_item=query_result_item,
             manuscript_version=manuscript_version,
+            evaluation=evaluation,
             docmap_evaluation_type=docmap_evaluation_type
         ),
         'outputs': [
@@ -384,6 +510,7 @@ def iter_docmap_actions_for_evaluations(
         yield get_docmap_actions_for_evaluations(
             query_result_item=query_result_item,
             manuscript_version=manuscript_version,
+            evaluation=evaluation,
             hypothesis_id=hypothesis_id,
             annotation_created_timestamp=annotation_created_timestamp,
             annotation_updated_timestamp=evaluation['annotation_updated_timestamp'],

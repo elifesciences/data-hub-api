@@ -143,8 +143,18 @@
                     "participants": [
                         {
                             "actor": {
-                                "name": "anonymous",
-                                "type": "person"
+                                "type": "person",
+                                "id": "https://orcid.org/0000-0002-0302-4206",
+                                "name": "Michael Bunce",
+                                "firstName": "Michael",
+                                "surname": "Bunce",
+                                "_relatesToOrganization": "Curtin University, Australia",
+                                "affiliation": {
+                                    "id": "https://ror.org/02n415q13",
+                                    "type": "organization",
+                                    "name": "Curtin University",
+                                    "location": "Australia"
+                                }
                             },
                             "role": "peer-reviewer"
                         }

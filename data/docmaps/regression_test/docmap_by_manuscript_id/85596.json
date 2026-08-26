@@ -73,8 +73,17 @@
                     "participants": [
                         {
                             "actor": {
-                                "name": "anonymous",
-                                "type": "person"
+                                "type": "person",
+                                "id": "https://orcid.org/0000-0001-9618-1261",
+                                "name": "Bart Gadella",
+                                "firstName": "Bart",
+                                "surname": "Gadella",
+                                "_relatesToOrganization": "Utrecht University, Netherlands",
+                                "affiliation": {
+                                    "type": "organization",
+                                    "name": "Utrecht University",
+                                    "location": "Utrecht, Netherlands"
+                                }
                             },
                             "role": "peer-reviewer"
                         }
