@@ -2,6 +2,7 @@ from unittest.mock import patch
 
 import pytest
 
+from data_hub_api.docmaps.v2.api_input_typing import ApiManuscriptVersionInput
 from data_hub_api.docmaps.v2.codecs.elife_manuscript import get_elife_manuscript_version_doi
 from data_hub_api.docmaps.v2.codecs import evaluation as evaluation_module
 from data_hub_api.docmaps.v2.codecs.evaluation import (
@@ -12,6 +13,7 @@ from data_hub_api.docmaps.v2.codecs.evaluation import (
     HYPOTHESIS_URL,
     SCIETY_ARTICLES_ACTIVITY_URL,
     SCIETY_ARTICLES_EVALUATIONS_URL,
+    get_anonymous_reviewer_participant,
     get_docmap_affiliation,
     get_docmap_affiliation_location,
     get_docmap_evaluation_content_url_for_data_hub,
@@ -24,7 +26,10 @@ from data_hub_api.docmaps.v2.codecs.evaluation import (
     get_docmap_evaluation_participants,
     get_docmap_evaluation_participants_for_evaluation_summary_type,
     get_docmap_evaluation_participants_for_evalution_summary_type,
+    get_docmap_evaluation_participants_for_review_article_type,
     get_docmap_evaluation_type_form_tags,
+    get_first_line_of_annotation_content_without_markdown,
+    get_named_reviewer_participant,
     get_elife_evaluation_doi,
     get_elife_evaluation_doi_url,
     get_related_organization_detail,
@@ -34,6 +39,7 @@ from data_hub_api.utils.url import get_basepath
 from tests.unit_tests.docmaps.v2.test_data import (
     ANNOTATION_CREATED_TIMESTAMP_1,
     ANNOTATION_UPDATED_TIMESTAMP_1,
+    DOCMAPS_QUERY_RESULT_EVALUATION_1,
     DOCMAPS_QUERY_RESULT_ITEM_1,
     DOI_1,
     EDITOR_DETAIL_1,
@@ -43,6 +49,10 @@ from tests.unit_tests.docmaps.v2.test_data import (
     HYPOTHESIS_ID_1,
     LICENSE_1,
     MANUSCRIPT_VERSION_1,
+    MANUSCRIPT_VERSION_2,
+    REVIEW_ARTICLE_EVALUATION_1,
+    REVIEWER_DETAIL_1,
+    REVIEWER_DETAIL_2,
     RP_MECA_PATH_1,
     SENIOR_EDITOR_DETAIL_1
 )
@@ -431,7 +441,9 @@ class TestGetDocmapEvaluationParticipants:
             'get_docmap_evaluation_participants_for_review_article_type'
         ) as mock:
             get_docmap_evaluation_participants(
+                query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1,
                 manuscript_version=MANUSCRIPT_VERSION_1,
+                evaluation=DOCMAPS_QUERY_RESULT_EVALUATION_1,
                 docmap_evaluation_type=DOCMAP_EVALUATION_TYPE_FOR_REVIEW_ARTICLE
             )
             mock.assert_called_once()
@@ -442,10 +454,296 @@ class TestGetDocmapEvaluationParticipants:
             'get_docmap_evaluation_participants_for_evalution_summary_type'
         ) as mock:
             get_docmap_evaluation_participants(
+                query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1,
                 manuscript_version=MANUSCRIPT_VERSION_1,
+                evaluation=DOCMAPS_QUERY_RESULT_EVALUATION_1,
                 docmap_evaluation_type=DOCMAP_EVALUATION_TYPE_FOR_EVALUATION_SUMMARY
             )
             mock.assert_called_once()
+
+
+class TestGetFirstLineOfAnnotationContentWithoutMarkdown:
+    def test_should_return_empty_string_if_content_none_or_empty(self):
+        assert get_first_line_of_annotation_content_without_markdown(None) == ''
+        assert get_first_line_of_annotation_content_without_markdown('') == ''
+
+    def test_should_return_only_the_first_line(self):
+        result = get_first_line_of_annotation_content_without_markdown(
+            'Reviewer #1:\n\n> Joint Public Review:\nbody'
+        )
+        assert result == 'Reviewer #1:'
+
+    def test_should_strip_markdown_asterisks_and_backslashes_and_whitespace(self):
+        result = get_first_line_of_annotation_content_without_markdown(
+            '  **R\\eviewer #2:** '
+        )
+        assert result == 'Reviewer #2:'
+
+
+class TestGetDocmapEvaluationParticipantsForReviewArticleType:
+    def test_should_return_single_anonymous_when_no_recognisable_heading(self):
+        result = get_docmap_evaluation_participants_for_review_article_type(
+            query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1,
+            manuscript_version=MANUSCRIPT_VERSION_1,
+            evaluation={
+                **REVIEW_ARTICLE_EVALUATION_1,
+                'annotation_content': 'Some unrelated first line'
+            }
+        )
+        assert result == [get_anonymous_reviewer_participant()]
+
+    def test_should_fan_out_joint_review_with_anonymous_padding(self):
+        manuscript_version = {
+            **MANUSCRIPT_VERSION_1,
+            'reviewer_details': [REVIEWER_DETAIL_1],
+            'reviewer_count': 3
+        }
+        result = get_docmap_evaluation_participants_for_review_article_type(
+            query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1,
+            manuscript_version=manuscript_version,
+            evaluation={
+                **REVIEW_ARTICLE_EVALUATION_1,
+                'annotation_content': '**Joint Public Review:**'
+            }
+        )
+        assert result == [
+            get_named_reviewer_participant(REVIEWER_DETAIL_1),
+            get_anonymous_reviewer_participant(),
+            get_anonymous_reviewer_participant()
+        ]
+
+    def test_should_match_combined_and_consensus_keywords_for_joint_review(self):
+        for keyword in ['Combined Public Review', 'Consensus Public Review']:
+            manuscript_version = {
+                **MANUSCRIPT_VERSION_1,
+                'reviewer_details': [REVIEWER_DETAIL_1, REVIEWER_DETAIL_2],
+                'reviewer_count': 2
+            }
+            result = get_docmap_evaluation_participants_for_review_article_type(
+                query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1,
+                manuscript_version=manuscript_version,
+                evaluation={
+                    **REVIEW_ARTICLE_EVALUATION_1,
+                    'annotation_content': keyword
+                }
+            )
+            assert result == [
+                get_named_reviewer_participant(REVIEWER_DETAIL_1),
+                get_named_reviewer_participant(REVIEWER_DETAIL_2)
+            ]
+
+    def test_should_not_pad_joint_review_when_reviewer_count_is_none(self):
+        manuscript_version = {
+            **MANUSCRIPT_VERSION_1,
+            'reviewer_details': [REVIEWER_DETAIL_1],
+            'reviewer_count': None
+        }
+        result = get_docmap_evaluation_participants_for_review_article_type(
+            query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1,
+            manuscript_version=manuscript_version,
+            evaluation={
+                **REVIEW_ARTICLE_EVALUATION_1,
+                'annotation_content': 'Joint Public Review:'
+            }
+        )
+        assert result == [get_named_reviewer_participant(REVIEWER_DETAIL_1)]
+
+    def test_should_return_anonymous_for_joint_review_without_any_revealed_reviewer(self):
+        manuscript_version = {
+            **MANUSCRIPT_VERSION_1,
+            'reviewer_details': [],
+            'reviewer_count': None
+        }
+        result = get_docmap_evaluation_participants_for_review_article_type(
+            query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1,
+            manuscript_version=manuscript_version,
+            evaluation={
+                **REVIEW_ARTICLE_EVALUATION_1,
+                'annotation_content': 'Joint Public Review:'
+            }
+        )
+        assert result == [get_anonymous_reviewer_participant()]
+
+    def test_should_name_reviewer_matching_numbered_review(self):
+        manuscript_version = {
+            **MANUSCRIPT_VERSION_1,
+            'reviewer_details': [REVIEWER_DETAIL_1, REVIEWER_DETAIL_2],
+            'reviewer_count': 2
+        }
+        result = get_docmap_evaluation_participants_for_review_article_type(
+            query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1,
+            manuscript_version=manuscript_version,
+            evaluation={
+                **REVIEW_ARTICLE_EVALUATION_1,
+                'annotation_content': 'Reviewer #2 (Public Review):'
+            }
+        )
+        assert result == [get_named_reviewer_participant(REVIEWER_DETAIL_2)]
+
+    def test_should_match_numbered_review_on_reviewer_number_value_not_position(self):
+        manuscript_version = {
+            **MANUSCRIPT_VERSION_1,
+            'reviewer_details': [REVIEWER_DETAIL_2],
+            'reviewer_count': 2
+        }
+        result = get_docmap_evaluation_participants_for_review_article_type(
+            query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1,
+            manuscript_version=manuscript_version,
+            evaluation={
+                **REVIEW_ARTICLE_EVALUATION_1,
+                'annotation_content': 'Reviewer #2 (Public Review):'
+            }
+        )
+        assert result == [get_named_reviewer_participant(REVIEWER_DETAIL_2)]
+
+    def test_should_return_anonymous_when_numbered_review_has_no_revealed_reviewer(self):
+        manuscript_version = {
+            **MANUSCRIPT_VERSION_1,
+            'reviewer_details': [REVIEWER_DETAIL_1],
+            'reviewer_count': 2
+        }
+        result = get_docmap_evaluation_participants_for_review_article_type(
+            query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1,
+            manuscript_version=manuscript_version,
+            evaluation={
+                **REVIEW_ARTICLE_EVALUATION_1,
+                'annotation_content': 'Reviewer #2 (Public Review):'
+            }
+        )
+        assert result == [get_anonymous_reviewer_participant()]
+
+    @pytest.mark.parametrize(
+        'first_line',
+        [
+            'R**eviewer #2:',
+            'Reviewer # 2',
+            'Review #2',
+            'Reviewing #2',
+            'reviewer#2'
+        ]
+    )
+    def test_should_match_malformed_numbered_headings(self, first_line: str):
+        manuscript_version: ApiManuscriptVersionInput = {
+            **MANUSCRIPT_VERSION_1,
+            'reviewer_details': [REVIEWER_DETAIL_1, REVIEWER_DETAIL_2],
+            'reviewer_count': 2
+        }
+        result = get_docmap_evaluation_participants_for_review_article_type(
+            query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1,
+            manuscript_version=manuscript_version,
+            evaluation={
+                **REVIEW_ARTICLE_EVALUATION_1,
+                'annotation_content': first_line
+            }
+        )
+        assert result == [get_named_reviewer_participant(REVIEWER_DETAIL_2)]
+
+    def test_should_not_attribute_quoted_reviewer_header_in_author_response_body(self):
+        annotation_content = (
+            'We thank the reviewers for their comments.\n\n'
+            '> **Joint Public Review:**\n'
+            '> The manuscript is interesting.'
+        )
+        manuscript_version = {
+            **MANUSCRIPT_VERSION_1,
+            'reviewer_details': [REVIEWER_DETAIL_1],
+            'reviewer_count': 2
+        }
+        result = get_docmap_evaluation_participants_for_review_article_type(
+            query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1,
+            manuscript_version=manuscript_version,
+            evaluation={
+                **REVIEW_ARTICLE_EVALUATION_1,
+                'annotation_content': annotation_content
+            }
+        )
+        assert result == [get_anonymous_reviewer_participant()]
+
+    def test_should_carry_forward_reviewers_for_editor_assessed_version(self):
+        earlier_version = {
+            **MANUSCRIPT_VERSION_1,
+            'position_in_overall_stage': 1,
+            'reviewer_details': [REVIEWER_DETAIL_1, REVIEWER_DETAIL_2]
+        }
+        current_version = {
+            **MANUSCRIPT_VERSION_2,
+            'position_in_overall_stage': 2,
+            'reviewer_details': []
+        }
+        query_result_item = {
+            **DOCMAPS_QUERY_RESULT_ITEM_1,
+            'manuscript_versions': [earlier_version, current_version]
+        }
+        result = get_docmap_evaluation_participants_for_review_article_type(
+            query_result_item=query_result_item,
+            manuscript_version=current_version,
+            evaluation={
+                **REVIEW_ARTICLE_EVALUATION_1,
+                'annotation_content': (
+                    'This Reviewed Preprint was assessed by the Reviewing Editor '
+                    'without further input from the original reviewers.'
+                )
+            }
+        )
+        assert result == [
+            get_named_reviewer_participant(REVIEWER_DETAIL_1),
+            get_named_reviewer_participant(REVIEWER_DETAIL_2)
+        ]
+
+    def test_should_return_anonymous_for_editor_assessed_version_without_earlier_reviewers(self):
+        earlier_version = {
+            **MANUSCRIPT_VERSION_1,
+            'position_in_overall_stage': 1,
+            'reviewer_details': []
+        }
+        current_version = {
+            **MANUSCRIPT_VERSION_2,
+            'position_in_overall_stage': 2,
+            'reviewer_details': []
+        }
+        query_result_item = {
+            **DOCMAPS_QUERY_RESULT_ITEM_1,
+            'manuscript_versions': [earlier_version, current_version]
+        }
+        result = get_docmap_evaluation_participants_for_review_article_type(
+            query_result_item=query_result_item,
+            manuscript_version=current_version,
+            evaluation={
+                **REVIEW_ARTICLE_EVALUATION_1,
+                'annotation_content': (
+                    'assessed by the Reviewing Editor without further input '
+                    'from the original reviewers'
+                )
+            }
+        )
+        assert result == [get_anonymous_reviewer_participant()]
+
+    def test_should_stay_anonymous_for_invited_a_third_reviewer_note(self):
+        earlier_version = {
+            **MANUSCRIPT_VERSION_1,
+            'position_in_overall_stage': 1,
+            'reviewer_details': [REVIEWER_DETAIL_1, REVIEWER_DETAIL_2]
+        }
+        current_version = {
+            **MANUSCRIPT_VERSION_2,
+            'position_in_overall_stage': 2,
+            'reviewer_details': []
+        }
+        query_result_item = {
+            **DOCMAPS_QUERY_RESULT_ITEM_1,
+            'manuscript_versions': [earlier_version, current_version]
+        }
+        result = get_docmap_evaluation_participants_for_review_article_type(
+            query_result_item=query_result_item,
+            manuscript_version=current_version,
+            evaluation={
+                **REVIEW_ARTICLE_EVALUATION_1,
+                'annotation_content': (
+                    'During the revision the editors invited a third reviewer to comment.'
+                )
+            }
+        )
+        assert result == [get_anonymous_reviewer_participant()]
 
 
 class TestGetRpMecaPathAction:

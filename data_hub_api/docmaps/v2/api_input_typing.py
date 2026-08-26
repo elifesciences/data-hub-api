@@ -32,6 +32,23 @@ ApiEditorDetailInput = TypedDict(
     }
 )
 
+ApiReviewerDetailInput = TypedDict(
+    'ApiReviewerDetailInput',
+    {
+        'name': str,
+        'institution': Optional[str],
+        'country': Optional[str],
+        'title': Optional[str],
+        'first_name': str,
+        'middle_name': Optional[str],
+        'last_name': str,
+        'city': Optional[str],
+        'ORCID': Optional[str],
+        'ROR_ID': Optional[str],
+        'reviewer_number': Optional[int]
+    }
+)
+
 ApiSubjectAreaInput = TypedDict(
     'ApiSubjectAreaInput',
     {
@@ -57,6 +74,8 @@ ApiManuscriptVersionInput = TypedDict(
         'under_review_timestamp': Optional[datetime],
         'editor_details': Sequence[ApiEditorDetailInput],
         'senior_editor_details': Sequence[ApiEditorDetailInput],
+        'reviewer_details': Sequence[ApiReviewerDetailInput],
+        'reviewer_count': Optional[int],
         'preprint_url': str,
         'elife_doi_version_str': str,
         'preprint_doi': str,
