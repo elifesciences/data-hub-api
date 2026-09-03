@@ -548,11 +548,11 @@ class TestGetDocmapEvaluationParticipantsForReviewArticleType:
         )
         assert result == [get_named_reviewer_participant(REVIEWER_DETAIL_1)]
 
-    def test_should_return_anonymous_for_joint_review_without_any_revealed_reviewer(self):
+    def test_should_return_single_anonymous_for_joint_review_without_any_revealed_reviewer(self):
         manuscript_version = {
             **MANUSCRIPT_VERSION_1,
             'reviewer_details': [],
-            'reviewer_count': None
+            'reviewer_count': 3
         }
         result = get_docmap_evaluation_participants_for_review_article_type(
             query_result_item=DOCMAPS_QUERY_RESULT_ITEM_1,

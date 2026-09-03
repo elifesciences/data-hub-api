@@ -240,19 +240,21 @@ def get_reviewer_participants_for_joint_review(
     manuscript_version: ApiManuscriptVersionInput
 ) -> Sequence[DocmapParticipant]:
     reviewer_details = manuscript_version['reviewer_details']
-    reviewer_count = manuscript_version.get('reviewer_count')
+    if not reviewer_details:
+        # nobody revealed their identity: a single anonymous stands for the whole review,
+        # we only expose the individual (anonymous) participant count once at least one is named
+        return [get_anonymous_reviewer_participant()]
     participants: List[DocmapParticipant] = [
         get_named_reviewer_participant(reviewer_detail)
         for reviewer_detail in reviewer_details
     ]
+    reviewer_count = manuscript_version.get('reviewer_count')
     if reviewer_count is not None:
         anonymous_count = max(reviewer_count - len(reviewer_details), 0)
         participants += [
             get_anonymous_reviewer_participant()
             for _ in range(anonymous_count)
         ]
-    if not participants:
-        return [get_anonymous_reviewer_participant()]
     return participants
 
 
